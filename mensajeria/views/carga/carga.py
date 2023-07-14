@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, permission_required
-from mensajeria.models import Archivos
+from mensajeria.models import Archivos, Destinatarios
 from mensajeria.forms import ArchivosForm
 import os
 from datetime import datetime
@@ -33,6 +33,32 @@ def uploaded(request):
             try:
                 df = pd.read_excel(archivo, engine='openpyxl')
                 matriz = df.values.tolist()
+
+                errados = []
+                duplicados = []
+
+                for fila in matriz:
+                    nombre = fila[0]
+                    celular = fila[1]
+
+                    celular = str(celular)
+                    celular = celular.replace(" ", "")
+
+                    user = request.user
+                    user = User.objects.get(id=user.id)
+                    
+                    if len(celular) == 10 and celular.startswith("3") and celular.isdigit():
+                        if not Destinatarios.objects.filter(celular=celular).exists():
+                            nuevo_registro = Destinatarios(nombre=nombre, celular=celular, created_by=user)
+                            nuevo_registro.save()
+                        else:
+                            duplicados.append((nombre, celular))
+                    else:
+                        errados.append((nombre, celular))
+
+
+
+
 
                 # Devolver el arreglo como respuesta JSON
                 return JsonResponse({'success': True}) 
