@@ -72,6 +72,11 @@ def delete(request, archivo_id):
     if request.method == 'POST':
 
         try:
+
+            archivo = Archivos.objects.get(id=archivo_id)
+            ruta_archivo = archivo.dir
+            borrar_archivo(ruta_archivo)
+
             registro = Archivos.objects.get(id=archivo_id)
             registro.delete()
             # Lógica adicional después de eliminar el registro
@@ -108,4 +113,9 @@ def list(request):
             # Lógica en caso de que el registro no exista
             return JsonResponse({'success': False})  
 
-        
+def borrar_archivo(ruta_archivo):
+    if os.path.exists(ruta_archivo):
+        os.remove(ruta_archivo)
+        return True
+    else:
+        return False
