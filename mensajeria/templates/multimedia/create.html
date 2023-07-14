@@ -1,0 +1,75 @@
+{% extends '../layout/base.html' %} {% load static %} {% block content %}
+<!-- CSS de DataTables -->
+<link rel="stylesheet" href="{% static 'css/datatables.css' %}" />
+<link
+  rel="stylesheet"
+  href="{% static 'css/administracion/funcionarios.css' %}"
+/>
+<div class="row py-3">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <div class="dashboard-title-text">
+      <input
+        type="hidden"
+        id="mensajeCreate"
+        class="mensajeCreate"
+        value="{{mensaje}}"
+      />
+    </div>
+  </div>
+</div>
+<style>
+  .nav-link:not(.active) {
+    color: black !important;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <div class="row justify-content-center align-items-center vh-30">
+      <div class="col-md-6">
+        <form id="miFormulario" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion</label>
+            <input
+              type="text"
+              class="form-control"
+              id="descripcion"
+              name="descripcion"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="archivo" class="form-label"
+              >Archivo (Imagen, Video o PDF)</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="archivo"
+              name="archivo"
+              accept="image/*,video/*,application/pdf"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <a type="button" id="guardarBtn" class="btn btn-primary">
+              Guardar
+            </a>
+            <a type="button" href="{% url 'multimedia-index' %}" class="btn btn-secondary">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <br />
+</div>
+<br />
+<br />
+<script src="{% static 'js/datatables.js' %}"></script>
+<script src="{% static 'js/sweet.js' %}"></script>
+<script src="{% static 'js/multimedia/create.js' %}"></script>
+
+{% endblock %}

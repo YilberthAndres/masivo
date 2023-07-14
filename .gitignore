@@ -1,0 +1,27 @@
+# Archivos y directorios específicos de Django
+*.pyc
+__pycache__/
+db.sqlite3
+*.pyo
+*.pyc
+*.py~
+*~
+
+# Entorno virtual (si se utiliza)
+venv/
+env/
+ENV/
+
+# Archivos generados por herramientas de construcción de front-end
+node_modules/
+/staticfiles/
+/static/assets/
+
+# Archivos y directorios de configuración locales sensibles
+.env
+settings_local.py
+
+# Archivos de registro
+logs/
+
+# Otros archivos y directorios específicos del proyecto

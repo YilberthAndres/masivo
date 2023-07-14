@@ -1,0 +1,96 @@
+{% extends '../layout/base.html' %} {% load static %} {% block content %}
+<!-- CSS de DataTables -->
+<link rel="stylesheet" href="{% static 'css/datatables.css' %}" />
+<link
+  rel="stylesheet"
+  href="{% static 'css/administracion/funcionarios.css' %}"
+/>
+<div class="row py-3">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <div class="dashboard-title-text">
+      <input
+        type="hidden"
+        id="mensajeCreate"
+        class="mensajeCreate"
+        value="{{mensaje}}"
+      />
+    </div>
+  </div>
+</div>
+<style>
+  .nav-link:not(.active) {
+    color: black !important;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <a
+        style="color: aliceblue"
+        class="btn btn-primary ml-3"
+        href="{% url 'multimedia-create' %}"
+      >
+        Agregar Archivo
+      </a>
+    </div>
+  </div>
+  <br />
+  <form id="miFormulario" enctype="multipart/form-data">
+    {% csrf_token %}
+  </form>
+  <table id="example" class="table">
+    <thead>
+      <tr>
+        <th style="text-align: center" >#</th>
+        <th style="text-align: center" >Nombre</th>
+        <!-- <th>Formato</th> -->
+        <th style="text-align: center" >Ver</th>
+        <th style="text-align: center" >Creador</th>
+        <th style="text-align: center" >Creacion</th>
+        <th style="text-align: center" >Acciones</th>
+      </tr>
+    </thead>
+    <!-- {% for archivo in archivos %}
+    <tr>
+      <td>{{archivo.descripcion}}</td>
+      <td style="text-align: center" >{{archivo.tipo}}</td> 
+      <td style="text-align: center">
+        <a href="{% static archivo.dir %}" target="_blank">
+          <i class="fa-solid fa-eye" style="color: #4b70af;"></i>
+        </a>
+      </td>
+      
+      <td style="text-align: center">{{archivo.created_by_id}}</td>
+      <td style="text-align: center">{{ archivo.created_at }}</td>
+      <td style="text-align: center">
+        
+        <a
+          type="submit"
+          class="btn btn-default"
+          id="delete_{{ archivo.id }}"
+          onclick="borrar('{{ archivo.id }}')"
+        >
+        <i class="fa-sharp fa-solid fa-trash" style="color: #ff0000;"></i>
+        </a>
+        
+      </td>
+      
+    </tr>
+    {% endfor %} -->
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+<br />
+<br />
+<script src="{% static 'js/datatables.js' %}"></script>
+<script src="{% static 'js/sweet.js' %}"></script>
+<script src="{% static 'js/multimedia/index.js' %}?v=17"></script>
+
+<script>
+  // $(document).ready(function() {
+
+</script>
+
+{% endblock %}

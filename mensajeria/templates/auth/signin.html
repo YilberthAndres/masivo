@@ -1,0 +1,44 @@
+{% extends 'base_login.html' %} {% block content %}
+<div class="container-fluid">
+  <div class="row justify-content-center align-items-center vh-100">
+    <div class="col-md-4">
+      <div class="card shadow">
+        {{error}}
+        <div class="card-header">
+          <h4 class="text-center">Login</h4>
+        </div>
+        <div class="card-body">
+          <form action="/signin/" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="username" class="form-label">Usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="username"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                required
+              />
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">
+                Iniciar Sesion
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends '../layout/base.html' %} {% load static %} {% block content %}
+<!-- CSS de DataTables -->
+<link rel="stylesheet" href="{% static 'css/datatables.css' %}" />
+<link
+  rel="stylesheet"
+  href="{% static 'css/administracion/funcionarios.css' %}"
+/>
+<div class="row py-3">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <div class="dashboard-title-text">
+      <input
+        type="hidden"
+        id="mensajeCreate"
+        class="mensajeCreate"
+        value="{{mensaje}}"
+      />
+    </div>
+  </div>
+</div>
+<style>
+  .nav-link:not(.active) {
+    color: black !important;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 text-center">
+    </div>
+  </div>
+  <form id="miFormulario" enctype="multipart/form-data">
+    {% csrf_token %}
+  </form>
+
+
+    </tbody>
+  </table>
+</div>
+<br />
+<br />
+<script src="{% static 'js/datatables.js' %}"></script>
+<script src="{% static 'js/sweet.js' %}"></script>
+<script src="{% static 'js/carga/index.js' %}?v=1"></script>
+
+<script>
+  // $(document).ready(function() {
+
+</script>
+
+{% endblock %}
