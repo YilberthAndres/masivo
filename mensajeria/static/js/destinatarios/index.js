@@ -1,31 +1,48 @@
+function borrar(id, nombre) {
+  Swal.fire({
+    title: 'Confirmar borrado',
+    text: '¿Deseas al destinatario '+nombre+'?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'No'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: 'Borrando...',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+          Swal.showLoading();
+        }
+      });
 
-function borrar(id) {
+      var formulario = $("#miFormulario")[0];
+      var formData = new FormData(formulario);
 
-    var formulario = $("#miFormulario")[0];
-    var formData = new FormData(formulario);
-
-    $.ajax({
+      $.ajax({
         url: id + "/delete",
         type: "POST",
         data: formData,
         processData: false,
         contentType: false,
-        success: function(response) {
-            // Lógica para manejar la respuesta del servidor
-            if (response.success) {
-                list_archivos();
-            } else {
-                alert("Error");
-            }
+        success: function (response) {
+          Swal.close();
+
+          if (response.success) {
+            Swal.fire('Éxito', 'destinatario borrado exitosamente', 'success');
+            list_destinatarios();
+          } else {
+            Swal.fire('Error', 'Error al borrar el destinatario', 'error');
+          }
         },
-        error: function(xhr, status, error) {
-            // Lógica para manejar el error
-            alert("Error en la solicitud AJAX");
-        }
-    });
-
-
-  }
+        error: function (xhr, status, error) {
+          Swal.close();
+          Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
+        },
+      });
+    }
+  });
+}
 
 
   function init_table()
@@ -56,7 +73,7 @@ function borrar(id) {
 }
   
 
-function list_archivos()
+function list_destinatarios()
 {
 
     var formulario = $("#miFormulario")[0];
@@ -93,7 +110,7 @@ function list_archivos()
               newRow.append($('<td>').addClass('text-center')
               .append($('<div>').addClass('btn-group')
                   .append($('<a>').addClass('btn btn-danger')
-                      .attr('onclick', 'borrar(' + row.id + ')')
+                      .attr("onclick", "borrar(" + row.id + ", '" + row.nombre + "')")
                       .append($('<span>').addClass('fa fa-trash'))
                   )
               )
@@ -113,4 +130,4 @@ function list_archivos()
 
 }
 
-list_archivos();
+list_destinatarios();

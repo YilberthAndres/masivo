@@ -47,3 +47,15 @@ def list(request):
         except destinatarios.DoesNotExist:
             # Lógica en caso de que el registro no exista
             return JsonResponse({'success': False})  
+        
+def delete(request, destinatario_id):
+    if request.method == 'POST':
+
+        try:
+            registro = Destinatarios.objects.get(id=destinatario_id)
+            registro.delete()
+            # Lógica adicional después de eliminar el registro
+            return JsonResponse({'success': True})  
+        except Destinatarios.DoesNotExist:
+            # Lógica en caso de que el registro no exista
+            return JsonResponse({'success': False})  
