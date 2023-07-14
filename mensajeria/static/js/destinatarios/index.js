@@ -1,5 +1,5 @@
 
-  function borrar(id) {
+function borrar(id) {
 
     var formulario = $("#miFormulario")[0];
     var formData = new FormData(formulario);
@@ -86,17 +86,8 @@ function list_archivos()
             num++;
               var newRow = $('<tr>');
               newRow.append($('<td>').addClass('text-center').text(num).addClass('text-left'));
-              newRow.append($('<td>').text(row.nombre).addClass('text-left'));
-              newRow.append($('<td>').addClass('text-center')
-                .append($('<div>').addClass('btn-group')
-                    .append($('<a>').addClass('btn btn-primary')
-                    .attr('href', '../' + row.dir)
-                    .attr('target', '_blank')  // Agrega el atributo target="_blank"
-                    .append($('<span>').addClass('fa fa-eye'))
-                    )
-                )
-                );
-
+              newRow.append($('<td>').text(row.nombre).addClass('text-center'));
+              newRow.append($('<td>').addClass('text-center').text(row.celular).addClass('text-center'));
               newRow.append($('<td>').addClass('text-center').text(row.nombre_usuario).addClass('text-center'));
               newRow.append($('<td>').addClass('text-center').text(row.created_at).addClass('text-center'));
               newRow.append($('<td>').addClass('text-center')

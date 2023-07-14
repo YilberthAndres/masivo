@@ -19,6 +19,7 @@ from django.urls import path
 from mensajeria.views.auth import auth
 from mensajeria.views.multimedia import multimedia
 from mensajeria.views.carga import carga
+from mensajeria.views.destinatarios import destinatarios
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,6 +41,10 @@ urlpatterns = [
     #CARGA
     path('carga/', carga.index, name='carga-index'),
     path('carga/uploaded', carga.uploaded, name='carga-uploaded'),
+
+    #DESTINATARIOS
+    path('destinatarios/', destinatarios.index, name='destinatarios-index'),
+    path('destinatarios/list', destinatarios.list, name='destinatarios-list'),
 
 
 
