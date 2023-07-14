@@ -74,7 +74,7 @@ def delete(request, archivo_id):
         try:
 
             archivo = Archivos.objects.get(id=archivo_id)
-            ruta_archivo = archivo.dir
+            ruta_archivo = 'mensajeria/static/'+ archivo.dir
             borrar_archivo(ruta_archivo)
 
             registro = Archivos.objects.get(id=archivo_id)
