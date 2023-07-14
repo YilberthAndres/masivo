@@ -15,7 +15,7 @@ ENV/
 # Archivos generados por herramientas de construcción de front-end
 node_modules/
 /staticfiles/
-/static/assets/
+mensajeria/static/assets/
 
 # Archivos y directorios de configuración locales sensibles
 .env
