@@ -39,6 +39,7 @@ urlpatterns = [
 
     #CARGA
     path('carga/', carga.index, name='carga-index'),
+    path('carga/uploaded', carga.uploaded, name='carga-uploaded'),
 
 
 

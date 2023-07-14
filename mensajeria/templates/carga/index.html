@@ -27,9 +27,43 @@
     <div class="col-md-12 text-center">
     </div>
   </div>
-  <form id="miFormulario" enctype="multipart/form-data">
-    {% csrf_token %}
-  </form>
+
+
+  <div class="container-fluid">
+    <div class="row justify-content-center align-items-center vh-50">
+      <div class="col-md-4">
+        <div class="card shadow">
+          {{error}}
+          <div class="card-header">
+            <h4 class="text-center">Cargar Excel</h4>
+          </div>
+          <div class="card-body">
+            <form id="miFormulario" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="archivo_excel" class="form-label"
+              >Archivo </label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="archivo_excel"
+              name="archivo_excel"
+              accept=".xlsx, .xls"
+              required
+            />
+              </div>
+              <div class="text-center">
+                <button id="guardarBtn" class="btn btn-primary">
+                  Subir
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
     </tbody>
@@ -39,11 +73,6 @@
 <br />
 <script src="{% static 'js/datatables.js' %}"></script>
 <script src="{% static 'js/sweet.js' %}"></script>
-<script src="{% static 'js/carga/index.js' %}?v=1"></script>
-
-<script>
-  // $(document).ready(function() {
-
-</script>
+<script src="{% static 'js/carga/index.js' %}?v=3"></script>
 
 {% endblock %}
