@@ -20,6 +20,7 @@ def index(request):
     }
     return render(request, 'destinatarios/index.html', contexto)
 
+@login_required(login_url='signin')
 def list(request):
     if request.method == 'POST':
 

@@ -38,6 +38,9 @@ def uploaded(request):
                 errados = []
                 duplicados = []
 
+                user = request.user
+                user = User.objects.get(id=user.id)
+
                 for fila in matriz:
                     nombre = fila[0]
                     celular = fila[1]
@@ -45,8 +48,7 @@ def uploaded(request):
                     celular = str(celular)
                     celular = celular.replace(" ", "")
 
-                    user = request.user
-                    user = User.objects.get(id=user.id)
+                    
                     
                     if len(celular) == 10 and celular.startswith("3") and celular.isdigit():
                         if not Destinatarios.objects.filter(celular=celular).exists():
