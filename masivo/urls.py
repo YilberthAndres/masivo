@@ -20,6 +20,7 @@ from mensajeria.views.auth import auth
 from mensajeria.views.multimedia import multimedia
 from mensajeria.views.carga import carga
 from mensajeria.views.destinatarios import destinatarios
+from mensajeria.views.webhook import webhook
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,6 +47,9 @@ urlpatterns = [
     path('destinatarios/', destinatarios.index, name='destinatarios-index'),
     path('destinatarios/list', destinatarios.list, name='destinatarios-list'),
     path('destinatarios/<int:destinatario_id>/delete', destinatarios.delete, name='destinatario-delete'),
+
+    #WEBHOOK
+    path('webhook', webhook.webhook, name='webhook'),
 
 
 
