@@ -50,6 +50,7 @@ urlpatterns = [
 
     #WEBHOOK
     path('webhook', webhook.webhook, name='webhook'),
+    path('tokenuser', webhook.generate_permanent_token, name='generate_permanent'),
 
 
 
