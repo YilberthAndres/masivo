@@ -14,10 +14,6 @@ def generate_permanent_token(request):
     return JsonResponse(response_data, status=200)
 
 
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-
-
 @csrf_exempt
 def webhook(request):
     try:
