@@ -69,6 +69,7 @@ function borrar(id, nombre) {
             sortDescending: ": Activar para ordenar la columna en orden descendente",
           },
         },
+        "order": [[1, "asc"]],
       });
 }
   
@@ -102,19 +103,44 @@ function list_destinatarios()
             // console.log(row)
             num++;
               var newRow = $('<tr>');
-              newRow.append($('<td>').addClass('text-center').text(num).addClass('text-left'));
+              if (row.estado == 596) {
+                newRow.append($('<td>').addClass('text-center')
+                  .append($('<div>').addClass('btn-group')
+                    .append($('<a>').addClass('btn')
+                      .append($('<span>').addClass('fa-brands fa-brands fa-whatsapp  fa-lg')
+                        .attr('style', 'color: #57e723;') // Establecer el color verde directamente
+                      )
+                    )
+                  )
+                );
+              } else {
+                newRow.append($('<td>').addClass('text-center')
+                  .append($('<div>').addClass('btn-group')
+                    .append($('<a>').addClass('btn')
+                      .append($('<span>').addClass('fa-brands fa-brands fa-whatsapp  fa-lg')
+                        .attr('style', 'color: #ff0000;') // Establecer el color rojo directamente
+                      )
+                    )
+                  )
+                );
+              }
+              
+              
+              
+              
               newRow.append($('<td>').text(row.nombre).addClass('text-center'));
               newRow.append($('<td>').addClass('text-center').text(row.celular).addClass('text-center'));
-              newRow.append($('<td>').addClass('text-center').text(row.nombre_usuario).addClass('text-center'));
-              newRow.append($('<td>').addClass('text-center').text(row.created_at).addClass('text-center'));
+              // newRow.append($('<td>').addClass('text-center').text(row.nombre_usuario).addClass('text-center'));
+              // newRow.append($('<td>').addClass('text-center').text(row.created_at).addClass('text-center'));
               newRow.append($('<td>').addClass('text-center')
-              .append($('<div>').addClass('btn-group')
-                  .append($('<a>').addClass('btn btn-danger')
-                      .attr("onclick", "borrar(" + row.id + ", '" + row.nombre + "')")
-                      .append($('<span>').addClass('fa fa-trash'))
-                  )
-              )
-            );
+                .append($('<div>').addClass('btn-group')
+                    .append($('<a>')
+                        .attr("onclick", "borrar(" + row.id + ", '" + row.nombre + "')")
+                        .append($('<span>').addClass('fa-sharp fa-solid fa-trash fa-lg')
+                        .attr('style', 'color: #ff0000;'))
+                    )
+                )
+              );
 
               tableBody.append(newRow);
           });

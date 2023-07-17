@@ -20,6 +20,15 @@
 <style>
   .nav-link:not(.active) {
     color: black !important;
+    .custom-btn-success {
+      background-color: green;
+      color: white;
+    }
+
+    .custom-btn-danger {
+      background-color: red;
+      color: white;
+    }
   }
 </style>
 <div class="container-fluid">
@@ -35,34 +44,29 @@
     </div>
   </div>
   <br />
-  <form id="miFormulario" enctype="multipart/form-data">
-    {% csrf_token %}
-  </form>
+  <form id="miFormulario" enctype="multipart/form-data">{% csrf_token %}</form>
   <table id="example" class="table">
     <thead>
       <tr>
-        <th style="text-align: center" >#</th>
-        <th style="text-align: center" >Nombre</th>
-        <th style="text-align: center" >Celular</th>
-        <th style="text-align: center" >Creador</th>
-        <th style="text-align: center" >Creacion</th>
-        <th style="text-align: center" >Acciones</th>
+        <th style="text-align: center">Estado</th>
+        <th style="text-align: center">Nombre</th>
+        <th style="text-align: center">Celular</th>
+        <!-- <th style="text-align: center">Creador</th>
+        <th style="text-align: center">Creacion</th> -->
+        <th style="text-align: center">Acciones</th>
       </tr>
     </thead>
-    <tbody>
-
-    </tbody>
+    <tbody></tbody>
   </table>
 </div>
 <br />
 <br />
 <script src="{% static 'js/datatables.js' %}"></script>
 <script src="{% static 'js/sweet.js' %}"></script>
-<script src="{% static 'js/destinatarios/index.js' %}?v=17"></script>
+<script src="{% static 'js/destinatarios/index.js' %}?v=26"></script>
 
 <script>
   // $(document).ready(function() {
-
 </script>
 
 {% endblock %}

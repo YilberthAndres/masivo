@@ -1,0 +1,52 @@
+{% extends '../layout/base.html' %} {% load static %} {% block content %}
+<!-- CSS de DataTables -->
+<link rel="stylesheet" href="{% static 'css/datatables.css' %}" />
+<link
+  rel="stylesheet"
+  href="{% static 'css/administracion/funcionarios.css' %}"
+/>
+<div class="row py-3">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <div class="dashboard-title-text">
+      <input
+        type="hidden"
+        id="mensajeCreate"
+        class="mensajeCreate"
+        value="{{mensaje}}"
+      />
+    </div>
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <form action="" id="miFormulario" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="mensaje" class="form-label">Mensaje:</label>
+                <textarea class="form-control" name="mensaje" id="mensaje" rows="5"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="destinatarios" class="form-label">Destinatarios:</label>
+                <select class="form-select" name="destinatarios" id="destinatarios">
+                    <option value=""></option>
+                </select>
+            </div>
+            <a  id="enviarBtn" class="btn btn-primary">Enviar</a>
+        </form>
+    </div>
+</div>
+<style>
+  .nav-link:not(.active) {
+    color: black !important;
+  }
+</style>
+
+<br />
+<br />
+<script src="{% static 'js/datatables.js' %}"></script>
+<script src="{% static 'js/sweet.js' %}"></script>
+<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/mensajes/index.js' %}?v=10"></script>
+
+<script>
+  // $(document).ready(function() {
+</script>
+
+{% endblock %}
