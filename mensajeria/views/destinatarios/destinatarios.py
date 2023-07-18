@@ -29,11 +29,12 @@ def list(request):
             
             destinatarios = Destinatarios.objects.all()
             destinatariosnew = []
-
+              
             for destinatario in destinatarios:
                 usuario = destinatario.created_by
                 persona = destinatario.persona
 
+                
                 nombre_persona = persona.nombre + ' ' + persona.segundonombre + ' ' + persona.apellido + ' ' + persona.segundoapellido
                 destinatarioslist = {
                     'id': destinatario.id,
@@ -50,9 +51,11 @@ def list(request):
 
             # Lógica adicional después de eliminar el registro
             return JsonResponse(destinatariosnew, safe=False)
-        except destinatarios.DoesNotExist:
+        except Exception as e:
+            error_message = str(e)
             # Lógica en caso de que el registro no exista
-            return JsonResponse({'success': False})  
+            return JsonResponse({'success': error_message})  
+            # Lógica en caso de que el registro no exista
         
 def delete(request, destinatario_id):
     if request.method == 'POST':

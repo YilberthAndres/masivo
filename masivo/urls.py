@@ -55,9 +55,10 @@ urlpatterns = [
 
 
     #MENSAJERIA
-    path('chat', mensajeria.index, name='chat'),
+    path('chat', mensajeria.index, name='chat_index'),
     path('send_message', mensajeria.send_message, name='send_message'),
     path('list_destinatarios', mensajeria.list_destinatarios, name='list_destinatarios'),
+    path('templates', mensajeria.templates, name='mensajes_templates'),
 
 
 

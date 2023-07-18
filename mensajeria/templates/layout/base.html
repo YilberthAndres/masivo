@@ -30,10 +30,11 @@
           <div class="container-fluid">
             
             <a class="navbar-brand" href="/">Masivo</a>
-            <a class="navbar-brand" href="/multimedia">Multimedia</a>
-            <a class="navbar-brand" href="/carga">Cargar Excel</a>
-            <a class="navbar-brand" href="/destinatarios">Destinatarios</a>
-            <a class="navbar-brand" href="/chat">chat</a>
+            <a class="navbar-brand" href="{% url 'multimedia-index' %}">Multimedia</a>
+            <a class="navbar-brand" href="{% url 'carga-index' %}">Cargar Excel</a>
+            <a class="navbar-brand" href="{% url 'destinatarios-index' %}">Destinatarios</a>
+            <a class="navbar-brand" href="{% url 'chat_index' %}">chat</a>
+            <a class="navbar-brand" href="{% url 'mensajes_templates' %}">templates</a>
             <button
               class="navbar-toggler"
               type="button"
@@ -64,7 +65,7 @@
                   >
                     <li><a class="dropdown-item" href="#">Editar perfil</a></li>
                     <li>
-                      <a class="dropdown-item" href="/lognout">Cerrar sesión</a>
+                      <a class="dropdown-item" href="{% url 'lognout' %}">Cerrar sesión</a>
                     </li>
                   </ul>
                 </li>

@@ -81,12 +81,15 @@ def uploaded(request):
                         and resultado != 'error'
                     ):
                         if not Personas.objects.filter(telefonomovil=celular).exists():
+
+                            celular_w = '57'+ celular
                             nueva_persona = Personas(
                                 nombre=primer_nombre,
                                 segundonombre=segundo_nombre,
                                 apellido=primer_apellido,
                                 segundoapellido=segundo_apellido,
                                 telefonomovil=celular,
+                                telefonowhatsapp=celular_w,
                                 created_by=user
                             )
 
