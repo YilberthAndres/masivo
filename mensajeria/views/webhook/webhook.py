@@ -32,6 +32,10 @@ def webhook(request):
         token = request.GET.get('hub.verify_token')
         json_data = json.loads(request.body)
 
+        statuses_text = json.dumps(json_data['entry'])
+        nueva_peticion = Peticion(estado = statuses_text)
+        nueva_peticion.save()
+
         try:
 
             if(json_data['entry'][0]['changes'][0]['field'] == 'messages'):

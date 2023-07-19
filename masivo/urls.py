@@ -21,6 +21,8 @@ from mensajeria.views.multimedia import multimedia
 from mensajeria.views.carga import carga
 from mensajeria.views.destinatarios import destinatarios
 from mensajeria.views.mensajes import mensajes
+from mensajeria.views.webhook import webhook
+from mensajeria.views.mensajeria import mensajeria
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -52,12 +54,17 @@ urlpatterns = [
     path('tokenuser', webhook.generate_permanent_token, name='generate_permanent'),
 
 
-    #MENSAJERIA
-    path('chat', mensajeria.index, name='chat_index'),
-    path('send_message', mensajeria.send_message, name='send_message'),
+    #MENSAJERIA VISTAS Y RECURSOS
+    path('chat', mensajes.mensajes, name='chat_index'),
+    path('chat_templates', mensajes.index, name='chat_templates'),
     path('list_destinatarios', mensajeria.list_destinatarios, name='list_destinatarios'),
     path('templates', mensajeria.templates, name='mensajes_templates'),
+
+
+    #MENSAJERIA ENVIO
+    path('send_message', mensajeria.send_message, name='send_message'),
     path('send_message_template', mensajeria.send_message_template, name='send_message_template'),
+
 
 
 
