@@ -42,7 +42,11 @@ def uploaded(request):
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
         )
         bucket = s3.Bucket("masivo")
-        s3_client = boto3.client("s3",aws_access_key_id=settings.AWS_ACCESS_KEY_ID,aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+        s3_client = boto3.client(
+            "s3",
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        )
 
         url = ""
 
@@ -50,11 +54,11 @@ def uploaded(request):
             bucket.put_object(Key=archivo.name, Body=archivo)
             response = s3_client.generate_presigned_url(
                 "get_object",
-                Params={"Bucket": "masivo", "Key":archivo.name },
+                Params={"Bucket": "masivo", "Key": archivo.name},
             )
             url = response
         except Exception as e:
-            print(e)
+            return JsonResponse({"error": e})
 
         response = bucket.Object(archivo.name)
 
