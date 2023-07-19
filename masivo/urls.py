@@ -20,33 +20,34 @@ from mensajeria.views.auth import auth
 from mensajeria.views.multimedia import multimedia
 from mensajeria.views.carga import carga
 from mensajeria.views.destinatarios import destinatarios
+from mensajeria.views.mensajes import mensajes
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', auth.home, name='home'),
-        # AUTHENTICATION
-    path('signup/', auth.signup, name='signup'),
-    path('lognout/', auth.signout, name='lognout'),
-
+    path("admin/", admin.site.urls),
+    path("", auth.home, name="home"),
+    # AUTHENTICATION
+    path("signup/", auth.signup, name="signup"),
+    path("lognout/", auth.signout, name="lognout"),
     # REGISTER
-    path('signin/', auth.signin, name='signin'),
-
-    #Multimedia
-    path('multimedia/', multimedia.index, name='multimedia-index'),
-    path('multimedia/create', multimedia.create, name='multimedia-create'),
-    path('multimedia/uploaded', multimedia.uploaded, name='multimedia-uploaded'),
-    path('multimedia/<int:archivo_id>/delete', multimedia.delete, name='multimedia-delete'),
-    path('multimedia/list', multimedia.list, name='multimedia-list'),
-
-    #CARGA
-    path('carga/', carga.index, name='carga-index'),
-    path('carga/uploaded', carga.uploaded, name='carga-uploaded'),
-
-    #DESTINATARIOS
-    path('destinatarios/', destinatarios.index, name='destinatarios-index'),
-    path('destinatarios/list', destinatarios.list, name='destinatarios-list'),
-
-
-
-
+    path("signin/", auth.signin, name="signin"),
+    # Multimedia
+    path("multimedia/", multimedia.index, name="multimedia-index"),
+    path("multimedia/create", multimedia.create, name="multimedia-create"),
+    path("multimedia/uploaded", multimedia.uploaded, name="multimedia-uploaded"),
+    path(
+        "multimedia/<int:archivo_id>/delete",
+        multimedia.delete,
+        name="multimedia-delete",
+    ),
+    path("multimedia/list", multimedia.list, name="multimedia-list"),
+    # CARGA
+    path("carga/", carga.index, name="carga-index"),
+    path("carga/uploaded", carga.uploaded, name="carga-uploaded"),
+    # DESTINATARIOS
+    path("destinatarios/", destinatarios.index, name="destinatarios-index"),
+    path("destinatarios/list", destinatarios.list, name="destinatarios-list"),
+    # Mensajes
+    path("mensajes/", mensajes.index, name="mensajes-index"),
+    path("mensajes/create/", mensajes.createRecordatorio, name="mensajes-recordatorio"),
+    path("info/", mensajes.mensajes, name="mensajes-info"),
 ]

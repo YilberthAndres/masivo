@@ -99,9 +99,6 @@ def list(request):
                 }
                 archivosnew.append(archivoslist)
 
-           
-
-
             # Lógica adicional después de eliminar el registro
             return JsonResponse(archivosnew, safe=False)
         except Archivos.DoesNotExist:
