@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-+7aq85p8t@1-e05ld&o&+eghh$t#o8)r+s2td(m_4h#o4u6txl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'storages',
     "django_celery_beat",
     "mensajeria",
 ]
@@ -127,8 +128,29 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+# print(BASE_DIR)
 
+
+
+AWS_ACCESS_KEY_ID = 'AKIASBXVIQXOFSOJZYPV'
+AWS_SECRET_ACCESS_KEY = '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'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = 'masivo'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_DEFAULT_ACL = None
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'mensajeria/static'),
+# ]
+
+STATIC_URL = "static/"
+# AWS_LOCATION = 'static'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+# DEFAULT_FILE_STORAGE = 'masivo.storage_backends.MediaStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
