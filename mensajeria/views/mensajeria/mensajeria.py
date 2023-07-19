@@ -11,6 +11,14 @@ import os
 from datetime import datetime
 from django.conf import settings
 import json
+import dotenv
+dotenv.load_dotenv()
+
+API_KEY_ENV                 = os.getenv('API_KEY')
+ID_WHATSAPP_BUSINESS_ENV    = os.getenv('ID_WHATSAPP_BUSINESS')
+ID_WHATSAPP_NUMBER_ENV      = os.getenv('ID_WHATSAPP_NUMBER')
+API_VERSION_WHATSAPP_ENV    = os.getenv('API_VERSION_WHATSAPP')
+
 
 @login_required(login_url='signin')
 def index(request):
@@ -23,9 +31,9 @@ def index(request):
 @login_required(login_url='signin')
 def templates(request):
 
-    url = 'https://graph.facebook.com/v17.0/103916249443809/message_templates'
+    url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+ID_WHATSAPP_BUSINESS_ENV+'/message_templates'
     headers = {
-        'Authorization': 'Bearer EAAEF7nFwsRoBAKuZC1ThcixZAfShD0mWwcKPtpZBHh9JfRKOLcNrwV2HnVgWwN5rzygHDX4mYRbY2TqZA5MVmad79cRZAKVGFJtIlG48mkUY6barPTeMhwxQpgBZAquwMGwurqo6gg6HqzO2gloreexkmjQDo8OJAUMxRkZA8ff074ZBAcijkTiE',
+        'Authorization': API_KEY_ENV,
         'Content-Type': 'application/json'
     }
 
@@ -102,27 +110,10 @@ def send_message(request):
 
             destinatario = Destinatarios.objects.get(id=destinatario)
             celular = destinatario.persona.telefonomovil
-            # return JsonResponse({'destinatario_id': })
 
-            # url = 'https://graph.facebook.com/v17.0/112605838565124/messages'
-            # headers = {
-            #     'Authorization': '',
-            #     'Content-Type': 'application/json'
-            # }
-            # payload = {
-            #     "messaging_product": "whatsapp",
-            #     "to": "57"+celular,
-            #     "type": "template",
-            #     "template": {
-            #         "name": "hello_world",
-            #         "language": {
-            #             "code": "en_US"
-            #         }
-            #     }
-            # }
-            url = 'https://graph.facebook.com/v17.0/112605838565124/messages'
+            url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+ID_WHATSAPP_NUMBER_ENV+'/messages'
             headers = {
-                'Authorization': 'Bearer EAAEF7nFwsRoBAKuZC1ThcixZAfShD0mWwcKPtpZBHh9JfRKOLcNrwV2HnVgWwN5rzygHDX4mYRbY2TqZA5MVmad79cRZAKVGFJtIlG48mkUY6barPTeMhwxQpgBZAquwMGwurqo6gg6HqzO2gloreexkmjQDo8OJAUMxRkZA8ff074ZBAcijkTiE',
+                'Authorization': API_KEY_ENV,
                 'Content-Type': 'application/json'
             }
             payload = {
@@ -163,20 +154,25 @@ def send_message_template(request):
     if request.method == 'POST':
 
         destinatarios = request.POST.getlist('destinatarios')  # Obtener una lista de los valores de destinatarios
-        mensaje = request.POST.get('mensaje')
+        template     = request.POST.get('templates')
         data = {'destinatarios': destinatarios}  # Crear un diccionario con el valor de destinatarios
         user = request.user
         # user = User.objects.get(id=user.id)
         # return JsonResponse(data)
+
+        destinatarios = Destinatarios.objects.filter(estado_id=596)
+
         for destinatario in destinatarios:
 
-            destinatario = Destinatarios.objects.get(id=destinatario)
+            # destinatario = Destinatarios.objects.get(id=destinatario)
+            # celular = destinatario.persona.telefonomovil
+            # # return JsonResponse({'destinatario_id': })
             celular = destinatario.persona.telefonomovil
-            # return JsonResponse({'destinatario_id': })
 
-            url = 'https://graph.facebook.com/v17.0/112605838565124/messages'
+
+            url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+ID_WHATSAPP_NUMBER_ENV+'/messages'
             headers = {
-                'Authorization': 'Bearer EAAEF7nFwsRoBAKuZC1ThcixZAfShD0mWwcKPtpZBHh9JfRKOLcNrwV2HnVgWwN5rzygHDX4mYRbY2TqZA5MVmad79cRZAKVGFJtIlG48mkUY6barPTeMhwxQpgBZAquwMGwurqo6gg6HqzO2gloreexkmjQDo8OJAUMxRkZA8ff074ZBAcijkTiE',
+                'Authorization': API_KEY_ENV,
                 'Content-Type': 'application/json'
             }
             payload = {
@@ -184,7 +180,7 @@ def send_message_template(request):
                 "to": "57"+celular,
                 "type": "template",
                 "template": {
-                    "name": "hello_world",
+                    "name": template,
                     "language": {
                         "code": "en_US"
                     }
@@ -200,11 +196,11 @@ def send_message_template(request):
             messageId = response_json['messages'][0]['id']
 
             nuevo_mensaje = Mensajeria(
-                destinatario_id = destinatario.id,
-                texto=mensaje,
-                celular = waId,
-                mensaje_id = messageId,
-                created_by_id=user.id
+                destinatario_id =   destinatario.id,
+                tipo_id         =   754,
+                celular         =   waId,
+                mensaje_id      =   messageId,
+                created_by_id   =   user.id
             )
 
             nuevo_mensaje.save()

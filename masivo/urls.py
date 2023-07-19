@@ -29,25 +29,37 @@ urlpatterns = [
     path("signup/", auth.signup, name="signup"),
     path("lognout/", auth.signout, name="lognout"),
     # REGISTER
-    path("signin/", auth.signin, name="signin"),
-    # Multimedia
-    path("multimedia/", multimedia.index, name="multimedia-index"),
-    path("multimedia/create", multimedia.create, name="multimedia-create"),
-    path("multimedia/uploaded", multimedia.uploaded, name="multimedia-uploaded"),
-    path(
-        "multimedia/<int:archivo_id>/delete",
-        multimedia.delete,
-        name="multimedia-delete",
-    ),
-    path("multimedia/list", multimedia.list, name="multimedia-list"),
-    # CARGA
-    path("carga/", carga.index, name="carga-index"),
-    path("carga/uploaded", carga.uploaded, name="carga-uploaded"),
-    # DESTINATARIOS
-    path("destinatarios/", destinatarios.index, name="destinatarios-index"),
-    path("destinatarios/list", destinatarios.list, name="destinatarios-list"),
-    # Mensajes
-    path("mensajes/", mensajes.index, name="mensajes-index"),
-    path("mensajes/create/", mensajes.createRecordatorio, name="mensajes-recordatorio"),
-    path("info/", mensajes.mensajes, name="mensajes-info"),
+    path('signin/', auth.signin, name='signin'),
+
+    #Multimedia
+    path('multimedia/', multimedia.index, name='multimedia-index'),
+    path('multimedia/create', multimedia.create, name='multimedia-create'),
+    path('multimedia/uploaded', multimedia.uploaded, name='multimedia-uploaded'),
+    path('multimedia/<int:archivo_id>/delete', multimedia.delete, name='multimedia-delete'),
+    path('multimedia/list', multimedia.list, name='multimedia-list'),
+
+    #CARGA
+    path('carga/', carga.index, name='carga-index'),
+    path('carga/uploaded', carga.uploaded, name='carga-uploaded'),
+
+    #DESTINATARIOS
+    path('destinatarios/', destinatarios.index, name='destinatarios-index'),
+    path('destinatarios/list', destinatarios.list, name='destinatarios-list'),
+    path('destinatarios/<int:destinatario_id>/delete', destinatarios.delete, name='destinatario-delete'),
+
+    #WEBHOOK
+    path('webhook', webhook.webhook, name='webhook'),
+    path('tokenuser', webhook.generate_permanent_token, name='generate_permanent'),
+
+
+    #MENSAJERIA
+    path('chat', mensajeria.index, name='chat_index'),
+    path('send_message', mensajeria.send_message, name='send_message'),
+    path('list_destinatarios', mensajeria.list_destinatarios, name='list_destinatarios'),
+    path('templates', mensajeria.templates, name='mensajes_templates'),
+    path('send_message_template', mensajeria.send_message_template, name='send_message_template'),
+
+
+
+
 ]
