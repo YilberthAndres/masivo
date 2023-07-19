@@ -59,6 +59,7 @@ urlpatterns = [
     path('send_message', mensajeria.send_message, name='send_message'),
     path('list_destinatarios', mensajeria.list_destinatarios, name='list_destinatarios'),
     path('templates', mensajeria.templates, name='mensajes_templates'),
+    path('send_message_template', mensajeria.send_message_template, name='send_message_template'),
 
 
 

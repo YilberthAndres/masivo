@@ -6,6 +6,12 @@ from mensajeria.models import Peticion, Mensajeria, Destinatarios, Personas
 import json
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+import os
+import dotenv
+dotenv.load_dotenv()
+
+VERIFY_TOKEN_ENV = os.getenv('VERIFY_TOKEN')
+
 
 def generate_permanent_token(request):
     user = request.user
@@ -20,7 +26,7 @@ def generate_permanent_token(request):
 @csrf_exempt
 def webhook(request):
     try:
-        verify_token = 'riodev1998'
+        verify_token = VERIFY_TOKEN_ENV
         mode = request.GET.get('hub.mode')
         challenge = request.GET.get('hub.challenge')
         token = request.GET.get('hub.verify_token')
