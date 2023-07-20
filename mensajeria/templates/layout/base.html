@@ -34,11 +34,11 @@
           <div class="container-fluid">
             
             <a class="navbar-brand" href="/">Masivo</a>
-            <a class="navbar-brand" href="/multimedia">Multimedia</a>
-            <a class="navbar-brand" href="/carga">Cargar Excel</a>
-            <a class="navbar-brand" href="/destinatarios">Destinatarios</a>
+            <a class="navbar-brand" href="{% url 'multimedia-index' %}">Multimedia</a>
+            <a class="navbar-brand" href="{% url 'carga-index' %}">Cargar Excel</a>
+            <a class="navbar-brand" href="{% url 'destinatarios-index' %}">Destinatarios</a>
             <a class="navbar-brand" href="{% url 'chat_index' %}">Mensajes</a>
-            <a class="navbar-brand" href="/info">Mensajes Templates</a>
+            <a class="navbar-brand" href="{% url 'chat_templates' %}">Mensajes Templates</a>
             <button
               class="navbar-toggler"
               type="button"
