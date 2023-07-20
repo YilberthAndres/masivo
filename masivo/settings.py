@@ -36,15 +36,17 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'storages',
+    "storages",
     "django_celery_beat",
     "mensajeria",
+    
 ]
 
 MIDDLEWARE = [
@@ -75,7 +77,20 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "masivo.wsgi.application"
+WSGI_APPLICATION = 'masivo.wsgi.application'
+ASGI_APPLICATION = 'masivo.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+
+
+
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]

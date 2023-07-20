@@ -59,6 +59,8 @@ urlpatterns = [
     path('chat_templates', mensajes.index, name='chat_templates'),
     path('list_destinatarios', mensajeria.list_destinatarios, name='list_destinatarios'),
     path('templates', mensajeria.templates, name='mensajes_templates'),
+    path('get_menssage', mensajes.obtener_mensajes, name='mensajes_obtener_mensajes'),
+    path('get_menssage/<int:recipiente_id>', mensajes.obtener_mensajes_find, name='mensajes_obtener_mensajes_find'),
 
 
     #MENSAJERIA ENVIO

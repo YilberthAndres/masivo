@@ -105,7 +105,7 @@ class Mensajeria(models.Model):
     multimedia_id     = models.CharField(null=True, blank=True,max_length=100)
     mime_type         = models.CharField(null=True, blank=True,max_length=100)
     sha256            = models.TextField(null=True, blank=True)
-    timestamp         = models.CharField(null=True, blank=True,max_length=100)
+    timestamp_w       = models.CharField(null=True, blank=True,max_length=100)
     celular           = models.CharField(null=True, blank=True,max_length=12)
     estado            = models.ForeignKey(Maestras, blank=True, related_name='mensajeria_estado', null=True, on_delete=models.CASCADE, db_index=True)
     created_by        = models.ForeignKey('auth.User', related_name='mensajeria_created_by', null=True, blank=True, on_delete=models.CASCADE)
