@@ -148,10 +148,14 @@ body {
 .sidebar-chat:hover {
     background-color: #F5F5F5;
 }
-
-.sidebar-chat:nth-child(2) {
+/* .sidebar-chat:nth-child(2) {
     background-color: #EBEBEB;
-}
+  } */
+  
+  .selected {
+    background-color: #EBEBEB;
+  }
+  
 
 .sidebar-chat::before {
     content: "";
@@ -203,7 +207,7 @@ body {
     width: fit-content;
     border-radius: 8px;
     background-color: white;
-    margin-bottom: 30px;
+    margin-bottom: 3px;
 }
 
 .chat-sent {
