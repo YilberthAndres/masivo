@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dotenv
+
 dotenv.load_dotenv()
 
 
@@ -23,30 +24,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-SECRET_KEY_ENV    = os.getenv('SECRET_KEY')
+SECRET_KEY_ENV = os.getenv("SECRET_KEY")
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET_KEY_ENV 
+SECRET_KEY = SECRET_KEY_ENV
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
-
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # Application definition
 
 INSTALLED_APPS = [
-    "channels",
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "channels",
     "storages",
     "django_celery_beat",
     "mensajeria",
-    
 ]
 
 MIDDLEWARE = [
@@ -77,17 +78,11 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'masivo.wsgi.application'
+WSGI_APPLICATION = "masivo.wsgi.application"
 # ASGI_APPLICATION = 'masivo.asgi.application'
 
-ASGI_APPLICATION = "masivo.routing.application" #routing.py will be created later
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': "channels.layers.InMemoryChannelLayer"
-        }
-    }
-
-
+ASGI_APPLICATION = "masivo.asgi.application"  # routing.py will be created later
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
@@ -97,23 +92,23 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_TIMEZONE = "America/Bogota"
 broker_connection_retry_on_startup = True
 
-DB_NAME     = os.getenv('DB_NAME')
-DB_USER     = os.getenv('DB_USER')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_HOST     = os.getenv('DB_HOST')
-DB_PORT     = os.getenv('DB_PORT')
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE':   'django.db.backends.mysql',
-        'NAME':     DB_NAME,
-        'USER':     DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST':     DB_HOST,
-        'PORT':     DB_PORT,
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": DB_NAME,
+        "USER": DB_USER,
+        "PASSWORD": DB_PASSWORD,
+        "HOST": DB_HOST,
+        "PORT": DB_PORT,
     }
 }
 
@@ -156,14 +151,14 @@ USE_TZ = True
 # print(BASE_DIR)
 
 
-AWS_ACCESS_KEY_ID     = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY     = os.getenv('AWS_SECRET_ACCESS_KEY')
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_STORAGE_BUCKET_NAME = 'masivo'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_S3_REGION_NAME = 'us-east-1'
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_STORAGE_BUCKET_NAME = "masivo"
+AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+AWS_S3_REGION_NAME = "us-east-1"
 AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
+    "CacheControl": "max-age=86400",
 }
 AWS_DEFAULT_ACL = None
 # STATICFILES_DIRS = [

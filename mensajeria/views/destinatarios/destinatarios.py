@@ -27,14 +27,13 @@ def list(request):
         try:
 
             
-            destinatarios = Destinatarios.objects.all()
+            destinatarios = Destinatarios.objects.select_related("persona").all()
             destinatariosnew = []
               
             for destinatario in destinatarios:
                 usuario = destinatario.created_by
                 persona = destinatario.persona
 
-                
                 nombre_persona = persona.nombre + ' ' + persona.segundonombre + ' ' + persona.apellido + ' ' + persona.segundoapellido
                 destinatarioslist = {
                     'id': destinatario.id,
@@ -47,7 +46,6 @@ def list(request):
                 destinatariosnew.append(destinatarioslist)
 
            
-
 
             # Lógica adicional después de eliminar el registro
             return JsonResponse(destinatariosnew, safe=False)

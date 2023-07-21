@@ -85,11 +85,11 @@ def obtener_mensajes(request):
                     DATE_FORMAT(FROM_UNIXTIME(m1.timestamp_w), '%Y-%m-%d') AS fecha,
                     DATE_FORMAT(FROM_UNIXTIME(m1.timestamp_w), '%H:%i') AS hora,
                     CONCAT(p.nombre, ' ', p.segundonombre, ' ', p.apellido) as nombre
-                FROM Mensajeria m1
+                FROM mensajeria m1
                 INNER JOIN personas p ON (m1.recipiente_id = p.telefonowhatsapp)
                 INNER JOIN (
                     SELECT recipiente_id, MAX(created_at) AS max_created_at
-                    FROM Mensajeria
+                    FROM mensajeria
                     WHERE created_at >= DATE_SUB(NOW(), INTERVAL 2 WEEK) 
                     GROUP BY recipiente_id
                 ) m2 ON m1.recipiente_id = m2.recipiente_id AND m1.created_at = m2.max_created_at
@@ -138,7 +138,7 @@ def obtener_mensajes_find(request, recipiente_id):
                 DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%H:%%i') AS hora, 
                 texto,
                 id
-                FROM Mensajeria
+                FROM mensajeria
                 WHERE  recipiente_id = '%s' and created_at >= DATE_SUB(NOW(), INTERVAL 2 WEEK)
             """, [recipiente_id])
 
