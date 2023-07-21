@@ -17,6 +17,54 @@
 // var formulario = $("#miFormulario")[0];
 // var formData = new FormData(formulario);
 
+
+// const boxName = JSON.parse(document.getElementById('box-name').textContent);
+const boxName = 'mordecay'
+// # Create a WebSocket in JavaScript.
+const chatSocket = new WebSocket(
+   'ws://' +
+   window.location.host +
+   '/ws/chat/' +
+   boxName +
+   '/'
+);
+
+// chatSocket.onmessage = function (e) {
+//    const data = JSON.parse(e.data);
+//    document.querySelector('#chat-text').value += (data.message + ' sent by ' + data.username   + '\n') // add message to text box
+// }
+
+// const user_username = JSON.parse(document.getElementById('user_username').textContent);
+const user_username = 'yilberth';
+// document.querySelector('#submit').onclick = function (e) {
+  //  const messageInputDom = document.querySelector('#input');
+   const message = 'hola';
+
+  //  chatSocket.send(JSON.stringify({
+  //      'message': message,
+  //      'username': user_username,
+  //  }));
+  //  messageInputDom.value = '';
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Obtener el token CSRF
 var tokenCSRF = $('input[name="csrfmiddlewaretoken"]').val();
 // var selectDestinatarios = $("#destinatarios");

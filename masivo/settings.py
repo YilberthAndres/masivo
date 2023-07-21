@@ -78,16 +78,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'masivo.wsgi.application'
-ASGI_APPLICATION = 'masivo.asgi.application'
+# ASGI_APPLICATION = 'masivo.asgi.application'
 
+ASGI_APPLICATION = "masivo.routing.application" #routing.py will be created later
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
-}
+    'default': {
+        'BACKEND': "channels.layers.InMemoryChannelLayer"
+        }
+    }
 
 
 
