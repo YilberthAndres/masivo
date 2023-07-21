@@ -32,9 +32,9 @@ def webhook(request):
         token = request.GET.get('hub.verify_token')
         json_data = json.loads(request.body)
 
-        # statuses_text = json.dumps(json_data['entry'])
-        # nueva_peticion = Peticion(estado = statuses_text)
-        # nueva_peticion.save()
+        statuses_text = json.dumps(json_data['entry'])
+        nueva_peticion = Peticion(estado = statuses_text)
+        nueva_peticion.save()
 
         try:
 
@@ -87,7 +87,7 @@ def update_message(statuses):
 
         mensaje                 = Mensajeria.objects.get(mensaje_id=mensaje_id)
         mensaje.estado_id       = estado
-        mensaje.timestamp       = timestamp
+        mensaje.timestamp_w     = timestamp
         mensaje.recipiente_id   = recipiente_id
         # mensaje.conversacion_id = conversacion_id
         mensaje.save()
@@ -135,7 +135,7 @@ def new_message(message, perfil):
                 celular           = from_num,
                 recipiente_id     = from_num,
                 mensaje_id        = message_id,
-                timestamp         = timestamp,
+                timestamp_w       = timestamp,
                 tipo_id           = 748,
                 estado_id         = estado
             )
@@ -154,7 +154,7 @@ def new_message(message, perfil):
                 celular           = from_num,
                 recipiente_id     = from_num,
                 mensaje_id        = message_id,
-                timestamp         = timestamp,
+                timestamp_w         = timestamp,
                 tipo_id           = 750,
                 estado_id         = estado
             )
@@ -164,7 +164,7 @@ def new_message(message, perfil):
                 celular           = from_num,
                 recipiente_id     = from_num,
                 mensaje_id        = message_id,
-                timestamp         = timestamp,
+                timestamp_w         = timestamp,
                 tipo_id           = 751,
                 estado_id         = estado
             )
