@@ -39,7 +39,7 @@ urlpatterns = [
     path('multimedia/uploaded', multimedia.uploaded, name='multimedia-uploaded'),
     path('multimedia/<int:archivo_id>/delete', multimedia.delete, name='multimedia-delete'),
     path('multimedia/list', multimedia.list, name='multimedia-list'),
-    path('multimedia/get_media', multimedia.get_media, name='multimedia-get_media'),
+    # path('multimedia/get_media', multimedia.get_media, name='multimedia-get_media'),
 
     #CARGA
     path('carga/', carga.index, name='carga-index'),

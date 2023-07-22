@@ -7,18 +7,18 @@ from django.contrib.auth.decorators import login_required, permission_required
 from mensajeria.models import Archivos
 from mensajeria.forms import ArchivosForm
 from django.http import HttpResponse
-import os
 from datetime import datetime
-from django.conf import settings
 import boto3
 from django.core.files.storage import get_storage_class
 import requests
 import os
-from datetime import datetime
 from django.conf import settings
 import json
 import dotenv
 dotenv.load_dotenv()
+import hashlib
+import re
+
 
 API_KEY_ENV                 = os.getenv('API_KEY')
 ID_WHATSAPP_BUSINESS_ENV    = os.getenv('ID_WHATSAPP_BUSINESS')
@@ -155,6 +155,7 @@ def borrar_archivo(ruta_archivo):
         return False
 
 
+
 def get_media(request):
     url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/268127482508556'
     headers = {
@@ -169,7 +170,34 @@ def get_media(request):
     url_media = response_json['url']
 
     response_media = requests.get(url_media, headers=headers)
-    return HttpResponse(response_media, content_type="image/jpeg")
+
+
+    if response_media.status_code == 200:
+        # Genera el nombre del archivo a partir de la URL usando un hash MD5
+        nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
+
+        # Obtiene la extensión del archivo desde el encabezado Content-Type
+        extension_archivo = response_media.headers.get('Content-Type', '').split('/')[-1]
+
+        # Elimina los caracteres inválidos para el nombre del archivo
+        nombre_archivo = re.sub(r'[\\/*?:"<>|]', '', nombre_archivo)
+
+        # Combina el nombre del archivo y su extensión
+        nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
+
+        # Construye la ruta completa para guardar el archivo en la carpeta deseada
+        ruta_archivo = os.path.join(settings.BASE_DIR, "mensajeria", "static", "temp", nombre_archivo_con_extension)
+
+        # Abre el archivo en modo binario y guarda el contenido de la respuesta en él
+        with open(ruta_archivo, 'wb') as archivo:
+            archivo.write(response_media.content)
+
+        # Devuelve una respuesta con el enlace a la imagen descargada
+        return HttpResponse(f"Imagen descargada y guardada en: {ruta_archivo}")
+    else:
+        return HttpResponse("Error al descargar la imagen", status=404)
+
+    # return HttpResponse(response_media, content_type="image/jpeg")
     response_json_media = response.json()
 
     return JsonResponse(response_json_media)

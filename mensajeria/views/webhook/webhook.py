@@ -3,23 +3,24 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from mensajeria.models import Peticion, Mensajeria, Destinatarios, Personas
-import json
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
-import os
-import dotenv
-dotenv.load_dotenv()
-
-import json
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import requests
-import os
 from datetime import datetime
 from django.conf import settings
 import json
 import dotenv
 dotenv.load_dotenv()
+import boto3
+from django.core.files.storage import get_storage_class
+import os
+
+
+
+import hashlib
+import re
 
 API_KEY_ENV                 = os.getenv('API_KEY')
 ID_WHATSAPP_BUSINESS_ENV    = os.getenv('ID_WHATSAPP_BUSINESS')
@@ -181,6 +182,7 @@ def new_message(message, perfil):
                 estado_id         = estado
             )
             nuevo_mensaje.save()
+            get_media(multimedia_id, message_id)
         else: 
             nuevo_mensaje  = Mensajeria(
                 celular           = from_num,
@@ -226,14 +228,48 @@ def send_txt(id, message, timestamp_w, recipiente_id):
         nueva_peticion.save()
 
 
-def get_media(media_id):
-    url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+media_id
-    headers = {
-        'Authorization': API_KEY_ENV,
-        'Content-Type': 'application/json'
-    }
+def get_media(media_id, message_id):
+    try:
+        url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+media_id
+        headers = {
+            'Authorization': API_KEY_ENV,
+            'Content-Type': 'application/json'
+        }
 
 
-    response = requests.get(url, headers=headers)
-    response_json = response.json()
-    return JsonResponse(response_json)
+        response = requests.get(url, headers=headers)
+        response_json = response.json()
+
+        url_media = response_json['url']
+
+        response_media = requests.get(url_media, headers=headers)
+
+
+        if response_media.status_code == 200:
+            # Genera el nombre del archivo a partir de la URL usando un hash MD5
+            nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
+
+            # Obtiene la extensión del archivo desde el encabezado Content-Type
+            extension_archivo = response_media.headers.get('Content-Type', '').split('/')[-1]
+
+            # Elimina los caracteres inválidos para el nombre del archivo
+            nombre_archivo = re.sub(r'[\\/*?:"<>|]', '', nombre_archivo)
+
+            # Combina el nombre del archivo y su extensión
+            nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
+
+            # Construye la ruta completa para guardar el archivo en la carpeta deseada
+            ruta_archivo = os.path.join(settings.BASE_DIR, "mensajeria", "static", "temp", nombre_archivo_con_extension)
+
+            # Abre el archivo en modo binario y guarda el contenido de la respuesta en él
+            with open(ruta_archivo, 'wb') as archivo:
+                archivo.write(response_media.content)
+
+            # Devuelve una respuesta con el enlace a la imagen descargada
+            return HttpResponse(f"Imagen descargada y guardada en: {ruta_archivo}")
+        else:
+            return HttpResponse("Error al descargar la imagen", status=404)
+    except Exception as e:
+        error_message = str(e)
+        nueva_peticion = Peticion(estado = 'Fallo guardando multimedia: ' + error_message)
+        nueva_peticion.save()
