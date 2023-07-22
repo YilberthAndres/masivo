@@ -6,12 +6,24 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, permission_required
 from mensajeria.models import Archivos
 from mensajeria.forms import ArchivosForm
+from django.http import HttpResponse
 import os
 from datetime import datetime
 from django.conf import settings
 import boto3
 from django.core.files.storage import get_storage_class
+import requests
+import os
+from datetime import datetime
+from django.conf import settings
+import json
+import dotenv
+dotenv.load_dotenv()
 
+API_KEY_ENV                 = os.getenv('API_KEY')
+ID_WHATSAPP_BUSINESS_ENV    = os.getenv('ID_WHATSAPP_BUSINESS')
+ID_WHATSAPP_NUMBER_ENV      = os.getenv('ID_WHATSAPP_NUMBER')
+API_VERSION_WHATSAPP_ENV    = os.getenv('API_VERSION_WHATSAPP')
 
 @login_required(login_url="signin")
 def index(request):
@@ -141,3 +153,23 @@ def borrar_archivo(ruta_archivo):
         return True
     else:
         return False
+
+
+def get_media(request):
+    url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/268127482508556'
+    headers = {
+        'Authorization': API_KEY_ENV,
+        'Content-Type': 'application/json'
+    }
+
+
+    response = requests.get(url, headers=headers)
+    response_json = response.json()
+
+    url_media = response_json['url']
+
+    response_media = requests.get(url_media, headers=headers)
+    return HttpResponse(response_media, content_type="image/jpeg")
+    response_json_media = response.json()
+
+    return JsonResponse(response_json_media)

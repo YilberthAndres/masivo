@@ -10,6 +10,21 @@ import os
 import dotenv
 dotenv.load_dotenv()
 
+import json
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+import requests
+import os
+from datetime import datetime
+from django.conf import settings
+import json
+import dotenv
+dotenv.load_dotenv()
+
+API_KEY_ENV                 = os.getenv('API_KEY')
+ID_WHATSAPP_BUSINESS_ENV    = os.getenv('ID_WHATSAPP_BUSINESS')
+ID_WHATSAPP_NUMBER_ENV      = os.getenv('ID_WHATSAPP_NUMBER')
+API_VERSION_WHATSAPP_ENV    = os.getenv('API_VERSION_WHATSAPP')
 VERIFY_TOKEN_ENV = os.getenv('VERIFY_TOKEN')
 
 
@@ -35,6 +50,7 @@ def webhook(request):
         statuses_text = json.dumps(json_data['entry'])
         nueva_peticion = Peticion(estado = statuses_text)
         nueva_peticion.save()
+        # enviar_mensaje_a_grupo()
 
         try:
 
@@ -122,6 +138,8 @@ def new_message(message, perfil):
         nueva_persona.save()
         persona_id = nueva_persona.id
 
+        # nombre_persona = nueva_persona.nombre + ' ' + nueva_persona.segundonombre
+
         nuevo_registro = Destinatarios(
             persona_id=persona_id, created_by_id=1, estado_id=596
         )
@@ -141,6 +159,10 @@ def new_message(message, perfil):
             )
 
             nuevo_mensaje.save()
+
+            send_txt(nuevo_mensaje.id, nuevo_mensaje.texto, nuevo_mensaje.timestamp_w, nuevo_mensaje.recipiente_id)
+
+
 
         elif(type == 'image'):
 
@@ -170,8 +192,48 @@ def new_message(message, perfil):
             )
             nuevo_mensaje.save()
 
+        
+
     except Exception as e:
         error_message = str(e)
         nueva_peticion = Peticion(estado = 'Fallo creando: ' + error_message)
         nueva_peticion.save()
 
+
+
+# Vista donde quieres enviar el mensaje al WebSocketGroup
+def send_txt(id, message, timestamp_w, recipiente_id):
+
+    try:
+        # Obtén los datos del mensaje y el nombre de usuario de alguna manera
+        # message = "Hola, esto es un mensaje enviado desde otra vista"
+        # username = "Usuario1"
+
+        # Obtén el channel_layer
+        channel_layer = get_channel_layer()
+
+        # Envia el mensaje al grupo del WebSocketGroup usando async_to_sync
+        async_to_sync(channel_layer.group_send)('chat_riodev', {
+            'type'          :   'chatbox_message',
+            'id'           :   id,
+            'message'       :   message,
+            'timestamp_w'   :   timestamp_w,
+            'recipiente_id' :   recipiente_id,
+        })
+    except Exception as e:
+        error_message = str(e)
+        nueva_peticion = Peticion(estado = 'Fallo websockets: ' + error_message)
+        nueva_peticion.save()
+
+
+def get_media(media_id):
+    url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+media_id
+    headers = {
+        'Authorization': API_KEY_ENV,
+        'Content-Type': 'application/json'
+    }
+
+
+    response = requests.get(url, headers=headers)
+    response_json = response.json()
+    return JsonResponse(response_json)

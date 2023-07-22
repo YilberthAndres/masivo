@@ -12,6 +12,8 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
+
+
     # This function receive messages from WebSocket.
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -28,14 +30,19 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         )
     # Receive message from room group.
     async def chatbox_message(self, event):
-        message = event["message"]
-        username = event["username"]
+        id              =   event["id"]
+        message         =   event["message"]
+        timestamp_w     =   event["timestamp_w"]
+        recipiente_id   =   event["recipiente_id"]
+        
         #send message and username of sender to websocket
         await self.send(
             text_data=json.dumps(
                 {
-                    "message": message,
-                    "username": username,
+                    "id"            :   id,
+                    "message"       :   message,
+                    "timestamp_w"   :   timestamp_w,
+                    "recipiente_id" :   recipiente_id,
                 }
             )
         )
