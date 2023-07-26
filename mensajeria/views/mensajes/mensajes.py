@@ -183,7 +183,7 @@ def send_message(request):
         # for destinatario in destinatarios:
 
         
-        persona_model       =   Personas.objects.get(telefonowhatsapp=destinatario)
+        persona_model       =   Personas.objects.get(telefonowhatsapp=3014582878)
         destinatario_model  =   Destinatarios.objects.get(persona_id = persona_model.id)
         celular = destinatario_model.persona.telefonomovil
 

@@ -5,6 +5,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.chat_box_name = self.scope["url_route"]["kwargs"]["chat_box_name"]
         self.group_name = "chat_%s" % self.chat_box_name
+        # self.group_name = "chat_mordecay"
 
         await self.channel_layer.group_add(self.group_name, self.channel_name)
 
@@ -31,6 +32,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         message = event["message"]
         username = event["username"]
         #send message and username of sender to websocket
+        
         await self.send(
             text_data=json.dumps(
                 {
@@ -39,3 +41,8 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+    
+    def send_notification(self, event):
+        # Esta función enviará la notificación al cliente
+        notification = event['notification']
+        self.send(text_data=json.dumps(notification))

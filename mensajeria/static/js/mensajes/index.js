@@ -53,7 +53,7 @@ $("#enviarBtn").click(function () {
       console.log(response)
     },
     error: function (xhr, status, error) {
-      alert("Error en la solicitud AJAX");
+      alert("Error en ssss");
     },
   });
 });
