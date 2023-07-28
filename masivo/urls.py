@@ -62,6 +62,7 @@ urlpatterns = [
     path('templates', mensajeria.templates, name='mensajes_templates'),
     path('get_menssage', mensajes.obtener_mensajes, name='mensajes_obtener_mensajes'),
     path('get_menssage/<int:recipiente_id>', mensajes.obtener_mensajes_find, name='mensajes_obtener_mensajes_find'),
+    path('messages_read/<int:recipiente_id>', mensajes.messages_read, name='messages_read'),
 
 
     #MENSAJERIA ENVIO

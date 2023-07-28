@@ -296,3 +296,25 @@ body {
     cursor: pointer;
   }
   
+  
+/* Estilo para el número */
+.number {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #4caf50; /* Color del círculo verde */
+    border-radius: 50%; /* Para crear el círculo */
+    color: white; /* Color del número */
+    font-weight: bold; /* Texto en negrita */
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 5px; /* Ajusta el margen superior para bajar el número */
+  }
+  
+  /* Estilo para el contenedor de la hora y el número */
+  .time {
+    display: flex;
+    flex-direction: column; /* Alinea los elementos verticalmente */
+    align-items: center; /* Centra los elementos horizontalmente */
+  }
+  

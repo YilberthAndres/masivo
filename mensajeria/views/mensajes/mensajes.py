@@ -82,7 +82,14 @@ def obtener_mensajes(request):
                     m1.texto, 
                     DATE_FORMAT(FROM_UNIXTIME(m1.timestamp_w), '%Y-%m-%d') AS fecha,
                     DATE_FORMAT(FROM_UNIXTIME(m1.timestamp_w), '%H:%i') AS hora,
-                    CONCAT(p.nombre, ' ', p.segundonombre, ' ', p.apellido) as nombre
+                    CONCAT(p.nombre, ' ', p.segundonombre, ' ', p.apellido) as nombre,
+                    (
+                        SELECT COUNT(*)
+                        FROM mensajeria m2
+                        WHERE m2.recipiente_id = m1.recipiente_id
+                        AND m2.destinatario_id IS NULL
+                        AND m2.estado_id = 745
+                    ) as cantidad_mensajes_destinatario_null_estado_745
                 FROM mensajeria m1
                 INNER JOIN personas p ON (m1.recipiente_id = p.telefonowhatsapp)
                 INNER JOIN (
@@ -104,6 +111,7 @@ def obtener_mensajes(request):
             fecha           = row[2]
             hora            = row[3]
             nombre          = row[4]
+            sin_leer        = row[5]
 
             resultado = {
                 'recipiente_id':    recipiente_id,
@@ -111,6 +119,7 @@ def obtener_mensajes(request):
                 'fecha':            fecha,
                 'hora':             hora,
                 'nombre':           nombre,
+                'sin_leer':         sin_leer,
             }
             resultados.append(resultado)
 
@@ -243,3 +252,22 @@ def send_message(request):
         return JsonResponse(resultadoMensaje)
         # Retornar la respuesta como un JSON
         # return JsonResponse(response_json)
+
+
+@login_required()
+def messages_read(request, recipiente_id):
+
+    try:
+        Mensajeria.objects.filter(destinatario_id__isnull=True, recipiente_id=recipiente_id).update(estado_id=746)
+        response_data = {'success': True, 'message': 'Operación exitosa.'}
+
+    except Exception as e:
+        error_message = str(e)
+            # Lógica en caso de que el registro no exista
+        response_data = {'success': False, 'message': error_message}
+    
+    # Retorna una respuesta JSON con el diccionario
+    return JsonResponse(response_data)
+    
+
+
