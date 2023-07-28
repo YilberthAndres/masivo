@@ -58,8 +58,6 @@ def createRecordatorio(request):
     return JsonResponse({"success": True})
 
 
-
-
 @login_required(login_url="signin")
 def mensajes(request):
 
@@ -137,7 +135,9 @@ def obtener_mensajes_find(request, recipiente_id):
                 DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%Y-%%m-%%d') AS fecha,
                 DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%H:%%i') AS hora, 
                 texto,
-                id
+                id,
+                mime_type,
+                link
                 FROM mensajeria
                 WHERE  recipiente_id = '%s' and created_at >= DATE_SUB(NOW(), INTERVAL 2 WEEK)
             """, [recipiente_id])
@@ -153,6 +153,8 @@ def obtener_mensajes_find(request, recipiente_id):
             hora            = row[4]
             texto           = row[5]
             mensaje_id      = row[6]
+            mime_type       = row[7]
+            link            = row[8]
 
             resultado = {
                 'estado_id':        estado_id,
@@ -162,8 +164,11 @@ def obtener_mensajes_find(request, recipiente_id):
                 'hora':             hora,
                 'texto':            texto,
                 'mensaje_id':       mensaje_id,
+                'mime_type':        mime_type,
+                'link':             link,
             }
             resultados.append(resultado)
+
 
 
         # Devolver la respuesta JSON
@@ -215,6 +220,7 @@ def send_message(request):
             destinatario_id     =   destinatario_model.id,
             texto               =   mensaje,
             celular             =   waId,
+            recipiente_id       =   waId,
             mensaje_id          =   messageId,
             created_by_id       =   user.id
         )
@@ -222,8 +228,12 @@ def send_message(request):
         nuevo_mensaje.save()
 
         resultadoMensaje = {
-                'mensaje_id':    nuevo_mensaje.id,
-                'texto':            nuevo_mensaje.texto,
+                'id':    nuevo_mensaje.id,
+                'message':            nuevo_mensaje.texto,
+                'destinatario':       waId,
+                'timestamp_w':        '1690133734',
+                'mime_type':           '',
+                'link':           ''
                 # 'fecha':            fecha,
                 # 'hora':             hora,
                 # 'nombre':           nombre,

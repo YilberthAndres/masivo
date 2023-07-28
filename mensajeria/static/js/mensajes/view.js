@@ -157,17 +157,40 @@ $.ajax({
             response.forEach((chat) => {
               // Crear y agregar el mensaje según el estado
               if (chat.estado === "recibido") {
-                const chatMessage = document.createElement("p");
-                chatMessage.classList.add("chat-message");
-                chatMessage.textContent = chat.texto;
-                chatMessage.id = `mensaje_${chat.mensaje_id}`;
+                // console.log('1')
+                // console.log(chat)
+                if(chat.mime_type == null){
+                  const chatMessage = document.createElement("p");
+                  chatMessage.classList.add("chat-message");
+                  chatMessage.textContent = chat.texto;
+                  chatMessage.id = `mensaje_${chat.mensaje_id}`;
 
-                const chatTimestamp = document.createElement("span");
-                chatTimestamp.classList.add("chat-timestamp");
-                chatTimestamp.textContent = chat.hora;
+                  const chatTimestamp = document.createElement("span");
+                  chatTimestamp.classList.add("chat-timestamp");
+                  chatTimestamp.textContent = chat.hora;
 
-                chatMessage.appendChild(chatTimestamp);
-                messageContent.appendChild(chatMessage);
+                  chatMessage.appendChild(chatTimestamp);
+                  messageContent.appendChild(chatMessage);
+                }else if(chat.mime_type == 'image/jpeg'){
+
+                  const chatMessage = document.createElement("div");
+                  chatMessage.classList.add("chat-message");
+                  chatMessage.id = `mensaje_${chat.mensaje_id}`;
+                  
+                  const chatImage = document.createElement("img");
+                  chatImage.classList.add("chat-image");
+                  chatImage.style.cursor = "pointer";
+                  chatImage.src = chat.link
+                  
+                  const chatTimestamp = document.createElement("span");
+                  chatTimestamp.classList.add("chat-timestamp");
+                  chatTimestamp.textContent = chat.hora;
+                  
+                  chatMessage.appendChild(chatImage);
+                  chatMessage.appendChild(chatTimestamp);
+                  messageContent.appendChild(chatMessage);
+                  
+                }
               } else if (chat.estado === "enviado") {
                 const chatMessage = document.createElement("p");
                 chatMessage.classList.add("chat-message", "chat-sent");
@@ -183,6 +206,14 @@ $.ajax({
               }
               lastMessage = `mensaje_${chat.mensaje_id}`;
             });
+            // Agrega el evento onclick a todas las imágenes dentro del contenedor de mensajes
+            const chatImages = messageContent.querySelectorAll(".chat-image");
+            chatImages.forEach((image) => {
+              image.onclick = () => {
+                mostrarVentanaEmergente(image.src);
+              };
+            });
+
 
             const miElemento = document.getElementById(lastMessage);
 
@@ -296,8 +327,8 @@ function sendMessage(mensaje) {
 
       const chatMessage2 = document.createElement("p");
       chatMessage2.classList.add("chat-message", "chat-sent");
-      chatMessage2.textContent = response.texto;
-      chatMessage2.id = `mensaje_${response.mensaje_id}`;
+      chatMessage2.textContent = response.message;
+      chatMessage2.id = `mensaje_${response.id}`;
 
       const chatTimestamp2 = document.createElement("span");
       chatTimestamp2.classList.add("chat-timestamp");
@@ -307,7 +338,7 @@ function sendMessage(mensaje) {
       messageContent2.appendChild(chatMessage2);
 
       const miElemento = document.getElementById(
-        "mensaje_" + response.mensaje_id
+        "mensaje_" + response.id
       );
 
       if (miElemento) {
@@ -315,6 +346,7 @@ function sendMessage(mensaje) {
       }
 
       document.getElementById("txt_" + mensaje.recipiente_id).value = "";
+      pintar(null)
     },
     error: function (xhr, status, error) {
       alert("Error en la solicitud AJAX");
@@ -338,6 +370,7 @@ function pintar(message_new)
     success: function (response) {
       // Obtenemos el contenedor donde deseamos agregar los elementos
       const chatContainer = document.getElementById("chat-container");
+      chatContainer.innerHTML = "";
       const chatElements = [];
   
       response.forEach((mensaje) => {
@@ -393,21 +426,49 @@ function pintar(message_new)
               invisibleElement.style.display = "none"; 
               invisibleElement.id = `view_chat_${mensaje.recipiente_id}`;
               messageContent.appendChild(invisibleElement);
+              
   
               response.forEach((chat) => {
                 // Crear y agregar el mensaje según el estado
                 if (chat.estado === "recibido") {
-                  const chatMessage = document.createElement("p");
-                  chatMessage.classList.add("chat-message");
-                  chatMessage.textContent = chat.texto;
-                  chatMessage.id = `mensaje_${chat.mensaje_id}`;
+                  // console.log('2')
+                  // console.log(chat)
+                  if(chat.mime_type == null){
+                    const chatMessage = document.createElement("p");
+                    chatMessage.classList.add("chat-message");
+                    chatMessage.textContent = chat.texto;
+                    chatMessage.id = `mensaje_${chat.mensaje_id}`;
   
-                  const chatTimestamp = document.createElement("span");
-                  chatTimestamp.classList.add("chat-timestamp");
-                  chatTimestamp.textContent = chat.hora;
+                    const chatTimestamp = document.createElement("span");
+                    chatTimestamp.classList.add("chat-timestamp");
+                    chatTimestamp.textContent = chat.hora;
   
-                  chatMessage.appendChild(chatTimestamp);
-                  messageContent.appendChild(chatMessage);
+                    chatMessage.appendChild(chatTimestamp);
+                    messageContent.appendChild(chatMessage);
+                  }else if(chat.mime_type == 'image/jpeg'){
+                    // console.log('2')
+                    // console.log(chat)
+                    // console.log(chat.link)
+                    const chatMessage = document.createElement("div");
+                    chatMessage.classList.add("chat-message");
+                    chatMessage.id = `mensaje_${chat.mensaje_id}`;
+                    
+                    const chatImage = document.createElement("img");
+                    chatImage.classList.add("chat-image");
+                    chatImage.style.cursor = "pointer";
+                    chatImage.src = chat.link
+                    
+                    const chatTimestamp = document.createElement("span");
+                    chatTimestamp.classList.add("chat-timestamp");
+                    chatTimestamp.textContent = chat.hora;
+                    
+                    chatMessage.appendChild(chatImage);
+                    chatMessage.appendChild(chatTimestamp);
+                    messageContent.appendChild(chatMessage);
+                    
+                  }else{
+                    console.log(chat.mime_type)
+                  }
                 } else if (chat.estado === "enviado") {
                   const chatMessage = document.createElement("p");
                   chatMessage.classList.add("chat-message", "chat-sent");
@@ -423,12 +484,19 @@ function pintar(message_new)
                 }
                 lastMessage = `mensaje_${chat.mensaje_id}`;
               });
+              // Agrega el evento onclick a todas las imágenes dentro del contenedor de mensajes
+              const chatImages = messageContent.querySelectorAll(".chat-image");
+              chatImages.forEach((image) => {
+                image.onclick = () => {
+                  mostrarVentanaEmergente(image.src);
+                };
+              });
   
-              const miElemento = document.getElementById(lastMessage);
+              // const miElemento = document.getElementById(lastMessage);
   
-              if (miElemento) {
-                miElemento.scrollIntoView({ behavior: "smooth" });
-              }
+              // if (miElemento) {
+              //   miElemento.scrollIntoView({ behavior: "smooth" });
+              // }
   
               // Agregar elementos al final del mensaje
               const messageFooter = document.querySelector(".message-footer");
@@ -513,38 +581,73 @@ function pintar(message_new)
 
         const invisibleElement = document.getElementById("view_chat_" +mensaje.recipiente_id);
 
-        if (invisibleElement) {
+        if(message_new != null){
+          if (invisibleElement) {
 
-          const messageContent3 = document.querySelector(".message-content");
-          const chatMessage3 = document.createElement("p");
-          chatMessage3.classList.add("chat-message");
-          chatMessage3.textContent = message_new.message;
-          chatMessage3.id = `mensaje_${message_new.id}`;
-        
-          const chatTimestamp3 = document.createElement("span");
-          chatTimestamp3.classList.add("chat-timestamp");
+            const messageContent3 = document.querySelector(".message-content");
+              if(message_new.mime_type == ''){
+                const chatMessage3 = document.createElement("p");
+                chatMessage3.classList.add("chat-message");
+                chatMessage3.textContent = message_new.message;
+                chatMessage3.id = `mensaje_${message_new.id}`;
+              
+                const chatTimestamp3 = document.createElement("span");
+                chatTimestamp3.classList.add("chat-timestamp");
 
-          // Crear un objeto Date usando el timestamp
-          const date = new Date(message_new.timestamp_w * 1000); // Multiplicamos por 1000 ya que el timestamp está en segundos
+                // Crear un objeto Date usando el timestamp
+                const date = new Date(message_new.timestamp_w * 1000); // Multiplicamos por 1000 ya que el timestamp está en segundos
 
-          // Obtener la hora y los minutos
-          const horas = date.getHours();
-          const minutos = date.getMinutes();
-          chatTimestamp3.textContent = horas +':'+ minutos;
-        
-          chatMessage3.appendChild(chatTimestamp3);
-          messageContent3.appendChild(chatMessage3);
+                // Obtener la hora y los minutos
+                const horas = date.getHours();
+                const minutos = date.getMinutes();
+                chatTimestamp3.textContent = horas +':'+ minutos;
+              
+                chatMessage3.appendChild(chatTimestamp3);
+                messageContent3.appendChild(chatMessage3);
+              }else if(message_new.mime_type == 'image/jpeg'){
+                // console.log('2')
+                // console.log(chat)
+                // console.log(chat.link)
+                const chatMessage3 = document.createElement("div");
+                chatMessage3.classList.add("chat-message");
+                chatMessage3.id = `mensaje_${message_new.id}`;
+                
+                const chatImage3 = document.createElement("img");
+                chatImage3.classList.add("chat-image");
+                chatImage3.style.cursor = "pointer";
+                chatImage3.src = message_new.link
+                
+                const chatTimestamp3= document.createElement("span");
+                chatTimestamp3.classList.add("chat-timestamp");
+                chatTimestamp3.textContent = message_new.hora;
+                
+                chatMessage3.appendChild(chatImage3);
+                chatMessage3.appendChild(chatTimestamp3);
+                messageContent3.appendChild(chatMessage3);
+                
+              }else{
+                // console.log(chat.mime_type)
+              }
 
-          lastMessage = `mensaje_${message_new.id}`;
-          const miElemento = document.getElementById(lastMessage);
-  
-          if (miElemento) {
-            miElemento.scrollIntoView({ behavior: "smooth" });
-          }else{
-            console.log(lastMessage)
-          }
+              const chatImages = messageContent3.querySelectorAll(".chat-image");
+                chatImages.forEach((image) => {
+                  image.onclick = () => {
+                    mostrarVentanaEmergente(image.src);
+                  };
+                });
+            // }
 
-        } 
+            lastMessage = `mensaje_${message_new.id}`;
+            const miElemento = document.getElementById(lastMessage);
+    
+            if (miElemento) {
+              miElemento.scrollIntoView({ behavior: "smooth" });
+            }else{
+              // console.log(lastMessage)
+            }
+
+          } 
+        }
 
         
       });
@@ -554,3 +657,39 @@ function pintar(message_new)
     },
   });
 }
+
+// Obtén la referencia del contenedor de mensajes
+
+
+// Función para mostrar la ventana emergente modal
+function mostrarVentanaEmergente(src) {
+  const messageContent = document.querySelector(".message-content");
+  // Crea el elemento de la ventana emergente
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
+
+  // Crea el contenido de la ventana emergente y la imagen
+  const modalContent = document.createElement("div");
+  modalContent.classList.add("modal-content");
+  const img = document.createElement("img");
+  img.src = src;
+  modalContent.appendChild(img);
+
+  // Crea el botón de cierre
+  const closeBtn = document.createElement("span");
+  closeBtn.classList.add("close");
+  closeBtn.innerHTML = "&times;";
+  closeBtn.onclick = () => {
+    modal.style.display = "none";
+  };
+  modalContent.appendChild(closeBtn);
+
+  // Agrega el contenido a la ventana emergente y esta al contenedor de mensajes
+  modal.appendChild(modalContent);
+  messageContent.appendChild(modal);
+
+  // Muestra la ventana emergente
+  modal.style.display = "block";
+}
+
+

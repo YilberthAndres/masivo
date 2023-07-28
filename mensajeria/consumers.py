@@ -34,6 +34,8 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         message         =   event["message"]
         timestamp_w     =   event["timestamp_w"]
         recipiente_id   =   event["recipiente_id"]
+        mime_type       =   event["mime_type"]
+        link            =   event["link"]
         
         #send message and username of sender to websocket
         await self.send(
@@ -43,6 +45,8 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                     "message"       :   message,
                     "timestamp_w"   :   timestamp_w,
                     "recipiente_id" :   recipiente_id,
+                    "mime_type"     :   mime_type,
+                    "link"          :   link,
                 }
             )
         )

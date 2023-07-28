@@ -48,9 +48,9 @@ def webhook(request):
         token = request.GET.get('hub.verify_token')
         json_data = json.loads(request.body)
 
-        statuses_text = json.dumps(json_data['entry'])
-        nueva_peticion = Peticion(estado = statuses_text)
-        nueva_peticion.save()
+        # statuses_text = json.dumps(json_data['entry'])
+        # nueva_peticion = Peticion(estado = statuses_text)
+        # nueva_peticion.save()
         # enviar_mensaje_a_grupo()
 
         try:
@@ -165,6 +165,8 @@ def new_message(message, perfil):
 
 
 
+
+
         elif(type == 'image'):
 
             mime_type      = message['image']['mime_type']
@@ -182,7 +184,8 @@ def new_message(message, perfil):
                 estado_id         = estado
             )
             nuevo_mensaje.save()
-            get_media(multimedia_id, message_id)
+            get_media(multimedia_id, message_id,timestamp, from_num, mime_type )
+            # get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
         else: 
             nuevo_mensaje  = Mensajeria(
                 celular           = from_num,
@@ -216,11 +219,13 @@ def send_txt(id, message, timestamp_w, recipiente_id):
 
         # Envia el mensaje al grupo del WebSocketGroup usando async_to_sync
         async_to_sync(channel_layer.group_send)('chat_riodev', {
-            'type'          :   'chatbox_message',
-            'id'           :   id,
-            'message'       :   message,
-            'timestamp_w'   :   timestamp_w,
-            'recipiente_id' :   recipiente_id,
+            'type'              :   'chatbox_message',
+            'id'                :   id,
+            'message'           :   message,
+            'timestamp_w'       :   timestamp_w,
+            'recipiente_id'     :   recipiente_id,
+            'mime_type'         :   '',
+            'link'              :   ''
         })
     except Exception as e:
         error_message = str(e)
@@ -228,7 +233,7 @@ def send_txt(id, message, timestamp_w, recipiente_id):
         nueva_peticion.save()
 
 
-def get_media(media_id, message_id):
+def get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
     try:
         url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+media_id
         headers = {
@@ -265,6 +270,14 @@ def get_media(media_id, message_id):
             with open(ruta_archivo, 'wb') as archivo:
                 archivo.write(response_media.content)
 
+            mensaje                 = Mensajeria.objects.get(mensaje_id=message_id)
+            mensaje.link   = "static/temp/" + nombre_archivo_con_extension
+            # mensaje.conversacion_id = conversacion_id
+            mensaje.save()
+
+            link = "static/temp/" + nombre_archivo_con_extension
+
+            send_media(message_id, timestamp_w, recipiente_id, mime_type, link)
             # Devuelve una respuesta con el enlace a la imagen descargada
             return HttpResponse(f"Imagen descargada y guardada en: {ruta_archivo}")
         else:
@@ -272,4 +285,29 @@ def get_media(media_id, message_id):
     except Exception as e:
         error_message = str(e)
         nueva_peticion = Peticion(estado = 'Fallo guardando multimedia: ' + error_message)
+        nueva_peticion.save()
+
+def send_media(id, timestamp_w, recipiente_id, mime_type, link):
+
+    try:
+        # Obtén los datos del mensaje y el nombre de usuario de alguna manera
+        # message = "Hola, esto es un mensaje enviado desde otra vista"
+        # username = "Usuario1"
+
+        # Obtén el channel_layer
+        channel_layer = get_channel_layer()
+
+        # Envia el mensaje al grupo del WebSocketGroup usando async_to_sync
+        async_to_sync(channel_layer.group_send)('chat_riodev', {
+            'type'              :   'chatbox_message',
+            'id'                :   id,
+            'message'           :   '',
+            'timestamp_w'       :   timestamp_w,
+            'recipiente_id'     :   recipiente_id,
+            'mime_type'         :   mime_type,
+            'link'              :   link
+        })
+    except Exception as e:
+        error_message = str(e)
+        nueva_peticion = Peticion(estado = 'Fallo websockets: ' + error_message)
         nueva_peticion.save()
