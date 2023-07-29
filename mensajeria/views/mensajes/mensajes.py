@@ -146,7 +146,9 @@ def obtener_mensajes_find(request, recipiente_id):
                 texto,
                 id,
                 mime_type,
-                link
+                link,
+                filename,
+                voice
                 FROM mensajeria
                 WHERE  recipiente_id = '%s' and created_at >= DATE_SUB(NOW(), INTERVAL 2 WEEK)
             """, [recipiente_id])
@@ -164,6 +166,8 @@ def obtener_mensajes_find(request, recipiente_id):
             mensaje_id      = row[6]
             mime_type       = row[7]
             link            = row[8]
+            filename        = row[9]
+            voice           = row[10]
 
             resultado = {
                 'estado_id':        estado_id,
@@ -175,6 +179,8 @@ def obtener_mensajes_find(request, recipiente_id):
                 'mensaje_id':       mensaje_id,
                 'mime_type':        mime_type,
                 'link':             link,
+                'filename':         filename,
+                'voice':            voice,
             }
             resultados.append(resultado)
 

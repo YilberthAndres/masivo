@@ -318,3 +318,26 @@ body {
     align-items: center; /* Centra los elementos horizontalmente */
   }
   
+/* Estilos para los contenedores de video */
+.video-container {
+    width: 320px; /* Ancho deseado para el contenedor */
+    height: 180px; /* Alto deseado para el contenedor */
+    overflow: hidden; /* Ocultar cualquier contenido que se desborde del contenedor */
+  }
+  
+  /* Estilos para los videos dentro de los contenedores de video */
+  .video-container .chat-video {
+    width: 100%; /* Ancho del video al 100% del contenedor */
+    height: 100%; /* Alto del video al 100% del contenedor */
+    object-fit: contain; /* Ajustar el video para que se ajuste dentro del contenedor sin distorsión */
+  }
+  
+  .avatar-audio-container {
+    display: flex; /* Mostrar elementos en línea */
+    align-items: center; /* Alinear verticalmente en el centro */
+  }
+
+  /* Estilo para el reproductor de audio */
+  .chat-audio {
+    width: 250px; /* Establecer el ancho del reproductor de audio */
+  }
