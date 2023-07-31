@@ -3,32 +3,31 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from mensajeria.models import Peticion, Mensajeria, Destinatarios, Personas
-import json
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
-import os
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+import requests
+from datetime import datetime
+from django.conf import settings
+import json
 import dotenv
 
 dotenv.load_dotenv()
-
-VERIFY_TOKEN_ENV = os.getenv("VERIFY_TOKEN")
-
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+import boto3
+from django.core.files.storage import get_storage_class
+import os
 
 
-def send_channel_message(group_name, message):
-    channel_layer = get_channel_layer()
 
-    async_to_sync(channel_layer.group_send)(
-        f"chat_{group_name}",
-        {
-            "type": "chatbox_message",
-            "message": message,
-            "username": "Nelson",
-            "channel_name": "chat_mordecay",
-        },
-    )
+import hashlib
+import re
+
+API_KEY_ENV                 = os.getenv('API_KEY')
+ID_WHATSAPP_BUSINESS_ENV    = os.getenv('ID_WHATSAPP_BUSINESS')
+ID_WHATSAPP_NUMBER_ENV      = os.getenv('ID_WHATSAPP_NUMBER')
+API_VERSION_WHATSAPP_ENV    = os.getenv('API_VERSION_WHATSAPP')
+VERIFY_TOKEN_ENV = os.getenv('VERIFY_TOKEN')
 
 
 def generate_permanent_token(request):
@@ -53,6 +52,7 @@ def webhook(request):
         statuses_text = json.dumps(json_data["entry"])
         nueva_peticion = Peticion(estado=statuses_text)
         nueva_peticion.save()
+        # enviar_mensaje_a_grupo()
 
         try:
             if json_data["entry"][0]["changes"][0]["field"] == "messages":
@@ -140,6 +140,8 @@ def new_message(message, perfil):
         nueva_persona.save()
         persona_id = nueva_persona.id
 
+        # nombre_persona = nueva_persona.nombre + ' ' + nueva_persona.segundonombre
+
         nuevo_registro = Destinatarios(
             persona_id=persona_id,
             created_by_id=1,
@@ -158,48 +160,118 @@ def new_message(message, perfil):
                 # tipo_id           = 748,
                 # estado_id         = estado
             )
-            send_channel_message(
-                "mordecay",
-                json.dumps(
-                    {
-                        "texto": text,
-                        "celular": from_num,
-                        "recipiente_id": from_num,
-                        "mensaje_id": message_id,
-                        "timestamp_w": timestamp,
-                    }
-                ),
+
+            nuevo_mensaje.save()
+
+            send_txt(nuevo_mensaje.id, nuevo_mensaje.texto, nuevo_mensaje.timestamp_w, nuevo_mensaje.recipiente_id)
+
+
+
+        elif(type == 'image'):
+
+            mime_type      = message['image']['mime_type']
+            sha256         = message['image']['sha256']
+            multimedia_id  = message['image']['id']
+            nuevo_mensaje  = Mensajeria(
+                mime_type         = mime_type,
+                sha256            = sha256,
+                multimedia_id     = multimedia_id,
+                celular           = from_num,
+                recipiente_id     = from_num,
+                mensaje_id        = message_id,
+                timestamp_w         = timestamp,
+                tipo_id           = 750,
+                estado_id         = estado
+            )
+            nuevo_mensaje.save()
+            get_media(multimedia_id, message_id)
+        else: 
+            nuevo_mensaje  = Mensajeria(
+                celular           = from_num,
+                recipiente_id     = from_num,
+                mensaje_id        = message_id,
+                timestamp_w         = timestamp,
+                tipo_id           = 751,
+                estado_id         = estado
             )
             nuevo_mensaje.save()
 
-        elif type == "image":
-            mime_type = message["image"]["mime_type"]
-            sha256 = message["image"]["sha256"]
-            multimedia_id = message["image"]["id"]
-            nuevo_mensaje = Mensajeria(
-                mime_type=mime_type,
-                sha256=sha256,
-                multimedia_id=multimedia_id,
-                celular=from_num,
-                recipiente_id=from_num,
-                mensaje_id=message_id,
-                timestamp_w=timestamp,
-                # tipo_id           = 750,
-                # estado_id         = estado
-            )
-            nuevo_mensaje.save()
-        else:
-            nuevo_mensaje = Mensajeria(
-                celular=from_num,
-                recipiente_id=from_num,
-                mensaje_id=message_id,
-                timestamp_w=timestamp,
-                # tipo_id           = 751,
-                # estado_id         = estado
-            )
-            nuevo_mensaje.save()
+        
 
     except Exception as e:
         error_message = str(e)
         nueva_peticion = Peticion(estado="Fallo creando: " + error_message)
+        nueva_peticion.save()
+
+
+
+# Vista donde quieres enviar el mensaje al WebSocketGroup
+def send_txt(id, message, timestamp_w, recipiente_id):
+
+    try:
+        # Obtén los datos del mensaje y el nombre de usuario de alguna manera
+        # message = "Hola, esto es un mensaje enviado desde otra vista"
+        # username = "Usuario1"
+
+        # Obtén el channel_layer
+        channel_layer = get_channel_layer()
+
+        # Envia el mensaje al grupo del WebSocketGroup usando async_to_sync
+        async_to_sync(channel_layer.group_send)('chat_riodev', {
+            'type'          :   'chatbox_message',
+            'id'           :   id,
+            'message'       :   message,
+            'timestamp_w'   :   timestamp_w,
+            'recipiente_id' :   recipiente_id,
+        })
+    except Exception as e:
+        error_message = str(e)
+        nueva_peticion = Peticion(estado = 'Fallo websockets: ' + error_message)
+        nueva_peticion.save()
+
+
+def get_media(media_id, message_id):
+    try:
+        url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+media_id
+        headers = {
+            'Authorization': API_KEY_ENV,
+            'Content-Type': 'application/json'
+        }
+
+
+        response = requests.get(url, headers=headers)
+        response_json = response.json()
+
+        url_media = response_json['url']
+
+        response_media = requests.get(url_media, headers=headers)
+
+
+        if response_media.status_code == 200:
+            # Genera el nombre del archivo a partir de la URL usando un hash MD5
+            nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
+
+            # Obtiene la extensión del archivo desde el encabezado Content-Type
+            extension_archivo = response_media.headers.get('Content-Type', '').split('/')[-1]
+
+            # Elimina los caracteres inválidos para el nombre del archivo
+            nombre_archivo = re.sub(r'[\\/*?:"<>|]', '', nombre_archivo)
+
+            # Combina el nombre del archivo y su extensión
+            nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
+
+            # Construye la ruta completa para guardar el archivo en la carpeta deseada
+            ruta_archivo = os.path.join(settings.BASE_DIR, "mensajeria", "static", "temp", nombre_archivo_con_extension)
+
+            # Abre el archivo en modo binario y guarda el contenido de la respuesta en él
+            with open(ruta_archivo, 'wb') as archivo:
+                archivo.write(response_media.content)
+
+            # Devuelve una respuesta con el enlace a la imagen descargada
+            return HttpResponse(f"Imagen descargada y guardada en: {ruta_archivo}")
+        else:
+            return HttpResponse("Error al descargar la imagen", status=404)
+    except Exception as e:
+        error_message = str(e)
+        nueva_peticion = Peticion(estado = 'Fallo guardando multimedia: ' + error_message)
         nueva_peticion.save()
