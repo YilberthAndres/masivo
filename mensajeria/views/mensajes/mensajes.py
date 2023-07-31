@@ -58,8 +58,6 @@ def createRecordatorio(request):
     return JsonResponse({"success": True})
 
 
-
-
 @login_required(login_url="signin")
 def mensajes(request):
 
@@ -84,7 +82,14 @@ def obtener_mensajes(request):
                     m1.texto, 
                     DATE_FORMAT(FROM_UNIXTIME(m1.timestamp_w), '%Y-%m-%d') AS fecha,
                     DATE_FORMAT(FROM_UNIXTIME(m1.timestamp_w), '%H:%i') AS hora,
-                    CONCAT(p.nombre, ' ', p.segundonombre, ' ', p.apellido) as nombre
+                    CONCAT(p.nombre, ' ', p.segundonombre, ' ', p.apellido) as nombre,
+                    (
+                        SELECT COUNT(*)
+                        FROM mensajeria m2
+                        WHERE m2.recipiente_id = m1.recipiente_id
+                        AND m2.destinatario_id IS NULL
+                        AND m2.estado_id = 745
+                    ) as cantidad_mensajes_destinatario_null_estado_745
                 FROM mensajeria m1
                 INNER JOIN personas p ON (m1.recipiente_id = p.telefonowhatsapp)
                 INNER JOIN (
@@ -106,6 +111,7 @@ def obtener_mensajes(request):
             fecha           = row[2]
             hora            = row[3]
             nombre          = row[4]
+            sin_leer        = row[5]
 
             resultado = {
                 'recipiente_id':    recipiente_id,
@@ -113,6 +119,7 @@ def obtener_mensajes(request):
                 'fecha':            fecha,
                 'hora':             hora,
                 'nombre':           nombre,
+                'sin_leer':         sin_leer,
             }
             resultados.append(resultado)
 
@@ -137,7 +144,11 @@ def obtener_mensajes_find(request, recipiente_id):
                 DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%Y-%%m-%%d') AS fecha,
                 DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%H:%%i') AS hora, 
                 texto,
-                id
+                id,
+                mime_type,
+                link,
+                filename,
+                voice
                 FROM mensajeria
                 WHERE  recipiente_id = '%s' and created_at >= DATE_SUB(NOW(), INTERVAL 2 WEEK)
             """, [recipiente_id])
@@ -153,6 +164,10 @@ def obtener_mensajes_find(request, recipiente_id):
             hora            = row[4]
             texto           = row[5]
             mensaje_id      = row[6]
+            mime_type       = row[7]
+            link            = row[8]
+            filename        = row[9]
+            voice           = row[10]
 
             resultado = {
                 'estado_id':        estado_id,
@@ -162,8 +177,13 @@ def obtener_mensajes_find(request, recipiente_id):
                 'hora':             hora,
                 'texto':            texto,
                 'mensaje_id':       mensaje_id,
+                'mime_type':        mime_type,
+                'link':             link,
+                'filename':         filename,
+                'voice':            voice,
             }
             resultados.append(resultado)
+
 
 
         # Devolver la respuesta JSON
@@ -215,6 +235,7 @@ def send_message(request):
             destinatario_id     =   destinatario_model.id,
             texto               =   mensaje,
             celular             =   waId,
+            recipiente_id       =   waId,
             mensaje_id          =   messageId,
             created_by_id       =   user.id
         )
@@ -222,8 +243,12 @@ def send_message(request):
         nuevo_mensaje.save()
 
         resultadoMensaje = {
-                'mensaje_id':    nuevo_mensaje.id,
-                'texto':            nuevo_mensaje.texto,
+                'id':    nuevo_mensaje.id,
+                'message':            nuevo_mensaje.texto,
+                'destinatario':       waId,
+                'timestamp_w':        '1690133734',
+                'mime_type':           '',
+                'link':           ''
                 # 'fecha':            fecha,
                 # 'hora':             hora,
                 # 'nombre':           nombre,
@@ -233,3 +258,22 @@ def send_message(request):
         return JsonResponse(resultadoMensaje)
         # Retornar la respuesta como un JSON
         # return JsonResponse(response_json)
+
+
+@login_required()
+def messages_read(request, recipiente_id):
+
+    try:
+        Mensajeria.objects.filter(destinatario_id__isnull=True, recipiente_id=recipiente_id).update(estado_id=746)
+        response_data = {'success': True, 'message': 'Operación exitosa.'}
+
+    except Exception as e:
+        error_message = str(e)
+            # Lógica en caso de que el registro no exista
+        response_data = {'success': False, 'message': error_message}
+    
+    # Retorna una respuesta JSON con el diccionario
+    return JsonResponse(response_data)
+    
+
+

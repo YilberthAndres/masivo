@@ -247,3 +247,97 @@ body {
     border-radius: 20px;
     font-size: 15px;
 }
+
+/* Estilos para las imágenes dentro del chat */
+.chat-image {
+    width: 200px; /* Ancho de las imágenes */
+    height: 200px; /* Altura de las imágenes */
+    /* border-radius: 50%; Hace que las imágenes sean circulares */
+    object-fit: cover; /* Ajusta la imagen para que cubra todo el contenedor */
+  }
+  
+
+  /* Estilo de la ventana emergente modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  /* Estilo para el contenido de la ventana emergente */
+  .modal-content {
+    display: block;
+    margin: 10% auto;
+    max-width: 90%;
+    max-height: 90%;
+  }
+  
+  /* Estilo para la imagen en la ventana emergente */
+  .modal-content img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  /* Estilo para el botón de cierre */
+  .close {
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    cursor: pointer;
+  }
+  
+  
+/* Estilo para el número */
+.number {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #4caf50; /* Color del círculo verde */
+    border-radius: 50%; /* Para crear el círculo */
+    color: white; /* Color del número */
+    font-weight: bold; /* Texto en negrita */
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 5px; /* Ajusta el margen superior para bajar el número */
+  }
+  
+  /* Estilo para el contenedor de la hora y el número */
+  .time {
+    display: flex;
+    flex-direction: column; /* Alinea los elementos verticalmente */
+    align-items: center; /* Centra los elementos horizontalmente */
+  }
+  
+/* Estilos para los contenedores de video */
+.video-container {
+    width: 320px; /* Ancho deseado para el contenedor */
+    height: 180px; /* Alto deseado para el contenedor */
+    overflow: hidden; /* Ocultar cualquier contenido que se desborde del contenedor */
+  }
+  
+  /* Estilos para los videos dentro de los contenedores de video */
+  .video-container .chat-video {
+    width: 100%; /* Ancho del video al 100% del contenedor */
+    height: 100%; /* Alto del video al 100% del contenedor */
+    object-fit: contain; /* Ajustar el video para que se ajuste dentro del contenedor sin distorsión */
+  }
+  
+  .avatar-audio-container {
+    display: flex; /* Mostrar elementos en línea */
+    align-items: center; /* Alinear verticalmente en el centro */
+  }
+
+  /* Estilo para el reproductor de audio */
+  .chat-audio {
+    width: 250px; /* Establecer el ancho del reproductor de audio */
+  }
