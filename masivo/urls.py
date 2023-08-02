@@ -67,6 +67,7 @@ urlpatterns = [
 
     #MENSAJERIA ENVIO
     path('send_message', mensajes.send_message, name='send_message'),
+    path('send_message_media', mensajes.send_message_media, name='send_message_media'),
     path('send_message_template', mensajeria.send_message_template, name='send_message_template'),
 
 ]

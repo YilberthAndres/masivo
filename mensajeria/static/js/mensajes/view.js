@@ -70,7 +70,7 @@ function sendMessage(mensaje) {
   $.ajax({
     url: "send_message",
     type: "POST",
-    data: JSON.stringify({ destinatario: destinatario_ws, mensaje: txt_send }),
+    data: JSON.stringify({ destinatario: destinatario_ws, mensaje: txt_send,tipo: 'txt' }),
     contentType: "application/json",
     headers: {
       "X-CSRFToken": tokenCSRF2,
@@ -104,6 +104,10 @@ function sendMessage(mensaje) {
     },
   });
 }
+
+
+
+
 
 function pintar(message_new) {
   $.ajax({
@@ -182,9 +186,10 @@ function pintar(message_new) {
               messageContent.appendChild(invisibleElement);
 
               const inputElement = document.createElement("input");
-              inputElement.type = "text";
-              inputElement.style.display = "none"; // Hacer el input invisible
-              inputElement.value = "Mi valor invisible"; // Puedes establecer un valor para el input (opcional)
+              inputElement.type = "hidden";
+              inputElement.id = "chat_actual";
+              // inputElement.style.display = "none"; // Hacer el input invisible
+              inputElement.value = mensaje.recipiente_id; 
               messageContent.appendChild(inputElement);
 
 
@@ -410,7 +415,7 @@ function pintar(message_new) {
 
                 // Agrega un evento cambio al elemento <input> para manejar la selección de archivos
                 // inputElement.addEventListener("change", handleFileSelection.bind(null, mensaje.recipiente_id));
-                inputElement.addEventListener("change", handleFileSelection.bind(null, mensaje.recipiente_id));
+                inputElement.addEventListener("change", handleFileSelection);
 
                 // Simula un clic en el elemento <input> para abrir el explorador de archivos
                 inputElement.click();
@@ -814,14 +819,84 @@ function esExcel(url) {
 
 
 // Función para manejar la selección de archivos
-function handleFileSelection(event, recipiente_id) {
-  const archivosSeleccionados = event.target.files;
+function handleFileSelection(event) {
+  const archivosSeleccionados = Array.from(event.target.files);
 
   // Ejemplo: Mostrar el nombre de cada archivo seleccionado
   for (const archivo of archivosSeleccionados) {
-    console.log(archivo.name);
+    console.log('Nombre:', archivo.name);
+    if (esImagenArchivo(archivo)) {
+
+      sendMessageMultimedia(archivo, 'image')
+
+    }else if (esVideoArchivo(archivo)) {
+      console.log('Tipo: Video');
+    }else if (esAudioArchivo(archivo)) {
+      console.log('Tipo: Audio');
+    }else if (esArchivoArchivo(archivo)) {
+      console.log('Tipo: Documento');
+    }else{
+      console.log('Archivo no valido');
+    }
   }
 }
+
+//ENVIAR MULTIMEDIA
+function sendMessageMultimedia(file, tipo) {
+  var tokenCSRF2 = $('input[name="csrfmiddlewaretoken"]').val();
+  var destinatario_ws = document.getElementById("chat_actual").value;
+
+  // Crear un objeto FormData y agregar el archivo seleccionado
+  var formData = new FormData();
+  formData.append('destinatario', destinatario_ws);
+  formData.append('tipo', tipo);
+  formData.append('archivo', file);
+
+  $.ajax({
+    url: "send_message_media",
+    type: "POST",
+    data: formData,
+    headers: {
+      "X-CSRFToken": tokenCSRF2,
+    },
+    processData: false, // Para evitar que jQuery procese el FormData
+    contentType: false, // Para que jQuery establezca automáticamente el encabezado correcto
+    success: function (response) {
+      console.log(response);
+    },
+    error: function (xhr, status, error) {
+      alert("Error en la solicitud AJAX");
+    },
+  });
+}
+
+
+// Función para verificar si el archivo es una imagen
+function esImagenArchivo(archivo) {
+  return archivo.type.startsWith('image/');
+}
+
+// Función para verificar si el archivo es un video
+function esVideoArchivo(archivo) {
+  return archivo.type.startsWith('video/');
+}
+
+// Función para verificar si el archivo es un archivo de Word, Excel o TXT
+function esArchivoArchivo(archivo) {
+  return (
+    archivo.type === 'application/msword' ||
+    archivo.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+    archivo.type === 'application/vnd.ms-excel' ||
+    archivo.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+    archivo.type === 'text/plain'
+  );
+}
+
+// Función para verificar si el archivo es un audio
+function esAudioArchivo(archivo) {
+  return archivo.type.startsWith('audio/');
+}
+
 
 
 

@@ -197,11 +197,6 @@ def send_message(request):
         destinatario = data.get('destinatario')  
         mensaje = data.get('mensaje')
         user = request.user
-        # user = User.objects.get(id=user.id)
-        # return JsonResponse(data)
-        # return JsonResponse(data)
-        # for destinatario in destinatarios:
-
         
         persona_model       =   Personas.objects.get(telefonowhatsapp=destinatario)
         destinatario_model  =   Destinatarios.objects.get(persona_id = persona_model.id)
@@ -212,6 +207,8 @@ def send_message(request):
             'Authorization': API_KEY_ENV,
             'Content-Type': 'application/json'
         }
+
+
         payload = {
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
@@ -258,6 +255,75 @@ def send_message(request):
         return JsonResponse(resultadoMensaje)
         # Retornar la respuesta como un JSON
         # return JsonResponse(response_json)
+
+@login_required()
+def send_message_media(request):
+    if request.method == 'POST':
+        destinatario = request.POST.get("destinatario")
+        archivo = request.FILES.get("archivo")
+        user = request.user
+
+        return JsonResponse({'status': 'success'})
+
+        # persona_model       =   Personas.objects.get(telefonowhatsapp=destinatario)
+        # destinatario_model  =   Destinatarios.objects.get(persona_id = persona_model.id)
+        # celular = destinatario_model.persona.telefonomovil
+
+        # url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/'+ID_WHATSAPP_NUMBER_ENV+'/messages'
+        # headers = {
+        #     'Authorization': API_KEY_ENV,
+        #     'Content-Type': 'application/json'
+        # }
+
+
+        # payload = {
+        #     "messaging_product": "whatsapp",
+        #     "recipient_type": "individual",
+        #     "to": "57"+celular,
+        #     "type": "text",
+        #     "text": {
+        #         "preview_url": False,
+        #         "body": mensaje
+        #     }
+        # }
+
+        # response = requests.post(url, headers=headers, json=payload)
+
+        # # Obtener el contenido de la respuesta en formato JSON
+        # response_json = response.json()
+
+        # waId = response_json['contacts'][0]['wa_id']
+        # messageId = response_json['messages'][0]['id']
+
+        # nuevo_mensaje = Mensajeria(
+        #     destinatario_id     =   destinatario_model.id,
+        #     texto               =   mensaje,
+        #     celular             =   waId,
+        #     recipiente_id       =   waId,
+        #     mensaje_id          =   messageId,
+        #     created_by_id       =   user.id
+        # )
+
+        # nuevo_mensaje.save()
+
+        # resultadoMensaje = {
+        #         'id':    nuevo_mensaje.id,
+        #         'message':            nuevo_mensaje.texto,
+        #         'destinatario':       waId,
+        #         'timestamp_w':        '1690133734',
+        #         'mime_type':           '',
+        #         'link':           ''
+        #         # 'fecha':            fecha,
+        #         # 'hora':             hora,
+        #         # 'nombre':           nombre,
+        #     }
+
+        #     # Retornar la respuesta como un JSON
+        # return JsonResponse(resultadoMensaje)
+        # Retornar la respuesta como un JSON
+        # return JsonResponse(response_json)
+
+
 
 
 @login_required()
