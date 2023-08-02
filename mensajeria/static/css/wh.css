@@ -341,3 +341,12 @@ body {
   .chat-audio {
     width: 250px; /* Establecer el ancho del reproductor de audio */
   }
+
+
+
+  
+  /* Estilo del botón de adjuntar */
+  #fileImg {
+    cursor: pointer;
+  }
+  

@@ -107,6 +107,8 @@ class Mensajeria(models.Model):
     sha256            = models.TextField(null=True, blank=True)
     link              = models.TextField(null=True, blank=True)
     filename          = models.TextField(null=True, blank=True)
+    context_id        = models.TextField(null=True, blank=True)
+    context_from      = models.CharField(null=True, blank=True,max_length=25)
     timestamp_w       = models.CharField(null=True, blank=True,max_length=100)
     celular           = models.CharField(null=True, blank=True,max_length=12)
     voice             = models.CharField(null=True, blank=True,max_length=12)

@@ -181,6 +181,13 @@ function pintar(message_new) {
               invisibleElement.id = `view_chat_${mensaje.recipiente_id}`;
               messageContent.appendChild(invisibleElement);
 
+              const inputElement = document.createElement("input");
+              inputElement.type = "text";
+              inputElement.style.display = "none"; // Hacer el input invisible
+              inputElement.value = "Mi valor invisible"; // Puedes establecer un valor para el input (opcional)
+              messageContent.appendChild(inputElement);
+
+
               response.forEach((chat) => {
                 // Crear y agregar el mensaje según el estado
                 if (chat.estado === "recibido") {
@@ -376,12 +383,42 @@ function pintar(message_new) {
               const messageFooter = document.querySelector(".message-footer");
               messageFooter.innerHTML = ""; // Eliminar cualquier contenido existente
 
-              const paperClipInput = document.createElement("input");
-              paperClipInput.type = "file";
-              paperClipInput.accept = "image/*";
+              // const paperClipInput = document.createElement("input");
+              // paperClipInput.type = "file";
+              // paperClipInput.accept = "image/*";
 
-              paperClipInput.id = `file_${mensaje.recipiente_id}`;
-              messageFooter.appendChild(paperClipInput);
+              // paperClipInput.id = `file_${mensaje.recipiente_id}`;
+              // messageFooter.appendChild(paperClipInput);
+              // Crea un botón estilizado
+              const adjuntarButton = document.createElement("button");
+              adjuntarButton.textContent = "Adjuntar archivo";
+              adjuntarButton.style.padding = "10px 20px";
+              adjuntarButton.style.backgroundColor = "#007bff";
+              adjuntarButton.style.color = "#fff";
+              adjuntarButton.style.border = "none";
+              adjuntarButton.style.borderRadius = "5px";
+              adjuntarButton.style.cursor = "pointer";
+              adjuntarButton.style.marginRight = "10px";
+
+              // Agrega un evento clic al botón para abrir la ventana de selección de archivos
+              adjuntarButton.addEventListener("click", function () {
+                const inputElement = document.createElement("input");
+                inputElement.type = "file";
+                inputElement.accept = "image/*, video/*, audio/*, .doc, .docx, .xls, .xlsx, .txt";
+                inputElement.multiple = true;
+                inputElement.style.display = "none";
+
+                // Agrega un evento cambio al elemento <input> para manejar la selección de archivos
+                // inputElement.addEventListener("change", handleFileSelection.bind(null, mensaje.recipiente_id));
+                inputElement.addEventListener("change", handleFileSelection.bind(null, mensaje.recipiente_id));
+
+                // Simula un clic en el elemento <input> para abrir el explorador de archivos
+                inputElement.click();
+              });
+
+              // Agrega el botón al messageFooter o cualquier otro contenedor donde desees mostrarlo
+              messageFooter.appendChild(adjuntarButton);
+
 
               const inputText = document.createElement("input");
               inputText.type = "text";
@@ -594,8 +631,8 @@ function pintar(message_new) {
                 // Agregar el avatar al contenedor
                 const chatAvatar3 = document.createElement("div");
                 chatAvatar3.classList.add("chat-avatar");
-                const avatarImg3 = document.createElement("img");
-                avatarImg3.src = "/static/images/avatar.jpg";
+                const avatarImg3  = document.createElement("img");
+                avatarImg3.src    = "/static/images/avatar.jpg";
                 chatAvatar3.appendChild(avatarImg3);
                 avatarAudioContainer3.appendChild(chatAvatar3);
             
@@ -724,6 +761,31 @@ function marcar_leidos(recipiente_id, tokenCSRF2) {
   }
 }
 
+function esImagen(file) {
+  // Obtenemos el tipo MIME del archivo
+  const mimeType = file.type;
+
+  // Verificamos si el tipo MIME corresponde a una imagen
+  return mimeType.startsWith("image/");
+}
+
+function esVideo(mime_type) {
+  // Array con los tipos MIME de video que quieres aceptar
+  const tiposMIMEVideo = ["video/mp4", "video/mpeg", "video/ogg", "video/webm"];
+
+  // Verificamos si el tipo MIME del archivo está presente en el array de tipos de video
+  return tiposMIMEVideo.includes(mime_type);
+}
+
+function esAudio(mime_type) {
+  // Array con los tipos MIME de audio que quieres aceptar
+  const tiposMIMEAudio = ["audio/mpeg", "audio/ogg", "audio/wav", "audio/webm"];
+
+  // Verificamos si el tipo MIME del archivo está presente en el array de tipos de audio
+  return tiposMIMEAudio.includes(mime_type);
+}
+
+
 
 function esPDF(url) {
   // Verificar si el enlace termina con ".pdf" (ignorando mayúsculas y minúsculas)
@@ -751,6 +813,61 @@ function esExcel(url) {
 }
 
 
+// Función para manejar la selección de archivos
+function handleFileSelection(event, recipiente_id) {
+  const archivosSeleccionados = event.target.files;
+
+  // Ejemplo: Mostrar el nombre de cada archivo seleccionado
+  for (const archivo of archivosSeleccionados) {
+    console.log(archivo.name);
+  }
+}
+
+
+
+function sendImg(file) {
+  txt_send = document.getElementById("txt_" + mensaje.recipiente_id).value;
+  destinatario_ws = mensaje.recipiente_id;
+  
+  var tokenCSRF2 = $('input[name="csrfmiddlewaretoken"]').val();
+
+  $.ajax({
+    url: "send_message",
+    type: "POST",
+    data: JSON.stringify({ destinatario: destinatario_ws, mensaje: txt_send }),
+    contentType: "application/json",
+    headers: {
+      "X-CSRFToken": tokenCSRF2,
+    },
+    success: function (response) {
+      const messageContent2 = document.querySelector(".message-content");
+
+      const chatMessage2 = document.createElement("p");
+      chatMessage2.classList.add("chat-message", "chat-sent");
+      chatMessage2.textContent = response.message;
+      chatMessage2.id = `mensaje_${response.id}`;
+
+      const chatTimestamp2 = document.createElement("span");
+      chatTimestamp2.classList.add("chat-timestamp");
+      chatTimestamp2.textContent = "Enviado";
+
+      chatMessage2.appendChild(chatTimestamp2);
+      messageContent2.appendChild(chatMessage2);
+
+      const miElemento = document.getElementById("mensaje_" + response.id);
+
+      if (miElemento) {
+        miElemento.scrollIntoView({ behavior: "smooth" });
+      }
+
+      document.getElementById("txt_" + mensaje.recipiente_id).value = "";
+      pintar(null);
+    },
+    error: function (xhr, status, error) {
+      alert("Error en la solicitud AJAX");
+    },
+  });
+}
 
 
 pintar(null);
