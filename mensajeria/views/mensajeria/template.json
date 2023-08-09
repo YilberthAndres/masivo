@@ -1,0 +1,43 @@
+[
+    {'name': 'invitacion_prueba', 'components': [
+            {'type': 'HEADER', 'format': 'TEXT', 'text': 'Mensaje de invitacion {
+                    {
+                        1
+                    }
+                }', 'example': {'header_text': ['Nelson'
+                    ]
+                }
+            },
+            {'type': 'BODY', 'text': 'Te invitamos a esta genial celebracion {
+                    {
+                        1
+                    }
+                } para que celebrel el cumplaños de {
+                    {
+                        2
+                    }
+                }', 'example': {'body_text': [
+                        ['Nelson', 'Nelson'
+                        ]
+                    ]
+                }
+            }
+        ], 'language': 'es', 'status': 'PENDING', 'category': 'MARKETING', 'id': '346551551276883'
+    },
+    {'name': 'mensaje_invitacion', 'components': [
+            {'type': 'HEADER', 'format': 'TEXT', 'text': 'Te invito a una celebracion'
+            },
+            {'type': 'BODY', 'text': 'Este invitado a una celebración'
+            }
+        ], 'language': 'es', 'status': 'PENDING', 'category': 'MARKETING', 'id': '792572599277980'
+    },
+    {'name': 'hello_world', 'components': [
+            {'type': 'HEADER', 'format': 'TEXT', 'text': 'Hello World'
+            },
+            {'type': 'BODY', 'text': 'Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for taking the time to test with us.'
+            },
+            {'type': 'FOOTER', 'text': 'WhatsApp Business Platform sample message'
+            }
+        ], 'language': 'en_US', 'status': 'APPROVED', 'category': 'UTILITY', 'id': '623372086368316'
+    }
+]

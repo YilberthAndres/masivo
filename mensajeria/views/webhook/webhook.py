@@ -42,7 +42,9 @@ def generate_permanent_token(request):
 
 @csrf_exempt
 def webhook(request):
+    print("ss")
     try:
+        
         verify_token = VERIFY_TOKEN_ENV
         mode = request.GET.get("hub.mode")
         challenge = request.GET.get("hub.challenge")
