@@ -353,11 +353,11 @@ def send_message_media(request):
             "to": "57"+celular,
             "type": "image",
             "image": {
-                "link": "https://dcba-190-84-159-35.ngrok-free.app/static/temp/"+nombre_completo
+                "link": "https://043a-190-84-159-35.ngrok-free.app/static/temp/"+nombre_completo
             }
         }
 
-        link_img = "https://dcba-190-84-159-35.ngrok-free.app/static/temp/"+nombre_completo
+        link_img = "https://043a-190-84-159-35.ngrok-free.app/static/temp/"+nombre_completo
         response = requests.post(url, headers=headers, json=payload)
 
         # Obtener el contenido de la respuesta en formato JSON
