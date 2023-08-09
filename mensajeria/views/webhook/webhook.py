@@ -347,8 +347,6 @@ def get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
         error_message = str(e)
         nueva_peticion = Peticion(estado = 'Fallo guardando multimedia: ' + error_message)
         nueva_peticion.save()
-<<<<<<< HEAD
-=======
 
 
 def get_audio(multimedia_id, message_id,timestamp_w, recipiente_id, mime_type, voice ):
@@ -529,4 +527,3 @@ def send_file(id, timestamp_w, recipiente_id, mime_type, link, filename):
         error_message = str(e)
         nueva_peticion = Peticion(estado = 'Fallo websockets: ' + error_message)
         nueva_peticion.save()
->>>>>>> bf88a5c8ca852acc447f1405a2d1f4150126e0d1
