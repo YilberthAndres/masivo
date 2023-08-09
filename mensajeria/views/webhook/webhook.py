@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-from mensajeria.models import Peticion, Mensajeria, Destinatarios, Personas
+from mensajeria.models import Peticion, Mensajeria, Destinatarios, Personas, Conversaciones
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from channels.layers import get_channel_layer
@@ -72,7 +72,7 @@ def webhook(request):
 
         except Exception as e:
             error_message = str(e)
-            nueva_peticion = Peticion(estado = 'error: ' + error_message)
+            nueva_peticion = Peticion(estado = 'error1: ' + error_message)
             nueva_peticion.save()
 
         if mode and token:            
@@ -120,9 +120,14 @@ def new_message(message, perfil):
     timestamp       = message['timestamp']
     type            = message['type']
     estado          = 745
-
+    
     try:
         persona = Personas.objects.get(telefonowhatsapp=from_num)
+        persona_id = persona.id
+
+        envia   = Destinatarios.objects.get(persona_id=persona_id)
+        envia_id = envia.id
+
         # El registro existe
     except ObjectDoesNotExist:
         resultado = from_num[2:]
@@ -141,12 +146,34 @@ def new_message(message, perfil):
 
         # nombre_persona = nueva_persona.nombre + ' ' + nueva_persona.segundonombre
 
-        nuevo_registro = Destinatarios(
+        envia = Destinatarios(
             persona_id=persona_id, created_by_id=1, estado_id=596
         )
-        nuevo_registro.save()
+        envia.save()
+        envia_id = envia.id
+
+
+ 
 
     try:
+        
+        try:
+            conversacion = Conversaciones.objects.get(destinatario_id=envia_id)
+            conversacion.estado_id       = 758
+            conversacion.save()
+
+            conversacion_id = conversacion.id
+        except ObjectDoesNotExist:
+            conversacion = Conversaciones(
+                destinatario_id = envia_id,
+                created_by_id=1, estado_id=758
+            )
+            conversacion.save()
+            conversacion_id = conversacion.id
+
+       
+
+
         if(type == 'text'):
             text            = message['text']['body']
             nuevo_mensaje = Mensajeria(
@@ -156,7 +183,8 @@ def new_message(message, perfil):
                 mensaje_id        = message_id,
                 timestamp_w       = timestamp,
                 tipo_id           = 748,
-                estado_id         = estado
+                estado_id         = estado,
+                conversacion_id   = conversacion_id
             )
 
             nuevo_mensaje.save()
@@ -178,7 +206,8 @@ def new_message(message, perfil):
                 mensaje_id        = message_id,
                 timestamp_w       = timestamp,
                 tipo_id           = 750,
-                estado_id         = estado
+                estado_id         = estado,
+                conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
             get_media(multimedia_id, message_id,timestamp, from_num, mime_type )
@@ -197,7 +226,8 @@ def new_message(message, perfil):
                 mensaje_id        = message_id,
                 timestamp_w       = timestamp,
                 tipo_id           = 755,
-                estado_id         = estado
+                estado_id         = estado,
+                conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
             get_media(multimedia_id, message_id,timestamp, from_num, mime_type )
@@ -218,7 +248,8 @@ def new_message(message, perfil):
                 timestamp_w       = timestamp,
                 filename          = filename,
                 tipo_id           = 756,
-                estado_id         = estado
+                estado_id         = estado,
+                conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
             get_file(multimedia_id, filename, message_id,timestamp, from_num, mime_type )
@@ -238,7 +269,8 @@ def new_message(message, perfil):
                 timestamp_w       = timestamp,
                 voice             = voice,
                 tipo_id           = 756,
-                estado_id         = estado
+                estado_id         = estado,
+                conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
             get_audio(multimedia_id, message_id,timestamp, from_num, mime_type, voice )
@@ -250,7 +282,8 @@ def new_message(message, perfil):
                 mensaje_id        = message_id,
                 timestamp_w       = timestamp,
                 tipo_id           = 751,
-                estado_id         = estado
+                estado_id         = estado,
+                conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
 
@@ -259,7 +292,7 @@ def new_message(message, perfil):
     except Exception as e:
         error_message = str(e)
         nueva_peticion = Peticion(estado = 'Fallo creando: ' + error_message)
-        nueva_peticion.save()
+        # nueva_peticion.save()
 
 
 
@@ -310,10 +343,8 @@ def get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
 
 
         if response_media.status_code == 200:
-            # Genera el nombre del archivo a partir de la URL usando un hash MD5
+            
             nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
-
-            # Obtiene la extensión del archivo desde el encabezado Content-Type
             extension_archivo = response_media.headers.get('Content-Type', '').split('/')[-1]
 
             # Elimina los caracteres inválidos para el nombre del archivo
@@ -365,10 +396,10 @@ def get_audio(multimedia_id, message_id,timestamp_w, recipiente_id, mime_type, v
 
 
         if response_media.status_code == 200:
-            # Genera el nombre del archivo a partir de la URL usando un hash MD5
+            
             nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
 
-            # Obtiene la extensión del archivo desde el encabezado Content-Type
+           
             extension_archivo = response_media.headers.get('Content-Type', '').split('/')[-1]
 
             # Elimina los caracteres inválidos para el nombre del archivo
@@ -435,10 +466,10 @@ def get_file(media_id, filename, message_id, timestamp_w, recipiente_id, mime_ty
         # ...
 
         if response_media.status_code == 200:
-            # Genera el nombre del archivo a partir de la URL usando un hash MD5
+            
             nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
 
-            # Obtiene la extensión del archivo desde el encabezado Content-Type
+           
             extension_archivo = response_media.headers.get('Content-Type', '').split('/')[-1]
 
             # Combina el nombre del archivo y su extensión

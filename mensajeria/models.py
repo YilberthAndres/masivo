@@ -31,8 +31,8 @@ class Personas(models.Model):
     fechaexpedicion = models.DateField(null=True, blank=True, verbose_name='Fehca de expedición')
     direccion = models.CharField(max_length=150, null=True, blank=True, verbose_name='Direccion')
     telefono = models.CharField(max_length=50, null=True, blank=True, verbose_name='Telefono fijo')
-    telefonomovil = models.CharField(max_length=10, blank=True, verbose_name='Telefono movil')
-    telefonowhatsapp = models.CharField(max_length=50, null=True, blank=True)
+    telefonomovil = models.CharField(max_length=10, blank=True, verbose_name='Telefono movil', unique=True)
+    telefonowhatsapp = models.CharField(max_length=50, null=True, blank=True, unique=True)
     email = models.CharField(max_length=50, null=True, blank=True, verbose_name='Email')
     sendemail = models.BooleanField(default=False,null=True, verbose_name='Enviar email')
     fechanacimiento = models.DateField(null=True, blank=True, verbose_name='Fecha nacmiento')
@@ -82,7 +82,7 @@ class Archivos(models.Model):
 
 
 class Destinatarios(models.Model):
-    persona           = models.ForeignKey(Personas, null=True, blank=True, related_name='Personas_destinatarios_persona', on_delete=models.CASCADE, db_index=True)
+    persona           = models.ForeignKey(Personas, null=True, blank=True, related_name='Personas_destinatarios_persona', on_delete=models.CASCADE, db_index=True, unique=True)
     estado            = models.ForeignKey(Maestras, blank=True, null=True,related_name='destinatario_estado', on_delete=models.CASCADE, db_index=True)
     created_by        = models.ForeignKey('auth.User', related_name='Destinatarios_created_by', on_delete=models.CASCADE)
     created_at        = models.DateTimeField(auto_now_add=True)
@@ -94,10 +94,27 @@ class Destinatarios(models.Model):
         verbose_name = 'destinatarios'
         verbose_name_plural = 'destinatarios'
 
+
+
+
+class Conversaciones(models.Model):
+    destinatario      = models.ForeignKey(Destinatarios, null=True, blank=True, related_name='Conversaciones_destinatarios', on_delete=models.CASCADE, db_index=True, unique=True)
+    estado            = models.ForeignKey(Maestras, blank=True, null=True,related_name='Conversaciones_estado', on_delete=models.CASCADE, db_index=True)
+    created_by        = models.ForeignKey('auth.User', related_name='Conversaciones_created_by', on_delete=models.CASCADE)
+    created_at        = models.DateTimeField(auto_now_add=True)
+    updated_by        = models.ForeignKey('auth.User', related_name='Conversaciones_updated_by', null=True, on_delete=models.CASCADE)
+    updated_at        = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'conversaciones'
+        verbose_name = 'conversaciones'
+        verbose_name_plural = 'conversaciones'
+
+
 class Mensajeria(models.Model):
     mensaje_id        = models.CharField(null=True, blank=True,max_length=100)
     recipiente_id     = models.CharField(null=True, blank=True,max_length=100)
-    conversacion_id   = models.CharField(null=True, blank=True,max_length=100)
+    conversacion      = models.ForeignKey(Conversaciones, null=True, blank=True, related_name='Mensajeria_conversaciones', on_delete=models.CASCADE, db_index=True)
     destinatario      = models.ForeignKey(Destinatarios, null=True, blank=True, related_name='Mensajeria_destinatarios', on_delete=models.CASCADE, db_index=True)
     origin            = models.CharField(null=True, blank=True,max_length=100)
     tipo              = models.ForeignKey(Maestras, blank=True, related_name='mensajeria_tipo', null=True, on_delete=models.CASCADE, db_index=True)
@@ -122,6 +139,7 @@ class Mensajeria(models.Model):
         db_table = 'mensajeria'
         verbose_name = 'mensajeria'
         verbose_name_plural = 'mensajeria'
+
 
 class Modulos(models.Model):
     name = models.CharField(max_length=191, null=True, blank=True)

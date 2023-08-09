@@ -44,11 +44,11 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
             text_data=json.dumps(
                 {
                     "id"            :   id,
-                    "message"       :   message,
+                    "texto"         :   message,
                     "timestamp_w"   :   timestamp_w,
                     "recipiente_id" :   recipiente_id,
                     "mime_type"     :   mime_type,
-                    "link"          :   link,
+                    "dir"           :   link,
                     "filename"      :   filename,
                     "voice"         :   voice,
                 }

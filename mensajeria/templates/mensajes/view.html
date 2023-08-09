@@ -5,7 +5,7 @@
   href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap"
   rel="stylesheet"
 />
-<link rel="stylesheet" href="{% static 'css/wh.css' %}?v=14" />
+<link rel="stylesheet" href="{% static 'css/wh.css' %}?v=29" />
 <link
   rel="shortcut icon"
   type="image/jpg"
@@ -19,17 +19,38 @@
       <img src="{% static 'images/avatar.jpg' %}" alt="" />
     </div>
     <div class="chat-header-right">
-      <img src="{% static 'images/circle-notch-solid.svg' %}" alt="" />
-      <img src="{% static  'images/chat.svg' %}" alt="" />
-      <img src="{% static 'images/more.svg' %}" alt="" />
+      <!-- <img src="{% static 'images/circle-notch-solid.svg' %}" alt="" /> -->
+      <!-- <img src="{% static  'images/chat.svg' %}" alt="" /> -->
+
+      <img
+        src="{% static 'images/save-file.svg' %}"
+        alt=""
+        id="archivados"
+        title="Mensajes archivados"
+        style="cursor: pointer"
+        class="activo"
+        onclick="archivarElemento()"
+      />
+      <img
+        src="{% static 'images/arrow.svg' %}"
+        alt=""
+        id="entrada"
+        title="Bandeja de entrada"
+        style="cursor: pointer"
+        onclick="entrada()"
+      />
     </div>
   </div>
-  <div class="sidebar-search">
+  <div class="sidebar-search" id="sidebar-search-container">
     <div class="sidebar-search-container">
       <img src="{% static 'images/search-solid.svg' %}" alt="" />
-      <input type="text" placeholder="Search or start new chat" />
+      <input type="text" placeholder="Buscar...." id="search-input" />
     </div>
   </div>
+  <!-- <div class="sidebar-search" id="sidebar-archivar-container">
+    <button class="boton-archivar" onclick="archivarElemento()">Archivados</button>
+  </div> -->
+
   <form id="formEnvio" class="w-100">{% csrf_token %}</form>
   <div class="sidebar-chats">
     <div id="chat-container"></div>
@@ -52,4 +73,7 @@
 
 {% endblock %}
 <script src="{% static 'js/pdf.min.js' %}"></script>
-<script src="{% static 'js/mensajes/view.js' %}?v=149"></script>
+<script src="{% static 'js/sweet.js' %}"></script>
+<script src="{% static 'js/mensajes/componentes.js' %}?v=12"></script>
+<script src="{% static 'js/mensajes/view.js' %}?v=228"></script>
+

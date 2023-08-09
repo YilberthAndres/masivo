@@ -206,12 +206,19 @@ body {
     padding: 8px 10px;
     width: fit-content;
     border-radius: 8px;
-    background-color: white;
     margin-bottom: 3px;
+    background-color: white;
+    
 }
 
 .chat-sent {
     margin-left: auto;
+    width: fit-content;
+    font-size: 14px;
+    padding: 8px 10px;
+    width: fit-content;
+    border-radius: 8px;
+    margin-bottom: 3px;
     background-color: #dcf8c6;
 }
 
@@ -348,5 +355,37 @@ body {
   /* Estilo del botón de adjuntar */
   #fileImg {
     cursor: pointer;
+  }
+  
+
+  .boton-archivar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff; /* Color de fondo del botón */
+    color: rgb(0, 0, 0); /* Color del texto del botón */
+    width: 100%; /* Toma el ancho completo del elemento padre */
+    height: 35px; /* Altura del botón */
+    border: none; /* Sin borde */
+    border-radius: 20px; /* Borde redondeado */
+    cursor: pointer;
+  }
+  
+  /* Inicialmente, solo el elemento activo será visible */
+img#archivados {
+    display: block;
+  }
+  
+  img#entrada {
+    display: none;
+  }
+  
+  /* Agrega la clase "activo" para mostrar el elemento correspondiente */
+  img.activo#archivados {
+    display: block;
+  }
+  
+  img.activo#entrada {
+    display: block;
   }
   
