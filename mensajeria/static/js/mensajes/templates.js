@@ -47,40 +47,39 @@ function createComponentsWithTemplateName(data) {
   const createdComponents = [];
 
   data.forEach(template => {
+
     const templateName = template.name;
     const components = template.components;
+    let Body_components = { "templateName": templateName, "language": template["language"], "components": [] }
 
-    components.forEach(component => {
+    components.forEach((component) => {
 
       if ("example" in component) {
-        const exampleKeys = Object.keys(component.example);
+        let paramters = []
 
-        exampleKeys.forEach(exampleKey => {
-          const exampleValues = component.example[exampleKey];
+        if ("body_text" in component["example"]) {
+          component["example"]["body_text"][0].forEach((body) => {
+            paramters.push({
+              "type": "text",
+              "text": body
+            })
+          })
 
-          exampleValues.forEach(exampleValue => {
-            const newComponent = {
-              templateName: templateName,
-              type: component.type,
-              key: exampleKey,
-              value: exampleValue,
-              text: component.text
-            };
+        } else if ("header_text" in component["example"]) {
+          component["example"]["header_text"].forEach((body) => {
+            paramters.push({
+              "type": "text",
+              "text": body
+            })
+          })
+        }
 
-            createdComponents.push(newComponent);
-          });
-        });
-      } else {
-        const newComponent = {
-          templateName: templateName,
-          type: component.type,
-          text: component.text
-        };
-
-        createdComponents.push(newComponent);
+        Body_components["components"].push({ "type": component["type"], "parameters": paramters })
       }
 
     });
+
+    createdComponents.push(Body_components);
 
   });
 
@@ -88,12 +87,80 @@ function createComponentsWithTemplateName(data) {
 }
 
 var component = createComponentsWithTemplateName(templates)
+var inputsContainer = $("#variables");
+var resulst = {}
+
+function createComponent(param, selectElement) {
+  $.each(param["parameters"], function (index, item) {
+
+    var input = $("<input>").attr("type", item.type);
+    input.css({
+      "display": "block",
+      "margin-top": "5px"
+    });
+    if (item.text) {
+      input.val(item.text);
+    }
+    input.change(function () {
+      var inputValue = $(this).val();
+      resulst.components[0].parameters[index].text = inputValue;
+    });
+    selectElement.append(input);
+  });
+}
+
+function generaComponent(jsonData) {
+
+  jsonData.forEach((param) => {
+
+    if (param["type"] == "HEADER") {
+
+      var header = $("<div>");
+      header.append($("<h1>").append(param["type"]))
+      createComponent(param, header);
+      inputsContainer.append(header);
+
+    } else if (param["type"] == "BODY") {
+
+      var body = $("<div>");
+      body.append($("<h1>").append(param["type"]))
+      createComponent(param, body);
+      inputsContainer.append(body)
+
+    } else if (param["type"] == "FOOTER") {
+
+      var footer = $("<div>");
+      footer.append($("<h1>").append(param["type"]))
+      createComponent(param, footer);
+      inputsContainer.append(footer)
+
+    }
+
+
+  });
+
+
+}
+
+
+
+$(document).ready(function () {
+  var selectElement = $("#templates");
+
+  selectElement.change(function () {
+    var selectedValue = $(this).val();
+    inputsContainer.empty();
+    resulst = component.find((template) => template["templateName"] == selectedValue);
+    generaComponent(resulst["components"]);
+  });
+});
+
 
 
 $("#enviarBtntemplate").click(function () {
   var formulario = $("#miFormulario")[0];
   var formData = new FormData(formulario);
-  formData.append("parameters", JSON.stringify(component));
+  formData.append("parameters", JSON.stringify(resulst));
 
   // Obtener el token CSRF
   var tokenCSRF2 = $('input[name="csrfmiddlewaretoken"]').val();

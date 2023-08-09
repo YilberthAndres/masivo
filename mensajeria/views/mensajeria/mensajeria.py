@@ -45,7 +45,7 @@ def templates(request):
 
     data = response_json["data"]
 
-    print(data)
+    # print(data)
 
     templates = []
     templates_body = []
@@ -59,7 +59,13 @@ def templates(request):
 
         # Agregar el diccionario al arreglo de resultados
         templates.append(resultado)
-        templates_body.append({"components": item["components"], **resultado})
+        templates_body.append(
+            {
+                "components": item["components"],
+                "language": item["language"],
+                **resultado,
+            }
+        )
 
     # return JsonResponse(resultados, safe=False)
 
@@ -182,20 +188,7 @@ def send_message_template(request):
         components = []
 
         if parameters:
-            parameters = list(
-                filter(lambda x: x["templateName"] == template, json.loads(parameters))
-            )
-
-            for i in parameters:
-                type_key = {}
-                type_key["type"] = i["type"]
-                if "value" in i:
-                    type_key["parameters"] = (
-                        [{"type": "text", "text": i["value"]}]
-                        if type(i["value"]) == type("string")
-                        else [{"type": "text", "text": x} for x in i["value"]]
-                    )
-                    components.append(type_key)
+            parameters = json.loads(parameters)
 
         for destinatario in destinatarios:
             # destinatario = Destinatarios.objects.get(id=destinatario)
@@ -213,34 +206,37 @@ def send_message_template(request):
             headers = {"Authorization": API_KEY_ENV, "Content-Type": "application/json"}
             payload = {
                 "messaging_product": "whatsapp",
-                "recipient_type": "individual",
+                # "recipient_type": "individual",
                 "to": "573014582878",
                 "type": "template",
-                "template": {"name": template, "language": {"code": "es_MX"}},
+                "template": {
+                    "name": parameters["templateName"],
+                    "language": {"code": parameters["language"]},
+                },
             }
 
+            # print(parameters["components"])
+
             if parameters:
-                payload["template"]["components"] = components
+                payload["template"]["components"] = parameters["components"]
 
             response = requests.post(url, headers=headers, json=payload)
 
             # Obtener el contenido de la respuesta en formato JSON
             response_json = response.json()
 
-            # waId = response_json["contacts"][0]["wa_id"]
-            # messageId = response_json["messages"][0]["id"]
+            waId = response_json["contacts"][0]["wa_id"]
+            messageId = response_json["messages"][0]["id"]
 
-        return JsonResponse({"message": "Hola"})
+        nuevo_mensaje = Mensajeria(
+            destinatario_id=destinatario.id,
+            tipo_id=754,
+            celular=waId,
+            mensaje_id=messageId,
+            created_by_id=user.id,
+        )
 
-        # nuevo_mensaje = Mensajeria(
-        #     destinatario_id=destinatario.id,
-        #     tipo_id=754,
-        #     celular=waId,
-        #     mensaje_id=messageId,
-        #     created_by_id=user.id,
-        # )
+        nuevo_mensaje.save()
 
-        # nuevo_mensaje.save()
-
-        # # Retornar la respuesta como un JSON
-        # return JsonResponse(response_json)
+        # Retornar la respuesta como un JSON
+        return JsonResponse(response_json)
