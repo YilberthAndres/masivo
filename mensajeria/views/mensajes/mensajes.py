@@ -307,23 +307,14 @@ def send_message_media(request):
     if request.method == 'POST':
         
         destinatario    = request.POST.get('destinatario')
+        tipo            = request.POST.get('tipo')
         archivo         = request.FILES.get('archivo')
 
         nombre_archivo, extension = os.path.splitext(archivo.name)
         nombre_unico = datetime.now().strftime("%Y%m%d_%H%M%S")
         carpeta_destino = 'temp'
         user = request.user
-        # user = User.objects.get(id=user.id)
-        # form = ArchivosForm(request.POST)
-        # new_archivo            = form.save(commit=False)
-        # new_archivo.formato    = extension
-        # new_archivo.dir        = carpeta_destino +'/'+nombre_unico+''+extension
-        # new_archivo.created_by = user
 
-        # new_archivo.save()
-
-        
-        # Define la ruta completa de destino del archivo
         ruta_destino = os.path.join(settings.STATIC_ROOT, carpeta_destino, f'{nombre_unico}{extension}')
 
         # Guarda el archivo en la carpeta de destino
@@ -351,8 +342,8 @@ def send_message_media(request):
         payload = {
             "messaging_product": "whatsapp",
             "to": "57"+celular,
-            "type": "image",
-            "image": {
+            "type": tipo,
+            ""+tipo+"": {
                 "link": "https://043a-190-84-159-35.ngrok-free.app/static/temp/"+nombre_completo
             }
         }
@@ -362,6 +353,8 @@ def send_message_media(request):
 
         # Obtener el contenido de la respuesta en formato JSON
         response_json = response.json()
+        
+
 
         try:
             envia_id = destinatario_model.id
@@ -382,30 +375,31 @@ def send_message_media(request):
         waId = response_json['contacts'][0]['wa_id']
         messageId = response_json['messages'][0]['id']
 
+        
+        if(tipo == 'image'):
+            mime_type = 'image/jpeg'
+        elif(tipo == 'video'):
+            mime_type = 'video/mp4'
+        elif(tipo == 'audio'):
+            mime_type = 'audio/mpeg'
+        elif(tipo == 'document'):
+            mime_type = 'document'
+        
+
         nuevo_mensaje = Mensajeria(
             destinatario_id     =   destinatario_model.id,
             celular             =   waId,
             recipiente_id       =   waId,
             link                =   dir,
-            mime_type           =   'image/jpeg',
             mensaje_id          =   messageId,
+            mime_type           =   mime_type,
+            filename            =   nombre_completo,
             conversacion_id     =   conversacion_id,
             created_by_id       =   user.id
         )
 
         nuevo_mensaje.save()
-        return JsonResponse({'status':200, 'img':{'id':nuevo_mensaje.id,'dir':dir, 'mime_type':'image/jpeg'}})
-
-        # 
-
-        # resultadoMensaje = {
-        #         'id':    nuevo_mensaje.id,
-        #         'message':            nuevo_mensaje.texto,
-        #         'destinatario':       waId,
-        #         'timestamp_w':        '1690133734',
-        #         'mime_type':           '',
-        #         'link':           ''
-        #     }
+        return JsonResponse({'status':200, 'file':{'id':nuevo_mensaje.id,'dir':dir, 'mime_type':tipo, 'filename':nombre_completo}})
 
 
     except Exception as e:

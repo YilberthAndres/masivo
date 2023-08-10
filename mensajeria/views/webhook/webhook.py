@@ -192,8 +192,8 @@ def new_message(message, perfil):
             )
 
             nuevo_mensaje.save()
-
-            send_txt(nuevo_mensaje.id, nuevo_mensaje.texto, nuevo_mensaje.timestamp_w, nuevo_mensaje.recipiente_id)
+            horaMinutos = getMinutosHoras(timestamp)
+            send_txt(nuevo_mensaje.id, nuevo_mensaje.texto, horaMinutos, nuevo_mensaje.recipiente_id)
 
 
         elif(type == 'image'):
@@ -214,7 +214,8 @@ def new_message(message, perfil):
                 conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
-            get_media(multimedia_id, message_id,timestamp, from_num, mime_type )
+            horaMinutos = getMinutosHoras(timestamp)
+            get_media(multimedia_id, message_id, horaMinutos, from_num, mime_type )
             # get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
         elif(type == 'video'):
 
@@ -234,7 +235,8 @@ def new_message(message, perfil):
                 conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
-            get_media(multimedia_id, message_id,timestamp, from_num, mime_type )
+            horaMinutos = getMinutosHoras(timestamp)
+            get_media(multimedia_id, message_id,horaMinutos, from_num, mime_type )
 
         elif(type == 'document'):
 
@@ -256,7 +258,8 @@ def new_message(message, perfil):
                 conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
-            get_file(multimedia_id, filename, message_id,timestamp, from_num, mime_type )
+            horaMinutos = getMinutosHoras(timestamp)
+            get_file(multimedia_id, filename, message_id,horaMinutos, from_num, mime_type )
         elif(type == 'audio'):
 
             mime_type       = message['audio']['mime_type']
@@ -277,7 +280,8 @@ def new_message(message, perfil):
                 conversacion_id   = conversacion_id
             )
             nuevo_mensaje.save()
-            get_audio(multimedia_id, message_id,timestamp, from_num, mime_type, voice )
+            horaMinutos = getMinutosHoras(timestamp)
+            get_audio(multimedia_id, message_id,horaMinutos, from_num, mime_type, voice )
             # get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
         else: 
             nuevo_mensaje  = Mensajeria(
@@ -296,9 +300,16 @@ def new_message(message, perfil):
     except Exception as e:
         error_message = str(e)
         nueva_peticion = Peticion(estado = 'Fallo creando: ' + error_message)
-        # nueva_peticion.save()
+        nueva_peticion.save()
 
+def getMinutosHoras(timestamp):
+    timestamp_unix = int(timestamp)
+    datetime_object = datetime.fromtimestamp(timestamp_unix)
+    hora = datetime_object.hour
+    minutos = datetime_object.minute
+    horaMinutos = str(hora) + ':' + str(minutos)
 
+    return horaMinutos
 
 # Vista donde quieres enviar el mensaje al WebSocketGroup
 def send_txt(id, message, timestamp_w, recipiente_id):

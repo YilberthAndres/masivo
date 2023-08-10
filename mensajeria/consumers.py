@@ -47,7 +47,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 {
                     "id"            :   id,
                     "texto"         :   message,
-                    "timestamp_w"   :   timestamp_w,
+                    "hora"          :   timestamp_w,
                     "recipiente_id" :   recipiente_id,
                     "mime_type"     :   mime_type,
                     "dir"           :   link,
