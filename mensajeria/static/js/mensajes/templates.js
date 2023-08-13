@@ -130,10 +130,18 @@ function createComponent(param, selectElement, labelP = "0") {
     if (item.text) {
       input.val(item.text);
     }
-    input.change(function () {
+
+    input.on("input", function () {
       var inputValue = $(this).val();
-      resulst.components[0].parameters[index].text = inputValue;
+      resulst.components.forEach((item, index_type) => {
+        if (item["type"] === labelP) resulst.components[index_type].parameters[index].text = inputValue;
+      });
+      var selectedValue = $("#templates").val();
+      vista.empty();
+      resulst_text = text_components.find((template) => template["templateName"] == selectedValue);
+      generaComponentText(resulst_text["components"], resulst["components"]);
     });
+
     label.innerHTML = `label-${index}`;
     selectElement.append(input);
     selectElement.append(highlight);
@@ -152,21 +160,21 @@ function generaComponent(jsonData) {
 
       var header = $("<div>").addClass("groups");
       header.append($("<h1>").append(param["type"]))
-      createComponent(param, header, `variable ${index}`);
+      createComponent(param, header, "HEADER");
       inputsContainer.append(header);
 
     } else if (param["type"] == "BODY") {
 
       var body = $("<div>").addClass("groups");
       body.append($("<h1>").append(param["type"]))
-      createComponent(param, body, `variable ${index}`);
+      createComponent(param, body, "BODY");
       inputsContainer.append(body)
 
     } else if (param["type"] == "FOOTER") {
 
       var footer = $("<div>").addClass("groups");
       footer.append($("<h1>").append(param["type"]))
-      createComponent(param, footer, `variable ${index}`);
+      createComponent(param, footer, "FOOTER");
       inputsContainer.append(footer);
     }
 
@@ -175,14 +183,14 @@ function generaComponent(jsonData) {
 
 function createComponentText(param, selectElement, class_name, text) {
 
-  $.each(param["parameters"], function (index, item) {
+  $.each(param["parameters"], function (_, item) {
 
     var message = $("<p>").addClass(class_name);
     let new_text = item["text"];
 
     text["parameters"].forEach((item_text, text_index) => {
       new_text = new_text.replace(`{{${text_index + 1}}}`, item_text["text"]);
-    })
+    });
 
     message.append(new_text);
     selectElement.append(message);
@@ -225,7 +233,7 @@ $(document).ready(function () {
 
 
 
-$("#enviarBtntemplate---").click(function () {
+$("#enviarBtntemplate").click(function () {
   var formulario = $("#miFormulario")[0];
   var formData = new FormData(formulario);
   formData.append("parameters", JSON.stringify(resulst));
@@ -233,21 +241,21 @@ $("#enviarBtntemplate---").click(function () {
   // Obtener el token CSRF
   var tokenCSRF2 = $('input[name="csrfmiddlewaretoken"]').val();
 
-  $.ajax({
-    url: "send_message_template",
-    type: "POST",
-    data: formData,
-    processData: false,
-    contentType: false,
-    headers: {
-      Authorization: tokenCSRF2,
-      "X-CSRFToken": tokenCSRF2, // También puedes incluir el token CSRF en el encabezado X-CSRFToken
-    },
-    success: function (response) {
-      console.log(response)
-    },
-    error: function (xhr, status, error) {
-      alert("Error en la solicitud AJAX");
-    },
-  });
+  // $.ajax({
+  //   url: "send_message_template",
+  //   type: "POST",
+  //   data: formData,
+  //   processData: false,
+  //   contentType: false,
+  //   headers: {
+  //     Authorization: tokenCSRF2,
+  //     "X-CSRFToken": tokenCSRF2, // También puedes incluir el token CSRF en el encabezado X-CSRFToken
+  //   },
+  //   success: function (response) {
+  //     console.log(response)
+  //   },
+  //   error: function (xhr, status, error) {
+  //     alert("Error en la solicitud AJAX");
+  //   },
+  // });
 });
