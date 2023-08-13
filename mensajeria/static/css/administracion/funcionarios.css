@@ -282,3 +282,13 @@ input:focus~.highlight {
   margin-bottom: 3px;
   background-color: white;
 }
+
+.template-text .message .header {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.template-text .message .footer {
+  display: inline-block;
+  font-weight: 100;
+}

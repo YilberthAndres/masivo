@@ -173,22 +173,40 @@ function generaComponent(jsonData) {
   });
 }
 
-function createComponentText(param, selectElement, labelP = "0") {
+function createComponentText(param, selectElement, class_name, text) {
+
   $.each(param["parameters"], function (index, item) {
-    selectElement.append(item["text"]);
+
+    var message = $("<p>").addClass(class_name);
+    let new_text = item["text"];
+
+    text["parameters"].forEach((item_text, text_index) => {
+      new_text = new_text.replace(`{{${text_index + 1}}}`, item_text["text"]);
+    })
+
+    message.append(new_text);
+    selectElement.append(message);
   });
 }
 
-function generaComponentText(jsonData) {
+function generaComponentText(jsonData, jsonDataText) {
 
   var message = $("<p>").addClass("message");
 
   jsonData.forEach((param, index) => {
-    createComponentText(param, message, `variable ${index}`);
+    if (param["type"] == "HEADER") {
+      createComponentText(param, message, "header", jsonDataText[index]);
+    }
+    else if (param["type"] == "BODY") {
+      createComponentText(param, message, "body", jsonDataText[index]);
+    }
+    else if (param["type"] == "FOOTER") {
+      createComponentText(param, message, "footer", jsonDataText[index]);
+    }
+
   });
 
   vista.append(message);
-
 }
 
 $(document).ready(function () {
@@ -201,7 +219,7 @@ $(document).ready(function () {
     resulst = component.find((template) => template["templateName"] == selectedValue);
     resulst_text = text_components.find((template) => template["templateName"] == selectedValue);
     generaComponent(resulst["components"]);
-    generaComponentText(resulst_text["components"])
+    generaComponentText(resulst_text["components"], resulst["components"]);
   });
 });
 
