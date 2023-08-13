@@ -2,46 +2,61 @@
 <!-- CSS de DataTables -->
 <link rel="stylesheet" href="{% static 'css/datatables.css' %}" />
 <link rel="stylesheet" href="{% static 'css/administracion/funcionarios.css' %}" />
-<div class="row py-3">
-  <div class="col-12 d-flex justify-content-between align-items-center">
-    <div class="dashboard-title-text">
-      <input type="hidden" id="mensajeCreate" class="mensajeCreate" value="{{mensaje}}" />
+
+<div class="container-all">
+  <div class="card d-flex align-items-center w-50 shadow-sm p-3 mb-5 bg-white rounded template">
+
+    <div class="plantilla-header">
+      <h2>Editar plantilla</h2>
     </div>
-    <div class="container d-flex justify-content-center align-items-center" style="height: 60vh;">
-      <form action="" id="miFormulario" method="post">
+
+    <div class="container container-nav" style="height: 60vh;">
+      <form action="" id="miFormulario" method="post" class="d-flex">
         {% csrf_token %}
-        <div class="mb-3">
+        <div class="mb-3 content-select w-100">
           <label for="templates" class="form-label">Templates:</label>
           <select class="form-select" name="templates" id="templates">
-            <option value=""></option>
+            <option>Selecione una opcion</option>
             {% for template in templates %}
             <option value="{{ template.name }}">{{ template.name }}</option>
             {% endfor %}
           </select>
         </div>
-        <a id="enviarBtntemplate" class="btn btn-primary">Enviar</a>
       </form>
+
+      <div id="variables"></div>
+
+      <div class="button" id="enviarBtntemplate">
+        <div class="tick">
+        </div>
+      </div>
     </div>
-    <div id="variables" ></div>
+
   </div>
-  <style>
-    .nav-link:not(.active) {
-      color: black !important;
-    }
-  </style>
 
-  <br />
-  <br />
+  <div class="container card vista">
+    <div class="card-header">Vista Previa del mensaje</div>
+    <div class="card-body template-text"></div>
+  </div>
 
-  <script>
-    var templates = JSON.parse('{{ templates_body|escapejs }}')
-  </script>
+</div>
 
-  <script src="{% static 'js/datatables.js' %}"></script>
-  <script src="{% static 'js/sweet.js' %}"></script>
-  <script src="{% static 'js/select2.min.js' %}"></script>
-  <script src="{% static 'js/mensajes/templates.js' %}?v=1"></script>
+<style>
+  .nav-link:not(.active) {
+    color: black !important;
+  }
+</style>
 
 
+<script>
+  var templates = JSON.parse('{{ templates_body|escapejs }}')
+</script>
 
-  {% endblock %}
+<script src="{% static 'js/datatables.js' %}"></script>
+<script src="{% static 'js/sweet.js' %}"></script>
+<script src="{% static 'js/select2.min.js' %}"></script>
+<script src="{% static 'js/mensajes/templates.js' %}?v=1"></script>
+
+
+
+{% endblock %}

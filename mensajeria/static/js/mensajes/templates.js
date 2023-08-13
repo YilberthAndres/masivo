@@ -5,6 +5,23 @@ var formData = new FormData(formulario);
 var tokenCSRF = $('input[name="csrfmiddlewaretoken"]').val();
 var selectDestinatarios = $("#destinatarios");
 
+let button = document.querySelector('.button');
+let buttonText = document.querySelector('.tick');
+
+const tickMark = "<svg width=\"58\" height=\"45\" viewBox=\"0 0 58 45\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#fff\" fill-rule=\"nonzero\" d=\"M19.11 44.64L.27 25.81l5.66-5.66 13.18 13.18L52.07.38l5.65 5.65\"/></svg>";
+
+buttonText.innerHTML = "Submit";
+
+button.addEventListener('click', function () {
+
+  if (buttonText.innerHTML !== "Submit") {
+    buttonText.innerHTML = "Submit";
+  } else if (buttonText.innerHTML === "Submit") {
+    buttonText.innerHTML = tickMark;
+  }
+  this.classList.toggle('button__circle');
+});
+
 // $.ajax({
 //   url: "list_destinatarios",
 //   type: "POST",
@@ -44,60 +61,72 @@ var selectDestinatarios = $("#destinatarios");
 // { 'type': 'FOOTER', 'text': 'WhatsApp Business Platform sample message' }], 'language': 'en_US', 'status': 'APPROVED', 'category': 'UTILITY', 'id': '623372086368316' }]
 
 function createComponentsWithTemplateName(data) {
+
   const createdComponents = [];
+  const createComponenttext = []
 
   data.forEach(template => {
 
     const templateName = template.name;
     const components = template.components;
     let Body_components = { "templateName": templateName, "language": template["language"], "components": [] }
+    let text_components = { "templateName": templateName, "language": template["language"], "components": [] }
 
     components.forEach((component) => {
 
+      let paramters_text = []
+
+      paramters_text.push({
+        "type": component["type"],
+        "text": component["text"]
+      });
+
       if ("example" in component) {
-        let paramters = []
+        let paramters = [];
 
         if ("body_text" in component["example"]) {
           component["example"]["body_text"][0].forEach((body) => {
             paramters.push({
               "type": "text",
               "text": body
-            })
-          })
+            });
+          });
 
         } else if ("header_text" in component["example"]) {
           component["example"]["header_text"].forEach((body) => {
             paramters.push({
               "type": "text",
               "text": body
-            })
-          })
+            });
+          });
         }
 
-        Body_components["components"].push({ "type": component["type"], "parameters": paramters })
+        Body_components["components"].push({ "type": component["type"], "parameters": paramters });
+        text_components["components"].push({ "type": component["type"], "parameters": paramters_text })
       }
 
     });
 
     createdComponents.push(Body_components);
+    createComponenttext.push(text_components)
 
   });
 
-  return createdComponents;
+  return [createdComponents, createComponenttext];
 }
 
-var component = createComponentsWithTemplateName(templates)
+var [component, text_components] = createComponentsWithTemplateName(templates);
 var inputsContainer = $("#variables");
+var vista = $(".template-text");
 var resulst = {}
 
-function createComponent(param, selectElement) {
+function createComponent(param, selectElement, labelP = "0") {
   $.each(param["parameters"], function (index, item) {
 
-    var input = $("<input>").attr("type", item.type);
-    input.css({
-      "display": "block",
-      "margin-top": "5px"
-    });
+    var highlight = $("<span>").addClass("highlight");
+    var bar = $("<span>").addClass("bar");
+    var label = $("<label>");
+    var input = $("<input>").attr("type", item.type).addClass("text");
     if (item.text) {
       input.val(item.text);
     }
@@ -105,44 +134,62 @@ function createComponent(param, selectElement) {
       var inputValue = $(this).val();
       resulst.components[0].parameters[index].text = inputValue;
     });
+    label.innerHTML = `label-${index}`;
     selectElement.append(input);
+    selectElement.append(highlight);
+    selectElement.append(bar);
+    selectElement.append(label);
   });
 }
 
+
+
 function generaComponent(jsonData) {
 
-  jsonData.forEach((param) => {
+  jsonData.forEach((param, index) => {
 
     if (param["type"] == "HEADER") {
 
-      var header = $("<div>");
+      var header = $("<div>").addClass("groups");
       header.append($("<h1>").append(param["type"]))
-      createComponent(param, header);
+      createComponent(param, header, `variable ${index}`);
       inputsContainer.append(header);
 
     } else if (param["type"] == "BODY") {
 
-      var body = $("<div>");
+      var body = $("<div>").addClass("groups");
       body.append($("<h1>").append(param["type"]))
-      createComponent(param, body);
+      createComponent(param, body, `variable ${index}`);
       inputsContainer.append(body)
 
     } else if (param["type"] == "FOOTER") {
 
-      var footer = $("<div>");
+      var footer = $("<div>").addClass("groups");
       footer.append($("<h1>").append(param["type"]))
-      createComponent(param, footer);
-      inputsContainer.append(footer)
-
+      createComponent(param, footer, `variable ${index}`);
+      inputsContainer.append(footer);
     }
 
-
   });
-
-
 }
 
+function createComponentText(param, selectElement, labelP = "0") {
+  $.each(param["parameters"], function (index, item) {
+    selectElement.append(item["text"]);
+  });
+}
 
+function generaComponentText(jsonData) {
+
+  var message = $("<p>").addClass("message");
+
+  jsonData.forEach((param, index) => {
+    createComponentText(param, message, `variable ${index}`);
+  });
+
+  vista.append(message);
+
+}
 
 $(document).ready(function () {
   var selectElement = $("#templates");
@@ -150,14 +197,17 @@ $(document).ready(function () {
   selectElement.change(function () {
     var selectedValue = $(this).val();
     inputsContainer.empty();
+    vista.empty();
     resulst = component.find((template) => template["templateName"] == selectedValue);
+    resulst_text = text_components.find((template) => template["templateName"] == selectedValue);
     generaComponent(resulst["components"]);
+    generaComponentText(resulst_text["components"])
   });
 });
 
 
 
-$("#enviarBtntemplate").click(function () {
+$("#enviarBtntemplate---").click(function () {
   var formulario = $("#miFormulario")[0];
   var formData = new FormData(formulario);
   formData.append("parameters", JSON.stringify(resulst));

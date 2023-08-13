@@ -38,14 +38,13 @@ def templates(request):
         + ID_WHATSAPP_BUSINESS_ENV
         + "/message_templates"
     )
+
     headers = {"Authorization": API_KEY_ENV, "Content-Type": "application/json"}
 
     response = requests.get(url, headers=headers)
     response_json = response.json()
 
     data = response_json["data"]
-
-    # print(data)
 
     templates = []
     templates_body = []
@@ -54,10 +53,7 @@ def templates(request):
         status = item["status"]
         name = item["name"]
 
-        # Crear un diccionario con los campos id, status y name
         resultado = {"id": id, "status": status, "name": name}
-
-        # Agregar el diccionario al arreglo de resultados
         templates.append(resultado)
         templates_body.append(
             {
@@ -67,7 +63,7 @@ def templates(request):
             }
         )
 
-    # return JsonResponse(resultados, safe=False)
+    # return JsonResponse({"message":"Hello"}, safe=False)
 
     contexto = {
         "titulo": "Templates",
@@ -207,7 +203,7 @@ def send_message_template(request):
             payload = {
                 "messaging_product": "whatsapp",
                 # "recipient_type": "individual",
-                "to": "573014582878",
+                "to": "57" + celular,
                 "type": "template",
                 "template": {
                     "name": parameters["templateName"],
@@ -224,19 +220,21 @@ def send_message_template(request):
 
             # Obtener el contenido de la respuesta en formato JSON
             response_json = response.json()
+            print(response_json)
+            return JsonResponse({"message": "Ok"})
 
-            waId = response_json["contacts"][0]["wa_id"]
-            messageId = response_json["messages"][0]["id"]
+        #     waId = response_json["contacts"][0]["wa_id"]
+        #     messageId = response_json["messages"][0]["id"]
 
-        nuevo_mensaje = Mensajeria(
-            destinatario_id=destinatario.id,
-            tipo_id=754,
-            celular=waId,
-            mensaje_id=messageId,
-            created_by_id=user.id,
-        )
+        # nuevo_mensaje = Mensajeria(
+        #     destinatario_id=destinatario.id,
+        #     tipo_id=754,
+        #     celular=waId,
+        #     mensaje_id=messageId,
+        #     created_by_id=user.id,
+        # )
 
-        nuevo_mensaje.save()
+        # nuevo_mensaje.save()
 
-        # Retornar la respuesta como un JSON
-        return JsonResponse(response_json)
+        # # Retornar la respuesta como un JSON
+        # return JsonResponse(response_json)

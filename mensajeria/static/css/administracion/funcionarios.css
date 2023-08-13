@@ -18,3 +18,267 @@
     background-color: red;
   }
    */
+
+.plantilla-header {
+  border-bottom: 1px solid gray;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.container-all {
+  display: grid;
+  grid-template-areas:
+    "template vista";
+  grid-auto-columns: 1fr .4fr;
+  grid-auto-rows: 1fr .2fr;
+}
+
+.vista {
+  grid-area: vista;
+  width: 70% !important;
+  height: 70vh;
+  padding: 0;
+}
+
+.template {
+  grid-area: template;
+  width: 100% !important;
+}
+
+.container-nav {
+  display: grid;
+  grid-template-areas:
+    "select select select"
+    "body body body"
+    "wrapper wrapper wrapper";
+  grid-auto-rows: 0.2fr 1fr .2fr;
+}
+
+#miFormulario {
+  grid-area: select;
+}
+
+#variables {
+  grid-area: body;
+}
+
+#enviarBtntemplate {
+  grid-area: wrapper;
+  margin: auto;
+}
+
+.content-input input,
+.content-select select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.content-select select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.content-select select::-ms-expand {
+  display: none;
+}
+
+.content-select {
+  max-width: 90%;
+  position: relative;
+}
+
+.content-select select {
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  padding: 7px 10px;
+  height: 42px;
+  outline: none;
+  border: 0;
+  border-radius: 0px;
+  background: #f0f0f0;
+  color: #7b7b7b;
+  font-size: 1em;
+  color: #999;
+  font-family:
+    'Quicksand', sans-serif;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0px;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.content-select i {
+  position: absolute;
+  right: 20px;
+  top: calc(50% - 13px);
+  width: 16px;
+  height: 16px;
+  display: block;
+  border-left: 4px solid #0d23eb;
+  border-bottom: 4px solid #0c80ec;
+  transform: rotate(-45deg);
+  transition: all 0.25s ease;
+}
+
+.content-select:hover i {
+  margin-top: 3px;
+}
+
+.button,
+.tick {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+}
+
+.button {
+  width: 130px;
+  height: 50px;
+  background: dodgerblue;
+  border-radius: 6px;
+  transition: all .3s cubic-bezier(0.67, 0.17, 0.40, 0.83);
+}
+
+.button svg {
+  transform: rotate(180deg);
+  transition: all .5s;
+}
+
+.button__circle {
+  width: 60px;
+  height: 60px;
+  background: mediumseagreen;
+  border-radius: 50%;
+  transform: rotate(-180deg);
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.tick {
+  color: white;
+  font-size: 2em;
+  transition: all .9s;
+}
+
+
+.group {
+  position: relative;
+  margin-bottom: 45px;
+}
+
+input {
+  font-size: 18px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 300px;
+  border: none;
+  border-bottom: 1px solid #757575;
+}
+
+input:focus {
+  outline: none;
+}
+
+
+label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+input:focus~label,
+input:valid~label {
+  top: -20px;
+  font-size: 14px;
+  color: #5264AE;
+}
+
+
+.bar {
+  position: relative;
+  display: block;
+  width: 300px;
+}
+
+.bar:before,
+.bar:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #5264AE;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+.bar:before {
+  left: 50%;
+}
+
+.bar:after {
+  right: 50%;
+}
+
+
+input:focus~.bar:before,
+input:focus~.bar:after {
+  width: 50%;
+}
+
+
+.highlight {
+  position: absolute;
+  height: 60%;
+  width: 100px;
+  top: 25%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
+input:focus~.highlight {
+  animation: inputHighlighter 0.3s ease;
+}
+
+@keyframes inputHighlighter {
+  from {
+    background: #5264AE;
+  }
+
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+
+.template-text {
+  height: calc(100vh - 120px);
+  background-image: url(../../images/background\ \(1\).png);
+  background-position: center;
+}
+
+.template-text .message {
+  font-size: 14px;
+  padding: 8px 10px;
+  width: fit-content;
+  border-radius: 8px;
+  margin-bottom: 3px;
+  background-color: white;
+}
