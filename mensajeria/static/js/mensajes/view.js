@@ -9,12 +9,6 @@ const chatSocket = new WebSocket(
 
 chatSocket.onopen = (event) => {
   console.log("Conectado al servidor WebSocket");
-  // chatSocket.send(
-  //   JSON.stringify({
-  //     message: message,
-  //     username: user_username,
-  //   })
-  // );
 };
 
 // Evento onmessage para recibir mensajes del servidor
@@ -43,23 +37,36 @@ function closeWebSocket() {
   chatSocket.close();
 }
 
- // Variable para almacenar el reproductor de audio actual
- let currentAudioPlayer = null;
+// Variable para almacenar el reproductor de audio actual
+let currentAudioPlayer = null;
+let currentTimeOnPause = 0;
 
- // Función para detener el reproductor de audio actual
- function stopCurrentAudioPlayer() {
-   if (currentAudioPlayer) {
-     currentAudioPlayer.pause();
-     currentAudioPlayer.currentTime = 0;
-   }
- }
+// Función para detener el reproductor de audio actual
+function stopCurrentAudioPlayer() {
+  if (currentAudioPlayer) {
+    currentAudioPlayer.pause();
+    currentTimeOnPause = currentAudioPlayer.currentTime; // Guardar la posición actual
+    currentAudioPlayer.currentTime = 0;
+    currentAudioPlayer = null; // Reiniciar el reproductor actual
+  }
+}
 
- // Función para iniciar un nuevo reproductor de audio
- function startNewAudioPlayer(audioPlayer) {
-   stopCurrentAudioPlayer();
-   currentAudioPlayer = audioPlayer;
-   audioPlayer.play();
- }
+// Función para iniciar un nuevo reproductor de audio
+function startNewAudioPlayer(audioPlayer) {
+  if (currentAudioPlayer === audioPlayer) {
+    // Si se hace clic en el mismo reproductor, pausarlo y reiniciar el reproductor actual
+    stopCurrentAudioPlayer();
+  } else {
+    stopCurrentAudioPlayer();
+    currentAudioPlayer = audioPlayer;
+    
+    // Establecer la posición donde se adelantó anteriormente
+    currentAudioPlayer.currentTime = currentTimeOnPause;
+    
+    audioPlayer.play();
+  }
+}
+
 
 
 function sendMessage(mensaje) {
@@ -78,6 +85,7 @@ function sendMessage(mensaje) {
     },
     success: function (response) {
       mensaje_texto(response, 'enviado' );
+
       const miElemento = document.getElementById("mensaje_" + response.id);
       if (miElemento) {
         miElemento.scrollIntoView({ behavior: "smooth" });
@@ -231,77 +239,23 @@ function list_menssage_find(response, message_new)
                     } else if (chat.filename != null) {
                       mensaje_file(chat, chat.estado)
                     }  else if (chat.voice != '') {
-                      
-                      const chatMessage = document.createElement("div");
-                      chatMessage.classList.add("chat-message");
-                      chatMessage.id = `mensaje_${chat.id}`;
-
-                      if (chat.voice === "True") {
-                        // Agregar el avatar
-                        const avatarAudioContainer = document.createElement("div");
-                        avatarAudioContainer.classList.add("avatar-audio-container");
-                    
-                        // Agregar el avatar al contenedor
-                        const chatAvatar = document.createElement("div");
-                        chatAvatar.classList.add("chat-avatar");
-                        const avatarImg = document.createElement("img");
-                        avatarImg.src = "/static/images/avatar.jpg";
-                        chatAvatar.appendChild(avatarImg);
-                        avatarAudioContainer.appendChild(chatAvatar);
-                    
-                        // Agregar el reproductor de audio al contenedor
-                        const audioPlayer = document.createElement("audio");
-                        audioPlayer.controls = true;
-                        audioPlayer.classList.add("chat-audio"); // Aplicar la clase de estilo para el reproductor de audio
-                        audioPlayer.src = chat.link; // Asumiendo que la propiedad chat.link contiene la URL del archivo de audio
-                        audioPlayer.addEventListener("play", () => startNewAudioPlayer(audioPlayer));
-                        avatarAudioContainer.appendChild(audioPlayer);
-                    
-                        // Agregar el contenedor al chatMessage
-                        chatMessage.appendChild(avatarAudioContainer);
-                      } else {
-                        // console.log(chat.voice)
-                        // Agregar el reproductor de audio
-                        // Agregar solo el reproductor de audio
-                        const audioPlayer = document.createElement("audio");
-                        audioPlayer.controls = true;
-                        audioPlayer.classList.add("chat-audio"); // Aplicar la clase de estilo para el reproductor de audio
-                        audioPlayer.src = chat.link; // Asumiendo que la propiedad chat.link contiene la URL del archivo de audio
-                        audioPlayer.addEventListener("play", () => startNewAudioPlayer(audioPlayer));
-                        chatMessage.appendChild(audioPlayer);
-                      }
-
-                      // Agregar el mensaje y la hora
-                      const chatInfo = document.createElement("div");
-                      chatInfo.classList.add("chat-info");
-                      const chatName = document.createElement("h4");
-                      chatName.textContent = chat.nombre;
-                      chatName.style.fontSize = "18px";
-                      const chatTimestamp = document.createElement("span");
-                      chatTimestamp.classList.add("chat-timestamp");
-                      chatTimestamp.textContent = chat.hora;
-                      chatInfo.appendChild(chatName);
-                      chatInfo.appendChild(chatTimestamp);
-
-                      chatMessage.appendChild(chatInfo);
-                      messageContent.appendChild(chatMessage);
-
-
+                      mensaje_audio(chat, chat.estado)
                     } 
 
                   } else if (chat.estado === "enviado") {
 
                     if(chat.mime_type == null){
                       mensaje_texto(chat, chat.estado );
-
                     }else if (chat.mime_type == "image/jpeg") {
-                      
                       mensaje_img(chat, chat.estado)
-                    }
+                    } else if (chat.mime_type == "video/mp4") {
+                      mensaje_video(chat, chat.estado)
+                    } else if (chat.mime_type == "document"){
+                      mensaje_file(chat, chat.estado)
+                    }  else if (chat.mime_type == "audio/mpeg") {
+                      mensaje_audio(chat, chat.estado)
+                    } 
                     
-
-
-
                   }
                   lastMessage = `mensaje_${chat.id}`;
                 });
@@ -323,13 +277,6 @@ function list_menssage_find(response, message_new)
                 const messageFooter = document.querySelector(".message-footer");
                 messageFooter.innerHTML = ""; // Eliminar cualquier contenido existente
 
-                // const paperClipInput = document.createElement("input");
-                // paperClipInput.type = "file";
-                // paperClipInput.accept = "image/*";
-
-                // paperClipInput.id = `file_${mensaje.recipiente_id}`;
-                // messageFooter.appendChild(paperClipInput);
-                // Crea un botón estilizado
                 const adjuntarButton = document.createElement("button");
                 adjuntarButton.textContent = "Adjuntar archivo";
                 adjuntarButton.style.padding = "10px 20px";
@@ -463,63 +410,7 @@ function list_menssage_find(response, message_new)
             } else if (message_new.filename != '') {
               mensaje_file(message_new, 'recibido' );
             } else if (message_new.voice !== '') {
-              console.log('Dentro audio')
-                    
-              const chatMessage3 = document.createElement("div");
-              chatMessage3.classList.add("chat-message");
-              chatMessage3.id = `mensaje_${message_new.id}`;
-
-              if (message_new.voice === true) {
-                // Agregar el avatar
-                const avatarAudioContainer3 = document.createElement("div");
-                avatarAudioContainer3.classList.add("avatar-audio-container");
-            
-                // Agregar el avatar al contenedor
-                const chatAvatar3 = document.createElement("div");
-                chatAvatar3.classList.add("chat-avatar");
-                const avatarImg3  = document.createElement("img");
-                avatarImg3.src    = "/static/images/avatar.jpg";
-                chatAvatar3.appendChild(avatarImg3);
-                avatarAudioContainer3.appendChild(chatAvatar3);
-            
-                // Agregar el reproductor de audio al contenedor
-                const audioPlayer3 = document.createElement("audio");
-                audioPlayer3.controls = true;
-                audioPlayer3.classList.add("chat-audio"); // Aplicar la clase de estilo para el reproductor de audio
-                audioPlayer3.src = message_new.link; // Asumiendo que la propiedad message_new.link contiene la URL del archivo de audio
-                audioPlayer3.addEventListener("play", () => startNewAudioPlayer(audioPlayer3));
-                avatarAudioContainer3.appendChild(audioPlayer3);
-            
-                // Agregar el contenedor al chatMessage
-                chatMessage3.appendChild(avatarAudioContainer3);
-              } else {
-                // console.log(message_new.voice)
-                // Agregar el reproductor de audio
-                 // Agregar solo el reproductor de audio
-                const audioPlayer3 = document.createElement("audio");
-                audioPlayer3.controls = true;
-                audioPlayer3.classList.add("chat-audio"); // Aplicar la clase de estilo para el reproductor de audio
-                audioPlayer3.src = message_new.link; // Asumiendo que la propiedad message_new.link contiene la URL del archivo de audio
-                audioPlayer3.addEventListener("play", () => startNewAudioPlayer(audioPlayer3));
-                chatMessage3.appendChild(audioPlayer3);
-              }
-
-              // Agregar el mensaje y la hora
-              const chatInfo3 = document.createElement("div");
-              chatInfo3.classList.add("chat-info");
-              const chatName3 = document.createElement("h4");
-              chatName3.textContent = message_new.nombre;
-              chatName3.style.fontSize = "18px";
-              const chatTimestamp3 = document.createElement("span");
-              chatTimestamp3.classList.add("chat-timestamp");
-              chatTimestamp3.textContent = message_new.hora;
-              chatInfo3.appendChild(chatName3);
-              chatInfo3.appendChild(chatTimestamp3);
-
-              chatMessage3.appendChild(chatInfo3);
-              messageContent3.appendChild(chatMessage3);
-
-
+              mensaje_audio(message_new, 'recibido' );
             } else{
               console.log("Audio fuera");
               console.log(message_new.voice);
@@ -660,15 +551,13 @@ function handleFileSelection(event) {
   for (const archivo of archivosSeleccionados) {
     console.log('Nombre:', archivo.name);
     if (esImagenArchivo(archivo)) {
-
       sendMessageMultimedia(archivo, 'image')
-
     }else if (esVideoArchivo(archivo)) {
-      console.log('Tipo: Video');
+      sendMessageMultimedia(archivo, 'video')
     }else if (esAudioArchivo(archivo)) {
-      console.log('Tipo: Audio');
+      sendMessageMultimedia(archivo, 'audio')
     }else if (esArchivoArchivo(archivo)) {
-      console.log('Tipo: Documento');
+      sendMessageMultimedia(archivo, 'document')
     }else{
       console.log('Archivo no valido');
     }
@@ -696,19 +585,22 @@ function sendMessageMultimedia(file, tipo) {
     processData: false, // Para evitar que jQuery procese el FormData
     contentType: false, // Para que jQuery establezca automáticamente el encabezado correcto
     success: function (response) {
-      // console.log(response);
 
-      if (response.img.mime_type == 'image/jpeg') {
-        mensaje_img(response.img, 'enviado' );
-        const miElemento = document.getElementById("mensaje_" + response.img.id);
-
-        if (miElemento) {
-          miElemento.scrollIntoView({ behavior: "smooth" });
-        }
-
-        document.getElementById("txt_" + mensaje.recipiente_id).value = "";
-        pintar(null, '', chat_activos);
+      if (response.file.mime_type == 'image') {
+        mensaje_img(response.file, 'enviado' );
+      }else if (response.file.mime_type == 'video') {
+        mensaje_video(response.file, 'enviado' );
+      }else if (response.file.mime_type == 'audio') {
+        mensaje_audio(response.file, 'enviado' );
+      }else if (response.file.mime_type == 'document') {
+        mensaje_file(response.file, 'enviado' );
       }
+
+      const miElemento = document.getElementById("mensaje_" + response.file.id);
+      if (miElemento) {
+        miElemento.scrollIntoView({ behavior: "smooth" });
+      }
+      pintar(null, '', chat_activos);
     },
     error: function (xhr, status, error) {
       alert("Error en la solicitud AJAX");
@@ -744,56 +636,6 @@ function esAudioArchivo(archivo) {
 }
 
 
-
-
-function sendImg(file) {
-  txt_send = document.getElementById("txt_" + mensaje.recipiente_id).value;
-  destinatario_ws = mensaje.recipiente_id;
-  
-  var tokenCSRF2 = $('input[name="csrfmiddlewaretoken"]').val();
-
-  $.ajax({
-    url: "send_message",
-    type: "POST",
-    data: JSON.stringify({ destinatario: destinatario_ws, mensaje: txt_send }),
-    contentType: "application/json",
-    headers: {
-      "X-CSRFToken": tokenCSRF2,
-    },
-    success: function (response) {
-      
-      const messageContent = document.querySelector(".message-content");
-      const chatMessage = document.createElement("div");
-      chatMessage.classList.add("chat-message", "chat-sent");
-      chatMessage.id = `mensaje_${response.img.id}`;
-
-      const chatImage = document.createElement("img");
-      chatImage.classList.add("chat-image");
-      chatImage.style.cursor = "pointer";
-      chatImage.src = response.img.link;
-
-      const chatTimestamp = document.createElement("span");
-      chatTimestamp.classList.add("chat-timestamp");
-      chatTimestamp.textContent = 'enviado';
-
-      chatMessage.appendChild(chatImage);
-      chatMessage.appendChild(chatTimestamp);
-      messageContent.appendChild(chatMessage);
-
-      const miElemento = document.getElementById("mensaje_" + response.img.id);
-
-      if (miElemento) {
-        miElemento.scrollIntoView({ behavior: "smooth" });
-      }
-
-      document.getElementById("txt_" + mensaje.recipiente_id).value = "";
-      pintar(null, '', chat_activos);
-    },
-    error: function (xhr, status, error) {
-      alert("Error en la solicitud AJAX");
-    },
-  });
-}
 
 const searchContainer = document.getElementById("sidebar-search-container");
 const searchInput = document.getElementById("search-input");
