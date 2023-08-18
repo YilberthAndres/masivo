@@ -272,15 +272,28 @@ input:focus~.highlight {
   height: calc(100vh - 120px);
   background-image: url(../../images/background\ \(1\).png);
   background-position: center;
+  overflow: auto;
 }
+
+/* .template-text p {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 200px  !important;
+  border: 1px solid;
+  padding: 2px 5px;
+} */
 
 .template-text .message {
   font-size: 14px;
   padding: 8px 10px;
-  width: fit-content;
   border-radius: 8px;
   margin-bottom: 3px;
   background-color: white;
+  height: auto;
+  /* white-space: initial; */
+}
+.template-text .message .body {
+  height: auto;
 }
 
 .template-text .message .header {
@@ -291,4 +304,11 @@ input:focus~.highlight {
 .template-text .message .footer {
   display: inline-block;
   font-weight: 100;
+}
+
+.template-text .img_text {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin: auto;
 }

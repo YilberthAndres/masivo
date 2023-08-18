@@ -76,10 +76,23 @@ function createComponentsWithTemplateName(data) {
 
       let paramters_text = []
 
-      paramters_text.push({
-        "type": component["type"],
-        "text": component["text"]
-      });
+      if (component["format"] == "IMAGE") {
+
+        if ("example" in component) {
+          paramters_text.push({
+            "type": component["type"],
+            "format": component["format"],
+            "text": component["example"]["header_handle"][0]
+          });
+        }
+      } else if (component["format"] == "TEXT" || component["type"] == "BODY" || component["type"] == "FOOTER") {
+        paramters_text.push({
+          "type": component["type"],
+          "text": component["text"],
+          "format": component["format"],
+        });
+      }
+
 
       if ("example" in component) {
         let paramters = [];
@@ -92,16 +105,31 @@ function createComponentsWithTemplateName(data) {
             });
           });
 
-        } else if ("header_text" in component["example"]) {
+        }
+        else if ("header_handle" in component["example"]) {
+
+          component["example"]["header_handle"].forEach((path) => {
+            paramters.push({
+              "type": "input",
+              "path": path
+            });
+          });
+
+        }
+
+        else if ("header_text" in component["example"]) {
+
+          console.log("sss")
           component["example"]["header_text"].forEach((body) => {
             paramters.push({
               "type": "text",
               "text": body
             });
           });
+
         }
 
-        Body_components["components"].push({ "type": component["type"], "parameters": paramters });
+        Body_components["components"].push({ "type": component["type"], "format": component["format"], "parameters": paramters });
         text_components["components"].push({ "type": component["type"], "parameters": paramters_text })
       }
 
@@ -121,6 +149,8 @@ var vista = $(".template-text");
 var resulst = {}
 
 function createComponent(param, selectElement, labelP = "0") {
+
+
   $.each(param["parameters"], function (index, item) {
 
     var highlight = $("<span>").addClass("highlight");
@@ -151,7 +181,6 @@ function createComponent(param, selectElement, labelP = "0") {
 }
 
 
-
 function generaComponent(jsonData) {
 
   jsonData.forEach((param, index) => {
@@ -160,7 +189,13 @@ function generaComponent(jsonData) {
 
       var header = $("<div>").addClass("groups");
       header.append($("<h1>").append(param["type"]))
-      createComponent(param, header, "HEADER");
+
+      if (param["format"] == "IMAGE") {
+        createComponentWith(param, header, "HEADER");
+      }
+      else if (param["format"] == "TEXT") {
+        createComponent(param, header, "HEADER");
+      }
       inputsContainer.append(header);
 
     } else if (param["type"] == "BODY") {
@@ -197,13 +232,48 @@ function createComponentText(param, selectElement, class_name, text) {
   });
 }
 
+function createComponentWithFile(param, selectElement, class_name, text) {
+  $.each(param["parameters"], function (_, item) {
+
+    var message = $("<img>").addClass(class_name);
+    message.attr("src", text["parameters"][0]["path"]);
+    selectElement.append(message);
+  });
+
+}
+
+function createComponentWith(param, selectElement, class_name) {
+
+  $.each(param["parameters"], function (index, item) {
+
+    var input = $("<input>").attr("type", "file");
+    input.addClass("image_text_input")
+
+    input.on("input", function () {
+      var fileReader = new FileReader();
+      fileReader.onload = function () {
+        $(".img_text").attr("src", fileReader.result);
+        resulst.components[0]["parameters"][0]["path"] = fileReader.result;
+      };
+      fileReader.readAsDataURL($(this).prop('files')[0]);
+    });
+    selectElement.append(input);
+  });
+}
+
 function generaComponentText(jsonData, jsonDataText) {
 
   var message = $("<p>").addClass("message");
 
   jsonData.forEach((param, index) => {
     if (param["type"] == "HEADER") {
-      createComponentText(param, message, "header", jsonDataText[index]);
+
+      if (jsonDataText[index]["format"] == "TEXT") {
+        createComponentText(param, message, "header", jsonDataText[index]);
+      } else if (jsonDataText[index]["format"] == "IMAGE") {
+        createComponentWithFile(param, message, "img_text", jsonDataText[index])
+      }
+
     }
     else if (param["type"] == "BODY") {
       createComponentText(param, message, "body", jsonDataText[index]);
@@ -230,7 +300,6 @@ $(document).ready(function () {
     generaComponentText(resulst_text["components"], resulst["components"]);
   });
 });
-
 
 
 $("#enviarBtntemplate").click(function () {
