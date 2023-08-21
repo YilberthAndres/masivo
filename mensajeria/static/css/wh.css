@@ -389,3 +389,15 @@ img#archivados {
     display: block;
   }
   
+  .fecha-element {
+    display: block;
+    width: 200px;
+    background-color: #AEB6BF;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin: 0 auto;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
