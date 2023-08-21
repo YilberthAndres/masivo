@@ -446,11 +446,11 @@ def send_message_media(request):
             "to": "57"+celular,
             "type": tipo,
             ""+tipo+"": {
-                "link": "https://7ede-186-86-181-231.ngrok-free.app/static/temp/"+nombre_completo
+                "link": "https://86bd-186-86-181-231.ngrok-free.app/static/temp/"+nombre_completo
             }
         }
 
-        link_img = "https://7ede-186-86-181-231.ngrok-free.app/static/temp/"+nombre_completo
+        link_img = "https://86bd-186-86-181-231.ngrok-free.app/static/temp/"+nombre_completo
         response = requests.post(url, headers=headers, json=payload)
 
         # Obtener el contenido de la respuesta en formato JSON
