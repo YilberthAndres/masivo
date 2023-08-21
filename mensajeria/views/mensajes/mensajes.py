@@ -17,7 +17,8 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import OuterRef, Subquery, Max, Count
 from django.db import connection
-
+from django.db.models import Count, Case, When, Value, CharField
+from django.db.models.functions import TruncDate
 import os
 from datetime import datetime
 from django.conf import settings
@@ -126,6 +127,7 @@ def obtener_mensajes(request):
 
         resultados = []
         for row in rows:
+            
             recipiente_id   = row[0]
             texto           = row[1]
             fecha           = row[2]
@@ -153,63 +155,163 @@ def obtener_mensajes(request):
 @login_required(login_url="signin")
 def obtener_mensajes_find(request, recipiente_id):
     if request.method == "POST":
-        
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                SELECT 
-                    estado_id, 
-                    recipiente_id,
-                    CASE
-                        WHEN created_by_id IS NULL THEN 'recibido'
-                        ELSE 'enviado'
-                END AS estado,
-                DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%Y-%%m-%%d') AS fecha,
-                DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%H:%%i') AS hora, 
-                texto,
-                id,
-                mime_type,
-                link,
-                filename,
-                voice
-                FROM mensajeria
-                WHERE  recipiente_id = '%s' and created_at >= DATE_SUB(NOW(), INTERVAL 2 WEEK)
-            """, [recipiente_id])
+        mensajes = Mensajeria.objects.filter(
+            recipiente_id=recipiente_id,
+            created_at__gte=timezone.now() - timezone.timedelta(weeks=2)
+        ).annotate(
+            estado_annotation=Case(
+                When(created_by_id__isnull=True, then=Value('recibido')),
+                default=Value('enviado'),
+                output_field=CharField()
+            ),
+            fecha=TruncDate('created_at')
+        ).values('estado_annotation', 'recipiente_id', 'fecha', 
+                 'estado_id', 'timestamp_w', 'texto', 'mensaje_id', 
+                 'mime_type', 'link', 'filename', 'voice', 'id').annotate(
+            cantidad_registros=Count('id')
+        ).order_by('fecha')
 
-            rows = cursor.fetchall()
-        # return JsonResponse({'Hola': 'perros'}, safe=False)
-        resultados = []
-        for row in rows:
-            estado_id       = row[0]
-            recipiente_id   = row[1]
-            estado          = row[2]
-            fecha           = row[3]
-            hora            = row[4]
-            texto           = row[5]
-            mensaje_id      = row[6]
-            mime_type       = row[7]
-            link            = row[8]
-            filename        = row[9]
-            voice           = row[10]
-
-            resultado = {
-                'estado_id':        estado_id,
-                'recipiente_id':    recipiente_id,
-                'estado':           estado,
-                'fecha':            fecha,                
-                'hora':             hora,
-                'texto':            texto,
-                'id':               mensaje_id,
-                'mime_type':        mime_type,
-                'dir':              link,
-                'filename':         filename,
-                'voice':            voice,
-            }
-            resultados.append(resultado)
+        resultados = {}
+        for mensaje in mensajes:
+            # fecha = mensaje['fecha'].strftime('%Y-%m-%d')
+            fecha_int = float(mensaje['timestamp_w'])
+            fecha_datetime = timezone.datetime.fromtimestamp(fecha_int)
+            fecha = fecha_datetime.strftime('%Y/%m/%d')
 
 
+            timestamp = float(mensaje['timestamp_w'])
+            fecha_hora = datetime.fromtimestamp(timestamp)
+            hora = fecha_hora.strftime('%H')
+            minutos = fecha_hora.strftime('%M')
+            hora_completa = hora + ':' + minutos
+
+
+            if fecha not in resultados:
+                resultados[fecha] = []
+            resultados[fecha].append({
+                'estado': mensaje['estado_annotation'],
+                'recipiente_id': mensaje['recipiente_id'],
+                'fecha': fecha,
+                'id': mensaje['id'],
+                'estado_id': mensaje['estado_id'],
+                'texto': mensaje['texto'],
+                'mensaje_id': mensaje['mensaje_id'],
+                'mime_type': mensaje['mime_type'],
+                'dir': mensaje['link'],
+                'filename': mensaje['filename'],
+                'voice': mensaje['voice'],
+                'hora': hora_completa
+            })
+
+        now = timezone.now()
+        limite_tiempo = now - timedelta(hours=24)
+
+        registros = Mensajeria.objects.filter(
+            recipiente_id= recipiente_id,
+            created_at__gte=limite_tiempo
+        )
+
+        cantidad_registros = True
+        if(registros.count() <= 0 ):
+            cantidad_registros = False
 
         # Devolver la respuesta JSON
-        return JsonResponse(resultados, safe=False)
+        response_data = {
+        "resultados": resultados,
+        "chat_view": cantidad_registros
+        }
+
+   
+    return JsonResponse(response_data)
+
+        # return JsonResponse(resultados, safe=False)
+    
+        #         estado_id       = row[0]
+    #         recipiente_id   = row[1]
+    #         estado          = row[2]
+    #         fecha           = row[3]
+    #         hora            = row[4]
+    #         texto           = row[5]
+    #         mensaje_id      = row[6]
+    #         mime_type       = row[7]
+    #         link            = row[8]
+    #         filename        = row[9]
+    #         voice           = row[10]
+    # if request.method == "POST":
+        
+    #     with connection.cursor() as cursor:
+    #         cursor.execute("""
+    #             SELECT 
+    #                 estado_id, 
+    #                 recipiente_id,
+    #                 CASE
+    #                     WHEN created_by_id IS NULL THEN 'recibido'
+    #                     ELSE 'enviado'
+    #             END AS estado,
+    #             DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%Y-%%m-%%d') AS fecha,
+    #             DATE_FORMAT(FROM_UNIXTIME(timestamp_w), '%%H:%%i') AS hora, 
+    #             texto,
+    #             id,
+    #             mime_type,
+    #             link,
+    #             filename,
+    #             voice
+    #             FROM mensajeria
+    #             WHERE  recipiente_id = '%s' and created_at >= DATE_SUB(NOW(), INTERVAL 2 WEEK)
+    #         """, [recipiente_id])
+
+    #         rows = cursor.fetchall()
+    #     # return JsonResponse({'Hola': 'perros'}, safe=False)
+    #     resultados = []
+    #     for row in rows:
+    #         estado_id       = row[0]
+    #         recipiente_id   = row[1]
+    #         estado          = row[2]
+    #         fecha           = row[3]
+    #         hora            = row[4]
+    #         texto           = row[5]
+    #         mensaje_id      = row[6]
+    #         mime_type       = row[7]
+    #         link            = row[8]
+    #         filename        = row[9]
+    #         voice           = row[10]
+
+    #         resultado = {
+    #             'estado_id':        estado_id,
+    #             'recipiente_id':    recipiente_id,
+    #             'estado':           estado,
+    #             'fecha':            fecha,                
+    #             'hora':             hora,
+    #             'texto':            texto,
+    #             'id':               mensaje_id,
+    #             'mime_type':        mime_type,
+    #             'dir':              link,
+    #             'filename':         filename,
+    #             'voice':            voice,
+    #         }
+    #         resultados.append(resultado)
+
+
+    #     now = timezone.now()
+    #     limite_tiempo = now - timedelta(hours=24)
+
+    #     registros = Mensajeria.objects.filter(
+    #         recipiente_id= recipiente_id,
+    #         created_at__gte=limite_tiempo
+    #     )
+
+    #     cantidad_registros = True
+    #     if(registros.count() <= 0 ):
+    #         cantidad_registros = False
+
+    #     # Devolver la respuesta JSON
+    #     response_data = {
+    #     "resultados": resultados,
+    #     "chat_view": cantidad_registros
+    #     }
+
+    # # Devolver una respuesta JSON con el diccionario como contenido
+    # return JsonResponse(response_data)
 
 
 @login_required()
@@ -344,11 +446,11 @@ def send_message_media(request):
             "to": "57"+celular,
             "type": tipo,
             ""+tipo+"": {
-                "link": "https://043a-190-84-159-35.ngrok-free.app/static/temp/"+nombre_completo
+                "link": "https://7ede-186-86-181-231.ngrok-free.app/static/temp/"+nombre_completo
             }
         }
 
-        link_img = "https://043a-190-84-159-35.ngrok-free.app/static/temp/"+nombre_completo
+        link_img = "https://7ede-186-86-181-231.ngrok-free.app/static/temp/"+nombre_completo
         response = requests.post(url, headers=headers, json=payload)
 
         # Obtener el contenido de la respuesta en formato JSON

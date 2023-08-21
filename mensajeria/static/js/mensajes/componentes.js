@@ -1,5 +1,5 @@
 function mensaje_texto(chat, tipo) {
-  console.log(chat);
+  // console.log(chat);
   const messageContent = document.querySelector(".message-content");
   const chatMessage = document.createElement("p");
 
@@ -19,7 +19,7 @@ function mensaje_texto(chat, tipo) {
     chatTimestamp.textContent = chat.hora;
   } else {
     var currentTime = hora_minutos();
-    console.log(currentTime);
+    // console.log(currentTime);
     chatTimestamp.textContent = currentTime;
   }
 
@@ -29,7 +29,7 @@ function mensaje_texto(chat, tipo) {
 
 function mensaje_img(chat, tipo) {
   const messageContent = document.querySelector(".message-content");
-  console.log(chat)
+  // console.log(chat)
 
   const chatMessage = document.createElement("div");
   if (tipo == "recibido") {
@@ -50,7 +50,7 @@ function mensaje_img(chat, tipo) {
     chatTimestamp.textContent = chat.hora;
   } else {
     var currentTime = hora_minutos();
-    console.log(currentTime)
+    // console.log(currentTime)
     chatTimestamp.textContent = currentTime;
   }
 
@@ -94,7 +94,7 @@ function mensaje_video(chat, tipo) {
 }
 
 function mensaje_file(chat, tipo) {
-  console.log(chat);
+  // // console.log(chat);
   const messageContent = document.querySelector(".message-content");
   const chatMessage = document.createElement("div");
   chatMessage.classList.add("chat-message");
@@ -151,7 +151,7 @@ function mensaje_file(chat, tipo) {
 }
 
 function mensaje_audio(chat, tipo) {
-    console.log(chat)
+    // console.log(chat)
   const messageContent = document.querySelector(".message-content");
   const chatMessage = document.createElement("div");
   if (tipo == "recibido") {
@@ -187,7 +187,7 @@ function mensaje_audio(chat, tipo) {
     // Agregar el contenedor al chatMessage
     chatMessage.appendChild(avatarAudioContainer);
   } else {
-    // console.log(chat.voice)
+    // // console.log(chat.voice)
     // Agregar el reproductor de audio
     // Agregar solo el reproductor de audio
     const audioPlayer = document.createElement("audio");
