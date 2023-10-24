@@ -23,6 +23,7 @@ VERIFY_TOKEN_ENV            = os.getenv('VERIFY_TOKEN')
 
 
 
+
 @csrf_exempt
 def perfil_foto(request):
     print("ss")
