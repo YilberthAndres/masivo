@@ -1,13 +1,6 @@
--- Valentina Studio --
--- MySQL dump --
--- ----------------------
 
+use masiva;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 CREATE TABLE `archivos`( 
 	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
@@ -1913,13 +1906,6 @@ ALTER TABLE `django_celery_beat_periodictask`
 	ON UPDATE No Action;
 
 
--- CREATE LINK "maestras_created_by_id_0d5f633f_fk_auth_user_id" 
-ALTER TABLE `maestras`
-	ADD CONSTRAINT `maestras_created_by_id_0d5f633f_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
 
 -- CREATE LINK "maestras_padre_id_efdba410_fk_maestras_id" -----
 ALTER TABLE `maestras`
@@ -2089,11 +2075,5 @@ ALTER TABLE `personas`
 	ON UPDATE No Action;
 
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
--- ----------------------
 
 

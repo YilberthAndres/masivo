@@ -1,0 +1,52 @@
+version: "3.1"
+
+services:
+  db:
+    image: mysql:8.2.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: masiva
+      MYSQL_USER: masiva
+      MYSQL_PASSWORD: masiva
+      MYSQL_ROOT_PASSWORD: masiva
+    ports:
+      - "3307:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - my-db:/var/lib/mysql
+    healthcheck:
+      test: '/usr/bin/mysql --user=masiva --password=masiva --database=masiva --execute "SELECT * FROM auth_user;"'
+      interval: 30s
+      timeout: 10s
+      retries: 6
+
+  masiva:
+    depends_on:
+      db:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_NAME: masiva
+      DB_USER: masiva
+      DB_PASSWORD: masiva
+      DB_HOST: db
+      DB_PORT: 3306
+      SECRET_KEY: 2d_y^cbrb6fy7b(tq+90bmyc8(i7=m*p+3(7=k8xe^%m-bx988
+    ports:
+      - 8000:8000
+    links:
+      - db
+    volumes:
+      - ./:/app/
+    healthcheck:
+      test: '/usr/bin/mysql --user=masiva --password=masiva --database=masiva --execute "SELECT * FROM auth_user;"'
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  my-db:
