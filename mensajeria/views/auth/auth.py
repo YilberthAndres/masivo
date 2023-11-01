@@ -21,9 +21,15 @@ class Signup(CreateAPIView, ResponseMixin):
             }
             return Response(self.response_obj)
 
-        serializer.save()
-
-        self.data = {"status": status.HTTP_200_OK, "data": "Ok", "state": True}
+        try:
+            serializer.save()
+            self.data = {"status": status.HTTP_200_OK, "data": "Ok", "state": True}
+        except Exception as e:
+            self.error = {
+                "errors": e.args,
+                "status": status.HTTP_400_BAD_REQUEST,
+                "valid": False,
+            }
 
         return Response(self.response_obj)
 

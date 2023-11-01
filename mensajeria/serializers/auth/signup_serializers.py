@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ...models import User
-from rest_framework.validators import DataError, ValidationError
+from rest_framework.validators import ValidationError, UniqueValidator
 
 
 class SignupSerializers(serializers.Serializer):
@@ -17,12 +17,9 @@ class SignupSerializers(serializers.Serializer):
         return attrs
 
     def create(self, validated_data):
-        try:
+        
             user = User.objects.create_user(
                 username=validated_data["username"], password=validated_data["password"]
             )
 
             return user
-
-        except Exception as e:
-            return ValidationError(e.args)

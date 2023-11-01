@@ -14,13 +14,13 @@ class Response(object):
 
 class ResponseMixin(object):
     meta_data = dict()
-    data: Response = Response()
-    error: Error = Error()
+    data = dict()
+    error = dict()
 
     def __init__(self):
         self.meta_data = dict()
-        self.data: Response = Response()
-        self.error: Error = Error()
+        self.data = dict()
+        self.error = dict()
         self.json_schema = None
         super().__init__()
 
