@@ -23,7 +23,7 @@ class Signup(CreateAPIView, ResponseMixin):
 
         try:
             serializer.save()
-            self.data = {"status": status.HTTP_200_OK, "data": "Ok", "state": True}
+            self.data = {"status": status.HTTP_200_OK, "data": "Ok", "valid": True}
         except Exception as e:
             self.error = {
                 "errors": e.args,
@@ -58,6 +58,6 @@ class Signin(GenericAPIView, ResponseMixin):
         user = serializer.validated_data
 
         token = self.get_tokens_for_user(user)
-        self.data = {"status": status.HTTP_200_OK, "data": token, "state": True}
+        self.data = {"status": status.HTTP_200_OK, "data": token, "valid": True}
 
         return Response(self.response_obj)

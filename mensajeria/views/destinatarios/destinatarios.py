@@ -1,71 +1,72 @@
-from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.contrib.auth.models import User, Group
-from django.contrib.auth import login, logout, authenticate
-from django.db import IntegrityError
-from django.contrib.auth.decorators import login_required, permission_required
-from mensajeria.models import Destinatarios, Personas
-import os
-from datetime import datetime
-from django.conf import settings
+from mensajeria.models import Destinatarios
+from rest_framework.views import APIView
+from rest_framework.generics import DestroyAPIView
+from ...mixins.base import ResponseMixin
+from rest_framework.response import Response
 
 
-@login_required(login_url='signin')
-def index(request):
-
-    destinatarios = Destinatarios.objects.all()
-    contexto = {
-        'titulo': 'Destinatarios',
-        'destinatarios': destinatarios,
-    }
-    return render(request, 'destinatarios/index.html', contexto)
-
-@login_required(login_url='signin')
-def list(request):
-    if request.method == 'POST':
-
+class ListDestinatarios(APIView, ResponseMixin):
+    def get(self, request, *args, **kwargs):
         try:
-
-            
-            destinatarios = Destinatarios.objects.select_related("persona").all()
+            destinatarios = (
+                Destinatarios.objects.only("persona", "id")
+                .select_related("persona")
+            )
             destinatariosnew = []
-              
+
             for destinatario in destinatarios:
-                usuario = destinatario.created_by
                 persona = destinatario.persona
 
-                nombre_persona = persona.nombre + ' ' + persona.segundonombre + ' ' + persona.apellido + ' ' + persona.segundoapellido
+                nombre_persona = (
+                    persona.nombre
+                    + " "
+                    + persona.segundonombre
+                    + " "
+                    + persona.apellido
+                    + " "
+                    + persona.segundoapellido
+                )
                 destinatarioslist = {
-                    'id': destinatario.id,
-                    'nombre': nombre_persona,
-                    'celular': persona.telefonomovil,
-                    'estado': destinatario.estado_id,
-                    # 'created_at': destinatario.created_at,
-                    # 'nombre_usuario': usuario.username,
+                    "id": destinatario.id,
+                    "nombre": nombre_persona,
+                    "celular": persona.telefonomovil,
+                    "estado": destinatario.estado_id,
                 }
                 destinatariosnew.append(destinatarioslist)
 
-           
+            self.data = {"data": destinatariosnew}
 
-            # Lógica adicional después de eliminar el registro
-            return JsonResponse(destinatariosnew, safe=False)
+            return Response(self.response_obj)
         except Exception as e:
             error_message = str(e)
-            # Lógica en caso de que el registro no exista
-            return JsonResponse({'success': error_message})  
-            # Lógica en caso de que el registro no exista
-        
-def delete(request, destinatario_id):
-    if request.method == 'POST':
+            self.error = {"error": error_message}
+            return JsonResponse(self.response_obj)
 
+
+class DestinarioDelete(DestroyAPIView, ResponseMixin):
+    def get_object(self):
         try:
-            # destinatario = Destinatarios.objects.get(id=destinatario_id)
-            # destinatario.delete()
-            destinatario = Destinatarios.objects.get(id=destinatario_id)
-            destinatario.estado_id = 597
-            destinatario.save()
-            # Lógica adicional después de eliminar el registro
-            return JsonResponse({'success': True})  
+            destinatario_id = self.kwargs.get("destinatario_id", None)
+            Destinatarios.objects.get(id=destinatario_id)
         except Destinatarios.DoesNotExist:
-            # Lógica en caso de que el registro no exista
-            return JsonResponse({'success': False})  
+            return None
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.meta_data = "DELETE"
+
+        if not instance:
+            self.error = {"error": "This destinatario don't exist"}
+
+            return Response(self.response_obj)
+        try:
+            instance.estado_id = 597
+            instance.save()
+
+            self.data = {"data": "Success"}
+
+            return Response(self.response_obj)
+        except Exception as e:
+            self.error = {"error": e.args}
+            return Response(self.response_obj)

@@ -14,7 +14,6 @@ import json
 from django.http import HttpResponse
 from openpyxl import Workbook
 
-
 @login_required(login_url="signin")
 def index(request):
     #

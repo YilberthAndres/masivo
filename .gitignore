@@ -25,3 +25,5 @@ settings_local.py
 logs/
 
 # Otros archivos y directorios específicos del proyecto
+text.txt
+ngrok.*

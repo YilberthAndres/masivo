@@ -52,8 +52,8 @@ urlpatterns = [
     #     name="destinatario-delete",
     # ),
     # # WEBHOOK
-    # path("webhook", webhook.webhook, name="webhook"),
-    # path("tokenuser", webhook.generate_permanent_token, name="generate_permanent"),
+    path("webhook", webhook.webhook, name="webhook"),
+    path("tokenuser", webhook.generate_permanent_token, name="generate_permanent"),
     # # MENSAJERIA VISTAS Y RECURSOS
     # path("chat", mensajes.mensajes, name="chat_index"),
     # path("chat_templates", mensajes.index, name="chat_templates"),

@@ -1,3 +1,6 @@
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+
+
 class Error(object):
     def __init__(self) -> None:
         self.errors: any = None
@@ -29,7 +32,13 @@ class ResponseMixin(object):
         resp = dict()
         resp["meta"] = self.meta_data
         if self.error:
+            if "valid" not in self.error or "status" not in self.error:
+                self.error["valid"] = False
+                self.error["status"] = HTTP_400_BAD_REQUEST
             resp["error"] = self.error
         else:
-            resp["data"] = self.data
+            if "valid" not in self.data or "status" not in self.data:
+                self.data["valid"] = True
+                self.data["status"] = HTTP_200_OK
+            resp["response"] = self.data
         return resp

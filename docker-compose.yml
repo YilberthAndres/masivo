@@ -36,6 +36,10 @@ services:
       DB_HOST: db
       DB_PORT: 3306
       SECRET_KEY: 2d_y^cbrb6fy7b(tq+90bmyc8(i7=m*p+3(7=k8xe^%m-bx988
+      ID_WHATSAPP_BUSINESS: ""
+      ID_WHATSAPP_NUMBER: ""
+      API_VERSION_WHATSAPP: ""
+      API_KEY: ""
     ports:
       - 8000:8000
     links:
@@ -47,6 +51,23 @@ services:
       interval: 10s
       timeout: 3s
       retries: 10
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    depends_on:
+      - masiva
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ${PWD}/ngrok.yml:/etc/ngrok.yml
+    ports:
+      - 4040:4040
+    expose:
+      - 4040
 
 volumes:
   my-db:
