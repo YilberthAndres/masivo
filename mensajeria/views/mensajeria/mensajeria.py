@@ -144,78 +144,33 @@ class SendMensaje(APIView, ResponseMixin):
             return Response(self.response_obj)
 
 
-# [{"type":"HEADER","key":"header_text","value":"Nelson"},{"type":"BODY","key":"body_text","value":["Nelson","Nelson"]}]
-# @login_required()
-# def send_message_template(request):
-#     if request.method == "POST":
-#         destinatarios = request.POST.getlist(
-#             "destinatarios"
-#         )  # Obtener una lista de los valores de destinatarios
-#         template = request.POST.get("templates")
-#         parameters = request.POST.get("parameters")
-#         data = {
-#             "destinatarios": destinatarios
-#         }  # Crear un diccionario con el valor de destinatarios
-#         user = request.user
-#         # user = User.objects.get(id=user.id)
-#         # return JsonResponse(data)
+class SendMessageTemplate(APIView, ResponseMixin):
+    def post(self, request, *args, **kwargs):
+        parameters = request.data["template"]
 
-#         destinatarios = Destinatarios.objects.filter(estado_id=596)
+        destinatarios = Destinatarios.objects.filter(estado_id=596)
 
-#         components = []
+        for destinatario in destinatarios:
+            celular = destinatario.persona.telefonomovil
+            payload = {
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": "573014582878",
+                "type": "template",
+                "template": {},
+            }
 
-#         if parameters:
-#             parameters = json.loads(parameters)
+            if parameters:
+                payload["template"] = parameters
 
-#         for destinatario in destinatarios:
-#             # destinatario = Destinatarios.objects.get(id=destinatario)
-#             # celular = destinatario.persona.telefonomovil
-#             # # return JsonResponse({'destinatario_id': })
-#             celular = destinatario.persona.telefonomovil
+            print(payload)
 
-#             url = (
-#                 "https://graph.facebook.com/"
-#                 + API_VERSION_WHATSAPP_ENV
-#                 + "/"
-#                 + ID_WHATSAPP_NUMBER_ENV
-#                 + "/messages"
-#             )
-#             headers = {"Authorization": API_KEY_ENV, "Content-Type": "application/json"}
-#             payload = {
-#                 "messaging_product": "whatsapp",
-#                 # "recipient_type": "individual",
-#                 "to": "57" + celular,
-#                 "type": "template",
-#                 "template": {
-#                     "name": parameters["templateName"],
-#                     "language": {"code": parameters["language"]},
-#                 },
-#             }
+            response = api_connect(
+                ID_WHATSAPP_NUMBER_ENV, "/messages", payload, method="POST"
+            )
 
-#             # print(parameters["components"])
+            response_json = response.json()
 
-#             if parameters:
-#                 payload["template"]["components"] = parameters["components"]
+            self.data = {"reponse": response_json}
 
-#             response = requests.post(url, headers=headers, json=payload)
-
-#             # Obtener el contenido de la respuesta en formato JSON
-#             response_json = response.json()
-#             print(response_json)
-#             return JsonResponse({"message": "Ok"})
-
-#         #     waId = response_json["contacts"][0]["wa_id"]
-#         #     messageId = response_json["messages"][0]["id"]
-
-#         # nuevo_mensaje = Mensajeria(
-#         #     destinatario_id=destinatario.id,
-#         #     tipo_id=754,
-#         #     celular=waId,
-#         #     mensaje_id=messageId,
-#         #     created_by_id=user.id,
-#         # )
-
-#         # nuevo_mensaje.save()
-
-#         # # Retornar la respuesta como un JSON
-#         # return JsonResponse(response_json)
+            return Response(self.response_obj)

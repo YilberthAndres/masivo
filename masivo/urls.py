@@ -16,14 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from mensajeria.views.auth import auth
-from mensajeria.views.multimedia import multimedia
-from mensajeria.views.carga import carga
-from mensajeria.views.destinatarios import destinatarios
-from mensajeria.views.mensajes import mensajes
 from mensajeria.views.webhook import webhook
-from mensajeria.views.mensajeria import mensajeria
-from mensajeria.views.perfil import perfil
 
 urlpatterns = [
     path("admin/", admin.site.urls),
