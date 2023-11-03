@@ -1,13 +1,13 @@
-import requests
 from mensajeria.models import Destinatarios, Mensajeria
 import os
-import json
 import dotenv
 
 from rest_framework.views import APIView
 from ...mixins.base import ResponseMixin
 from rest_framework import status
 from rest_framework.response import Response
+from django.db.models import Value as V, functions
+from ..base import api_connect
 
 dotenv.load_dotenv()
 
@@ -19,89 +19,80 @@ API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
 
 class ListTemplates(APIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
-        url = (
-            "https://graph.facebook.com/"
-            + API_VERSION_WHATSAPP_ENV
-            + "/"
-            + ID_WHATSAPP_BUSINESS_ENV
-            + "/message_templates"
-        )
+        try:
+            response = api_connect(ID_WHATSAPP_BUSINESS_ENV, "/message_templates")
+            response_json = response.json()
 
+            data = response_json["data"]
 
-        headers = {"Authorization": API_KEY_ENV, "Content-Type": "application/json"}
+            templates = []
+            templates_body = []
 
-        response = requests.get(url, headers=headers)
-        response_json = response.json()
+            for item in data:
+                id_template = item["id"]
+                status_template = item["status"]
+                name = item["name"]
 
-        print(response_json)
+                resultado = {"id": id_template, "status": status_template, "name": name}
 
-        # data = response_json["data"]
+                templates.append(resultado)
+                templates_body.append(
+                    {
+                        "components": item["components"],
+                        "language": item["language"],
+                        **resultado,
+                    }
+                )
 
-        templates = []
-        templates_body = []
+            self.data = {
+                "status": status.HTTP_200_OK,
+                "data": {
+                    "templates": templates,
+                    "templates_body": templates_body,
+                },
+                "valid": True,
+            }
 
-        # for item in data:
-        #     id_template = item["id"]
-        #     status_template = item["status"]
-        #     name = item["name"]
-
-        #     resultado = {"id": id_template, "status": status_template, "name": name}
-
-        #     templates.append(resultado)
-        #     templates_body.append(
-        #         {
-        #             "components": item["components"],
-        #             "language": item["language"],
-        #             **resultado,
-        #         }
-        #     )
-
-        self.data = {
-            "status": status.HTTP_200_OK,
-            "data": {
-                "templates": json.dumps(templates),
-                "templates_body": json.dumps(templates_body),
-            },
-            "valid": True,
-        }
-
-        return Response(self.response_obj)
+            return Response(self.response_obj)
+        except Exception as e:
+            self.error = {"error": e.args}
+            return Response(self.response_obj)
 
 
 class ListDestinatarios(APIView, ResponseMixin):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         try:
-            destinatarios = Destinatarios.objects.only("persona", "id").select_related(
-                "persona"
-            )
-            destinatariosnew = []
-
-            for destinatario in destinatarios:
-                persona = destinatario.persona
-
-                nombre_persona = (
-                    persona.nombre
-                    + " "
-                    + persona.segundonombre
-                    + " "
-                    + persona.apellido
-                    + " "
-                    + persona.segundoapellido
+            destinatarios = (
+                Destinatarios.objects.only("persona", "id")
+                .select_related("persona")
+                .annotate(
+                    full_name=functions.Concat(
+                        "persona__nombre",
+                        V(" "),
+                        "persona__apellido",
+                        V(" "),
+                        "persona__segundonombre",
+                        V(" "),
+                        "persona__segundoapellido",
+                    )
                 )
-                destinatarioslist = {
+            )
+            destinatariosnew = [
+                {
                     "id": destinatario.id,
-                    "nombre": nombre_persona,
-                    "celular": persona.telefonomovil,
+                    "nombre": destinatario.full_name,
+                    "celular": destinatario.persona.telefonomovil,
                 }
-                destinatariosnew.append(destinatarioslist)
+                for destinatario in destinatarios
+            ]
 
             self.data = {
                 "status": status.HTTP_200_OK,
                 "valid": True,
-                "data": json.dumps(destinatariosnew),
+                "data": destinatariosnew,
             }
 
-            return Response(self.response_obj, safe=False)
+            return Response(self.response_obj)
         except Exception as e:
             error_message = str(e.args)
             self.error = {
@@ -120,19 +111,6 @@ class SendMensaje(APIView, ResponseMixin):
             destinatario = Destinatarios.objects.get(id=destinatario)
             celular = destinatario.persona.telefonomovil
 
-            url = (
-                "https://graph.facebook.com/"
-                + API_VERSION_WHATSAPP_ENV
-                + "/"
-                + ID_WHATSAPP_NUMBER_ENV
-                + "/messages"
-            )
-
-            headers = {
-                "Authorization": API_KEY_ENV,
-                "Content-Type": "application/json",
-            }
-
             payload = {
                 "messaging_product": "whatsapp",
                 "recipient_type": "individual",
@@ -141,9 +119,15 @@ class SendMensaje(APIView, ResponseMixin):
                 "text": {"preview_url": False, "body": mensaje},
             }
 
-            response = requests.post(url, headers=headers, json=payload)
+            response = response = api_connect(
+                ID_WHATSAPP_NUMBER_ENV, "/messages", payload=payload, method="POST"
+            )
 
             response_json = response.json()
+
+            if "error" in response_json:
+                self.error = {"message": response_json}
+                return Response(self.response_obj)
 
             nuevo_mensaje = Mensajeria(
                 destinatario_id=destinatario.id,
