@@ -13,6 +13,8 @@ services:
       - "3307:3306"
     expose:
       - "3306"
+    networks:
+      - local
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - my-db:/var/lib/mysql
@@ -38,7 +40,7 @@ services:
       SECRET_KEY: 2d_y^cbrb6fy7b(tq+90bmyc8(i7=m*p+3(7=k8xe^%m-bx988
       ID_WHATSAPP_BUSINESS: 
       ID_WHATSAPP_NUMBER: 
-      API_VERSION_WHATSAPP: 
+      API_VERSION_WHATSAPP: v18.0
       API_KEY: 
     ports:
       - 8000:8000
@@ -51,6 +53,8 @@ services:
       interval: 10s
       timeout: 3s
       retries: 10
+    networks:
+      - local
 
   # ngrok:
   #   image: ngrok/ngrok:latest
@@ -71,3 +75,5 @@ services:
 
 volumes:
   my-db:
+networks:
+  local:

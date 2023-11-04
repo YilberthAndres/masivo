@@ -40,7 +40,7 @@ class ListTemplates(APIView, ResponseMixin):
                     {
                         "components": item["components"],
                         "language": item["language"],
-                        **resultado,
+                        "name": item["name"],
                     }
                 )
 
@@ -162,8 +162,6 @@ class SendMessageTemplate(APIView, ResponseMixin):
 
             if parameters:
                 payload["template"] = parameters
-
-            print(payload)
 
             response = api_connect(
                 ID_WHATSAPP_NUMBER_ENV, "/messages", payload, method="POST"
