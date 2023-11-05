@@ -155,7 +155,7 @@ class SendMessageTemplate(APIView, ResponseMixin):
             payload = {
                 "messaging_product": "whatsapp",
                 "recipient_type": "individual",
-                "to": "573014582878",
+                "to": "57" + celular,
                 "type": "template",
                 "template": {},
             }
@@ -169,6 +169,6 @@ class SendMessageTemplate(APIView, ResponseMixin):
 
             response_json = response.json()
 
-            self.data = {"reponse": response_json}
+            self.data =  response_json
 
-            return Response(self.response_obj)
+        return Response(self.response_obj)
