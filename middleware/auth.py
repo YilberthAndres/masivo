@@ -45,7 +45,8 @@ class CustomMiddleware(MiddlewareMixin):
             "/auth/signup/",
             "/admin/",
             "/__debug__/",
-            "webhook"
+            "webhook",
+            "/socket.io/",
         ]
 
         match = re.search("|".join(routes_free), request.path)
