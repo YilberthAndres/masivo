@@ -64,6 +64,15 @@ services:
       retries: 10
     networks:
       - local
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - local
 
   # ngrok:
   #   image: ngrok/ngrok:latest

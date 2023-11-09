@@ -21,7 +21,6 @@ API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
 class ListTemplates(APIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
         try:
-            logger.warning("test")
             response = api_connect(ID_WHATSAPP_BUSINESS_ENV, "/message_templates")
             response_json = response.json()
 

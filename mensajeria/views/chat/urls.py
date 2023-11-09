@@ -1,9 +1,6 @@
-from django.urls import path
+from django.urls import path, re_path
 from .chat import MenssageLeft
 
-app_name = "masivo-upload"
-
 urlpatterns = [
-    path("menssage_left/",  MenssageLeft.as_view(), name="menssage_left"),
-
+    re_path(r"menssage_left/(?:filter(?P<filter>\w+)/)?(?:list(?P<list>\w+)/)?$", MenssageLeft.as_view()),
 ]

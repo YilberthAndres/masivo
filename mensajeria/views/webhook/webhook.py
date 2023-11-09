@@ -56,6 +56,8 @@ def webhook(request):
         nueva_peticion.save()
         # enviar_mensaje_a_grupo()
 
+        print(statuses_text)
+
         try:
             if json_data["entry"][0]["changes"][0]["field"] == "messages":
                 if "statuses" in json_data["entry"][0]["changes"][0]["value"]:
@@ -97,7 +99,7 @@ def update_message(statuses):
         mensaje_id = statuses["id"]
         timestamp = statuses["timestamp"]
         recipiente_id = statuses["recipient_id"]
-        # conversacion_id = id
+        conversacion_id = id
 
         if "sent" == statuses["status"]:
             estado = 744
@@ -107,10 +109,10 @@ def update_message(statuses):
             estado = 746
 
         mensaje = Mensajeria.objects.get(mensaje_id=mensaje_id)
-        # mensaje.estado_id       = estado
+        mensaje.estado_id       = estado
         mensaje.timestamp_w = timestamp
         mensaje.recipiente_id = recipiente_id
-        # mensaje.conversacion_id = conversacion_id
+        mensaje.conversacion_id = conversacion_id
         mensaje.save()
     except Exception as e:
         nueva_peticion = Peticion(estado="Fallo")
@@ -156,9 +158,6 @@ def new_message(message, perfil):
         envia.save()
         envia_id = envia.id
 
-
- 
-
     try:
         
         try:
@@ -175,8 +174,7 @@ def new_message(message, perfil):
             conversacion.save()
             conversacion_id = conversacion.id
 
-       
-
+    
 
         if(type == 'text'):
             text            = message['text']['body']
