@@ -1,6 +1,9 @@
-from django.urls import path, re_path
-from .chat import MenssageLeft
+from django.urls import path
+from .chat import MenssageLeft, MenssageFind, MenssageSend
 
 urlpatterns = [
-    re_path(r"menssage_left/(?:filter(?P<filter>\w+)/)?(?:list(?P<list>\w+)/)?$", MenssageLeft.as_view()),
+    path("message_left/",  MenssageLeft.as_view(), name="message_left"),
+    path("message_find/",  MenssageFind.as_view(), name="message_find"),
+    path("message_send/",  MenssageSend.as_view(), name="message_send"),
+
 ]
