@@ -1,6 +1,4 @@
 
-use masiva;
-
 
 CREATE TABLE `archivos`( 
 	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
@@ -533,7 +531,10 @@ BEGIN;
 
 INSERT INTO `auth_user`(`id`,`password`,`last_login`,`is_superuser`,`username`,`first_name`,`last_name`,`email`,`is_staff`,`is_active`,`date_joined`) VALUES 
 ( '1', 'pbkdf2_sha256$600000$YSt3G4t8LO9eDvUmqNVP3Y$R6j+6JxH0+8xJNMlDrjSknbrvtpn1GbTjtR1gD6rVeU=', '2023-08-05 18:11:17.730918', '0', 'admin@gmail.com', '', '', '', '0', '1', '2023-07-14 13:31:38.881831' );
+
+
 COMMIT;
+
 -- ----------------------
 
 

@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from django.db.models import Value as V, functions
 from ..base import api_connect
 
+
 dotenv.load_dotenv()
 
 API_KEY_ENV = os.getenv("API_KEY")
@@ -20,6 +21,7 @@ API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
 class ListTemplates(APIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
         try:
+            logger.warning("test")
             response = api_connect(ID_WHATSAPP_BUSINESS_ENV, "/message_templates")
             response_json = response.json()
 
@@ -149,7 +151,7 @@ class SendMessageTemplate(APIView, ResponseMixin):
         parameters = request.data["template"]
 
         destinatarios = Destinatarios.objects.filter(estado_id=596)
-
+        mensajes = []
         for destinatario in destinatarios:
             celular = destinatario.persona.telefonomovil
             payload = {
@@ -168,7 +170,8 @@ class SendMessageTemplate(APIView, ResponseMixin):
             )
 
             response_json = response.json()
+            mensajes.append(response_json)
 
-            self.data =  response_json
+        self.data = {"response": mensajes}
 
         return Response(self.response_obj)
