@@ -12,10 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-import dotenv
 from datetime import timedelta
-
-dotenv.load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,7 +46,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "channels",
-    "storages",
     "django_celery_beat",
     "mensajeria",
 ]
@@ -120,7 +116,14 @@ WSGI_APPLICATION = "masivo.wsgi.application"
 # ASGI_APPLICATION = 'masivo.asgi.application'
 
 ASGI_APPLICATION = "masivo.asgi.application"  # routing.py will be created later
-CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    }
+}
 
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
@@ -137,8 +140,8 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -200,16 +203,16 @@ USE_TZ = True
 # print(BASE_DIR)
 
 
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-AWS_STORAGE_BUCKET_NAME = "masivo"
-AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
-AWS_S3_REGION_NAME = "us-east-1"
-AWS_S3_OBJECT_PARAMETERS = {
-    "CacheControl": "max-age=86400",
-}
-AWS_DEFAULT_ACL = None
+# AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# AWS_STORAGE_BUCKET_NAME = "masivo"
+# AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+# AWS_S3_REGION_NAME = "us-east-1"
+# AWS_S3_OBJECT_PARAMETERS = {
+#     "CacheControl": "max-age=86400",
+# }
+# AWS_DEFAULT_ACL = None
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'mensajeria/static'),
 # ]
