@@ -102,9 +102,8 @@ class Uploaded(CreateAPIView, ResponseMixin):
                     validos_celular     = []
                     duplicados          = []
 
-                    personas_actuales = Personas.objects.all().order_by('telefonowhatsapp')
+                    personas_actuales = Personas.objects.values("telefonowhatsapp").order_by('telefonowhatsapp')
                     user = request.user
-                    user = User.objects.get(id=user.id)
 
                     validos_actuales = []
                     for persona in personas_actuales:
