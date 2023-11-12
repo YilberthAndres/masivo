@@ -16,7 +16,7 @@ ENV/
 node_modules/
 /staticfiles/
 mensajeria/static/assets/
-
+docker-compose.yml
 # Archivos y directorios de configuración locales sensibles
 .env
 settings_local.py
