@@ -1,6 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
+
 class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.chat_box_name = self.scope["url_route"]["kwargs"]["chat_box_name"]
@@ -13,7 +14,6 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
-
 
     # This function receive messages from WebSocket.
     async def receive(self, text_data):
@@ -29,35 +29,28 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 "username": username,
             },
         )
+
     # Receive message from room group.
     async def chatbox_message(self, event):
-        id              =   event["id"]
-        message         =   event["message"]
-        timestamp_w     =   event["timestamp_w"]
-        recipiente_id   =   event["recipiente_id"]
-        mime_type       =   event["mime_type"]
-        link            =   event["link"]
-        filename        =   event["filename"]
-        voice           =   event["voice"]
-        
-        #send message and username of sender to websocket
-        
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "id"            :   id,
-                    "texto"         :   message,
-                    "hora"          :   timestamp_w,
-                    "recipiente_id" :   recipiente_id,
-                    "mime_type"     :   mime_type,
-                    "dir"           :   link,
-                    "filename"      :   filename,
-                    "voice"         :   voice,
-                }
-            )
-        )
-    
+        message_body = {
+            "recipiente_id": event["recipiente_id"],
+            "fecha": event["fecha"],
+            "id": event["id"],
+            "estado_id": event["estado_id"],
+            "texto": event["texto"],
+            "mensaje_id": event["mensaje_id"],
+            "mime_type": event["mime_type"],
+            "dir": event["dir"],
+            "filename": event["filename"],
+            "voice": event["voice"],
+            "hora": event["hora"],
+        }
+
+        # send message and username of sender to websocket
+
+        await self.send(text_data=json.dumps(message_body))
+
     def send_notification(self, event):
         # Esta función enviará la notificación al cliente
-        notification = event['notification']
+        notification = event["notification"]
         self.send(text_data=json.dumps(notification))

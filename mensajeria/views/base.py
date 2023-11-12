@@ -6,7 +6,7 @@ API_KEY_ENV = os.getenv("API_KEY")
 API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
 
 
-def api_connect(id_whatsap, path: str, payload={}, method="GET"):
+def api_connect(id_whatsap, path: str, payload={}, method="GET", headers={}):
     url = (
         "https://graph.facebook.com/"
         + API_VERSION_WHATSAPP_ENV
@@ -18,6 +18,7 @@ def api_connect(id_whatsap, path: str, payload={}, method="GET"):
     headers = {
         "Authorization": f"Bearer {API_KEY_ENV}",
         "Content-Type": "application/json",
+        **headers,
     }
 
     if method == "GET":

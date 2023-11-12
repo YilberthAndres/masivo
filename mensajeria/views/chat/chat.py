@@ -2,23 +2,16 @@ from django.db import connection
 from rest_framework.generics import CreateAPIView, GenericAPIView
 from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
-from ...serializers.auth.signin_serializers import SigninSerializers
 from rest_framework.response import Response
 from rest_framework import status
 from django.core import serializers
 import json
 from mensajeria.models import (
-    (
     Archivos,
-   
     Destinatarios,
-   
     Mensajeria,
-   
     Personas,
-   
     Conversaciones,
-),
     Peticion,
 )
 from django.utils import timezone
@@ -42,9 +35,9 @@ class MenssageLeft(GenericAPIView, ResponseMixin):
 
     def get(self, request, *args, **kwargs):
         try:
-            filter = request.GET["filter"]
+            filter_chat = request.GET["filter"]
 
-            if filter != "":
+            if filter_chat != "":
                 filters = " (CONCAT(p.nombre, ' ', p.segundonombre, ' ', p.apellido) LIKE %s OR p.telefonowhatsapp LIKE %s)"
                 filters_values = ["%" + filter + "%", "%" + filter + "%"]
             else:
@@ -124,9 +117,11 @@ class MenssageLeft(GenericAPIView, ResponseMixin):
             self.data = {"status": status.HTTP_200_OK, "data": data, "state": True}
             return Response(self.response_obj)
         except Exception as e:
-            response_data = {}
-
-            self.data = {"status": status.HTTP_404_NOT_FOUND, "data": {}, "state": True}
+            self.error = {
+                "status": status.HTTP_404_NOT_FOUND,
+                "message": str(e, args),
+                "state": True,
+            }
             return Response(self.response_obj)
 
 
@@ -170,7 +165,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                         "id",
                     )
                     .annotate(cantidad_registros=Count("id"))
-                    .order_by("fecha")
+                    .order_by("fecha", "created_at")
                 )
 
                 resultados = {}
@@ -246,12 +241,12 @@ class MenssageFind(CreateAPIView, ResponseMixin):
 class MenssageSend(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
-    def get_payload(self, whatsapp, text, type):
-        if type == "text":
+    def get_payload(self, whatsapp, text, type_message):
+        if type_message == "text":
             return {
                 "messaging_product": "whatsapp",
                 "recipient_type": "individual",
-                "to":  whatsapp,
+                "to": whatsapp,
                 "type": "text",
                 "text": {"preview_url": False, "body": text},
             }
@@ -261,7 +256,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
             destinatario_id=recipient_id, defaults={"estado_id": 758}
         )
         if isinstance(conversacion, tuple):
-            conversacion = conversacion[0] 
+            conversacion = conversacion[0]
         return conversacion.id
 
     def post(self, request, *args, **kwargs):
@@ -269,7 +264,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
         info = json.loads(request.body)
         recipient = info[0]["recipient"]
         message = info[0]["message"]
-        type = info[0]["type"]
+        type_message = info[0]["type"]
 
         user = request.user
         data = {
@@ -284,7 +279,6 @@ class MenssageSend(CreateAPIView, ResponseMixin):
         recipient_id = recipient_model.id
 
         if persona_model:
-            
             url = (
                 "https://graph.facebook.com/"
                 + API_VERSION_WHATSAPP_ENV
@@ -292,9 +286,12 @@ class MenssageSend(CreateAPIView, ResponseMixin):
                 + ID_WHATSAPP_NUMBER_ENV
                 + "/messages"
             )
-            headers = {"Authorization": API_KEY_ENV, "Content-Type": "application/json"}
+            headers = {
+                "Authorization": f"Bearer {API_KEY_ENV}",
+                "Content-Type": "application/json",
+            }
 
-            payload = self.get_payload(recipient, message, type)
+            payload = self.get_payload(recipient, message, type_message)
 
             response = requests.post(url, headers=headers, json=payload)
             response_json = response.json()
@@ -307,24 +304,45 @@ class MenssageSend(CreateAPIView, ResponseMixin):
 
             conversacion_id = self.post_conversation(recipient_id)
 
-            waId = response_json['contacts'][0]['wa_id']
-            messageId = response_json['messages'][0]['id']
+            waId = response_json["contacts"][0]["wa_id"]
+            messageId = response_json["messages"][0]["id"]
 
             nuevo_mensaje = Mensajeria(
-            destinatario_id     =   recipient_id,
-            texto               =   message,
-            celular             =   waId,
-            recipiente_id       =   waId,
-            mensaje_id          =   messageId,
-            conversacion_id     =   conversacion_id,
-            created_by_id       =   user.id
+                destinatario_id=recipient_id,
+                texto=message,
+                celular=waId,
+                recipiente_id=waId,
+                mensaje_id=messageId,
+                conversacion_id=conversacion_id,
+                created_by_id=user.id,
             )
 
             nuevo_mensaje.save()
 
+            fecha = nuevo_mensaje.created_at.strftime("%Y/%m/%d")
+
+            timestamp = nuevo_mensaje.created_at
+            hora = timestamp.strftime("%H")
+            minutos = timestamp.strftime("%M")
+            hora_completa = hora + ":" + minutos
+
+            data_message = {
+                "recipiente_id": nuevo_mensaje.recipiente_id,
+                "fecha": fecha,
+                "id": nuevo_mensaje.id,
+                "estado_id": nuevo_mensaje.estado_id,
+                "texto": nuevo_mensaje.texto,
+                "mensaje_id": nuevo_mensaje.mensaje_id,
+                "mime_type": nuevo_mensaje.mime_type,
+                "dir": nuevo_mensaje.link,
+                "filename": nuevo_mensaje.filename,
+                "voice": nuevo_mensaje.voice,
+                "hora": hora_completa,
+            }
+
             self.data = {
                 "status": status.HTTP_200_OK,
-                "data": {"payload": payload},
+                "data": data_message,
                 "state": True,
             }
             return Response(self.response_obj)
