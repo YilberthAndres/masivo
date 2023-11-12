@@ -8,11 +8,18 @@ from rest_framework import status
 from django.core import serializers
 import json
 from mensajeria.models import (
+    (
     Archivos,
+   
     Destinatarios,
+   
     Mensajeria,
+   
     Personas,
+   
     Conversaciones,
+),
+    Peticion,
 )
 from django.utils import timezone
 from mensajeria.tasks import my_task
@@ -23,7 +30,6 @@ from datetime import timedelta
 import os
 import requests
 from django.core.exceptions import ObjectDoesNotExist
-
 
 API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
@@ -36,11 +42,11 @@ class MenssageLeft(GenericAPIView, ResponseMixin):
 
     def get(self, request, *args, **kwargs):
         try:
-            chat_filter = request.GET["filter"]
+            filter = request.GET["filter"]
 
-            if chat_filter != "":
+            if filter != "":
                 filters = " (CONCAT(p.nombre, ' ', p.segundonombre, ' ', p.apellido) LIKE %s OR p.telefonowhatsapp LIKE %s)"
-                filters_values = ["%" + chat_filter + "%", "%" + chat_filter + "%"]
+                filters_values = ["%" + filter + "%", "%" + filter + "%"]
             else:
                 get_status = request.GET["list"]
                 filters = "  c.estado_id = %s "
@@ -245,7 +251,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
             return {
                 "messaging_product": "whatsapp",
                 "recipient_type": "individual",
-                "to": "57" + whatsapp,
+                "to":  whatsapp,
                 "type": "text",
                 "text": {"preview_url": False, "body": text},
             }
@@ -254,6 +260,8 @@ class MenssageSend(CreateAPIView, ResponseMixin):
         conversacion = Conversaciones.objects.update_or_create(
             destinatario_id=recipient_id, defaults={"estado_id": 758}
         )
+        if isinstance(conversacion, tuple):
+            conversacion = conversacion[0] 
         return conversacion.id
 
     def post(self, request, *args, **kwargs):
@@ -274,10 +282,9 @@ class MenssageSend(CreateAPIView, ResponseMixin):
         recipient_model = Destinatarios.objects.get(persona=persona_model)
         user_whatsapp = persona_model.telefonowhatsapp
         recipient_id = recipient_model.id
+
         if persona_model:
             
-            user_whatsapp = persona_model.telefonowhatsapp
-
             url = (
                 "https://graph.facebook.com/"
                 + API_VERSION_WHATSAPP_ENV
@@ -292,14 +299,34 @@ class MenssageSend(CreateAPIView, ResponseMixin):
             response = requests.post(url, headers=headers, json=payload)
             response_json = response.json()
 
-            # conversacion_id = self.post_conversation()
-
             self.data = {
                 "status": status.HTTP_200_OK,
                 "data": {"payload": payload},
                 "state": True,
             }
 
+            conversacion_id = self.post_conversation(recipient_id)
+
+            waId = response_json['contacts'][0]['wa_id']
+            messageId = response_json['messages'][0]['id']
+
+            nuevo_mensaje = Mensajeria(
+            destinatario_id     =   recipient_id,
+            texto               =   message,
+            celular             =   waId,
+            recipiente_id       =   waId,
+            mensaje_id          =   messageId,
+            conversacion_id     =   conversacion_id,
+            created_by_id       =   user.id
+            )
+
+            nuevo_mensaje.save()
+
+            self.data = {
+                "status": status.HTTP_200_OK,
+                "data": {"payload": payload},
+                "state": True,
+            }
             return Response(self.response_obj)
         else:
             response_data = {
