@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, permission_required
 import numpy as np
-from mensajeria.models import Archivos, Destinatarios, Personas
+from mensajeria.models import Archivos, Destinatarios, Personas, Maestras
 from mensajeria.forms import ArchivosForm
 import os
 from datetime import datetime
@@ -27,6 +27,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from mensajeria.tasks import my_task
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+
 
 
 class Uploaded(CreateAPIView, ResponseMixin):
@@ -76,6 +82,7 @@ class Uploaded(CreateAPIView, ResponseMixin):
                     validos             = []
                     validos_celular     = []
                     duplicados          = []
+                    duplicados_docu     = []
 
                     num_validos      = 0
                     num_duplicados  = 0
@@ -86,8 +93,10 @@ class Uploaded(CreateAPIView, ResponseMixin):
 
 
                     validos_actuales = []
+                    documentos_actuales = []
                     for persona in personas_actuales:
                         validos_actuales.append(persona.telefonowhatsapp)
+                        documentos_actuales.append(persona.identificacion)
 
                     matriz_data = self.get_validar_campos(matriz)
                     for row in matriz_data:
@@ -97,8 +106,39 @@ class Uploaded(CreateAPIView, ResponseMixin):
                         segundo_apellido    = row[3]
                         celular             = row[4]
                         celular_llamada     = row[5]
+                        pais                = row[6]
                         documento           = row[7]
+                        tipoidentificacion  = row[8]
+                        lugarexpedicion     = row[9]
+                        fechaexpedicion     = row[10]
+                        fechanacimiento     = row[11]
+                        direccion           = row[12]
+                        email               = row[13]
+                        sexo_id             = row[14]
+                        barrio              = row[15]
+                        ciudad              = row[16]
+                        departamento        = row[17]
+                        ocupacion           = row[18]
 
+                        try:
+                            fechaexpedicion = datetime.strptime(fechaexpedicion, '%Y-%m-%d %H:%M:%S').date()
+                            if fechaexpedicion > datetime.now().date():
+                                fechaexpedicion = ""
+                        except ValueError:
+                            fechaexpedicion = ""
+
+                        try:
+                            fechanacimiento = datetime.strptime(fechanacimiento, '%Y-%m-%d %H:%M:%S').date()
+                            if fechanacimiento > datetime.now().date():
+                                fechanacimiento = ""
+                        except ValueError:
+                            fechanacimiento = ""
+
+                        try:
+                            validate_email(email)
+                        except ValidationError as e:
+                            email = ""
+                        
 
                         if not isinstance(celular, str):
                             celular         = str(celular)
@@ -115,7 +155,19 @@ class Uploaded(CreateAPIView, ResponseMixin):
                                     "segundo_apellido"  :   segundo_apellido,
                                     "celular_whatsapp"  :   celular,
                                     "celular_llamada"   :   celular_llamada,
+                                    "pais"              :   pais,
                                     "documento"         :   documento,
+                                    "tipoidentificacion":   tipoidentificacion,
+                                    "lugarexpedicion"   :   lugarexpedicion,
+                                    "fechaexpedicion"   :   fechaexpedicion ,
+                                    "fechanacimiento"   :   fechanacimiento ,
+                                    "direccion"         :   direccion,
+                                    "email"             :   email,
+                                    "sexo_id"           :   sexo_id,
+                                    "barrio"            :   barrio,
+                                    "ciudad"            :   ciudad,
+                                    "departamento"      :   departamento,
+                                    "ocupacion"         :   ocupacion,
                                     "message"           :   ""
                                     }
 
@@ -170,7 +222,6 @@ class Save(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
     def post_add_person(self, data, user):
-
         nueva_persona           = Personas(
             nombre              = data['nombre'],
             segundonombre       = data['segundo_nombre'],
@@ -179,6 +230,10 @@ class Save(CreateAPIView, ResponseMixin):
             telefonomovil       = data['celular_llamada'],
             telefonowhatsapp    = data['celular_whatsapp'],
             identificacion      = data['documento'],
+            direccion           = data['direccion'],
+            fechanacimiento     = data['fechanacimiento'],
+            barrio              = data['barrio'],
+            sexo_id             = data['sexo_id'],
             created_by          = user
         )
 
@@ -207,6 +262,12 @@ class Save(CreateAPIView, ResponseMixin):
         
         for persona in personas:
 
+            sexo_id = 21
+
+            if(persona["sexo_id"] == 'M'):
+                sexo_id = 21
+            else:
+                sexo_id = 22
             persona_new = {
                 "nombre"            :   persona["nombre"],
                 "segundo_nombre"    :   persona["segundo_nombre"],
@@ -215,6 +276,11 @@ class Save(CreateAPIView, ResponseMixin):
                 "celular_whatsapp"  :   persona["celular_whatsapp"],
                 "celular_llamada"   :   persona["celular_llamada"],
                 "documento"         :   persona["documento"],
+                "direccion"         :   persona["direccion"],
+                "email"             :   persona["email"],
+                "fechanacimiento"   :   persona["fechanacimiento"],
+                "barrio"            :   persona["barrio"],
+                "sexo_id"           :   sexo_id,
                 }
             try:
                 self.post_add_person(persona_new, user)
