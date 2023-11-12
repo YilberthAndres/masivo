@@ -54,9 +54,7 @@ def webhook(request):
         statuses_text = json.dumps(json_data["entry"])
         nueva_peticion = Peticion(estado=statuses_text)
         nueva_peticion.save()
-        # enviar_mensaje_a_grupo()
 
-        print(statuses_text)
 
         try:
             if json_data["entry"][0]["changes"][0]["field"] == "messages":
@@ -91,6 +89,10 @@ def webhook(request):
         raise Exception("Invalid request")
 
     except Exception as e:
+        nueva_peticion = Peticion(estado= "Error peticion inicial: "  +e)
+        nueva_peticion.save()
+        nueva_peticion = Peticion(estado=e)
+        nueva_peticion.save()
         return HttpResponse(challenge, content_type="text/plain")
 
 
@@ -99,7 +101,6 @@ def update_message(statuses):
         mensaje_id = statuses["id"]
         timestamp = statuses["timestamp"]
         recipiente_id = statuses["recipient_id"]
-        conversacion_id = id
 
         if "sent" == statuses["status"]:
             estado = 744
@@ -112,10 +113,12 @@ def update_message(statuses):
         mensaje.estado_id       = estado
         mensaje.timestamp_w = timestamp
         mensaje.recipiente_id = recipiente_id
-        mensaje.conversacion_id = conversacion_id
+        # mensaje.conversacion_id = conversacion_id
         mensaje.save()
     except Exception as e:
-        nueva_peticion = Peticion(estado="Fallo")
+        nueva_peticion = Peticion(estado= "Error al actualizar mensaje: " )
+        nueva_peticion.save()
+        nueva_peticion = Peticion(estado=  e)
         nueva_peticion.save()
 
 
