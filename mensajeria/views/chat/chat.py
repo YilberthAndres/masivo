@@ -23,6 +23,15 @@ from datetime import timedelta
 import os
 import requests
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import (
+    F,
+    ExpressionWrapper,
+    DateTimeField,
+    Subquery,
+    OuterRef,
+    Func,
+)
+from django.db.models.functions import Concat, Upper, Lower, Substr
 
 API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
@@ -119,7 +128,7 @@ class MenssageLeft(GenericAPIView, ResponseMixin):
         except Exception as e:
             self.error = {
                 "status": status.HTTP_404_NOT_FOUND,
-                "message": str(e, args),
+                "message": str(e.args),
                 "state": True,
             }
             return Response(self.response_obj)

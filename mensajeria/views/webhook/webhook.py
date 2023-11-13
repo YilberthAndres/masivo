@@ -12,15 +12,16 @@ from mensajeria.models import (
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from channels.layers import get_channel_layer
+from channels.db import database_sync_to_async
 from asgiref.sync import async_to_sync
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 from django.conf import settings
 import json
-
+from django.db import connection
 from django.core.files.storage import get_storage_class
 import os
-
+import asyncio
 
 import hashlib
 import re
@@ -30,6 +31,76 @@ ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
 ID_WHATSAPP_NUMBER_ENV = os.getenv("ID_WHATSAPP_NUMBER")
 API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
 VERIFY_TOKEN_ENV = os.getenv("VERIFY_TOKEN")
+
+
+@database_sync_to_async
+def get_data():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+                    SELECT
+                        subq.recipiente_id,
+                        subq.type_message,
+                        subq.texto as text_message,
+                        subq.timestamp_date,
+                        subq.timestamp_hour,
+                        subq.name_user,
+                        subq.last_name_user,
+                        subq.id_message_status,
+                        subq.message_status
+                    FROM (
+                        SELECT
+                            m.recipiente_id,
+                            m.mime_type as type_message,
+                            m.texto AS texto,
+                            DATE_FORMAT(FROM_UNIXTIME(m.timestamp_w), '%%Y-%%m-%%d') AS timestamp_date,
+                            DATE_FORMAT(FROM_UNIXTIME(m.timestamp_w), '%%H:%%i') AS timestamp_hour,
+                            CONCAT(UPPER(LEFT(p.nombre, 1)), LCASE(SUBSTRING(p.nombre, 2))) AS name_user,
+                            CONCAT(UPPER(LEFT(p.apellido, 1)), LCASE(SUBSTRING(p.apellido, 2))) AS last_name_user,
+                            ROW_NUMBER() OVER (PARTITION BY m.recipiente_id ORDER BY m.timestamp_w DESC) AS row_num,
+                            ma.id as id_message_status,
+                            CONCAT(UPPER(LEFT(ma.nombre, 1)), LCASE(SUBSTRING(ma.nombre, 2))) as message_status
+                        FROM mensajeria m
+                        INNER JOIN conversaciones c ON (m.conversacion_id = c.id)
+                        INNER JOIN destinatarios d ON (c.destinatario_id = d.id)
+                        INNER JOIN personas p ON (d.persona_id = p.id)
+                        LEFT JOIN maestras ma on (m.estado_id = ma.id)
+                        WHERE c.estado_id = 758
+                        AND DATE_FORMAT(FROM_UNIXTIME(m.timestamp_w), '%%Y-%%m-%%d') >= CURDATE() - INTERVAL 300 DAY
+                    ) AS subq
+                    WHERE subq.row_num = 1;
+                """
+        )
+
+        rows = cursor.fetchall()
+
+    print(rows)
+    chats = []
+    for row in rows:
+        recipiente_id = row[0]
+        type_message = row[1]
+        texto = row[2]
+        timestamp_date = row[3]
+        timestamp_hour = row[4]
+        name_user = row[5]
+        last_name_user = row[6]
+        id_message_status = row[7]
+        message_status = row[8]
+
+        chat = {
+            "recipiente_id": recipiente_id,
+            "type_message": type_message,
+            "texto": texto,
+            "timestamp_date": timestamp_date,
+            "timestamp_hour": timestamp_hour,
+            "name_user": name_user,
+            "last_name_user": last_name_user,
+            "id_message_status": id_message_status,
+            "message_status": message_status,
+        }
+        chats.append(chat)
+
+    return chats
 
 
 def generate_permanent_token(request):
@@ -321,19 +392,17 @@ def getMinutosHoras(timestamp):
 
 
 # Vista donde quieres enviar el mensaje al WebSocketGroup
+
+
 def send_txt(message):
     try:
-        # Obtén los datos del mensaje y el nombre de usuario de alguna manera
-        # message = "Hola, esto es un mensaje enviado desde otra vista"
-        # username = "Usuario1"
-
-        # Obtén el channel_layer
         channel_layer = get_channel_layer()
 
-        # Envia el mensaje al grupo del WebSocketGroup usando async_to_sync
         async_to_sync(channel_layer.group_send)(
-            "chat_riodev", {"type": "chatbox_message", **message}
+            "chat_riodev",
+            {"type": "chatbox_message", "message": {**message}},
         )
+
     except Exception as e:
         error_message = str(e.args)
         nueva_peticion = Peticion(estado="Fallo websockets: " + error_message)
