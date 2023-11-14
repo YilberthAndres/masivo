@@ -80,6 +80,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.group_name, self.channel_name)
 
         await self.accept()
+        await self.chats_menu()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
@@ -98,6 +99,10 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 "username": username,
             },
         )
+
+    async def chats_menu(self):
+        chats = await self.get_data()
+        await self.send(text_data=json.dumps(chats))
 
     # Receive message from room group.
     async def chatbox_message(self, event):

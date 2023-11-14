@@ -339,7 +339,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
                 "recipiente_id": nuevo_mensaje.recipiente_id,
                 "fecha": fecha,
                 "id": nuevo_mensaje.id,
-                "estado_id": nuevo_mensaje.estado_id,
+                "estado": "enviado" if nuevo_mensaje.estado_id == None else "recibido",
                 "texto": nuevo_mensaje.texto,
                 "mensaje_id": nuevo_mensaje.mensaje_id,
                 "mime_type": nuevo_mensaje.mime_type,
