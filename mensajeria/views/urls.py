@@ -7,4 +7,5 @@ urlpatterns = [
     path("mensajeria/",include("mensajeria.views.mensajeria.urls")),
     path("upload/", include("mensajeria.views.carga.urls")),
     path("chat/", include("mensajeria.views.chat.urls")),
+    path("multimedia/", include("mensajeria.views.multimedia.urls")),
 ]

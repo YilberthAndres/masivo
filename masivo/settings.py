@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
+import dotenv 
 
+dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-SECRET_KEY_ENV = os.getenv("SECRET_KEY")
+
+SECRET_KEY_ENV              = os.getenv("SECRET_KEY")
+AWS_ACCESS_KEY_ID_ENV       = os.getenv("AWS_ACCESS_KEY_ID_N")
+AWS_SECRET_ACCESS_KEY_ENV   = os.getenv("AWS_SECRET_ACCESS_KEY_N")
+AWS_STORAGE_BUCKET_NAME_ENV = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME_ENV      = os.getenv("AWS_S3_REGION_NAME")
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY_ENV
 
@@ -48,6 +56,7 @@ INSTALLED_APPS = [
     "channels",
     "django_celery_beat",
     "mensajeria",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -61,6 +70,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -199,8 +209,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+
 # print(BASE_DIR)
 
+AWS_ACCESS_KEY_ID       = AWS_ACCESS_KEY_ID_ENV
+AWS_SECRET_ACCESS_KEY   = AWS_SECRET_ACCESS_KEY_ENV
+AWS_STORAGE_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME_ENV
+AWS_S3_SIGNATURE_NAME   = 's3v4',
+AWS_S3_REGION_NAME      = AWS_S3_REGION_NAME_ENV
+AWS_S3_FILE_OVERWRITE   = False
+AWS_DEFAULT_ACL         =  None
+AWS_S3_VERITY           = True
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Almacenamiento de archivos multimedia
+MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 # AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")

@@ -15,189 +15,86 @@ import os
 from django.conf import settings
 import json
 import dotenv
+
 dotenv.load_dotenv()
 import hashlib
 import re
 
 
-API_KEY_ENV                 = os.getenv('API_KEY')
-ID_WHATSAPP_BUSINESS_ENV    = os.getenv('ID_WHATSAPP_BUSINESS')
-ID_WHATSAPP_NUMBER_ENV      = os.getenv('ID_WHATSAPP_NUMBER')
-API_VERSION_WHATSAPP_ENV    = os.getenv('API_VERSION_WHATSAPP')
-
-@login_required(login_url="signin")
-def index(request):
-    #
-    contexto = {
-        "titulo": "Multimedia",
-        # 'archivos': archivos,
-    }
-    return render(request, "multimedia/index.html", contexto)
+API_KEY_ENV = os.getenv("API_KEY")
+ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
+ID_WHATSAPP_NUMBER_ENV = os.getenv("ID_WHATSAPP_NUMBER")
+API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
 
 
-@login_required(login_url="signin")
-def create(request):
-    contexto = {
-        "titulo": "Agregar Multimedia",
-    }
-    return render(request, "multimedia/create.html", contexto)
+from rest_framework.generics import CreateAPIView, GenericAPIView
+from ...mixins.base import ResponseMixin
+from ...serializers.auth.signup_serializers import SignupSerializers
+from ...serializers.auth.signin_serializers import SigninSerializers
+from rest_framework.response import Response
+from rest_framework import status
+
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 
-def uploaded(request):
-    if request.method == "POST":
-        nombre = request.POST.get("nombre")
-        archivo = request.FILES.get("archivo")
+class Uploaded(CreateAPIView, ResponseMixin):
+    serializer_class = SignupSerializers
 
-        s3 = boto3.resource(
-            "s3",
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        )
-        bucket = s3.Bucket("masivo")
-        s3_client = boto3.client(
-            "s3",
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        )
+    def get_info(self, file):
+        file_format = "document"
+        if file.content_type.startswith("image/"):
+            file_format = "image"
+        elif file.content_type.startswith("video/"):
+            file_format = "video"
+        elif file.content_type.startswith("audio/"):
+            file_format = "audio"
 
-        url = ""
+        return file_format
 
-        try:
-            bucket.put_object(Key=archivo.name, Body=archivo)
-            response = s3_client.generate_presigned_url(
-                "get_object",
-                Params={"Bucket": "masivo", "Key": archivo.name},
-            )
-            url = response
-        except Exception as e:
-            return JsonResponse({"error": e})
+    def post(self, request, *args, **kwargs):
+        file = request.FILES["file"]
+        name = request.POST.get("name")
 
-        response = bucket.Object(archivo.name)
-
-        nombre_archivo, extension = os.path.splitext(archivo.name)
-        nombre_unico = datetime.now().strftime("%Y%m%d_%H%M%S")
-        carpeta_destino = "archivos"
+        file_format = self.get_info(file)
         user = request.user
-        user = User.objects.get(id=user.id)
-        form = ArchivosForm(request.POST)
-        new_archivo = form.save(commit=False)
-        new_archivo.formato = extension
-        new_archivo.dir = url
-        new_archivo.created_by = user
 
-        new_archivo.save()
+        file_model = Archivos()
+        file_model.file = file
+        file_model.nombre = name
+        file_model.tipo = file_format
+        file_model.created_by = user
 
-        # Define la ruta completa de destino del archivo
-        ruta_destino = os.path.join(
-            settings.STATIC_ROOT, carpeta_destino, f"{nombre_unico}{extension}"
-        )
+        file_model.save()
 
-        # Guarda el archivo en la carpeta de destino
-        with open(ruta_destino, "wb") as archivo_destino:
-            for chunk in archivo.chunks():
-                archivo_destino.write(chunk)
-
-        # Obtener la extensión del archivo
-
-        archivo_nombre, archivo_extension = os.path.splitext(archivo.name)
-
-        return JsonResponse({"success": True})  # Envía una respuesta JSON exitosa
-
-    return JsonResponse({"success": False})
+        self.data = {
+            "status": status.HTTP_400_BAD_REQUEST,
+            "data": {"message": "exitoso"},
+            "state": False,
+        }
+        return Response(self.response_obj)
 
 
-def delete(request, archivo_id):
-    if request.method == "POST":
-        try:
-            archivo = Archivos.objects.get(id=archivo_id)
-            ruta_archivo = "mensajeria/static/" + archivo.dir
-            borrar_archivo(ruta_archivo)
+class AllMultimedia(CreateAPIView, ResponseMixin):
+    serializer_class = SignupSerializers
 
-            registro = Archivos.objects.get(id=archivo_id)
-            registro.delete()
-            # Lógica adicional después de eliminar el registro
-            return JsonResponse({"success": True})
-        except Archivos.DoesNotExist:
-            # Lógica en caso de que el registro no exista
-            return JsonResponse({"success": False})
+    def get(self, file):
+        archivos = Archivos.objects.all()
 
+        files = []
+        for archivo in archivos:
+            file = {
+                "file_id"   : archivo.id,
+                "name"      : archivo.nombre,
+                "dir"       : archivo.file.url,
+                "type"      : archivo.tipo,
+            }
 
-def list(request):
-    if request.method == "POST":
-        try:
-            archivos = Archivos.objects.all()
-            archivosnew = []
+            files.append(file)
 
-            for archivo in archivos:
-                usuario = archivo.created_by
-                archivoslist = {
-                    "id": archivo.id,
-                    "nombre": archivo.descripcion,
-                    "tipo": archivo.tipo,
-                    "dir": archivo.dir,
-                    "created_at": archivo.created_at,
-                    "nombre_usuario": usuario.username,
-                }
-                archivosnew.append(archivoslist)
-
-            # Lógica adicional después de eliminar el registro
-            return JsonResponse(archivosnew, safe=False)
-        except Archivos.DoesNotExist:
-            # Lógica en caso de que el registro no exista
-            return JsonResponse({"success": False})
-
-
-def borrar_archivo(ruta_archivo):
-    if os.path.exists(ruta_archivo):
-        os.remove(ruta_archivo)
-        return True
-    else:
-        return False
-
-
-
-def get_media(request):
-    url = 'https://graph.facebook.com/'+API_VERSION_WHATSAPP_ENV+'/268127482508556'
-    headers = {
-        'Authorization': API_KEY_ENV,
-        'Content-Type': 'application/json'
-    }
-
-
-    response = requests.get(url, headers=headers)
-    response_json = response.json()
-
-    url_media = response_json['url']
-
-    response_media = requests.get(url_media, headers=headers)
-
-
-    if response_media.status_code == 200:
-        # Genera el nombre del archivo a partir de la URL usando un hash MD5
-        nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
-
-        # Obtiene la extensión del archivo desde el encabezado Content-Type
-        extension_archivo = response_media.headers.get('Content-Type', '').split('/')[-1]
-
-        # Elimina los caracteres inválidos para el nombre del archivo
-        nombre_archivo = re.sub(r'[\\/*?:"<>|]', '', nombre_archivo)
-
-        # Combina el nombre del archivo y su extensión
-        nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
-
-        # Construye la ruta completa para guardar el archivo en la carpeta deseada
-        ruta_archivo = os.path.join(settings.BASE_DIR, "mensajeria", "static", "temp", nombre_archivo_con_extension)
-
-        # Abre el archivo en modo binario y guarda el contenido de la respuesta en él
-        with open(ruta_archivo, 'wb') as archivo:
-            archivo.write(response_media.content)
-
-        # Devuelve una respuesta con el enlace a la imagen descargada
-        return HttpResponse(f"Imagen descargada y guardada en: {ruta_archivo}")
-    else:
-        return HttpResponse("Error al descargar la imagen", status=404)
-
-    # return HttpResponse(response_media, content_type="image/jpeg")
-    response_json_media = response.json()
-
-    return JsonResponse(response_json_media)
+        self.data = {
+            "status": status.HTTP_400_BAD_REQUEST,
+            "data"  : {"files": files},
+            "state" : False,
+        }
+        return Response(self.response_obj)

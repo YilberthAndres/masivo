@@ -1,4 +1,5 @@
 from django.db import connection
+from django.shortcuts import get_object_or_404
 from rest_framework.generics import CreateAPIView, GenericAPIView
 from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
@@ -32,8 +33,10 @@ from django.db.models import (
     Func,
 )
 from django.db.models.functions import Concat, Upper, Lower, Substr
+from .send import send_message_api
 
 API_KEY_ENV = os.getenv("API_KEY")
+# API_KEY_ENV = "EAAEF7nFwsRoBO1bc0PaitqeaDUYVdrZC3H424XSSlC3ud1G6ZCcjTgGWiZABM15Iz3ZAUGYqUymCeLKFvdl60CIYkXkqzsA0yMi43ol5vNBPOt0ZC78hrbgqK4oW6xOvKC83NYAB5qQDN88O4mIjwsLUZCZCZBnqtLsPGuXRT3sFlKGZBzR995KNuR6GPnpneGmR3UNBHfRssYZBZBKrRBXBQZDZD"
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
 ID_WHATSAPP_NUMBER_ENV = os.getenv("ID_WHATSAPP_NUMBER")
 API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
@@ -250,104 +253,35 @@ class MenssageFind(CreateAPIView, ResponseMixin):
 class MenssageSend(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
-    def get_payload(self, whatsapp, text, type_message):
-        if type_message == "text":
-            return {
-                "messaging_product": "whatsapp",
-                "recipient_type": "individual",
-                "to": whatsapp,
-                "type": "text",
-                "text": {"preview_url": False, "body": text},
-            }
-
-    def post_conversation(self, recipient_id):
-        conversacion = Conversaciones.objects.update_or_create(
-            destinatario_id=recipient_id, defaults={"estado_id": 758}
-        )
-        if isinstance(conversacion, tuple):
-            conversacion = conversacion[0]
-        return conversacion.id
-
     def post(self, request, *args, **kwargs):
         # try:
-        info = json.loads(request.body)
-        recipient = info[0]["recipient"]
-        message = info[0]["message"]
-        type_message = info[0]["type"]
+        info            = json.loads(request.body)
+        recipient       = info[0]["recipient"]
+        file_id         = info[0].get("file_id", "")
+        dir             = info[0].get("dir", "")
+        type_message    = info[0]["type"]
+        message         = info[0].get("message", "")
 
         user = request.user
-        data = {
-            "recipient": recipient,
-            "message": message,
-            "user_id": user.id,
-        }
 
         persona_model = Personas.objects.get(telefonowhatsapp=recipient)
         recipient_model = Destinatarios.objects.get(persona=persona_model)
-        user_whatsapp = persona_model.telefonowhatsapp
         recipient_id = recipient_model.id
 
+        data_send = {}
+
         if persona_model:
-            url = (
-                "https://graph.facebook.com/"
-                + API_VERSION_WHATSAPP_ENV
-                + "/"
-                + ID_WHATSAPP_NUMBER_ENV
-                + "/messages"
-            )
-            headers = {
-                "Authorization": f"Bearer {API_KEY_ENV}",
-                "Content-Type": "application/json",
+            data_send = {
+                "recipient_id"  :recipient_id,
+                "recipient_w"   :recipient,
+                "message"       :message,
+                "type_message"  :type_message,
+                "file_id"       :file_id,
+                "user"          :user,
+                "user_id"       :user.id,
             }
 
-            payload = self.get_payload(recipient, message, type_message)
-
-            response = requests.post(url, headers=headers, json=payload)
-            response_json = response.json()
-
-            self.data = {
-                "status": status.HTTP_200_OK,
-                "data": {"payload": payload},
-                "state": True,
-            }
-
-            conversacion_id = self.post_conversation(recipient_id)
-
-            waId = response_json["contacts"][0]["wa_id"]
-            messageId = response_json["messages"][0]["id"]
-
-            nuevo_mensaje = Mensajeria(
-                destinatario_id=recipient_id,
-                texto=message,
-                celular=waId,
-                recipiente_id=waId,
-                mensaje_id=messageId,
-                conversacion_id=conversacion_id,
-                created_by_id=user.id,
-            )
-
-            nuevo_mensaje.save()
-
-            fecha = nuevo_mensaje.created_at.strftime("%Y/%m/%d")
-
-            timestamp = nuevo_mensaje.created_at
-            hora = timestamp.strftime("%H")
-            minutos = timestamp.strftime("%M")
-            hora_completa = hora + ":" + minutos
-
-            data_message = {
-                "recipiente_id": nuevo_mensaje.recipiente_id,
-                "fecha": fecha,
-                "id": nuevo_mensaje.id,
-                "estado": "enviado" if nuevo_mensaje.estado_id == None else "recibido",
-                "texto": nuevo_mensaje.texto,
-                "mensaje_id": nuevo_mensaje.mensaje_id,
-                "mime_type": nuevo_mensaje.mime_type,
-                "dir": nuevo_mensaje.link,
-                "filename": nuevo_mensaje.filename,
-                "voice": nuevo_mensaje.voice,
-                "hora": hora_completa,
-            }
+            data_message = send_message_api(data_send)
 
             self.data = {
                 "status": status.HTTP_200_OK,
