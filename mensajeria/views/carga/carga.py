@@ -26,8 +26,6 @@ from ...serializers.auth.signin_serializers import SigninSerializers
 from rest_framework.response import Response
 from rest_framework import status
 
-from mensajeria.tasks import my_task
-
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.validators import validate_email

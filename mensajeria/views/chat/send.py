@@ -1,19 +1,14 @@
 from django.shortcuts import get_object_or_404
 from mensajeria.models import (
     Archivos,
-    Destinatarios,
     Mensajeria,
-    Personas,
     Conversaciones,
-    Peticion,
 )
 import os
-import requests
 from ..base import api_connect
 
 
-# API_KEY_ENV = os.getenv("API_KEY")
-API_KEY_ENV = "EAAEF7nFwsRoBO1bc0PaitqeaDUYVdrZC3H424XSSlC3ud1G6ZCcjTgGWiZABM15Iz3ZAUGYqUymCeLKFvdl60CIYkXkqzsA0yMi43ol5vNBPOt0ZC78hrbgqK4oW6xOvKC83NYAB5qQDN88O4mIjwsLUZCZCZBnqtLsPGuXRT3sFlKGZBzR995KNuR6GPnpneGmR3UNBHfRssYZBZBKrRBXBQZDZD"
+API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
 ID_WHATSAPP_NUMBER_ENV = os.getenv("ID_WHATSAPP_NUMBER")
 API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
@@ -53,7 +48,6 @@ def send_message_api(data):
         data["recipient_w"], data["message"], data["type_message"], data["file_id"]
     )
 
-    # response = requests.post(url, headers=headers, json=payload)
     response = response = api_connect(
         ID_WHATSAPP_NUMBER_ENV, "/messages", payload=payload, method="POST"
     )
@@ -88,7 +82,7 @@ def send_message_api(data):
         created_by_id=data["user_id"],
     )
 
-    if(data["file_id"] != ''):
+    if data["file_id"] != "":
         nuevo_mensaje.multimedia_id = data["file_id"]
 
     nuevo_mensaje.save()

@@ -1,42 +1,27 @@
 from django.db import connection
-from django.shortcuts import get_object_or_404
 from rest_framework.generics import CreateAPIView, GenericAPIView
 from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
 from rest_framework.response import Response
 from rest_framework import status
-from django.core import serializers
 import json
 from mensajeria.models import (
-    Archivos,
     Destinatarios,
     Mensajeria,
     Personas,
-    Conversaciones,
-    Peticion,
 )
 from django.utils import timezone
-from mensajeria.tasks import my_task
 from django.db.models.functions import TruncDate
 from django.db.models import Count, Case, When, Value, CharField
 from datetime import datetime
 from datetime import timedelta
 import os
-import requests
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import (
-    F,
-    ExpressionWrapper,
-    DateTimeField,
-    Subquery,
-    OuterRef,
-    Func,
-)
-from django.db.models.functions import Concat, Upper, Lower, Substr
-from .send import send_message_api
+from ..base import send_message_api
+import uuid
+from masivo.utils import agregar_tarea_dinamicamente
+
 
 API_KEY_ENV = os.getenv("API_KEY")
-# API_KEY_ENV = "EAAEF7nFwsRoBO1bc0PaitqeaDUYVdrZC3H424XSSlC3ud1G6ZCcjTgGWiZABM15Iz3ZAUGYqUymCeLKFvdl60CIYkXkqzsA0yMi43ol5vNBPOt0ZC78hrbgqK4oW6xOvKC83NYAB5qQDN88O4mIjwsLUZCZCZBnqtLsPGuXRT3sFlKGZBzR995KNuR6GPnpneGmR3UNBHfRssYZBZBKrRBXBQZDZD"
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
 ID_WHATSAPP_NUMBER_ENV = os.getenv("ID_WHATSAPP_NUMBER")
 API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
@@ -144,11 +129,13 @@ class MenssageFind(CreateAPIView, ResponseMixin):
         try:
             telefonowhatsapp = request.GET.get("user_phone")
 
-            persona = Personas.objects.filter(telefonowhatsapp=telefonowhatsapp).first()
+            persona = (
+                Personas.objects.filter(telefonowhatsapp=telefonowhatsapp)
+                .only("id")
+                .exists()
+            )
 
             if persona:
-                persona_data = json.loads(serializers.serialize("json", [persona]))[0]
-
                 mensajes = (
                     Mensajeria.objects.filter(
                         recipiente_id=telefonowhatsapp,
@@ -182,7 +169,6 @@ class MenssageFind(CreateAPIView, ResponseMixin):
 
                 resultados = {}
                 for mensaje in mensajes:
-                    # fecha = mensaje['fecha'].strftime('%Y-%m-%d')
                     fecha_int = float(mensaje["timestamp_w"])
                     fecha_datetime = timezone.datetime.fromtimestamp(fecha_int)
                     fecha = fecha_datetime.strftime("%Y/%m/%d")
@@ -244,7 +230,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
         except Exception as e:
             response_data = {
                 "status": status.HTTP_404_NOT_FOUND,
-                "message": "No tienes acceso.",
+                "message": str(e.args),
                 "state": False,
             }
             return Response(response_data)
@@ -255,12 +241,12 @@ class MenssageSend(CreateAPIView, ResponseMixin):
 
     def post(self, request, *args, **kwargs):
         # try:
-        info            = json.loads(request.body)
-        recipient       = info[0]["recipient"]
-        file_id         = info[0].get("file_id", "")
-        dir             = info[0].get("dir", "")
-        type_message    = info[0]["type"]
-        message         = info[0].get("message", "")
+        info = json.loads(request.body)
+        recipient = info[0]["recipient"]
+        file_id = info[0].get("file_id", "")
+        dir = info[0].get("dir", "")
+        type_message = info[0]["type"]
+        message = info[0].get("message", "")
 
         user = request.user
 
@@ -272,13 +258,13 @@ class MenssageSend(CreateAPIView, ResponseMixin):
 
         if persona_model:
             data_send = {
-                "recipient_id"  :recipient_id,
-                "recipient_w"   :recipient,
-                "message"       :message,
-                "type_message"  :type_message,
-                "file_id"       :file_id,
-                "user"          :user,
-                "user_id"       :user.id,
+                "recipient_id": recipient_id,
+                "recipient_w": recipient,
+                "message": message,
+                "type_message": type_message,
+                "file_id": file_id,
+                "user": user,
+                "user_id": user.id,
             }
 
             data_message = send_message_api(data_send)
@@ -290,13 +276,57 @@ class MenssageSend(CreateAPIView, ResponseMixin):
             }
             return Response(self.response_obj)
         else:
-            response_data = {
-                "status": status.HTTP_404_NOT_FOUND,
-                "message": "Error destinatario no valido",
-                "state": False,
-            }
-            return Response(response_data)
+            self.error = {"error": "Error destinatario no valido"}
+
+            return Response(self.response_obj)
 
     # except Exception as e:
     #     response_data = {"status": status.HTTP_404_NOT_FOUND, "message": "error", "state": False}
     #     return Response(response_data)
+
+
+class ProgrammedSend(GenericAPIView, ResponseMixin):
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        asunto = data.get("asunto", "")
+        fecha = data.get("fecha", "")
+        hora = data.get("hora", "")
+        adjunto = data.get("adjunto", "")
+        to = data.get("to", "")
+
+        nombre_tarea = str(uuid.uuid4())
+        fecha_ejecucion = datetime.strptime(fecha + " " + hora, "%Y-%m-%d %H:%M")
+
+        user = request.user
+
+        persona_model = Personas.objects.get(telefonowhatsapp=to)
+        recipient_model = Destinatarios.objects.get(persona=persona_model)
+        recipient_id = recipient_model.id
+
+        data_send = {}
+
+        if persona_model:
+            data_send = {
+                "recipient_id": recipient_id,
+                "recipient_w": to,
+                "message": asunto,
+                "file_id": adjunto,
+                "type_message": "text",
+                "user_id": user.id,
+            }
+
+        tarea = agregar_tarea_dinamicamente(
+            nombre_tarea,
+            fecha_ejecucion,
+            send_to=data_send,
+        )
+
+        self.data = {
+            "response": {
+                "tarea": tarea["id"],
+                "nombre": tarea["name"],
+                "message": "Fue creada exitosamente",
+            }
+        }
+
+        return Response(self.response_obj)

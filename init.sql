@@ -1,2080 +1,3696 @@
 
 
-CREATE TABLE `archivos`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`nombre` VarChar( 650 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`descripcion` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`tipo` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`formato` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`dir` VarChar( 500 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`created_at` DateTime NOT NULL,
-	`updated_at` DateTime NOT NULL,
-	`created_by_id` Int( 0 ) NOT NULL,
-	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 33;
-
-
-
-CREATE TABLE `auth_group`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 150 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `name` UNIQUE( `name` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-
-CREATE TABLE `auth_group_permissions`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`group_id` Int( 0 ) NOT NULL,
-	`permission_id` Int( 0 ) NOT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` UNIQUE( `group_id`, `permission_id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-
-CREATE TABLE `auth_permission`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 255 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`content_type_id` Int( 0 ) NOT NULL,
-	`codename` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `auth_permission_content_type_id_codename_01ab375a_uniq` UNIQUE( `content_type_id`, `codename` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 84;
-
-
-
-CREATE TABLE `auth_user`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`password` VarChar( 128 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`last_login` DateTime NULL DEFAULT NULL,
-	`is_superuser` TinyInt( 1 ) NOT NULL,
-	`username` VarChar( 150 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`first_name` VarChar( 150 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`last_name` VarChar( 150 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`email` VarChar( 254 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`is_staff` TinyInt( 1 ) NOT NULL,
-	`is_active` TinyInt( 1 ) NOT NULL,
-	`date_joined` DateTime NOT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `username` UNIQUE( `username` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 2;
-
-
-CREATE TABLE `auth_user_groups`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`user_id` Int( 0 ) NOT NULL,
-	`group_id` Int( 0 ) NOT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `auth_user_groups_user_id_group_id_94350c0c_uniq` UNIQUE( `user_id`, `group_id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;
-
-
-
-CREATE TABLE `auth_user_user_permissions`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`user_id` Int( 0 ) NOT NULL,
-	`permission_id` Int( 0 ) NOT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` UNIQUE( `user_id`, `permission_id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;
-
-
-
-CREATE TABLE `conversaciones`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`created_at` DateTime NOT NULL,
-	`updated_at` DateTime NOT NULL,
-	`created_by_id` Int( 0 ) NOT NULL,
-	`destinatario_id` BigInt( 0 ) NULL DEFAULT NULL,
-	`estado_id` Int( 0 ) NULL DEFAULT NULL,
-	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `conversaciones_destinatario_id_db2d6e39_uniq` UNIQUE( `destinatario_id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 3;
-
-
-CREATE TABLE `destinatarios`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`created_at` DateTime NOT NULL,
-	`updated_at` DateTime NOT NULL,
-	`created_by_id` Int( 0 ) NOT NULL,
-	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
-	`persona_id` BigInt( 0 ) NULL DEFAULT NULL,
-	`estado_id` Int( 0 ) NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `destinatarios_persona_id_dda68fc7_uniq` UNIQUE( `persona_id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 3782;
-
-
-CREATE TABLE `django_admin_log`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`action_time` DateTime NOT NULL,
-	`object_id` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`object_repr` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`action_flag` SmallInt( 0 ) UNSIGNED NOT NULL,
-	`change_message` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`content_type_id` Int( 0 ) NULL DEFAULT NULL,
-	`user_id` Int( 0 ) NOT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;
-
-
-
-CREATE TABLE `django_celery_beat_clockedschedule`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`clocked_time` DateTime NOT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-
-CREATE TABLE `django_celery_beat_crontabschedule`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`minute` VarChar( 240 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`hour` VarChar( 96 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`day_of_week` VarChar( 64 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`day_of_month` VarChar( 124 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`month_of_year` VarChar( 64 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`timezone` VarChar( 63 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-
-CREATE TABLE `django_celery_beat_intervalschedule`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`every` Int( 0 ) NOT NULL,
-	`period` VarChar( 24 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-
-CREATE TABLE `django_celery_beat_periodictask`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`task` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`args` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`kwargs` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`queue` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`exchange` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`routing_key` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`expires` DateTime NULL DEFAULT NULL,
-	`enabled` TinyInt( 1 ) NOT NULL,
-	`last_run_at` DateTime NULL DEFAULT NULL,
-	`total_run_count` Int( 0 ) UNSIGNED NOT NULL,
-	`date_changed` DateTime NOT NULL,
-	`description` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`crontab_id` Int( 0 ) NULL DEFAULT NULL,
-	`interval_id` Int( 0 ) NULL DEFAULT NULL,
-	`solar_id` Int( 0 ) NULL DEFAULT NULL,
-	`one_off` TinyInt( 1 ) NOT NULL,
-	`start_time` DateTime NULL DEFAULT NULL,
-	`priority` Int( 0 ) UNSIGNED NULL DEFAULT NULL,
-	`headers` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL ,
-	`clocked_id` Int( 0 ) NULL DEFAULT NULL,
-	`expire_seconds` Int( 0 ) UNSIGNED NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `name` UNIQUE( `name` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-
-CREATE TABLE `django_celery_beat_periodictasks`( 
-	`ident` SmallInt( 0 ) NOT NULL,
-	`last_update` DateTime NOT NULL,
-	PRIMARY KEY ( `ident` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-CREATE TABLE `django_celery_beat_solarschedule`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`event` VarChar( 24 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`latitude` Decimal( 9, 6 ) NOT NULL,
-	`longitude` Decimal( 9, 6 ) NOT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `django_celery_beat_solar_event_latitude_longitude_ba64999a_uniq` UNIQUE( `event`, `latitude`, `longitude` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-
-CREATE TABLE `django_content_type`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`app_label` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`model` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `django_content_type_app_label_model_76bd3d3b_uniq` UNIQUE( `app_label`, `model` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 21;
-
-
-CREATE TABLE `django_migrations`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`app` VarChar( 255 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`name` VarChar( 255 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`applied` DateTime NOT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 67;
-
-
-
-CREATE TABLE `django_session`( 
-	`session_key` VarChar( 40 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`session_data` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`expire_date` DateTime NOT NULL,
-	PRIMARY KEY ( `session_key` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
-
-
-
-CREATE TABLE `maestras`( 
-	`id` Int( 0 ) AUTO_INCREMENT NOT NULL,
-	`codigo` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`nombre` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`jerarquia` Int( 0 ) NULL DEFAULT NULL,
-	`orden` Int( 0 ) NULL DEFAULT NULL,
-	`visible` Int( 0 ) NULL DEFAULT NULL,
-	`observacion` VarChar( 200 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`created_at` DateTime NOT NULL,
-	`updated_at` DateTime NULL DEFAULT NULL,
-	`deleted_at` DateTime NULL DEFAULT NULL,
-	`deleted_by` BigInt( 0 ) NULL DEFAULT NULL,
-	`created_by_id` Int( 0 ) NOT NULL,
-	`padre_id` Int( 0 ) NULL DEFAULT NULL,
-	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 759;
-
-
-
-CREATE TABLE `mensajeria`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`mensaje_id` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`recipiente_id` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`conversacion_id` BigInt( 0 ) NULL DEFAULT NULL,
-	`origin` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`timestamp_w` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`celular` VarChar( 12 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`created_at` DateTime NOT NULL,
-	`updated_at` DateTime NOT NULL,
-	`created_by_id` Int( 0 ) NULL DEFAULT NULL,
-	`estado_id` Int( 0 ) NULL DEFAULT NULL,
-	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
-	`destinatario_id` BigInt( 0 ) NULL DEFAULT NULL,
-	`texto` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`tipo_id` Int( 0 ) NULL DEFAULT NULL,
-	`sha256` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`multimedia_id` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`mime_type` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`link` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`filename` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`voice` VarChar( 12 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`context_from` VarChar( 25 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`context_id` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 273;
-
-
-
-CREATE TABLE `modulos`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 191 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`path` VarChar( 191 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`icon` VarChar( 191 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`order` Int( 0 ) NULL DEFAULT NULL,
-	`created_at` DateTime NULL DEFAULT NULL,
-	`updated_at` DateTime NULL DEFAULT NULL,
-	`deleted_at` DateTime NULL DEFAULT NULL,
-	`deleted_by` BigInt( 0 ) NULL DEFAULT NULL,
-	`created_by_id` Int( 0 ) NOT NULL,
-	`dad_id` BigInt( 0 ) NULL DEFAULT NULL,
-	`estado_id` Int( 0 ) NULL DEFAULT NULL,
-	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;
-
-
-
-CREATE TABLE `personas`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`identificacion` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`lugarexpedicion` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`fechaexpedicion` Date NULL DEFAULT NULL,
-	`direccion` VarChar( 150 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`telefono` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`telefonomovil` VarChar( 10 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`telefonowhatsapp` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`email` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`sendemail` TinyInt( 1 ) NULL DEFAULT NULL,
-	`fechanacimiento` Date NULL DEFAULT NULL,
-	`nombre` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`segundonombre` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`apellido` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`segundoapellido` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`foto` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`barrio` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`observaciones` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	`created_at` DateTime NULL DEFAULT NULL,
-	`updated_at` DateTime NULL DEFAULT NULL,
-	`deleted_at` DateTime NULL DEFAULT NULL,
-	`deleted_by` BigInt( 0 ) NULL DEFAULT NULL,
-	`ciudad_id` Int( 0 ) NULL DEFAULT NULL,
-	`created_by_id` Int( 0 ) NOT NULL,
-	`departamento_id` Int( 0 ) NULL DEFAULT NULL,
-	`ocupacion_id` Int( 0 ) NULL DEFAULT NULL,
-	`pais_id` Int( 0 ) NULL DEFAULT NULL,
-	`sexo_id` Int( 0 ) NULL DEFAULT NULL,
-	`tipoidentificacion_id` Int( 0 ) NULL DEFAULT NULL,
-	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
-	`zona_id` Int( 0 ) NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ),
-	CONSTRAINT `personas_telefonomovil_d10349bb_uniq` UNIQUE( `telefonomovil` ),
-	CONSTRAINT `personas_telefonowhatsapp_8bb213d6_uniq` UNIQUE( `telefonowhatsapp` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 2939;
-
-
-
-CREATE TABLE `peticion`( 
-	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`estado` VarChar( 1091 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 331;
-
-
-BEGIN;
-
-INSERT INTO `archivos`(`id`,`nombre`,`descripcion`,`tipo`,`formato`,`dir`,`created_at`,`updated_at`,`created_by_id`,`updated_by_id`) VALUES 
-( '21', '', 'Hola', '', '.png', 'https://masivo.s3.amazonaws.com/hola.png?AWSAccessKeyId=AKIASBXVIQXOFSOJZYPV&Signature=q5Upswjdho0aCi1O3YTNRdUBvos%3D&Expires=1689785245', '2023-07-19 15:47:25.696325', '2023-07-19 15:47:25.696325', '1', NULL ),
-( '22', '', '', '', '.jpg', 'archivos/20230807_192937.jpg', '2023-08-08 00:29:37.935406', '2023-08-08 00:29:37.935406', '1', NULL ),
-( '23', '', '', '', '.jpg', 'temp/20230807_194610.jpg', '2023-08-08 00:46:10.818937', '2023-08-08 00:46:10.818937', '1', NULL ),
-( '24', '', '', '', '.jpg', 'temp/20230807_194646.jpg', '2023-08-08 00:46:46.408444', '2023-08-08 00:46:46.408444', '1', NULL ),
-( '25', '', '', '', '.jpg', 'temp/20230807_194903.jpg', '2023-08-08 00:49:03.619850', '2023-08-08 00:49:03.619850', '1', NULL ),
-( '26', '', '', '', '.jpg', 'temp/20230807_194931.jpg', '2023-08-08 00:49:31.817929', '2023-08-08 00:49:31.817929', '1', NULL ),
-( '27', '', '', '', '.jpg', 'temp/20230807_195955.jpg', '2023-08-08 00:59:55.304947', '2023-08-08 00:59:55.304947', '1', NULL ),
-( '28', '', '', '', '.jpg', 'temp/20230807_200046.jpg', '2023-08-08 01:00:46.905867', '2023-08-08 01:00:46.905867', '1', NULL ),
-( '29', '', '', '', '.jpg', 'temp/20230807_200131.jpg', '2023-08-08 01:01:31.780873', '2023-08-08 01:01:31.780873', '1', NULL ),
-( '30', '', '', '', '.jpg', 'temp/20230807_200609.jpg', '2023-08-08 01:06:09.829708', '2023-08-08 01:06:09.829708', '1', NULL ),
-( '31', '', '', '', '.jpg', 'temp/20230807_200635.jpg', '2023-08-08 01:06:35.072419', '2023-08-08 01:06:35.072419', '1', NULL ),
-( '32', '', '', '', '.jpg', 'temp/20230807_201220.jpg', '2023-08-08 01:12:20.156437', '2023-08-08 01:12:20.156437', '1', NULL ),
-( '33', '', '', '', '.jpg', 'temp/20230807_201930.jpg', '2023-08-08 01:19:30.699769', '2023-08-08 01:19:30.699769', '1', NULL );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "auth_group" -------------------------------
--- ----------------------
-
-
--- Dump data of "auth_group_permissions" -------------------
--- ----------------------
-
-
--- Dump data of "auth_permission" --------------------------
-BEGIN;
-
-INSERT INTO `auth_permission`(`id`,`name`,`content_type_id`,`codename`) VALUES 
-( '1', 'Can add log entry', '1', 'add_logentry' ),
-( '2', 'Can change log entry', '1', 'change_logentry' ),
-( '3', 'Can delete log entry', '1', 'delete_logentry' ),
-( '4', 'Can view log entry', '1', 'view_logentry' ),
-( '5', 'Can add permission', '2', 'add_permission' ),
-( '6', 'Can change permission', '2', 'change_permission' ),
-( '7', 'Can delete permission', '2', 'delete_permission' ),
-( '8', 'Can view permission', '2', 'view_permission' ),
-( '9', 'Can add group', '3', 'add_group' ),
-( '10', 'Can change group', '3', 'change_group' ),
-( '11', 'Can delete group', '3', 'delete_group' ),
-( '12', 'Can view group', '3', 'view_group' ),
-( '13', 'Can add user', '4', 'add_user' ),
-( '14', 'Can change user', '4', 'change_user' ),
-( '15', 'Can delete user', '4', 'delete_user' ),
-( '16', 'Can view user', '4', 'view_user' ),
-( '17', 'Can add content type', '5', 'add_contenttype' ),
-( '18', 'Can change content type', '5', 'change_contenttype' ),
-( '19', 'Can delete content type', '5', 'delete_contenttype' ),
-( '20', 'Can view content type', '5', 'view_contenttype' ),
-( '21', 'Can add session', '6', 'add_session' ),
-( '22', 'Can change session', '6', 'change_session' ),
-( '23', 'Can delete session', '6', 'delete_session' ),
-( '24', 'Can view session', '6', 'view_session' ),
-( '25', 'Can add destinatarios', '7', 'add_destinatarios' ),
-( '26', 'Can change destinatarios', '7', 'change_destinatarios' ),
-( '27', 'Can delete destinatarios', '7', 'delete_destinatarios' ),
-( '28', 'Can view destinatarios', '7', 'view_destinatarios' ),
-( '29', 'Can add archivos', '8', 'add_archivos' ),
-( '30', 'Can change archivos', '8', 'change_archivos' ),
-( '31', 'Can delete archivos', '8', 'delete_archivos' ),
-( '32', 'Can view archivos', '8', 'view_archivos' ),
-( '33', 'Can add maestra', '9', 'add_maestras' ),
-( '34', 'Can change maestra', '9', 'change_maestras' ),
-( '35', 'Can delete maestra', '9', 'delete_maestras' ),
-( '36', 'Can view maestra', '9', 'view_maestras' ),
-( '37', 'Can add persona', '10', 'add_personas' ),
-( '38', 'Can change persona', '10', 'change_personas' ),
-( '39', 'Can delete persona', '10', 'delete_personas' ),
-( '40', 'Can view persona', '10', 'view_personas' ),
-( '41', 'Can add modulos', '11', 'add_modulos' ),
-( '42', 'Can change modulos', '11', 'change_modulos' ),
-( '43', 'Can delete modulos', '11', 'delete_modulos' ),
-( '44', 'Can view modulos', '11', 'view_modulos' ),
-( '45', 'Can add mensajeria', '12', 'add_mensajeria' ),
-( '46', 'Can change mensajeria', '12', 'change_mensajeria' ),
-( '47', 'Can delete mensajeria', '12', 'delete_mensajeria' ),
-( '48', 'Can view mensajeria', '12', 'view_mensajeria' ),
-( '49', 'Can add chat group', '13', 'add_chatgroup' ),
-( '50', 'Can change chat group', '13', 'change_chatgroup' ),
-( '51', 'Can delete chat group', '13', 'delete_chatgroup' ),
-( '52', 'Can view chat group', '13', 'view_chatgroup' ),
-( '53', 'Can add peticion', '14', 'add_peticion' ),
-( '54', 'Can change peticion', '14', 'change_peticion' ),
-( '55', 'Can delete peticion', '14', 'delete_peticion' ),
-( '56', 'Can view peticion', '14', 'view_peticion' ),
-( '57', 'Can add crontab', '15', 'add_crontabschedule' ),
-( '58', 'Can change crontab', '15', 'change_crontabschedule' ),
-( '59', 'Can delete crontab', '15', 'delete_crontabschedule' ),
-( '60', 'Can view crontab', '15', 'view_crontabschedule' ),
-( '61', 'Can add interval', '16', 'add_intervalschedule' ),
-( '62', 'Can change interval', '16', 'change_intervalschedule' ),
-( '63', 'Can delete interval', '16', 'delete_intervalschedule' ),
-( '64', 'Can view interval', '16', 'view_intervalschedule' ),
-( '65', 'Can add periodic task', '17', 'add_periodictask' ),
-( '66', 'Can change periodic task', '17', 'change_periodictask' ),
-( '67', 'Can delete periodic task', '17', 'delete_periodictask' ),
-( '68', 'Can view periodic task', '17', 'view_periodictask' ),
-( '69', 'Can add periodic tasks', '18', 'add_periodictasks' ),
-( '70', 'Can change periodic tasks', '18', 'change_periodictasks' ),
-( '71', 'Can delete periodic tasks', '18', 'delete_periodictasks' ),
-( '72', 'Can view periodic tasks', '18', 'view_periodictasks' ),
-( '73', 'Can add solar event', '19', 'add_solarschedule' ),
-( '74', 'Can change solar event', '19', 'change_solarschedule' ),
-( '75', 'Can delete solar event', '19', 'delete_solarschedule' ),
-( '76', 'Can view solar event', '19', 'view_solarschedule' ),
-( '77', 'Can add clocked', '20', 'add_clockedschedule' ),
-( '78', 'Can change clocked', '20', 'change_clockedschedule' ),
-( '79', 'Can delete clocked', '20', 'delete_clockedschedule' ),
-( '80', 'Can view clocked', '20', 'view_clockedschedule' ),
-( '81', 'Can add conversaciones', '21', 'add_conversaciones' ),
-( '82', 'Can change conversaciones', '21', 'change_conversaciones' ),
-( '83', 'Can delete conversaciones', '21', 'delete_conversaciones' ),
-( '84', 'Can view conversaciones', '21', 'view_conversaciones' );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "auth_user" --------------------------------
-BEGIN;
-
-INSERT INTO `auth_user`(`id`,`password`,`last_login`,`is_superuser`,`username`,`first_name`,`last_name`,`email`,`is_staff`,`is_active`,`date_joined`) VALUES 
-( '1', 'pbkdf2_sha256$600000$YSt3G4t8LO9eDvUmqNVP3Y$R6j+6JxH0+8xJNMlDrjSknbrvtpn1GbTjtR1gD6rVeU=', '2023-08-05 18:11:17.730918', '0', 'admin@gmail.com', '', '', '', '0', '1', '2023-07-14 13:31:38.881831' );
-
-
-COMMIT;
-
--- ----------------------
-
-
--- Dump data of "auth_user_groups" -------------------------
--- ----------------------
-
-
--- Dump data of "auth_user_user_permissions" ---------------
--- ----------------------
-
-
--- Dump data of "conversaciones" ---------------------------
-BEGIN;
-
-INSERT INTO `conversaciones`(`id`,`created_at`,`updated_at`,`created_by_id`,`destinatario_id`,`estado_id`,`updated_by_id`) VALUES 
-( '2', '2023-08-05 19:15:26.843541', '2023-08-09 02:08:23.254499', '1', '3780', '758', NULL );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "destinatarios" ----------------------------
-BEGIN;
-
-INSERT INTO `destinatarios`(`id`,`created_at`,`updated_at`,`created_by_id`,`updated_by_id`,`persona_id`,`estado_id`) VALUES 
-( '3780', '2023-07-18 00:06:27.321321', '2023-07-18 00:06:27.322911', '1', NULL, '2937', '596' ),
-( '3781', '2023-07-19 16:03:04.568250', '2023-07-19 16:03:04.568250', '1', NULL, '2938', '596' );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "django_admin_log" -------------------------
--- ----------------------
-
-
--- Dump data of "django_celery_beat_clockedschedule" -------
--- ----------------------
-
-
--- Dump data of "django_celery_beat_crontabschedule" -------
--- ----------------------
-
-
--- Dump data of "django_celery_beat_intervalschedule" ------
--- ----------------------
-
-
--- Dump data of "django_celery_beat_periodictask" ----------
--- ----------------------
-
-
--- Dump data of "django_celery_beat_periodictasks" ---------
--- ----------------------
-
-
--- Dump data of "django_celery_beat_solarschedule" ---------
--- ----------------------
-
-
--- Dump data of "django_content_type" ----------------------
-BEGIN;
-
-INSERT INTO `django_content_type`(`id`,`app_label`,`model`) VALUES 
-( '1', 'admin', 'logentry' ),
-( '3', 'auth', 'group' ),
-( '2', 'auth', 'permission' ),
-( '4', 'auth', 'user' ),
-( '5', 'contenttypes', 'contenttype' ),
-( '20', 'django_celery_beat', 'clockedschedule' ),
-( '15', 'django_celery_beat', 'crontabschedule' ),
-( '16', 'django_celery_beat', 'intervalschedule' ),
-( '17', 'django_celery_beat', 'periodictask' ),
-( '18', 'django_celery_beat', 'periodictasks' ),
-( '19', 'django_celery_beat', 'solarschedule' ),
-( '8', 'mensajeria', 'archivos' ),
-( '13', 'mensajeria', 'chatgroup' ),
-( '21', 'mensajeria', 'conversaciones' ),
-( '7', 'mensajeria', 'destinatarios' ),
-( '9', 'mensajeria', 'maestras' ),
-( '12', 'mensajeria', 'mensajeria' ),
-( '11', 'mensajeria', 'modulos' ),
-( '10', 'mensajeria', 'personas' ),
-( '14', 'mensajeria', 'peticion' ),
-( '6', 'sessions', 'session' );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "django_migrations" ------------------------
-BEGIN;
-
-INSERT INTO `django_migrations`(`id`,`app`,`name`,`applied`) VALUES 
-( '1', 'contenttypes', '0001_initial', '2023-07-14 13:30:39.717634' ),
-( '2', 'auth', '0001_initial', '2023-07-14 13:30:40.066747' ),
-( '3', 'admin', '0001_initial', '2023-07-14 13:30:40.169068' ),
-( '4', 'admin', '0002_logentry_remove_auto_add', '2023-07-14 13:30:40.177387' ),
-( '5', 'admin', '0003_logentry_add_action_flag_choices', '2023-07-14 13:30:40.187016' ),
-( '6', 'contenttypes', '0002_remove_content_type_name', '2023-07-14 13:30:40.270904' ),
-( '7', 'auth', '0002_alter_permission_name_max_length', '2023-07-14 13:30:40.321173' ),
-( '8', 'auth', '0003_alter_user_email_max_length', '2023-07-14 13:30:40.355243' ),
-( '9', 'auth', '0004_alter_user_username_opts', '2023-07-14 13:30:40.365902' ),
-( '10', 'auth', '0005_alter_user_last_login_null', '2023-07-14 13:30:40.420336' ),
-( '11', 'auth', '0006_require_contenttypes_0002', '2023-07-14 13:30:40.444703' ),
-( '12', 'auth', '0007_alter_validators_add_error_messages', '2023-07-14 13:30:40.455232' ),
-( '13', 'auth', '0008_alter_user_username_max_length', '2023-07-14 13:30:40.596423' ),
-( '14', 'auth', '0009_alter_user_last_name_max_length', '2023-07-14 13:30:41.132522' ),
-( '15', 'auth', '0010_alter_group_name_max_length', '2023-07-14 13:30:41.278543' ),
-( '16', 'auth', '0011_update_proxy_permissions', '2023-07-14 13:30:41.320738' ),
-( '17', 'auth', '0012_alter_user_first_name_max_length', '2023-07-14 13:30:41.872811' ),
-( '18', 'mensajeria', '0001_initial', '2023-07-14 13:30:42.047643' ),
-( '19', 'sessions', '0001_initial', '2023-07-14 13:30:42.083793' ),
-( '20', 'mensajeria', '0002_maestras_remove_destinatarios_celular_and_more', '2023-07-16 02:11:53.678344' ),
-( '21', 'mensajeria', '0003_alter_personas_identificacion_alter_personas_sexo_and_more', '2023-07-16 02:14:18.518924' ),
-( '22', 'mensajeria', '0004_destinatarios_estado', '2023-07-16 04:07:32.857784' ),
-( '23', 'mensajeria', '0005_chatgroup', '2023-07-16 14:29:55.378402' ),
-( '24', 'mensajeria', '0006_delete_chatgroup', '2023-07-16 14:32:30.182634' ),
-( '25', 'mensajeria', '0007_alter_mensajeria_celular_and_more', '2023-07-17 01:11:01.125272' ),
-( '26', 'mensajeria', '0008_mensajeria_destinatarios_id', '2023-07-17 01:13:53.530396' ),
-( '27', 'mensajeria', '0009_rename_destinatarios_id_mensajeria_destinatario', '2023-07-17 01:14:36.892389' ),
-( '28', 'mensajeria', '0010_peticion', '2023-07-17 01:45:31.094574' ),
-( '29', 'mensajeria', '0011_alter_peticion_estado', '2023-07-17 03:10:54.899771' ),
-( '30', 'mensajeria', '0012_mensajeria_texto', '2023-07-17 03:19:44.152872' ),
-( '31', 'mensajeria', '0013_mensajeria_tipo', '2023-07-17 22:16:35.457781' ),
-( '32', 'mensajeria', '0014_mensajeria_multimedia', '2023-07-17 22:22:54.917223' ),
-( '33', 'mensajeria', '0015_rename_multimedia_mensajeria_sha256_and_more', '2023-07-17 22:38:53.764413' ),
-( '34', 'mensajeria', '0016_mensajeria_mime_type_alter_mensajeria_multimedia_id_and_more', '2023-07-17 22:46:01.458674' ),
-( '35', 'django_celery_beat', '0001_initial', '2023-07-19 15:39:43.898719' ),
-( '36', 'django_celery_beat', '0002_auto_20161118_0346', '2023-07-19 15:39:44.050984' ),
-( '37', 'django_celery_beat', '0003_auto_20161209_0049', '2023-07-19 15:39:44.127136' ),
-( '38', 'django_celery_beat', '0004_auto_20170221_0000', '2023-07-19 15:39:44.133029' ),
-( '39', 'django_celery_beat', '0005_add_solarschedule_events_choices', '2023-07-19 15:39:44.142844' ),
-( '40', 'django_celery_beat', '0006_auto_20180322_0932', '2023-07-19 15:39:44.265083' ),
-( '41', 'django_celery_beat', '0007_auto_20180521_0826', '2023-07-19 15:39:44.397321' ),
-( '42', 'django_celery_beat', '0008_auto_20180914_1922', '2023-07-19 15:39:44.431672' ),
-( '43', 'django_celery_beat', '0006_auto_20180210_1226', '2023-07-19 15:39:44.467843' ),
-( '44', 'django_celery_beat', '0006_periodictask_priority', '2023-07-19 15:39:44.568345' ),
-( '45', 'django_celery_beat', '0009_periodictask_headers', '2023-07-19 15:39:44.672162' ),
-( '46', 'django_celery_beat', '0010_auto_20190429_0326', '2023-07-19 15:39:44.776961' ),
-( '47', 'django_celery_beat', '0011_auto_20190508_0153', '2023-07-19 15:39:44.912716' ),
-( '48', 'django_celery_beat', '0012_periodictask_expire_seconds', '2023-07-19 15:39:45.019107' ),
-( '49', 'django_celery_beat', '0013_auto_20200609_0727', '2023-07-19 15:39:45.028725' ),
-( '50', 'django_celery_beat', '0014_remove_clockedschedule_enabled', '2023-07-19 15:39:45.065016' ),
-( '51', 'django_celery_beat', '0015_edit_solarschedule_events_choices', '2023-07-19 15:39:45.074557' ),
-( '52', 'django_celery_beat', '0016_alter_crontabschedule_timezone', '2023-07-19 15:39:45.089109' ),
-( '53', 'django_celery_beat', '0017_alter_crontabschedule_month_of_year', '2023-07-19 15:39:45.101603' ),
-( '54', 'django_celery_beat', '0018_improve_crontab_helptext', '2023-07-19 15:39:45.110126' ),
-( '55', 'mensajeria', '0017_rename_timestamp_mensajeria_timestamp_w', '2023-07-19 20:58:54.299165' ),
-( '56', 'mensajeria', '0018_mensajeria_link', '2023-07-22 18:05:51.227529' ),
-( '57', 'mensajeria', '0019_mensajeria_filename', '2023-07-29 20:42:47.649606' ),
-( '58', 'mensajeria', '0020_mensajeria_voice', '2023-07-29 22:51:55.947438' ),
-( '59', 'mensajeria', '0021_alter_mensajeria_voice', '2023-07-29 22:53:43.371555' ),
-( '60', 'mensajeria', '0022_mensajeria_context_from_mensajeria_context_id', '2023-07-30 15:19:31.580852' ),
-( '61', 'mensajeria', '0023_conversaciones', '2023-08-05 18:09:47.660524' ),
-( '62', 'mensajeria', '0024_alter_mensajeria_conversacion_id', '2023-08-05 18:23:18.384678' ),
-( '63', 'mensajeria', '0025_rename_conversacion_id_mensajeria_conversacion', '2023-08-05 18:38:56.376977' ),
-( '64', 'mensajeria', '0026_alter_destinatarios_persona', '2023-08-05 18:43:41.026686' ),
-( '65', 'mensajeria', '0027_alter_conversaciones_destinatario', '2023-08-05 18:44:00.477311' ),
-( '66', 'mensajeria', '0028_alter_personas_telefonomovil_and_more', '2023-08-05 19:08:24.002473' );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "django_session" ---------------------------
-BEGIN;
-
-INSERT INTO `django_session`(`session_key`,`session_data`,`expire_date`) VALUES 
-( 'd2cpnya08au5hvn1e71paahed6ie0rhm', '.eJxVjDkOwjAUBe_iGlnenVDScwbLfzEOIEeKkwpxd4iUAto3M-8lUt7WmrbOS5pInIUWp98NMj647YDuud1miXNblwnkrsiDdnmdiZ-Xw_07qLnXbz2yN8WAhxzI8qBLQRcBvGIb9cCaOCqMENgFO1pUCA4LU1FgvArBiPcHAoc4iw:1qMrZf:4Mdum-KyBOnXleZSVl9ltu874KpIOJvcy9T2Tb9cPiY', '2023-08-04 14:57:43.713320' ),
-( 'fqa3x308fczyzsl9nvln946fdxddch9v', '.eJxVjDkOwjAUBe_iGlnenVDScwbLfzEOIEeKkwpxd4iUAto3M-8lUt7WmrbOS5pInIUWp98NMj647YDuud1miXNblwnkrsiDdnmdiZ-Xw_07qLnXbz2yN8WAhxzI8qBLQRcBvGIb9cCaOCqMENgFO1pUCA4LU1FgvArBiPcHAoc4iw:1qSLkD:_0r3nZbYhYPHQ7QwASq6PylRdx7xkFf51JgJhlqJoYs', '2023-08-19 18:11:17.763055' ),
-( 'rj2kcpd6fcsgpol15vebuvjh7omm25tj', '.eJxVjDkOwjAUBe_iGlnenVDScwbLfzEOIEeKkwpxd4iUAto3M-8lUt7WmrbOS5pInIUWp98NMj647YDuud1miXNblwnkrsiDdnmdiZ-Xw_07qLnXbz2yN8WAhxzI8qBLQRcBvGIb9cCaOCqMENgFO1pUCA4LU1FgvArBiPcHAoc4iw:1qMqvZ:QVkU4F05ZImercs6nb8_uJ8H1R6ueFdVItLh5TfGF9w', '2023-08-04 14:16:17.406616' );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "maestras" ---------------------------------
-BEGIN;
-
-INSERT INTO `maestras`(`id`,`codigo`,`nombre`,`jerarquia`,`orden`,`visible`,`observacion`,`created_at`,`updated_at`,`deleted_at`,`deleted_by`,`created_by_id`,`padre_id`,`updated_by_id`) VALUES 
-( '1', 'LIS_TIPOTABLAS', 'TIPOS DE TABLAS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '2', 'LIS_MODULOS', 'MODULOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '3', 'LIS_ROLES', 'ROLES', '2', NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '4', 'LIS_VISTAS', 'VISTAS', '3', NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '5', 'LIS_PERFILES', 'PERFILES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '6', NULL, 'SEGURIDAD', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '2', NULL ),
-( '7', NULL, 'ADMINISTRADOR', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '5', NULL ),
-( '8', 'LIS_TIPOSIDENTIFICACIONES', 'TIPOS DE IDENTIFICACIONES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '9', 'TI', 'TARJETA DE IDENTIDAD', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '8', NULL ),
-( '10', 'CC', 'CEDULA DE CIUDADANIA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '8', NULL ),
-( '11', 'NI', 'NIT', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '8', NULL ),
-( '12', 'MS', 'MENOR SIN IDENTIFICACION', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '8', NULL ),
-( '13', 'AS', 'ADULTO SIN IDENTIFICACION', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '8', NULL ),
-( '14', 'CE', 'CEDULA DE EXTRANJERIA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '8', NULL ),
-( '15', 'RC', 'REGISTRO CIVIL', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '8', NULL ),
-( '16', 'LIS_TIPOSCONTRATOS', 'TIPOS CONTRATOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '17', '1', 'CAPITADO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '16', NULL ),
-( '18', '2', 'POR EVENTO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '16', NULL ),
-( '19', '3', 'POR CASO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '16', NULL ),
-( '20', 'LIS_SEXOS', 'SEXOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '21', 'M', 'MASCULINO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '20', NULL ),
-( '22', 'F', 'FEMENINO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '20', NULL ),
-( '23', 'ND', 'NO DEFINIDO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '20', NULL ),
-( '24', 'LIS_ESTADOSCIVILES', 'ESTADOS CIVILES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '25', NULL, 'SOLTERO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '24', NULL ),
-( '26', NULL, 'CASADO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '24', NULL ),
-( '27', NULL, 'UNION LIBRE', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '24', NULL ),
-( '28', NULL, 'DIVORCIADO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '24', NULL ),
-( '29', NULL, 'VIUDO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '24', NULL ),
-( '30', 'LIS_CARGOS', 'CARGOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '31', NULL, 'GERENTE', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '30', NULL ),
-( '32', NULL, 'VENDEDOR', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '30', NULL ),
-( '33', NULL, 'INVENTARIO', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '30', NULL ),
-( '34', NULL, 'CLIENTE', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '30', NULL ),
-( '35', NULL, 'AUXILIAR', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '30', NULL ),
-( '36', NULL, 'OTRO', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '30', NULL ),
-( '37', 'LIS_TIPOSANGRE', 'TIPOS DE SANGRE', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '38', NULL, 'A', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '37', NULL ),
-( '39', NULL, 'B', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '37', NULL ),
-( '40', NULL, 'O', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '37', NULL ),
-( '41', NULL, 'AB', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '37', NULL ),
-( '42', 'LIS_RH', 'RH', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '43', 'POSITIVO', '+', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '42', NULL ),
-( '44', 'NEGATIVO', '-', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '42', NULL ),
-( '45', 'LIS_NIVELESEDUCATIVOS', 'NIVELES EDUCATIVOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '46', NULL, 'PRIMARIA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '45', NULL ),
-( '47', NULL, 'SECUNDARIA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '45', NULL ),
-( '48', NULL, 'MEDIA TECNICA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '45', NULL ),
-( '49', NULL, 'TECNICO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '45', NULL ),
-( '50', NULL, 'UNIVERSITARIO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '45', NULL ),
-( '51', NULL, 'OTRO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '45', NULL ),
-( '52', NULL, 'NO DEFINIDO (NINGUNO)', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '45', NULL ),
-( '53', 'LIS_ETNIAS', 'ETNIAS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '54', NULL, 'INDIGENA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '53', NULL ),
-( '55', NULL, 'ROM (GITANO)', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '53', NULL ),
-( '56', NULL, 'RAIZAL (ARCHIPIELAGO DE SAN ANDRES Y PROVIDENCIA)', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '53', NULL ),
-( '57', NULL, 'NINGUNO DE LOS ANTERIORES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '53', NULL ),
-( '58', 'LIS_RELIGIONES', 'RELIGIONES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '59', NULL, 'CATOLICA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '59', NULL ),
-( '60', NULL, 'EVANGELICA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '59', NULL ),
-( '61', NULL, 'PROTESTANTE', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '59', NULL ),
-( '62', NULL, 'NO SE TIENE INFORMACION', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '59', NULL ),
-( '63', 'LIS_GRUPOSPOBLACIONALES', 'GRUPOS POBLACIONALES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '64', NULL, 'HABITANTE DE LA CALLE', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '65', NULL, 'POBLACION INFANTIL A CARGO DEL ICBF', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '66', NULL, 'MADRES COMUNITARIAS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '67', NULL, 'CREADOR O GESTOR CULTURAL', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '68', NULL, 'POBLACION SISBENIZADA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '69', NULL, 'MENORES DESVINCULADOS DEL CONFICTO ARMADO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '70', NULL, 'POBLACION DISCAPACITADA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '71', NULL, 'POBLACION DESMOVILIZADA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '72', NULL, 'POBLACION EN CONDICION DE DESPLAZAMIENTO FORZADO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '73', NULL, 'POBLACION INFANTIL VULNERABLE', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '74', NULL, 'PROGRAMA EN PROTECCION A TESTIGOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '75', NULL, 'POBLACION EN CENTROS PSIQUIATRICOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '76', NULL, 'POBLACION RURAL MIGRATORIA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '77', NULL, 'POBLACION RECLUSA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '78', NULL, 'POBLACION RURAL NO MIGRATORIA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '79', NULL, 'COMUNIDADES INDIGENAS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '80', NULL, 'ROM (GITANOS)', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '81', NULL, 'NEGRO MULATO AFROCOLOMBIANO O AFRODESCENDIENTE', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '82', NULL, 'PALENQUERO DE SAN BACILIO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '83', NULL, 'POBLACION CARCELARIA DEL INPEC', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '64', NULL ),
-( '84', 'LIS_OCUPACONES', 'OCUPACIONES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '85', NULL, 'NO TENGO INFORMACION', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '86', NULL, 'FUERZAS MILITARES', '2', NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '87', NULL, 'OFICIALES DE LAS FUERZAS MILITARES', '3', NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '88', NULL, 'Oficiales de las Fuerzas Militares', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '89', NULL, 'Oficiales de las Fuerzas Militares', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '90', NULL, 'SUBOFICIALES DE LAS FUERZAS MILITARES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '91', NULL, 'Suboficiales de las Fuerzas Militares', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '92', NULL, 'Suboficiales de las Fuerzas Militares', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '93', NULL, 'OTROS MIEMBROS DE LAS FUERZAS MILITARES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '94', NULL, 'Otros miembros de las Fuerzas Militares', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '95', NULL, 'Otros miembros de las Fuerzas Militares', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '96', NULL, 'DIRECTORES Y GERENTES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '97', NULL, 'Directores formuladores de políticas y normas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '98', NULL, 'Directores del gobierno', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '99', NULL, 'Jefes de comunidades étnicas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '100', NULL, 'Directores y gerentes generales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '101', NULL, 'Directores y gerentes generales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '102', NULL, 'DIRECTORES ADMINISTRATIVOS Y COMERCIALES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '103', NULL, 'Directores de administración y servicios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '104', NULL, 'Directores financieros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '105', NULL, 'Directores de recursos humanos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '106', NULL, 'Directores de políticas y planeación', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '107', NULL, 'Directores de ventas y comercialización', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '108', NULL, 'Directores de publicidad y relaciones públicas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '109', NULL, 'Directores de investigación y desarrollo', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '110', NULL, 'Directores de producción de piscicultura y pesca', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '111', NULL, 'Directores de industrias manufactureras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '112', NULL, 'Directores de explotaciones de minería', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '113', NULL, 'Directores de empresas de construcción', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '114', NULL, 'Directores  y gerentes de servicios profesionales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '115', NULL, 'Directores de servicios de cuidados infantiles', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '116', NULL, 'Directores de servicios de salud', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '117', NULL, 'Directores  de servicios de bienestar social', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '118', NULL, 'Directores de servicios de educación', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '119', NULL, 'Gerentes de hoteles y restaurantes', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '120', NULL, 'Gerentes de hoteles', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '121', NULL, 'Gerentes de restaurantes', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '122', NULL, 'Gerentes de comercios al por mayor y al por menor', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '123', NULL, 'Gerentes de comercios al por mayor y al por menor', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '124', NULL, 'Otros gerentes de servicios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '125', NULL, 'PROFESIONALES, CIENTÍFICOS E INTELECTUALES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '126', NULL, 'PROFESIONALES DE LAS CIENCIAS Y DE LA INGENIERÍA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '127', NULL, 'Físicos, químicos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '128', NULL, 'Físicos y astrónomos ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '129', NULL, 'Meteorólogos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '130', NULL, 'Químicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '131', NULL, 'Geólogos y geofísicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '132', NULL, 'Matemáticos, actuarios y estadísticos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '133', NULL, 'Matemáticos, actuarios y estadísticos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '134', NULL, 'Profesionales en ciencias biológicas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '135', NULL, 'Biólogos, botánicos, zoólogos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '136', NULL, 'Agrónomos, silvicultores, zootecnistas y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '137', NULL, 'Profesionales de la protección medioambiental', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '138', NULL, 'Ingenieros industriales y de producción', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '139', NULL, 'Ingenieros civiles', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '140', NULL, 'Ingenieros medioambientales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '141', NULL, 'Ingenieros mecánicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '142', NULL, 'Ingenieros químicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '143', NULL, 'Ingenieros de minas, metalúrgicos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '144', NULL, 'Ingenieros en electrotecnología', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '145', NULL, 'Ingenieros electricistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '146', NULL, 'Ingenieros electrónicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '147', NULL, 'Ingenieros de telecomunicaciones', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '148', NULL, 'Arquitectos constructores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '149', NULL, 'Arquitectos paisajistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '150', NULL, 'Diseñadores de productos y de prendas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '151', NULL, 'Planificadores urbanos, regionales y de tránsito', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '152', NULL, 'Cartógrafos y topógrafos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '153', NULL, 'Diseñadores gráficos y multimedia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '154', NULL, 'PROFESIONALES DE LA SALUD', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '155', NULL, 'Médicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '156', NULL, 'Médicos generales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '157', NULL, 'Médicos especialistas ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '158', NULL, 'Profesionales de enfermería y de partería', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '159', NULL, 'Profesionales de enfermería', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '160', NULL, 'Profesionales de partería', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '161', NULL, 'Paramédicos e instrumentadores quirúrgicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '162', NULL, 'Paramédicos e instrumentadores quirúrgicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '163', NULL, 'Veterinarios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '164', NULL, 'Veterinarios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '165', NULL, 'Otros profesionales de la salud', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '166', NULL, 'Odontólogos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '167', NULL, 'Farmacéuticos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '168', NULL, 'Fisioterapeutas ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '169', NULL, 'Dietistas y nutricionistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '170', NULL, 'Fonoaudiólogos y terapeutas del lenguaje', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '171', NULL, 'Optómetras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '172', NULL, 'PROFESIONALES DE LA EDUCACIÓN', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '173', NULL, 'Profesores de instituciones de educación superior', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '174', NULL, 'Profesores de instituciones de educación superior', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '175', NULL, 'Profesores de formación profesional', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '176', NULL, 'Profesores de formación profesional', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '177', NULL, 'Profesores de educación secundaria', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '178', NULL, 'Profesores de educación secundaria', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '179', NULL, 'Profesores de educación primaria', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '180', NULL, 'Profesores de primera infancia ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '181', NULL, 'Otros profesionales de la educación', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '182', NULL, 'Especialistas en métodos pedagógicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '183', NULL, 'Profesores de educación especial e inclusiva', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '184', NULL, 'Otros profesores de idiomas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '185', NULL, 'Otros profesores de música', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '186', NULL, 'Otros profesores de artes', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '187', NULL, 'Instructores de tecnología de la información', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '188', NULL, 'PROFESIONALES DE NEGOCIOS Y DE ADMINISTRACIÓN', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '189', NULL, 'Profesionales en finanzas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '190', NULL, 'Contadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '191', NULL, 'Asesores financieros y de inversiones', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '192', NULL, 'Analistas financieros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '193', NULL, 'Profesionales de la administración', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '194', NULL, 'Analistas de gestión y organización', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '195', NULL, 'Profesionales en políticas de administración', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '196', NULL, 'Profesionales de gestión de talento humano', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '197', NULL, 'Profesionales de relaciones públicas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '198', NULL, 'Analistas de sistemas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '199', NULL, 'Desarrolladores de software', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '200', NULL, 'Desarrolladores web y multimedia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '201', NULL, 'Programadores de aplicaciones', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '202', NULL, 'Diseñadores y administradores de bases de datos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '203', NULL, 'Administradores de sistemas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '204', NULL, 'Profesionales en redes de computadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '205', NULL, 'Profesionales en derecho', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '206', NULL, 'Abogados', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '207', NULL, 'Jueces', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '208', NULL, 'Bibliotecarios, archivistas y curadores de arte', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '209', NULL, 'Archivistas y curadores de arte', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '210', NULL, 'Bibliotecarios, documentalistas y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '211', NULL, 'Profesionales en ciencias sociales y religiosas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '212', NULL, 'Economistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '213', NULL, 'Sociólogos, antropólogos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '214', NULL, 'Psicólogos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '215', NULL, 'Profesionales del trabajo social y consejeros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '216', NULL, 'Profesionales religiosos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '217', NULL, 'Autores, periodistas y lingúistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '218', NULL, 'Autores y otros escritores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '219', NULL, 'Periodistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '220', NULL, 'Traductores, intérpretes y otros lingúistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '221', NULL, 'Artistas creativos e interpretativos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '222', NULL, 'Escultores, pintores artísticos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '223', NULL, 'Compositores, músicos y cantantes', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '224', NULL, 'Coreógrafos y bailarines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '225', NULL, 'Actores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '226', NULL, 'TÉCNICOS Y PROFESIONALES DE NIVEL MEDIO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '227', NULL, 'Técnicos en ciencias físicas y en ingeniería', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '228', NULL, 'Técnicos en ciencias físicas y químicas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '229', NULL, 'Técnicos en ingeniería civil', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '230', NULL, 'Electrotécnicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '231', NULL, 'Técnicos en electrónica', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '232', NULL, 'Técnicos en ingeniería mecánica', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '233', NULL, 'Técnicos en química industrial', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '234', NULL, 'Técnicos de minas y metalurgia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '235', NULL, 'Delineantes y dibujantes técnicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '236', NULL, 'Supervisores de minas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '237', NULL, 'Supervisores de industrias manufactureras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '238', NULL, 'Supervisores de la construcción', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '239', NULL, 'Técnicos en control de procesos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '240', NULL, 'Operadores de plantas de producción de energía', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '241', NULL, 'Controladores de procesos de producción de metales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '242', NULL, 'Técnicos agropecuarios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '243', NULL, 'Técnicos forestales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '244', NULL, 'Oficiales maquinistas en navegación', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '245', NULL, 'Capitanes, oficiales de cubierta y prácticos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '246', NULL, 'Pilotos de aviación y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '247', NULL, 'Controladores de tráfico aéreo y marítimo', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '248', NULL, 'Técnicos en seguridad aeronáutica', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '249', NULL, 'Técnicos médicos y farmacéuticos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '250', NULL, 'Técnicos de laboratorios médicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL );
-
-INSERT INTO `maestras`(`id`,`codigo`,`nombre`,`jerarquia`,`orden`,`visible`,`observacion`,`created_at`,`updated_at`,`deleted_at`,`deleted_by`,`created_by_id`,`padre_id`,`updated_by_id`) VALUES 
-( '251', NULL, 'Técnicos y asistentes farmacéuticos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '252', NULL, 'Técnicos de prótesis médicas y dentales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '253', NULL, 'Técnicos y asistentes veterinarios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '254', NULL, 'Técnicos y asistentes veterinarios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '255', NULL, 'Higienistas y asistentes odontologícos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '256', NULL, 'Técnicos en documentación sanitaria', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '257', NULL, 'Trabajadores comunitarios de la salud', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '258', NULL, 'Técnicos en optometría y ópticas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '259', NULL, 'Técnicos y asistentes terapeutas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '260', NULL, 'Asistentes médicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '261', NULL, 'Técnicos en atención prehospitalaria', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '262', NULL, 'Pintores y empapeladores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '263', NULL, 'Analistas de préstamos y créditos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '264', NULL, 'Técnicos de contabilidad y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '265', NULL, 'Tasadores y evaluadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '266', NULL, 'Agentes comerciales y corredores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '267', NULL, 'Agentes de seguros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '268', NULL, 'Representantes comerciales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '269', NULL, 'Agentes de compras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '270', NULL, 'Agentes de servicios empresariales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '271', NULL, 'Declarantes o gestores de aduana', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '272', NULL, 'Organizadores de conferencias y eventos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '273', NULL, 'Agentes de empleo y contratistas de mano de obra', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '274', NULL, 'Agentes inmobiliarios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '275', NULL, 'Secretarios administrativos y especializados', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '276', NULL, 'Supervisores de oficina', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '277', NULL, 'Secretarios jurídicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '278', NULL, 'Secretarios administrativos y ejecutivos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '279', NULL, 'Secretarios médicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '280', NULL, 'Agentes de aduanas e inspectores de fronteras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '281', NULL, 'Agentes de administración tributaria', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '282', NULL, 'Agentes de servicios de seguridad social', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '283', NULL, 'Agentes gubernamentales de expedición de licencias', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '284', NULL, 'Inspectores de policía y detectives', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '285', NULL, 'Trabajadores y asistentes sociales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '286', NULL, 'Auxiliares laicos de las religiones', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '287', NULL, 'Entrenadores de deportes y aptitud física', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '288', NULL, 'Atletas y deportistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '289', NULL, 'Fotógrafos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '290', NULL, 'Diseñadores y decoradores de interiores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '291', NULL, 'Técnicos en galerías de arte, museos y bibliotecas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '292', NULL, 'Chefs', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '293', NULL, 'Técnicos en redes y sistemas de computación', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '294', NULL, 'Técnicos de la Web', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '295', NULL, 'Técnicos en telecomunicaciones y radiodifusión', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '296', NULL, 'Técnicos de radiodifusión y grabación audio visual', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '297', NULL, 'Técnicos de ingeniería de las telecomunicaciones', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '298', NULL, 'PERSONAL DE APOYO ADMINISTRATIVO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '299', NULL, 'OFICINISTAS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '300', NULL, 'Oficinistas generales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '301', NULL, 'Oficinistas generales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '302', NULL, 'Secretarios generales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '303', NULL, 'Secretarios generales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '304', NULL, 'Operadores de máquinas de oficina', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '305', NULL, 'Grabadores de datos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '306', NULL, 'EMPLEADOS DE TRATO DIRECTO CON EL PÃšBLICO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '307', NULL, 'Pagadores y cobradores de ventanilla y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '308', NULL, 'Cajeros de bancos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '309', NULL, 'Receptores de apuestas y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '310', NULL, 'Prestamistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '311', NULL, 'Cobradores y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '312', NULL, 'Barnizadores y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '313', NULL, 'Empleados de servicios de información al cliente', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '314', NULL, 'Empleados y consultores de viajes', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '315', NULL, 'Empleados de centros de llamadas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '316', NULL, 'Telefonistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '317', NULL, 'Recepcionistas de hoteles', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '318', NULL, 'Empleados de ventanillas de información', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '319', NULL, 'Recepcionistas generales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '320', NULL, 'Auxiliares contables y financieros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '321', NULL, 'Auxiliares de contabilidad y cálculo de costos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '322', NULL, 'Auxiliares encargados de las nóminas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '323', NULL, 'Empleados de servicios de apoyo a la producción', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '324', NULL, 'Empleados de servicios de transporte', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '325', NULL, 'Otro personal de apoyo administrativo', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '326', NULL, 'Otro personal de apoyo administrativo', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '327', NULL, 'Empleados de bibliotecas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '328', NULL, 'Empleados de servicios de correos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '329', NULL, 'Escribientes públicos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '330', NULL, 'Empleados de archivos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '331', NULL, 'Empleados del servicio de personal', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '332', NULL, 'TRABAJADORES DE LOS SERVICIOS PERSONALES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '333', NULL, 'Personal al servicio directo de los pasajeros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '334', NULL, 'Personal de servicio a pasajeros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '335', NULL, 'Revisores y cobradores de los transportes públicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '336', NULL, 'Guías', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '337', NULL, 'Cocineros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '338', NULL, 'Cocineros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '339', NULL, 'Meseros y bármanes', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '340', NULL, 'Meseros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '341', NULL, 'Bármanes', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '342', NULL, 'Peluqueros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '343', NULL, 'Especialistas en tratamientos de belleza y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '344', NULL, 'Mayordomos domésticos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '345', NULL, 'Conserjes y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '346', NULL, 'Otros trabajadores de servicios personales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '347', NULL, 'Astrólogos, adivinos y trabajadores afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '348', NULL, 'Acompañantes ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '349', NULL, 'Personal de servicios funerarios y embalsamadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '350', NULL, 'Cuidadores de animales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '351', NULL, 'Instructores de conducción', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '352', NULL, 'VENDEDORES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '353', NULL, 'Vendedores callejeros y de puestos de mercado ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '354', NULL, 'Vendedores en quioscos y puestos de mercado', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '355', NULL, 'Comerciantes de tiendas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '356', NULL, 'Supervisores de tiendas y almacenes', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '357', NULL, 'Otros vendedores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '358', NULL, 'Modelos de moda, arte y publicidad', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '359', NULL, 'Demostradores de tiendas, almacenes y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '360', NULL, 'Vendedores puerta a puerta ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '361', NULL, 'Vendedores a través de medios tecnolígicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '362', NULL, 'Expendedores de combustibles para vehículos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '363', NULL, 'Vendedores de comidas en mostrador ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '364', NULL, 'TRABAJADORES DE LOS CUIDADOS PERSONALES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '365', NULL, 'Cuidadores de niños y auxiliares de maestros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '366', NULL, 'Cuidadores de niños', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '367', NULL, 'Auxiliares de maestros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '368', NULL, 'PERSONAL DE LOS SERVICIOS DE PROTECCIÓN', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '369', NULL, 'Personal de los servicios de protecciín', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '370', NULL, 'Bomberos y rescatistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '371', NULL, 'Policías', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '372', NULL, 'Guardianes de prisiín', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '373', NULL, 'Guardias de seguridad', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '374', NULL, 'Trabajadores forestales calificados y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '375', NULL, 'Trabajadores forestales calificados y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '376', NULL, 'Pescadores, cazadores y tramperos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '377', NULL, 'Trabajadores de explotaciones de acuicultura', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '378', NULL, 'Pescadores de agua dulce y en aguas costeras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '379', NULL, 'Pescadores de alta mar', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '380', NULL, 'Cazadores y tramperos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '381', NULL, 'Trabajadores agrícolas de subsistencia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '382', NULL, 'Trabajadores agrícolas de subsistencia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '383', NULL, 'Trabajadores pecuarios de subsistencia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '384', NULL, 'Trabajadores pecuarios de subsistencia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '385', NULL, 'Trabajadores agropecuarios de subsistencia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '386', NULL, 'Trabajadores agropecuarios de subsistencia', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '387', NULL, 'Constructores de casas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '388', NULL, 'Albañiles', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '389', NULL, 'Labrantes, tronzadores y grabadores de piedra', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '390', NULL, 'Operarios en cemento armado, enfoscadores y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '391', NULL, 'Carpinteros de armar y de obra blanca', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '392', NULL, 'Techadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '393', NULL, 'Enchapadores, parqueteros y colocadores de suelos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '394', NULL, 'Revocadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '395', NULL, 'Cristaleros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '396', NULL, 'Fontaneros e instaladores de tuberías', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '397', NULL, 'Pintores, limpiadores de fachadas y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '398', NULL, 'Limpiadores de fachadas y deshollinadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '399', NULL, 'OFICIALES Y OPERARIOS DE LA METALURGIA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '400', NULL, 'Moldeadores y macheros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '401', NULL, 'Soldadores y oxicortadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '402', NULL, 'Chapistas y caldereros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '403', NULL, 'Montadores de estructuras metálicas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '404', NULL, 'Aparejadores y empalmadores de cables', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '405', NULL, 'Herreros, herramentistas y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '406', NULL, 'Herreros y forjadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '407', NULL, 'Herramentistas y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '408', NULL, 'Ajustadores y operadores de máquinas herramientas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '409', NULL, 'Pulidores de metales y afiladores de herramientas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '410', NULL, 'Mecánicos y reparadores de máquinas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '411', NULL, 'Mecánicos y reparadores de vehículos de motor', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '412', NULL, 'Reparadores de bicicletas y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '413', NULL, 'Fabricantes y afinadores de instrumentos musicales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '414', NULL, 'Se desagrega en 7361, 7362 y 7363 por adaptación', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '415', NULL, 'Alfareros y ceramistas (barro y arcilla)', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '416', NULL, 'Rotulistas, pintores decorativos y grabadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '417', NULL, 'Oficiales y operarios de las artes gráficas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '418', NULL, 'Preimpresores y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '419', NULL, 'Impresores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '420', NULL, 'Encuadernadores y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '421', NULL, 'Tejedores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '422', NULL, 'Tejedores con telares', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '423', NULL, 'Tejedores con agujas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '424', NULL, 'Otros tejedores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '425', NULL, 'Cesteros, mimbreros y sombrereros artesanales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '426', NULL, 'Cesteros y mimbreros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '427', NULL, 'Sombrereros artesanales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '428', NULL, 'Artesanos que realizan trabajos en madera', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '429', NULL, 'Tallador piezas artesanales de madera', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '430', NULL, 'Decoradores de piezas artesanales en madera', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '431', NULL, 'Joyeros, orfebres, plateros y bisuteros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '432', NULL, 'Joyeros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '433', NULL, 'Orfebres y plateros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '434', NULL, 'Bisutero', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '435', NULL, 'Artesanos del cuero', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '436', NULL, 'Artesanos del cuero', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '437', NULL, 'Artesanos de papel', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '438', NULL, 'Artesanos del hierro y otros metales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '439', NULL, 'Artesanos de las semillas y cortezas vegetales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '440', NULL, 'Instaladores y reparadores de equipos eléctricos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '441', NULL, 'Electricistas de obras y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '442', NULL, 'Ajustadores electricistas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '443', NULL, 'Instaladores y reparadores de líneas eléctricas ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '444', NULL, 'Ajustadores e instaladores en electrónica', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '445', NULL, 'Carniceros, pescaderos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '446', NULL, 'Panaderos, pasteleros y confiteros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '447', NULL, 'Operarios de la elaboración de productos lácteos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '448', NULL, 'Catadores y clasificadores de alimentos y bebidas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '449', NULL, 'Operarios del tratamiento de la madera', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '450', NULL, 'Oficiales y operarios de la confección y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '451', NULL, 'Sastres, modistos, peleteros y sombrereros', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '452', NULL, 'Patronistas y cortadores de tela, cuero y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '453', NULL, 'Costureros, bordadores y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '454', NULL, 'Tapiceros, colchoneros y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '455', NULL, 'Apelambradores, pellejeros y curtidores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '456', NULL, 'Zapateros y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '457', NULL, 'Otros oficiales, operarios y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '458', NULL, 'Buzos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '459', NULL, 'Dinamiteros y pegadores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '460', NULL, 'OPERADORES DE INSTALACIONES FIJAS Y MAQUINAS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '461', NULL, 'Mineros y operadores de instalaciones mineras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '462', NULL, 'Perforadores y sondistas de pozos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '463', NULL, 'Operadores de telares y otras máquinas tejedoras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '464', NULL, 'Operadores de máquinas de coser', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '465', NULL, 'Operadores de máquinas de lavandería', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '466', NULL, 'Operadores de máquinas de vapor y calderas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '467', NULL, 'ENSAMBLADORES ', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '468', NULL, 'Ensambladores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '469', NULL, 'Ensambladores de maquinaria mecánica', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '470', NULL, 'Ensambladores de equipos eléctricos y electrónicos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '471', NULL, 'Maquinistas de locomotoras y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '472', NULL, 'Maquinistas de locomotoras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '473', NULL, 'Guardafrenos, guardagujas y agentes de maniobras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '474', NULL, 'Conductores de motocicletas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '475', NULL, 'Se desagrega en 8323 y 8324 por adaptación', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '476', NULL, 'Conductores de camionetas y vehículos livianos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '477', NULL, 'Conductores de taxis', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '478', NULL, 'Conductores de camiones pesados y buses', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '479', NULL, 'Conductores de buses, microbuses y tranvías', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '480', NULL, 'Conductores de camiones y vehículos pesados', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '481', NULL, 'Operadores de maquinaria agrícola y forestal móvil', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '482', NULL, 'Operadores de grúas, aparatos elevadores y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '483', NULL, 'Operadores de montacargas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '484', NULL, 'Marineros de cubierta y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '485', NULL, 'Marineros de cubierta y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '486', NULL, 'OCUPACIONES ELEMENTALES', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '487', NULL, 'PERSONAL DOMESTICO Y DE ASEO', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '488', NULL, 'Personal doméstico', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '489', NULL, 'Lavanderos y planchadores manuales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '490', NULL, 'Lavadores de vehículos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '491', NULL, 'Limpiadores de ventanas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '492', NULL, 'Obreros y peones de explotaciones agrícolas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '493', NULL, 'Obreros y peones de explotaciones ganaderas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '494', NULL, 'Obreros y peones de explotaciones agropecuarias', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '495', NULL, 'Obreros y peones de jardinería y horticultura', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '496', NULL, 'Obreros y peones forestales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '497', NULL, 'Obreros y peones de pesca y acuicultura', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '498', NULL, 'Obreros y peones de la minería y la construcción', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '499', NULL, 'Obreros y peones de minas y canteras', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '500', NULL, 'Obreros y peones de obras públicas y mantenimiento', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL );
-
-INSERT INTO `maestras`(`id`,`codigo`,`nombre`,`jerarquia`,`orden`,`visible`,`observacion`,`created_at`,`updated_at`,`deleted_at`,`deleted_by`,`created_by_id`,`padre_id`,`updated_by_id`) VALUES 
-( '501', NULL, 'Obreros y peones de la construcción de edificios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '502', NULL, 'Obreros y peones de la industria manufacturera', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '503', NULL, 'Empacadores manuales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '504', NULL, 'Obreros y peones de transporte y almacenamiento', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '505', NULL, 'Obreros y peones de carga', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '506', NULL, 'Surtidores de estanterías', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '507', NULL, 'AYUDANTES DE PREPARACION DE ALIMENTOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '508', NULL, 'Ayudantes de preparación de alimentos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '509', NULL, 'Cocineros de comidas rápidas', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '510', NULL, 'Ayudantes de cocina', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '511', NULL, 'Trabajadores ambulantes de servicios y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '512', NULL, 'Trabajadores ambulantes de servicios y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '513', NULL, 'Recolectores de desechos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '514', NULL, 'Recolectores de basura y material reciclable', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '515', NULL, 'Clasificadores de desechos', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '516', NULL, 'Barrenderos y afines', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '517', NULL, 'Otras ocupaciones elementales', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '518', NULL, 'Mensajeros, mandaderos, maleteros y repartidores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '519', NULL, 'Personas que realizan trabajos varios', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '520', NULL, 'Se desagrega en 9625 y 9626 por adaptación', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '521', NULL, 'Acarreadores de agua y recolectores de leña', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '522', NULL, 'Lectores de medidores', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '523', NULL, 'SIN OCUPACION (NO APLICA)', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '524', NULL, 'Ama de casa', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '84', NULL ),
-( '525', 'LIS_REGIMES', 'REGIMENES', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '526', '1', 'CONTRIBUTIVO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '525', NULL ),
-( '527', '2', 'SUBSIDIADO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '525', NULL ),
-( '528', '3', 'VINCULADO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '525', NULL ),
-( '529', '4', 'PARTICULAR', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '525', NULL ),
-( '530', '5', 'OTRO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '525', NULL ),
-( '531', 'LIS_TIPOSEMPRESAS', 'TIPOS EMPRESAS', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '532', NULL, 'PRIVADA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '531', NULL ),
-( '533', NULL, 'PUBLICA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '531', NULL ),
-( '534', 'LIS_TIPOSAFILIADOS', 'TIPOS AFILIADOS', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '535', NULL, 'BENEFICIARIO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '534', NULL ),
-( '536', NULL, 'COTIZANTE / AFILIADO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '534', NULL ),
-( '537', 'LIS_PARENTEZCOS', 'PARENTEZCOS', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '538', NULL, 'MADRE', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '537', NULL ),
-( '539', NULL, 'PADRE', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '537', NULL ),
-( '540', NULL, 'HERMANO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '537', NULL ),
-( '541', NULL, 'TIO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '537', NULL ),
-( '542', NULL, 'ABUELO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '537', NULL ),
-( '543', NULL, 'PRIMO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '537', NULL ),
-( '544', NULL, 'OTRO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '537', NULL ),
-( '545', 'LIS_RANGOSALARIALES', 'RANGOS SALARIALES', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '546', NULL, 'RANGO 1', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '544', NULL ),
-( '547', NULL, 'RANGO 2', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '544', NULL ),
-( '548', NULL, 'RANGO 3', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '544', NULL ),
-( '549', 'LIS_ZONAS', 'ZONAS', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '550', 'U', 'URBANA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '549', NULL ),
-( '551', 'R', 'RURAL', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '549', NULL ),
-( '552', 'LIS_PAISES', 'PAISES', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '553', 'CO', 'COLOMBIA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '552', NULL ),
-( '554', 'VE', 'VENEZUELA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '552', NULL ),
-( '555', 'LIS_DEPARTAMENTOS', 'DEPARTAMENTOS', '552', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '556', 'GUA', 'LA GUAJIRA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '555', NULL ),
-( '557', 'ATL', 'ATLÁNTICO', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '555', NULL ),
-( '558', 'BOL', 'BOLÍVAR', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '555', NULL ),
-( '559', 'COR', 'CÓRDOBA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '555', NULL ),
-( '560', 'MAG', 'MAGDALENA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '555', NULL ),
-( '561', 'CES', 'CESAR', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '555', NULL ),
-( '562', 'SUC', 'SUCRE', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '555', NULL ),
-( '563', 'LIS_MUNICIPIOS', 'MUNICIPIOS', '555', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '564', NULL, 'RIOHACHA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '565', NULL, 'URUMITA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '566', NULL, 'VILLANUEVA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '567', NULL, 'URIBIA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '568', NULL, 'SAN JUAN DEL CESAR', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '569', NULL, 'MAICAO', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '570', NULL, 'LA JAGUA DEL PILAR', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '571', NULL, 'HATONUEVO', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '572', NULL, 'DIBULLA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '573', NULL, 'DISTRACCION', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '574', NULL, 'EL MOLINO', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '575', NULL, 'BARRANCAS', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '576', NULL, 'ALBANIA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '577', NULL, 'MANAURE', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '578', NULL, 'MAICAO', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '579', NULL, 'MONTERÍA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '580', NULL, 'VALLEDUPAR', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '581', NULL, 'FONSECA', '553', NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '556', NULL ),
-( '582', 'LIS_DISCAPACIDADES', 'DISCAPACIDADES', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '583', NULL, 'SENSORIAL', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '582', NULL ),
-( '584', NULL, 'PSICOSOCIAL', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '582', NULL ),
-( '585', NULL, 'COGNITIVA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '582', NULL ),
-( '586', NULL, 'MOTRIZ', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '582', NULL ),
-( '587', 'LIS_NIVELSISBEN', 'NIVELES SISBEN', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '588', '1', 'UNO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '587', NULL ),
-( '589', '2', 'DOS', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '587', NULL ),
-( '590', '3', 'TRES', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '587', NULL ),
-( '591', 'LIS_TIPOSNOTAS', 'TIPOS DE NOTAS PARA PACIENTES', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '592', NULL, 'BLOQUEADO INCUMPLIMIENTO DE CITA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '591', NULL ),
-( '593', NULL, 'BLOQUEADO DEBE CUOTA MODERADORA', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '591', NULL ),
-( '594', NULL, 'HABILITADO VACUNACION', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '591', NULL ),
-( '595', 'LIS_ESTADOS', 'ESTADOS', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '596', NULL, 'ACTIVO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '595', NULL ),
-( '597', NULL, 'SUSPENDIDO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '595', NULL ),
-( '598', NULL, 'RETIRADO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '595', NULL ),
-( '599', 'LIS_TIPOSFUNCIONARIOS', 'TIPOS DE FUNCIONARIO', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '600', NULL, 'PERMANENTE', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '599', NULL ),
-( '601', NULL, 'TEMPORAL', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '599', NULL ),
-( '602', 'LIS_TIPOSPUBLICACION', 'TIPOS PUBLICACION', NULL, NULL, '1', NULL, '2022-08-26 00:29:00.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '603', NULL, 'COMENTARIO', NULL, NULL, '1', NULL, '2022-08-26 00:42:35.000000', NULL, NULL, NULL, '1', '602', NULL ),
-( '604', NULL, 'PUBLICACION', NULL, NULL, '1', NULL, '2022-08-26 00:42:35.000000', NULL, NULL, NULL, '1', '602', NULL ),
-( '605', NULL, 'PREGUNTA', NULL, NULL, '1', NULL, '2022-08-26 00:42:35.000000', NULL, NULL, NULL, '1', '602', NULL ),
-( '606', NULL, 'RESPUESTA', NULL, NULL, '1', NULL, '2022-08-26 00:42:35.000000', NULL, NULL, NULL, '1', '602', NULL ),
-( '607', NULL, 'LABORATORIO DESCARGADO', NULL, NULL, '1', NULL, '2022-08-26 00:42:35.000000', NULL, NULL, NULL, '1', '602', NULL ),
-( '608', 'LIS_RESPUESTASINO', 'RESPUESTAS SI O NO', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '609', NULL, 'SI', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '608', NULL ),
-( '610', NULL, 'NO', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '608', NULL ),
-( '611', 'LIS_UNIDADESTIEMPO', 'UNIDADES TIEMPO', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '612', NULL, 'SEGUNDOS', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '611', NULL ),
-( '613', NULL, 'MINUTOS', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '611', NULL ),
-( '614', NULL, 'HORAS', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '611', NULL ),
-( '615', NULL, 'DIAS', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '611', NULL ),
-( '616', NULL, 'SEMANAS', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '611', NULL ),
-( '617', NULL, 'MESES', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '611', NULL ),
-( '618', NULL, 'AÑOS', NULL, NULL, '1', NULL, '2022-08-26 00:43:59.000000', NULL, NULL, NULL, '1', '611', NULL ),
-( '619', 'LIS_REACCIONES', 'REACCIONES', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '620', NULL, 'ME GUSTA', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '619', NULL ),
-( '621', NULL, 'ME ENCANTA', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '619', NULL ),
-( '622', NULL, 'ME DIVIERTE', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '619', NULL ),
-( '623', NULL, 'ME SORPRENDE', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '619', NULL ),
-( '624', NULL, 'ME ENTRISTECE', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '619', NULL ),
-( '625', NULL, 'ME ENOJO', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '619', NULL ),
-( '626', NULL, 'PROFESOR', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '5', NULL ),
-( '627', NULL, 'ESTUDIANTE', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '5', NULL ),
-( '628', NULL, 'PADRE', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '5', NULL ),
-( '629', 'LIS_TIPOSCAMPOS', 'TIPOS DE CAMPOS HTML', NULL, NULL, '1', NULL, '2022-08-26 00:44:56.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '664', 'text', 'Campos de textos', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '665', 'textarea ', 'Áreas de texto', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '666', 'search ', 'Campos de busqueda', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '667', 'tel ', 'Campos de telefono', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '668', 'url ', 'Campos de url', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '669', 'email ', 'Campos de email', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '670', 'date ', 'Campos de fecha', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '671', 'select', 'Combos de selección', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '672', 'hidden', 'Campos Ocultos', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '673', 'password', 'Contraseñas', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '674', 'checkbox', 'Checkbox', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '675', 'radio', 'Radios', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '676', 'image', 'Imágenes', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '677', 'file', 'Ficheros', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '678', 'button', 'Botones', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '679', 'submit', 'Botones de envío', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '680', 'reset', 'Botones de borrado', NULL, NULL, '1', NULL, '2022-08-26 00:48:29.000000', NULL, NULL, NULL, '1', '629', NULL ),
-( '681', 'LIS_TIPOMATERIA', 'TIPOS DE MATERIAS ESCOLARES', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '682', NULL, 'CIENCIAS NATURALES Y EDUCACIÓN AMBIENTAL', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '683', NULL, 'CIENCIAS SOCIALES', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '684', NULL, 'HISTORIA', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '685', NULL, 'GEOGRAFÍA', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '686', NULL, 'CONSTITUCIÓN POLÍTICA Y DEMOCRACIA', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '687', NULL, 'ARTÍSTICA Y CULTURAL', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '688', NULL, 'ÉTICA Y EN VALORES HUMANOS', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '689', NULL, 'EDUCACIÓN FÍSICA, RECREACIÓN Y DEPORTES', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '690', NULL, 'RELIGION', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '691', NULL, 'HUMANIDADES', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '692', NULL, 'LENGUA CASTELLANA', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '693', NULL, 'INGLES', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '694', NULL, 'IDIOMAS EXTRANJEROS', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '695', NULL, 'MATEMÁTICAS', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '696', NULL, 'TECNOLOGÍA E INFORMÁTICA', NULL, NULL, '1', NULL, '2022-08-26 01:10:49.000000', NULL, NULL, NULL, '1', '681', NULL ),
-( '697', 'LIST_GRADOS', 'GRADOS', NULL, NULL, '1', NULL, '2022-08-26 20:57:19.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '698', '', 'PRIMERO', NULL, NULL, '1', NULL, '2022-08-26 20:59:14.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '699', '', 'SEGUNDO', NULL, NULL, '1', NULL, '2022-08-26 21:01:15.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '700', '', 'TERCERO', NULL, NULL, '1', NULL, '2022-08-26 21:01:32.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '701', '', 'CUARTO', NULL, NULL, '1', NULL, '2022-08-26 21:01:32.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '702', '', 'QUINTO', NULL, NULL, '1', NULL, '2022-08-26 21:01:32.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '703', '', 'SEXTO', NULL, NULL, '1', NULL, '2022-08-26 21:01:32.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '704', '', 'SEPTIMO', NULL, NULL, '1', NULL, '2022-08-26 21:01:42.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '705', '', 'OCTAVO', NULL, NULL, '1', NULL, '2022-08-26 21:01:52.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '706', '', 'NOVENO', NULL, NULL, '1', NULL, '2022-08-26 21:02:17.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '707', '', 'DECIMO', NULL, NULL, '1', NULL, '2022-08-26 21:02:17.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '708', '', 'ONCE', NULL, NULL, '1', NULL, '2022-08-26 21:03:06.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '709', '', 'DOCE', NULL, NULL, '1', NULL, '2022-08-26 21:03:06.000000', NULL, NULL, NULL, '1', '697', NULL ),
-( '710', 'LIS_DIASEMANA', 'DIAS DE LA SEMANA', NULL, NULL, '1', NULL, '2022-08-28 02:40:47.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '711', NULL, 'LUNES', NULL, NULL, '1', NULL, '2022-08-28 02:41:42.000000', NULL, NULL, NULL, '1', '710', NULL ),
-( '712', NULL, 'MARTES', NULL, NULL, '1', NULL, '2022-08-28 02:41:42.000000', NULL, NULL, NULL, '1', '710', NULL ),
-( '713', NULL, 'MIERCOLES', NULL, NULL, '1', NULL, '2022-08-28 02:41:42.000000', NULL, NULL, NULL, '1', '710', NULL ),
-( '714', NULL, 'JUEVES', NULL, NULL, '1', NULL, '2022-08-28 02:41:42.000000', NULL, NULL, NULL, '1', '710', NULL ),
-( '715', NULL, 'VIERNES', NULL, NULL, '1', NULL, '2022-08-28 02:41:42.000000', NULL, NULL, NULL, '1', '710', NULL ),
-( '716', 'LIS_CORTES', 'CORTES', NULL, NULL, '1', NULL, '2022-09-01 22:29:49.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '717', NULL, 'PRIMER PERIODO', NULL, NULL, '1', NULL, '2022-09-01 22:31:41.000000', NULL, NULL, NULL, '1', '716', NULL ),
-( '718', NULL, 'SEGUNDO PERIODO', NULL, NULL, '1', NULL, '2022-09-01 22:31:41.000000', NULL, NULL, NULL, '1', '716', NULL ),
-( '719', NULL, 'TERCER PERIODO', NULL, NULL, '1', NULL, '2022-09-01 22:31:41.000000', NULL, NULL, NULL, '1', '716', NULL ),
-( '720', NULL, 'CUARTO PERIODO', NULL, NULL, '1', NULL, '2022-09-01 22:31:41.000000', NULL, NULL, NULL, '1', '716', NULL ),
-( '721', NULL, 'QUINTO PERIODO', NULL, NULL, '1', NULL, '2022-09-01 22:31:41.000000', NULL, NULL, NULL, '1', '716', NULL ),
-( '722', 'LIS_TIPOEVENTO', 'TIPO EVENTO', NULL, NULL, '1', NULL, '2022-09-01 22:31:41.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '723', NULL, 'PUBLICO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '722', NULL ),
-( '724', NULL, 'PRIVADO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '722', NULL ),
-( '725', NULL, 'GENERAL', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '722', NULL ),
-( '726', 'LIS_AREAS', 'LISTADO DE AREAS', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '1', NULL ),
-( '727', '', 'ADMINISTRATIVA', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '728', '', 'VENTAS', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '729', '', 'COMPRAS', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '730', '', 'DEVOLUCIONES', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '731', '', 'MARKETING', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '732', '', 'LOGISTICA', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '733', '', 'INVENTARIOS', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '734', '', 'FINANZAS', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '735', '', 'RECURSOS HUMANOS', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '736', '', 'INVESTIGACION Y DESARROLLO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '726', NULL ),
-( '737', 'LIS_TIPO_EMPLEADOS', 'TIPOS DE EMPLEADOS', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '1', NULL ),
-( '738', '', 'PLANTA', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '737', NULL ),
-( '739', '', 'PRESTADOR DE SERVICIOS', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '737', NULL ),
-( '740', '', 'TEMPORAL', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '737', NULL ),
-( '741', '', 'PRACTICANTE', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '2', '737', NULL ),
-( '742', 'LIS_TIPO_ESTADOS_MENSAJES', 'TIPOS DE ESTADOS MENSAJES', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '743', '', 'PENDIENTE', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '742', NULL ),
-( '744', '', 'ENVIADO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '742', NULL ),
-( '745', '', 'ENTREGADO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '742', NULL ),
-( '746', '', 'LEIDO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '742', NULL ),
-( '747', 'LIS_TIPO_MENSAJES', 'TIPOS DE MENSAJES', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '748', '', 'TEXTO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '749', '', 'REACION', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '750', '', 'IMAGEN', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '751', '', 'DESCONOCIDO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '752', '', 'UBICACION', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '753', '', 'CONTACTO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '754', '', 'TEMPLATE', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '755', '', 'VIDEO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '756', '', 'DOCUMENTO', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '747', NULL ),
-( '757', 'LIS_TIPO_ESTADO_CONVERSACION', 'ESTADOS CONVERSACION', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '758', '', 'ACTIVA', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '757', NULL ),
-( '759', '', 'ARCHIVADA', NULL, NULL, '1', NULL, '2022-09-27 00:51:18.000000', NULL, NULL, NULL, '1', '757', NULL );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "mensajeria" -------------------------------
-BEGIN;
-
-INSERT INTO `mensajeria`(`id`,`mensaje_id`,`recipiente_id`,`conversacion_id`,`origin`,`timestamp_w`,`celular`,`created_at`,`updated_at`,`created_by_id`,`estado_id`,`updated_by_id`,`destinatario_id`,`texto`,`tipo_id`,`sha256`,`multimedia_id`,`mime_type`,`link`,`filename`,`voice`,`context_from`,`context_id`) VALUES 
-( '273', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMkIzN0IyMTVCN0QzQjcwQjc0M0E1MUJDRDc4NEFGQ0QA', '573042115334', '2', NULL, '1691541036', '573042115334', '2023-08-09 00:30:37.526686', '2023-08-09 00:30:37.526686', NULL, '746', NULL, NULL, 'Hola', '748', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '274', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzM0RUYyQkE5RjJGNTc4RDcyAA==', '573042115334', '2', NULL, '1691541049', '573042115334', '2023-08-09 00:30:47.822744', '2023-08-09 00:30:49.996595', '1', '745', NULL, '3780', NULL, NULL, NULL, NULL, 'image/jpeg', 'static/temp/20230808_193046.jpg', NULL, NULL, NULL, NULL ),
-( '278', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDAzOUUyMzJBREQ5RENBMzY4AA==', '573042115334', '2', NULL, '1691541655', '573042115334', '2023-08-09 00:40:55.275849', '2023-08-09 00:40:56.421705', '1', '745', NULL, '3780', 'Hola', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '279', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggQkJBNkJEOUQ1Rjk1RDE3M0Q4ODAxODk1MUYyQkU1MkIA', '573042115334', '2', NULL, '1691542621', '573042115334', '2023-08-09 00:57:03.630661', '2023-08-09 00:57:04.959550', NULL, '746', NULL, NULL, NULL, '750', 'PScjhKexFpb5O6ByfQf41mkzY//w2uMUeL0zWvN1P10=', '261466763406626', 'image/jpeg', 'static/temp/6f26b6df11ed116c053b6d976b535747.jpeg', NULL, NULL, NULL, NULL ),
-( '280', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDFFQTQ5NUMzRDVDMzM5MjE1OENCNjFBREY2NUI2RUEA', '573042115334', '2', NULL, '1691543552', '573042115334', '2023-08-09 01:12:32.936006', '2023-08-09 01:12:32.936006', NULL, '746', NULL, NULL, 'Hola', '748', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '281', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMzQ4RERBNzI4MjE2ODBGRkEzN0E5QjE2MTc1QkVBNjgA', '573042115334', '2', NULL, '1691543629', '573042115334', '2023-08-09 01:13:49.691291', '2023-08-09 01:13:49.691291', NULL, '746', NULL, NULL, '.Hola', '748', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '282', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMTQ0MEM3QUE0OTM1NkMyOEQ5NkJBODg4OUQyMjdEQTgA', '573042115334', '2', NULL, '1691543650', '573042115334', '2023-08-09 01:14:11.010005', '2023-08-09 01:14:11.010005', NULL, '746', NULL, NULL, '.', '748', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '283', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMjFFNEE2RTE1ODZGMzQ2MjZDNDE0OEEwRDIyQzQ4NDAA', '573042115334', '2', NULL, '1691543695', '573042115334', '2023-08-09 01:14:55.861562', '2023-08-09 01:14:55.861562', NULL, '746', NULL, NULL, '.....', '748', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '284', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDQ1OTlFMzg0RDk2OEU3Q0ExRTczRjk4NEY4REY0MzkA', '573042115334', '2', NULL, '1691543706', '573042115334', '2023-08-09 01:15:07.695405', '2023-08-09 01:15:07.695405', NULL, '746', NULL, NULL, 'Hola', '748', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '285', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOEZFMTkxNDIwNkVEQkNGQUUyAA==', '573042115334', '2', NULL, '1691543851', '573042115334', '2023-08-09 01:17:30.793406', '2023-08-09 01:17:32.135377', '1', '745', NULL, '3780', 'Hola', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '286', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDNEMkY2M0M2QzBCMjcwNjEwNzhEMjBEOUQxQzRBN0IA', '573042115334', '2', NULL, '1691544868', '573042115334', '2023-08-09 01:34:30.380599', '2023-08-09 01:34:31.636344', NULL, '746', NULL, NULL, NULL, '750', '/vFqJHo6649VXiufqv/wIAQ5P98qq0+hIS6LoyGyrpA=', '306709195083724', 'image/jpeg', 'static/temp/8f4075a3b0d2bf4b3e3995a7a7080c3f.jpeg', NULL, NULL, NULL, NULL ),
-( '287', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNDY4OTQ5OUU2NDAwQTFCNzVBAA==', '573042115334', '2', NULL, '1691544959', '573042115334', '2023-08-09 01:35:57.431169', '2023-08-09 01:36:00.245323', '1', '745', NULL, '3780', NULL, NULL, NULL, NULL, 'image/jpeg', 'static/temp/20230808_203556.jpg', NULL, NULL, NULL, NULL ),
-( '288', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMTU2N0ZERUVEOTVDMTEzRUM2AA==', '573042115334', '2', NULL, '1691545283', '573042115334', '2023-08-09 01:41:23.275552', '2023-08-09 01:41:24.352843', '1', '745', NULL, '3780', 'hola', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '289', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRUVEM0E3N0I0MDExODU4MDAxAA==', '573042115334', '2', NULL, '1691545291', '573042115334', '2023-08-09 01:41:29.696223', '2023-08-09 01:41:32.149868', '1', '745', NULL, '3780', NULL, NULL, NULL, NULL, 'image/jpeg', 'static/temp/20230808_204128.jpg', NULL, NULL, NULL, NULL ),
-( '290', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMDdEQTEyMDQ3RkVGN0Q2QjY5AA==', '573042115334', '2', NULL, '1691545306', '573042115334', '2023-08-09 01:41:46.204942', '2023-08-09 01:41:47.323797', '1', '745', NULL, '3780', 'hola', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '291', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggQUU2MjZGMkVDOTYxQTEwQzU4OEIxNzY1REE5NDZGQTUA', '573042115334', '2', NULL, '1691545757', '573042115334', '2023-08-09 01:49:20.431840', '2023-08-09 01:49:22.349300', NULL, '746', NULL, NULL, NULL, '755', 'qJ6GXJlQTvOKniQLZ+3dZPIVgF4mWwO1AtsWwKYqFTY=', '837519771050729', 'video/mp4', 'static/temp/a62821867a1d90966f4b50729cb308b8.mp4', NULL, NULL, NULL, NULL ),
-( '292', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggNzQ0QTc2Q0M1QUVFNDZCQjM3RTJDQTczODVERkUxQUEA', '573042115334', '2', NULL, '1691546469', '573042115334', '2023-08-09 02:01:11.885955', '2023-08-09 02:01:13.857190', NULL, '746', NULL, NULL, NULL, '755', 'DegOR/D0BcHcgDw7oYLhzFvKYVBmtLgQQnOrBeBNCLc=', '655534253296939', 'video/mp4', 'static/temp/82fae06ef6748019a07395d223e5c4b2.mp4', NULL, NULL, NULL, NULL ),
-( '293', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMENBNEE5NDFBOEExOTg0NTE1MDlDQTdCQTlEMjY4NjMA', '573042115334', '2', NULL, '1691546900', '573042115334', '2023-08-09 02:08:23.256562', '2023-08-09 02:08:24.697875', NULL, '746', NULL, NULL, NULL, '756', 'BOaFxAuWyLlzU5pkT2eOk7RGLvqp/ZcaEAJ6SEMj32g=', '288871103728020', 'application/pdf', 'static/temp/2.1.Artículo.pdf', '2.1. Artículo.pdf', NULL, NULL, NULL );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "modulos" ----------------------------------
--- ----------------------
-
-
--- Dump data of "personas" ---------------------------------
-BEGIN;
-
-INSERT INTO `personas`(`id`,`identificacion`,`lugarexpedicion`,`fechaexpedicion`,`direccion`,`telefono`,`telefonomovil`,`telefonowhatsapp`,`email`,`sendemail`,`fechanacimiento`,`nombre`,`segundonombre`,`apellido`,`segundoapellido`,`foto`,`barrio`,`observaciones`,`created_at`,`updated_at`,`deleted_at`,`deleted_by`,`ciudad_id`,`created_by_id`,`departamento_id`,`ocupacion_id`,`pais_id`,`sexo_id`,`tipoidentificacion_id`,`updated_by_id`,`zona_id`) VALUES 
-( '2937', NULL, NULL, NULL, NULL, NULL, '3042115334', '573042115334', NULL, '0', NULL, 'Yilberth', '', 'Galarza', '', NULL, NULL, NULL, '2023-07-18 00:06:27.316310', '2023-07-18 00:06:27.316310', NULL, NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
-( '2938', NULL, NULL, NULL, NULL, NULL, '3014582878', '573014582878', NULL, '0', NULL, 'Nelson', '', 'Borrego', '', NULL, NULL, NULL, '2023-07-19 16:03:04.563390', '2023-07-19 16:03:04.563390', NULL, NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL );
-COMMIT;
--- ----------------------
-
-
--- Dump data of "peticion" ---------------------------------
-BEGIN;
-
-INSERT INTO `peticion`(`id`,`estado`) VALUES 
-( '291', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQjJDRUQzQjY2NzE3OTE2MUZEAA==", "status": "failed", "timestamp": "1691456798", "recipient_id": "573042115334", "errors": [{"code": 131053, "title": "Media upload error", "message": "Media upload error", "error_data": {"details": "Downloading media from weblink failed with http code 404, status message Not Found"}}]}]}, "field": "messages"}]}]' ),
-( '292', 'Fallo' ),
-( '293', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQkQ5RkI2MTMzMUZDMDEyNUQzAA==", "status": "failed", "timestamp": "1691457142", "recipient_id": "573042115334", "errors": [{"code": 131053, "title": "Media upload error", "message": "Media upload error", "error_data": {"details": "Downloading media from weblink failed with http code 404, status message Not Found"}}]}]}, "field": "messages"}]}]' ),
-( '294', 'Fallo' ),
-( '295', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQ0M1QzJGM0Q2M0Y4NkZGRjlFAA==", "status": "sent", "timestamp": "1691457573", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '296', 'Fallo' ),
-( '297', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQ0M1QzJGM0Q2M0Y4NkZGRjlFAA==", "status": "delivered", "timestamp": "1691457573", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '298', 'Fallo' ),
-( '299', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNkE0QkQ0NjEyODFFMDY1MTM1AA==", "status": "sent", "timestamp": "1691458404", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '300', 'Fallo' ),
-( '301', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNkE0QkQ0NjEyODFFMDY1MTM1AA==", "status": "delivered", "timestamp": "1691458404", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '302', 'Fallo' ),
-( '303', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTU0Q0ZERTAyNkE2MjVCRkE2AA==", "status": "sent", "timestamp": "1691458490", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '304', 'Fallo' ),
-( '305', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTU0Q0ZERTAyNkE2MjVCRkE2AA==", "status": "delivered", "timestamp": "1691458490", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '306', 'Fallo' ),
-( '307', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQ0E0MkI2N0I5RDUxQzZCM0FDAA==", "status": "sent", "timestamp": "1691458669", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '308', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQ0E0MkI2N0I5RDUxQzZCM0FDAA==", "status": "delivered", "timestamp": "1691458670", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '309', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOUUwMEM2Q0Q4MkYwRDU1MzBDAA==", "status": "sent", "timestamp": "1691458941", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '310', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOUUwMEM2Q0Q4MkYwRDU1MzBDAA==", "status": "delivered", "timestamp": "1691458941", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '311', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOUY4NkFBNjMyQ0M2MzFDNDhCAA==", "status": "sent", "timestamp": "1691459049", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '312', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOUY4NkFBNjMyQ0M2MzFDNDhCAA==", "status": "delivered", "timestamp": "1691459049", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '313', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNEE2N0YyMTlFQTY2NDAyRDJBAA==", "status": "failed", "timestamp": "1691536768", "recipient_id": "573042115334", "errors": [{"code": 131053, "title": "Media upload error", "message": "Media upload error", "error_data": {"details": "Downloading media from weblink failed with http code 404, status message Not Found"}}]}]}, "field": "messages"}]}]' ),
-( '314', 'Fallo' ),
-( '315', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRjgwOTNCNDZCNUJDNjI3NDg2AA==", "status": "sent", "timestamp": "1691536971", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '316', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRjgwOTNCNDZCNUJDNjI3NDg2AA==", "status": "delivered", "timestamp": "1691536971", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '317', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNjFFRjRCNjQwMkZCMUYxRDhBAA==", "status": "sent", "timestamp": "1691537270", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '318', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNjFFRjRCNjQwMkZCMUYxRDhBAA==", "status": "delivered", "timestamp": "1691537270", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '319', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQjNFNjg3MTJCQzcyMzNDRERBAA==", "status": "delivered", "timestamp": "1691537412", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '320', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQjNFNjg3MTJCQzcyMzNDRERBAA==", "status": "sent", "timestamp": "1691537411", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '321', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzMyNjVFRkZGMTExNjA2ODY1AA==", "status": "sent", "timestamp": "1691537555", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '322', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzMyNjVFRkZGMTExNjA2ODY1AA==", "status": "delivered", "timestamp": "1691537557", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '323', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0EyNzVFMzA1MEMyMkE5MENGAA==", "status": "sent", "timestamp": "1691537659", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '324', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0EyNzVFMzA1MEMyMkE5MENGAA==", "status": "delivered", "timestamp": "1691537661", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '325', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSREY4MDA5OEFEMTRCRjRFRUY1AA==", "status": "sent", "timestamp": "1691537711", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '326', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSREY4MDA5OEFEMTRCRjRFRUY1AA==", "status": "delivered", "timestamp": "1691537712", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '327', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDhBRkI3RTE3NDFCMjgyNjU3AA==", "status": "sent", "timestamp": "1691537730", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '328', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDhBRkI3RTE3NDFCMjgyNjU3AA==", "status": "delivered", "timestamp": "1691537730", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '329', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNzdDRjRDNzYzMTIwQjg5NDIzAA==", "status": "sent", "timestamp": "1691538026", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "expiration_timestamp": "1691539800", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '330', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNzdDRjRDNzYzMTIwQjg5NDIzAA==", "status": "delivered", "timestamp": "1691538028", "recipient_id": "573042115334", "conversation": {"id": "c76692afedd664c6b0ef3af3d2fa56da", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '331', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMkIzN0IyMTVCN0QzQjcwQjc0M0E1MUJDRDc4NEFGQ0QA", "timestamp": "1691541036", "text": {"body": "Hola"}, "type": "text"}]}, "field": "messages"}]}]' ),
-( '332', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzM0RUYyQkE5RjJGNTc4RDcyAA==", "status": "sent", "timestamp": "1691541049", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '333', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzM0RUYyQkE5RjJGNTc4RDcyAA==", "status": "delivered", "timestamp": "1691541049", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '334', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRjJFMTc3OEQ4MUIxREI4QzNGAA==", "status": "sent", "timestamp": "1691541175", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '335', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRjJFMTc3OEQ4MUIxREI4QzNGAA==", "status": "delivered", "timestamp": "1691541176", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '336', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTBEN0M5RTgzRkRCOUY1NkE5AA==", "status": "sent", "timestamp": "1691541216", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '337', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTBEN0M5RTgzRkRCOUY1NkE5AA==", "status": "delivered", "timestamp": "1691541216", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '338', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRkZFNkI3RDJENEMwNjEwREM2AA==", "status": "delivered", "timestamp": "1691541268", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '339', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRkZFNkI3RDJENEMwNjEwREM2AA==", "status": "sent", "timestamp": "1691541268", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '340', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDAzOUUyMzJBREQ5RENBMzY4AA==", "status": "sent", "timestamp": "1691541655", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '341', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDAzOUUyMzJBREQ5RENBMzY4AA==", "status": "delivered", "timestamp": "1691541655", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '342', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggQkJBNkJEOUQ1Rjk1RDE3M0Q4ODAxODk1MUYyQkU1MkIA", "timestamp": "1691542621", "type": "image", "image": {"mime_type": "image/jpeg", "sha256": "PScjhKexFpb5O6ByfQf41mkzY//w2uMUeL0zWvN1P10=", "id": "261466763406626"}}]}, "field": "messages"}]}]' ),
-( '343', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDFFQTQ5NUMzRDVDMzM5MjE1OENCNjFBREY2NUI2RUEA", "timestamp": "1691543552", "text": {"body": "Hola"}, "type": "text"}]}, "field": "messages"}]}]' ),
-( '344', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMzQ4RERBNzI4MjE2ODBGRkEzN0E5QjE2MTc1QkVBNjgA", "timestamp": "1691543629", "text": {"body": ".Hola"}, "type": "text"}]}, "field": "messages"}]}]' ),
-( '345', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMTQ0MEM3QUE0OTM1NkMyOEQ5NkJBODg4OUQyMjdEQTgA", "timestamp": "1691543650", "text": {"body": "."}, "type": "text"}]}, "field": "messages"}]}]' ),
-( '346', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMjFFNEE2RTE1ODZGMzQ2MjZDNDE0OEEwRDIyQzQ4NDAA", "timestamp": "1691543695", "text": {"body": "....."}, "type": "text"}]}, "field": "messages"}]}]' ),
-( '347', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDQ1OTlFMzg0RDk2OEU3Q0ExRTczRjk4NEY4REY0MzkA", "timestamp": "1691543706", "text": {"body": "Hola"}, "type": "text"}]}, "field": "messages"}]}]' ),
-( '348', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOEZFMTkxNDIwNkVEQkNGQUUyAA==", "status": "sent", "timestamp": "1691543851", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '349', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOEZFMTkxNDIwNkVEQkNGQUUyAA==", "status": "delivered", "timestamp": "1691543851", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '350', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDNEMkY2M0M2QzBCMjcwNjEwNzhEMjBEOUQxQzRBN0IA", "timestamp": "1691544868", "type": "image", "image": {"mime_type": "image/jpeg", "sha256": "/vFqJHo6649VXiufqv/wIAQ5P98qq0+hIS6LoyGyrpA=", "id": "306709195083724"}}]}, "field": "messages"}]}]' ),
-( '351', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNDY4OTQ5OUU2NDAwQTFCNzVBAA==", "status": "sent", "timestamp": "1691544959", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '352', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNDY4OTQ5OUU2NDAwQTFCNzVBAA==", "status": "delivered", "timestamp": "1691544959", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '353', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMTU2N0ZERUVEOTVDMTEzRUM2AA==", "status": "sent", "timestamp": "1691545283", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '354', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMTU2N0ZERUVEOTVDMTEzRUM2AA==", "status": "delivered", "timestamp": "1691545283", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '355', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRUVEM0E3N0I0MDExODU4MDAxAA==", "status": "sent", "timestamp": "1691545291", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '356', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRUVEM0E3N0I0MDExODU4MDAxAA==", "status": "delivered", "timestamp": "1691545291", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '357', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMDdEQTEyMDQ3RkVGN0Q2QjY5AA==", "status": "sent", "timestamp": "1691545306", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "expiration_timestamp": "1691627460", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '358', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMDdEQTEyMDQ3RkVGN0Q2QjY5AA==", "status": "delivered", "timestamp": "1691545306", "recipient_id": "573042115334", "conversation": {"id": "9bb367673fbdf8774371516539f6ce74", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
-( '359', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggQUU2MjZGMkVDOTYxQTEwQzU4OEIxNzY1REE5NDZGQTUA", "timestamp": "1691545757", "type": "video", "video": {"mime_type": "video/mp4", "sha256": "qJ6GXJlQTvOKniQLZ+3dZPIVgF4mWwO1AtsWwKYqFTY=", "id": "837519771050729"}}]}, "field": "messages"}]}]' ),
-( '360', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggNzQ0QTc2Q0M1QUVFNDZCQjM3RTJDQTczODVERkUxQUEA", "timestamp": "1691546469", "type": "video", "video": {"mime_type": "video/mp4", "sha256": "DegOR/D0BcHcgDw7oYLhzFvKYVBmtLgQQnOrBeBNCLc=", "id": "655534253296939"}}]}, "field": "messages"}]}]' ),
-( '361', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMENBNEE5NDFBOEExOTg0NTE1MDlDQTdCQTlEMjY4NjMA", "timestamp": "1691546900", "type": "document", "document": {"filename": "2.1. Art\\u00edculo.pdf", "mime_type": "application/pdf", "sha256": "BOaFxAuWyLlzU5pkT2eOk7RGLvqp/ZcaEAJ6SEMj32g=", "id": "288871103728020"}}]}, "field": "messages"}]}]' );
-COMMIT;
--- ----------------------
-
-
--- CREATE INDEX "archivos_created_by_id_45f66317_fk_auth_user_id" 
-CREATE INDEX `archivos_created_by_id_45f66317_fk_auth_user_id` USING BTREE ON `archivos`( `created_by_id` );
-
-
--- CREATE INDEX "archivos_updated_by_id_69a44904_fk_auth_user_id" 
-CREATE INDEX `archivos_updated_by_id_69a44904_fk_auth_user_id` USING BTREE ON `archivos`( `updated_by_id` );
-
-
--- CREATE INDEX "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm" 
-CREATE INDEX `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` USING BTREE ON `auth_group_permissions`( `permission_id` );
-
-
--- CREATE INDEX "auth_user_groups_group_id_97559544_fk_auth_group_id" 
-CREATE INDEX `auth_user_groups_group_id_97559544_fk_auth_group_id` USING BTREE ON `auth_user_groups`( `group_id` );
-
-
--- CREATE INDEX "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm" 
-CREATE INDEX `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` USING BTREE ON `auth_user_user_permissions`( `permission_id` );
-
-
--- CREATE INDEX "conversaciones_created_by_id_014c1b6c_fk_auth_user_id" 
-CREATE INDEX `conversaciones_created_by_id_014c1b6c_fk_auth_user_id` USING BTREE ON `conversaciones`( `created_by_id` );
-
-
--- CREATE INDEX "conversaciones_estado_id_f313842a_fk_maestras_id" 
-CREATE INDEX `conversaciones_estado_id_f313842a_fk_maestras_id` USING BTREE ON `conversaciones`( `estado_id` );
-
-
--- CREATE INDEX "conversaciones_updated_by_id_182bbfbc_fk_auth_user_id" 
-CREATE INDEX `conversaciones_updated_by_id_182bbfbc_fk_auth_user_id` USING BTREE ON `conversaciones`( `updated_by_id` );
-
-
--- CREATE INDEX "destinatarios_created_by_id_06bab4f5_fk_auth_user_id" 
-CREATE INDEX `destinatarios_created_by_id_06bab4f5_fk_auth_user_id` USING BTREE ON `destinatarios`( `created_by_id` );
-
-
--- CREATE INDEX "destinatarios_estado_id_6746a127_fk_maestras_id" 
-CREATE INDEX `destinatarios_estado_id_6746a127_fk_maestras_id` USING BTREE ON `destinatarios`( `estado_id` );
-
-
--- CREATE INDEX "destinatarios_updated_by_id_d4b37cc3_fk_auth_user_id" 
-CREATE INDEX `destinatarios_updated_by_id_d4b37cc3_fk_auth_user_id` USING BTREE ON `destinatarios`( `updated_by_id` );
-
-
--- CREATE INDEX "django_admin_log_content_type_id_c4bce8eb_fk_django_co" 
-CREATE INDEX `django_admin_log_content_type_id_c4bce8eb_fk_django_co` USING BTREE ON `django_admin_log`( `content_type_id` );
-
-
--- CREATE INDEX "django_admin_log_user_id_c564eba6_fk_auth_user_id" 
-CREATE INDEX `django_admin_log_user_id_c564eba6_fk_auth_user_id` USING BTREE ON `django_admin_log`( `user_id` );
-
-
--- CREATE INDEX "django_celery_beat_p_clocked_id_47a69f82_fk_django_ce" 
-CREATE INDEX `django_celery_beat_p_clocked_id_47a69f82_fk_django_ce` USING BTREE ON `django_celery_beat_periodictask`( `clocked_id` );
-
-
--- CREATE INDEX "django_celery_beat_p_crontab_id_d3cba168_fk_django_ce" 
-CREATE INDEX `django_celery_beat_p_crontab_id_d3cba168_fk_django_ce` USING BTREE ON `django_celery_beat_periodictask`( `crontab_id` );
-
-
--- CREATE INDEX "django_celery_beat_p_interval_id_a8ca27da_fk_django_ce" 
-CREATE INDEX `django_celery_beat_p_interval_id_a8ca27da_fk_django_ce` USING BTREE ON `django_celery_beat_periodictask`( `interval_id` );
-
-
--- CREATE INDEX "django_celery_beat_p_solar_id_a87ce72c_fk_django_ce" 
-CREATE INDEX `django_celery_beat_p_solar_id_a87ce72c_fk_django_ce` USING BTREE ON `django_celery_beat_periodictask`( `solar_id` );
-
-
--- CREATE INDEX "django_session_expire_date_a5c62663" ----------
-CREATE INDEX `django_session_expire_date_a5c62663` USING BTREE ON `django_session`( `expire_date` );
-
-
--- CREATE INDEX "maestras_created_by_id_0d5f633f_fk_auth_user_id" 
-CREATE INDEX `maestras_created_by_id_0d5f633f_fk_auth_user_id` USING BTREE ON `maestras`( `created_by_id` );
-
-
--- CREATE INDEX "maestras_padre_id_efdba410_fk_maestras_id" ----
-CREATE INDEX `maestras_padre_id_efdba410_fk_maestras_id` USING BTREE ON `maestras`( `padre_id` );
-
-
--- CREATE INDEX "maestras_updated_by_id_6785499a_fk_auth_user_id" 
-CREATE INDEX `maestras_updated_by_id_6785499a_fk_auth_user_id` USING BTREE ON `maestras`( `updated_by_id` );
-
-
--- CREATE INDEX "mensajeria_conversacion_id_id_2a3cd020" -------
-CREATE INDEX `mensajeria_conversacion_id_id_2a3cd020` USING BTREE ON `mensajeria`( `conversacion_id` );
-
-
--- CREATE INDEX "mensajeria_created_by_id_0660a5f4_fk_auth_user_id" 
-CREATE INDEX `mensajeria_created_by_id_0660a5f4_fk_auth_user_id` USING BTREE ON `mensajeria`( `created_by_id` );
-
-
--- CREATE INDEX "mensajeria_destinatario_id_d20046d0_fk_destinatarios_id" 
-CREATE INDEX `mensajeria_destinatario_id_d20046d0_fk_destinatarios_id` USING BTREE ON `mensajeria`( `destinatario_id` );
-
-
--- CREATE INDEX "mensajeria_estado_id_8bce68b8_fk_maestras_id" -
-CREATE INDEX `mensajeria_estado_id_8bce68b8_fk_maestras_id` USING BTREE ON `mensajeria`( `estado_id` );
-
-
--- CREATE INDEX "mensajeria_tipo_id_226751bf_fk_maestras_id" ---
-CREATE INDEX `mensajeria_tipo_id_226751bf_fk_maestras_id` USING BTREE ON `mensajeria`( `tipo_id` );
-
-
--- CREATE INDEX "mensajeria_updated_by_id_9d97231f_fk_auth_user_id" 
-CREATE INDEX `mensajeria_updated_by_id_9d97231f_fk_auth_user_id` USING BTREE ON `mensajeria`( `updated_by_id` );
-
-
--- CREATE INDEX "modulos_created_by_id_682736db_fk_auth_user_id" 
-CREATE INDEX `modulos_created_by_id_682736db_fk_auth_user_id` USING BTREE ON `modulos`( `created_by_id` );
-
-
--- CREATE INDEX "modulos_dad_id_7911d8fa_fk_modulos_id" --------
-CREATE INDEX `modulos_dad_id_7911d8fa_fk_modulos_id` USING BTREE ON `modulos`( `dad_id` );
-
-
--- CREATE INDEX "modulos_estado_id_b131b6f8_fk_maestras_id" ----
-CREATE INDEX `modulos_estado_id_b131b6f8_fk_maestras_id` USING BTREE ON `modulos`( `estado_id` );
-
-
--- CREATE INDEX "modulos_updated_by_id_379626ca_fk_auth_user_id" 
-CREATE INDEX `modulos_updated_by_id_379626ca_fk_auth_user_id` USING BTREE ON `modulos`( `updated_by_id` );
-
-
--- CREATE INDEX "personas_ciudad_id_33741ae6_fk_maestras_id" ---
-CREATE INDEX `personas_ciudad_id_33741ae6_fk_maestras_id` USING BTREE ON `personas`( `ciudad_id` );
-
-
--- CREATE INDEX "personas_created_by_id_843eac77_fk_auth_user_id" 
-CREATE INDEX `personas_created_by_id_843eac77_fk_auth_user_id` USING BTREE ON `personas`( `created_by_id` );
-
-
--- CREATE INDEX "personas_departamento_id_57efcde3_fk_maestras_id" 
-CREATE INDEX `personas_departamento_id_57efcde3_fk_maestras_id` USING BTREE ON `personas`( `departamento_id` );
-
-
--- CREATE INDEX "personas_ocupacion_id_e546e79a_fk_maestras_id" 
-CREATE INDEX `personas_ocupacion_id_e546e79a_fk_maestras_id` USING BTREE ON `personas`( `ocupacion_id` );
-
-
--- CREATE INDEX "personas_pais_id_45bcdd53_fk_maestras_id" -----
-CREATE INDEX `personas_pais_id_45bcdd53_fk_maestras_id` USING BTREE ON `personas`( `pais_id` );
-
-
--- CREATE INDEX "personas_sexo_id_05557b10_fk_maestras_id" -----
-CREATE INDEX `personas_sexo_id_05557b10_fk_maestras_id` USING BTREE ON `personas`( `sexo_id` );
-
-
--- CREATE INDEX "personas_tipoidentificacion_id_319d71c0_fk_maestras_id" 
-CREATE INDEX `personas_tipoidentificacion_id_319d71c0_fk_maestras_id` USING BTREE ON `personas`( `tipoidentificacion_id` );
-
-
--- CREATE INDEX "personas_updated_by_id_7e6ba61e_fk_auth_user_id" 
-CREATE INDEX `personas_updated_by_id_7e6ba61e_fk_auth_user_id` USING BTREE ON `personas`( `updated_by_id` );
-
-
--- CREATE INDEX "personas_zona_id_0e8ab25d_fk_maestras_id" -----
-CREATE INDEX `personas_zona_id_0e8ab25d_fk_maestras_id` USING BTREE ON `personas`( `zona_id` );
-
-
--- CREATE LINK "archivos_created_by_id_45f66317_fk_auth_user_id" 
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `masiva`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `archivos`
+--
+
+CREATE TABLE `archivos` (
+  `id` bigint NOT NULL,
+  `nombre` varchar(650) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `descripcion` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `tipo` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `formato` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `dir` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `created_by_id` int NOT NULL,
+  `updated_by_id` int DEFAULT NULL,
+  `file` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `archivos`
+--
+
+INSERT INTO `archivos` (`id`, `nombre`, `descripcion`, `tipo`, `formato`, `dir`, `created_at`, `updated_at`, `created_by_id`, `updated_by_id`, `file`) VALUES
+(21, '', 'Hola', '', '.png', 'https://masivo.s3.amazonaws.com/hola.png?AWSAccessKeyId=AKIASBXVIQXOFSOJZYPV&Signature=q5Upswjdho0aCi1O3YTNRdUBvos%3D&Expires=1689785245', '2023-07-19 15:47:26', '2023-07-19 15:47:26', 1, NULL, ''),
+(22, '', '', '', '.jpg', 'archivos/20230807_192937.jpg', '2023-08-08 00:29:38', '2023-08-08 00:29:38', 1, NULL, ''),
+(23, '', '', '', '.jpg', 'temp/20230807_194610.jpg', '2023-08-08 00:46:11', '2023-08-08 00:46:11', 1, NULL, ''),
+(24, '', '', '', '.jpg', 'temp/20230807_194646.jpg', '2023-08-08 00:46:46', '2023-08-08 00:46:46', 1, NULL, ''),
+(25, '', '', '', '.jpg', 'temp/20230807_194903.jpg', '2023-08-08 00:49:04', '2023-08-08 00:49:04', 1, NULL, ''),
+(26, '', '', '', '.jpg', 'temp/20230807_194931.jpg', '2023-08-08 00:49:32', '2023-08-08 00:49:32', 1, NULL, ''),
+(27, '', '', '', '.jpg', 'temp/20230807_195955.jpg', '2023-08-08 00:59:55', '2023-08-08 00:59:55', 1, NULL, ''),
+(28, '', '', '', '.jpg', 'temp/20230807_200046.jpg', '2023-08-08 01:00:47', '2023-08-08 01:00:47', 1, NULL, ''),
+(29, '', '', '', '.jpg', 'temp/20230807_200131.jpg', '2023-08-08 01:01:32', '2023-08-08 01:01:32', 1, NULL, ''),
+(30, '', '', '', '.jpg', 'temp/20230807_200609.jpg', '2023-08-08 01:06:10', '2023-08-08 01:06:10', 1, NULL, ''),
+(31, '', '', '', '.jpg', 'temp/20230807_200635.jpg', '2023-08-08 01:06:35', '2023-08-08 01:06:35', 1, NULL, ''),
+(32, '', '', '', '.jpg', 'temp/20230807_201220.jpg', '2023-08-08 01:12:20', '2023-08-08 01:12:20', 1, NULL, ''),
+(33, '', '', '', '.jpg', 'temp/20230807_201930.jpg', '2023-08-08 01:19:31', '2023-08-08 01:19:31', 1, NULL, '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auth_group`
+--
+
+CREATE TABLE `auth_group` (
+  `id` int NOT NULL,
+  `name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auth_group_permissions`
+--
+
+CREATE TABLE `auth_group_permissions` (
+  `id` bigint NOT NULL,
+  `group_id` int NOT NULL,
+  `permission_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auth_permission`
+--
+
+CREATE TABLE `auth_permission` (
+  `id` int NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `content_type_id` int NOT NULL,
+  `codename` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `auth_permission`
+--
+
+INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALUES
+(1, 'Can add log entry', 1, 'add_logentry'),
+(2, 'Can change log entry', 1, 'change_logentry'),
+(3, 'Can delete log entry', 1, 'delete_logentry'),
+(4, 'Can view log entry', 1, 'view_logentry'),
+(5, 'Can add permission', 2, 'add_permission'),
+(6, 'Can change permission', 2, 'change_permission'),
+(7, 'Can delete permission', 2, 'delete_permission'),
+(8, 'Can view permission', 2, 'view_permission'),
+(9, 'Can add group', 3, 'add_group'),
+(10, 'Can change group', 3, 'change_group'),
+(11, 'Can delete group', 3, 'delete_group'),
+(12, 'Can view group', 3, 'view_group'),
+(13, 'Can add user', 4, 'add_user'),
+(14, 'Can change user', 4, 'change_user'),
+(15, 'Can delete user', 4, 'delete_user'),
+(16, 'Can view user', 4, 'view_user'),
+(17, 'Can add content type', 5, 'add_contenttype'),
+(18, 'Can change content type', 5, 'change_contenttype'),
+(19, 'Can delete content type', 5, 'delete_contenttype'),
+(20, 'Can view content type', 5, 'view_contenttype'),
+(21, 'Can add session', 6, 'add_session'),
+(22, 'Can change session', 6, 'change_session'),
+(23, 'Can delete session', 6, 'delete_session'),
+(24, 'Can view session', 6, 'view_session'),
+(25, 'Can add destinatarios', 7, 'add_destinatarios'),
+(26, 'Can change destinatarios', 7, 'change_destinatarios'),
+(27, 'Can delete destinatarios', 7, 'delete_destinatarios'),
+(28, 'Can view destinatarios', 7, 'view_destinatarios'),
+(29, 'Can add archivos', 8, 'add_archivos'),
+(30, 'Can change archivos', 8, 'change_archivos'),
+(31, 'Can delete archivos', 8, 'delete_archivos'),
+(32, 'Can view archivos', 8, 'view_archivos'),
+(33, 'Can add maestra', 9, 'add_maestras'),
+(34, 'Can change maestra', 9, 'change_maestras'),
+(35, 'Can delete maestra', 9, 'delete_maestras'),
+(36, 'Can view maestra', 9, 'view_maestras'),
+(37, 'Can add persona', 10, 'add_personas'),
+(38, 'Can change persona', 10, 'change_personas'),
+(39, 'Can delete persona', 10, 'delete_personas'),
+(40, 'Can view persona', 10, 'view_personas'),
+(41, 'Can add modulos', 11, 'add_modulos'),
+(42, 'Can change modulos', 11, 'change_modulos'),
+(43, 'Can delete modulos', 11, 'delete_modulos'),
+(44, 'Can view modulos', 11, 'view_modulos'),
+(45, 'Can add mensajeria', 12, 'add_mensajeria'),
+(46, 'Can change mensajeria', 12, 'change_mensajeria'),
+(47, 'Can delete mensajeria', 12, 'delete_mensajeria'),
+(48, 'Can view mensajeria', 12, 'view_mensajeria'),
+(49, 'Can add chat group', 13, 'add_chatgroup'),
+(50, 'Can change chat group', 13, 'change_chatgroup'),
+(51, 'Can delete chat group', 13, 'delete_chatgroup'),
+(52, 'Can view chat group', 13, 'view_chatgroup'),
+(53, 'Can add peticion', 14, 'add_peticion'),
+(54, 'Can change peticion', 14, 'change_peticion'),
+(55, 'Can delete peticion', 14, 'delete_peticion'),
+(56, 'Can view peticion', 14, 'view_peticion'),
+(57, 'Can add crontab', 15, 'add_crontabschedule'),
+(58, 'Can change crontab', 15, 'change_crontabschedule'),
+(59, 'Can delete crontab', 15, 'delete_crontabschedule'),
+(60, 'Can view crontab', 15, 'view_crontabschedule'),
+(61, 'Can add interval', 16, 'add_intervalschedule'),
+(62, 'Can change interval', 16, 'change_intervalschedule'),
+(63, 'Can delete interval', 16, 'delete_intervalschedule'),
+(64, 'Can view interval', 16, 'view_intervalschedule'),
+(65, 'Can add periodic task', 17, 'add_periodictask'),
+(66, 'Can change periodic task', 17, 'change_periodictask'),
+(67, 'Can delete periodic task', 17, 'delete_periodictask'),
+(68, 'Can view periodic task', 17, 'view_periodictask'),
+(69, 'Can add periodic tasks', 18, 'add_periodictasks'),
+(70, 'Can change periodic tasks', 18, 'change_periodictasks'),
+(71, 'Can delete periodic tasks', 18, 'delete_periodictasks'),
+(72, 'Can view periodic tasks', 18, 'view_periodictasks'),
+(73, 'Can add solar event', 19, 'add_solarschedule'),
+(74, 'Can change solar event', 19, 'change_solarschedule'),
+(75, 'Can delete solar event', 19, 'delete_solarschedule'),
+(76, 'Can view solar event', 19, 'view_solarschedule'),
+(77, 'Can add clocked', 20, 'add_clockedschedule'),
+(78, 'Can change clocked', 20, 'change_clockedschedule'),
+(79, 'Can delete clocked', 20, 'delete_clockedschedule'),
+(80, 'Can view clocked', 20, 'view_clockedschedule'),
+(81, 'Can add conversaciones', 21, 'add_conversaciones'),
+(82, 'Can change conversaciones', 21, 'change_conversaciones'),
+(83, 'Can delete conversaciones', 21, 'delete_conversaciones'),
+(84, 'Can view conversaciones', 21, 'view_conversaciones');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auth_user`
+--
+
+CREATE TABLE `auth_user` (
+  `id` int NOT NULL,
+  `password` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `is_superuser` tinyint(1) NOT NULL,
+  `username` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `first_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `last_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `is_staff` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `date_joined` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `auth_user`
+--
+
+INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
+(1, 'pbkdf2_sha256$600000$YSt3G4t8LO9eDvUmqNVP3Y$R6j+6JxH0+8xJNMlDrjSknbrvtpn1GbTjtR1gD6rVeU=', '2023-08-05 18:11:18', 0, 'admin@gmail.com', '', '', '', 0, 1, '2023-07-14 13:31:39'),
+(2, 'pbkdf2_sha256$390000$ShxtTQrIzWf26HWKYczudQ$IETbMCVbQEt+dUR58hbajUS3/yP3bW7UNOhkBS6dPaE=', NULL, 0, 'nelson', '', '', '', 0, 1, '2023-11-01 20:27:38'),
+(21, 'pbkdf2_sha256$600000$OX1L89dPcnC1ykEU27KiTN$J7ra/qJsG6dw1C2g8OWRcBp5T95MyS42gIjwsw43MKM=', NULL, 0, 'nelson2', '', '', '', 0, 1, '2023-11-01 20:41:20'),
+(26, 'pbkdf2_sha256$600000$MLBsJwTVbu5MB28NqbK1HZ$Yqoq7Tc4Rt3jCNI72P0v/3huMg7zwbiG1bgs4tg03CM=', NULL, 0, 'nelson3', '', '', '', 0, 1, '2023-11-01 20:42:26'),
+(27, 'pbkdf2_sha256$600000$2w4Wct0OUehhe5D90J2O5M$LQF9Syyh/TkCvWmoZmNkyyRRIrLfM9UBXLEgwoE+BI8=', NULL, 0, 'nelson4', '', '', '', 0, 1, '2023-11-01 20:42:46'),
+(28, 'pbkdf2_sha256$600000$m6ljltpDq9niJyT2cOk27x$ixCFybn0u3jhfZ7kpuwih1i7b8ao5Qijhtq7HL8npI0=', NULL, 0, 'nelson5', '', '', '', 0, 1, '2023-11-01 20:43:43'),
+(29, 'pbkdf2_sha256$600000$ZKrNTHkn67O7Ggi4poHtb0$gZad8VQdWLW+1sK+sMH+5G9Fn8b1CFf7xX+4eeBBNRM=', NULL, 0, 'nelson6', '', '', '', 0, 1, '2023-11-01 20:44:15'),
+(31, 'pbkdf2_sha256$600000$W3w6B5nnfwfif4kehwY5sa$4Y6j09BDyYaet8aK+BJ2PnNPBCknWAcpKNAIMX/xPz8=', NULL, 0, 'nelson7', '', '', '', 0, 1, '2023-11-01 20:45:00'),
+(33, 'pbkdf2_sha256$600000$9j5sH4K6nb5TeA9qxNTXmM$pPl7MZmLl4V7NVx9dNTw27MB24YO5RTQiNjSCk9QzVA=', NULL, 0, 'nelson8', '', '', '', 0, 1, '2023-11-01 20:45:19'),
+(35, 'pbkdf2_sha256$600000$5KvJr3pUPOKSsuicLPR2Ra$1j7qB3XOzY0xkWfFRoEGUQHn70tgAZk+y6gxV4aGN/Q=', NULL, 0, 'nelson9', '', '', '', 0, 1, '2023-11-01 20:48:03'),
+(42, 'pbkdf2_sha256$390000$80I9vRluieI7JZIFyays2d$7JdTILhiNnPivMAvTzWcRoGBGoheN7/X4l7xYbqpqwA=', NULL, 0, 'nelson0000', '', '', '', 0, 1, '2023-11-12 22:27:09');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auth_user_groups`
+--
+
+CREATE TABLE `auth_user_groups` (
+  `id` bigint NOT NULL,
+  `user_id` int NOT NULL,
+  `group_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auth_user_user_permissions`
+--
+
+CREATE TABLE `auth_user_user_permissions` (
+  `id` bigint NOT NULL,
+  `user_id` int NOT NULL,
+  `permission_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `conversaciones`
+--
+
+CREATE TABLE `conversaciones` (
+  `id` bigint NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `created_by_id` int NOT NULL,
+  `destinatario_id` bigint DEFAULT NULL,
+  `estado_id` int DEFAULT NULL,
+  `updated_by_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `conversaciones`
+--
+
+INSERT INTO `conversaciones` (`id`, `created_at`, `updated_at`, `created_by_id`, `destinatario_id`, `estado_id`, `updated_by_id`) VALUES
+(4, '2023-11-13 14:27:28', '2023-11-15 18:58:07', 1, 3781, 758, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `destinatarios`
+--
+
+CREATE TABLE `destinatarios` (
+  `id` bigint NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `created_by_id` int NOT NULL,
+  `updated_by_id` int DEFAULT NULL,
+  `persona_id` bigint DEFAULT NULL,
+  `estado_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `destinatarios`
+--
+
+INSERT INTO `destinatarios` (`id`, `created_at`, `updated_at`, `created_by_id`, `updated_by_id`, `persona_id`, `estado_id`) VALUES
+(3780, '2023-07-18 00:06:27', '2023-07-18 00:06:27', 1, NULL, 2937, 596),
+(3781, '2023-07-19 16:03:05', '2023-07-19 16:03:05', 1, NULL, 2938, 596);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_admin_log`
+--
+
+CREATE TABLE `django_admin_log` (
+  `id` int NOT NULL,
+  `action_time` datetime NOT NULL,
+  `object_id` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `object_repr` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `action_flag` smallint UNSIGNED NOT NULL,
+  `change_message` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `content_type_id` int DEFAULT NULL,
+  `user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_celery_beat_clockedschedule`
+--
+
+CREATE TABLE `django_celery_beat_clockedschedule` (
+  `id` int NOT NULL,
+  `clocked_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_celery_beat_crontabschedule`
+--
+
+CREATE TABLE `django_celery_beat_crontabschedule` (
+  `id` int NOT NULL,
+  `minute` varchar(240) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `hour` varchar(96) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `day_of_week` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `day_of_month` varchar(124) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `month_of_year` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `timezone` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_celery_beat_intervalschedule`
+--
+
+CREATE TABLE `django_celery_beat_intervalschedule` (
+  `id` int NOT NULL,
+  `every` int NOT NULL,
+  `period` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_celery_beat_periodictask`
+--
+
+CREATE TABLE `django_celery_beat_periodictask` (
+  `id` int NOT NULL,
+  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `task` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `args` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `kwargs` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `queue` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `exchange` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `routing_key` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `expires` datetime DEFAULT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `last_run_at` datetime DEFAULT NULL,
+  `total_run_count` int UNSIGNED NOT NULL,
+  `date_changed` datetime NOT NULL,
+  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `crontab_id` int DEFAULT NULL,
+  `interval_id` int DEFAULT NULL,
+  `solar_id` int DEFAULT NULL,
+  `one_off` tinyint(1) NOT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `priority` int UNSIGNED DEFAULT NULL,
+  `headers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `clocked_id` int DEFAULT NULL,
+  `expire_seconds` int UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_celery_beat_periodictasks`
+--
+
+CREATE TABLE `django_celery_beat_periodictasks` (
+  `ident` smallint NOT NULL,
+  `last_update` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_celery_beat_solarschedule`
+--
+
+CREATE TABLE `django_celery_beat_solarschedule` (
+  `id` int NOT NULL,
+  `event` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `latitude` decimal(9,6) NOT NULL,
+  `longitude` decimal(9,6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_content_type`
+--
+
+CREATE TABLE `django_content_type` (
+  `id` int NOT NULL,
+  `app_label` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `django_content_type`
+--
+
+INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
+(1, 'admin', 'logentry'),
+(3, 'auth', 'group'),
+(2, 'auth', 'permission'),
+(4, 'auth', 'user'),
+(5, 'contenttypes', 'contenttype'),
+(20, 'django_celery_beat', 'clockedschedule'),
+(15, 'django_celery_beat', 'crontabschedule'),
+(16, 'django_celery_beat', 'intervalschedule'),
+(17, 'django_celery_beat', 'periodictask'),
+(18, 'django_celery_beat', 'periodictasks'),
+(19, 'django_celery_beat', 'solarschedule'),
+(8, 'mensajeria', 'archivos'),
+(13, 'mensajeria', 'chatgroup'),
+(21, 'mensajeria', 'conversaciones'),
+(7, 'mensajeria', 'destinatarios'),
+(9, 'mensajeria', 'maestras'),
+(12, 'mensajeria', 'mensajeria'),
+(11, 'mensajeria', 'modulos'),
+(10, 'mensajeria', 'personas'),
+(14, 'mensajeria', 'peticion'),
+(6, 'sessions', 'session');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_migrations`
+--
+
+CREATE TABLE `django_migrations` (
+  `id` bigint NOT NULL,
+  `app` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `applied` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `django_migrations`
+--
+
+INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
+(1, 'contenttypes', '0001_initial', '2023-07-14 13:30:40'),
+(2, 'auth', '0001_initial', '2023-07-14 13:30:40'),
+(3, 'admin', '0001_initial', '2023-07-14 13:30:40'),
+(4, 'admin', '0002_logentry_remove_auto_add', '2023-07-14 13:30:40'),
+(5, 'admin', '0003_logentry_add_action_flag_choices', '2023-07-14 13:30:40'),
+(6, 'contenttypes', '0002_remove_content_type_name', '2023-07-14 13:30:40'),
+(7, 'auth', '0002_alter_permission_name_max_length', '2023-07-14 13:30:40'),
+(8, 'auth', '0003_alter_user_email_max_length', '2023-07-14 13:30:40'),
+(9, 'auth', '0004_alter_user_username_opts', '2023-07-14 13:30:40'),
+(10, 'auth', '0005_alter_user_last_login_null', '2023-07-14 13:30:40'),
+(11, 'auth', '0006_require_contenttypes_0002', '2023-07-14 13:30:40'),
+(12, 'auth', '0007_alter_validators_add_error_messages', '2023-07-14 13:30:40'),
+(13, 'auth', '0008_alter_user_username_max_length', '2023-07-14 13:30:41'),
+(14, 'auth', '0009_alter_user_last_name_max_length', '2023-07-14 13:30:41'),
+(15, 'auth', '0010_alter_group_name_max_length', '2023-07-14 13:30:41'),
+(16, 'auth', '0011_update_proxy_permissions', '2023-07-14 13:30:41'),
+(17, 'auth', '0012_alter_user_first_name_max_length', '2023-07-14 13:30:42'),
+(18, 'mensajeria', '0001_initial', '2023-07-14 13:30:42'),
+(19, 'sessions', '0001_initial', '2023-07-14 13:30:42'),
+(20, 'mensajeria', '0002_maestras_remove_destinatarios_celular_and_more', '2023-07-16 02:11:54'),
+(21, 'mensajeria', '0003_alter_personas_identificacion_alter_personas_sexo_and_more', '2023-07-16 02:14:19'),
+(22, 'mensajeria', '0004_destinatarios_estado', '2023-07-16 04:07:33'),
+(23, 'mensajeria', '0005_chatgroup', '2023-07-16 14:29:55'),
+(24, 'mensajeria', '0006_delete_chatgroup', '2023-07-16 14:32:30'),
+(25, 'mensajeria', '0007_alter_mensajeria_celular_and_more', '2023-07-17 01:11:01'),
+(26, 'mensajeria', '0008_mensajeria_destinatarios_id', '2023-07-17 01:13:54'),
+(27, 'mensajeria', '0009_rename_destinatarios_id_mensajeria_destinatario', '2023-07-17 01:14:37'),
+(28, 'mensajeria', '0010_peticion', '2023-07-17 01:45:31'),
+(29, 'mensajeria', '0011_alter_peticion_estado', '2023-07-17 03:10:55'),
+(30, 'mensajeria', '0012_mensajeria_texto', '2023-07-17 03:19:44'),
+(31, 'mensajeria', '0013_mensajeria_tipo', '2023-07-17 22:16:35'),
+(32, 'mensajeria', '0014_mensajeria_multimedia', '2023-07-17 22:22:55'),
+(33, 'mensajeria', '0015_rename_multimedia_mensajeria_sha256_and_more', '2023-07-17 22:38:54'),
+(34, 'mensajeria', '0016_mensajeria_mime_type_alter_mensajeria_multimedia_id_and_more', '2023-07-17 22:46:01'),
+(35, 'django_celery_beat', '0001_initial', '2023-07-19 15:39:44'),
+(36, 'django_celery_beat', '0002_auto_20161118_0346', '2023-07-19 15:39:44'),
+(37, 'django_celery_beat', '0003_auto_20161209_0049', '2023-07-19 15:39:44'),
+(38, 'django_celery_beat', '0004_auto_20170221_0000', '2023-07-19 15:39:44'),
+(39, 'django_celery_beat', '0005_add_solarschedule_events_choices', '2023-07-19 15:39:44'),
+(40, 'django_celery_beat', '0006_auto_20180322_0932', '2023-07-19 15:39:44'),
+(41, 'django_celery_beat', '0007_auto_20180521_0826', '2023-07-19 15:39:44'),
+(42, 'django_celery_beat', '0008_auto_20180914_1922', '2023-07-19 15:39:44'),
+(43, 'django_celery_beat', '0006_auto_20180210_1226', '2023-07-19 15:39:44'),
+(44, 'django_celery_beat', '0006_periodictask_priority', '2023-07-19 15:39:45'),
+(45, 'django_celery_beat', '0009_periodictask_headers', '2023-07-19 15:39:45'),
+(46, 'django_celery_beat', '0010_auto_20190429_0326', '2023-07-19 15:39:45'),
+(47, 'django_celery_beat', '0011_auto_20190508_0153', '2023-07-19 15:39:45'),
+(48, 'django_celery_beat', '0012_periodictask_expire_seconds', '2023-07-19 15:39:45'),
+(49, 'django_celery_beat', '0013_auto_20200609_0727', '2023-07-19 15:39:45'),
+(50, 'django_celery_beat', '0014_remove_clockedschedule_enabled', '2023-07-19 15:39:45'),
+(51, 'django_celery_beat', '0015_edit_solarschedule_events_choices', '2023-07-19 15:39:45'),
+(52, 'django_celery_beat', '0016_alter_crontabschedule_timezone', '2023-07-19 15:39:45'),
+(53, 'django_celery_beat', '0017_alter_crontabschedule_month_of_year', '2023-07-19 15:39:45'),
+(54, 'django_celery_beat', '0018_improve_crontab_helptext', '2023-07-19 15:39:45'),
+(55, 'mensajeria', '0017_rename_timestamp_mensajeria_timestamp_w', '2023-07-19 20:58:54'),
+(56, 'mensajeria', '0018_mensajeria_link', '2023-07-22 18:05:51'),
+(57, 'mensajeria', '0019_mensajeria_filename', '2023-07-29 20:42:48'),
+(58, 'mensajeria', '0020_mensajeria_voice', '2023-07-29 22:51:56'),
+(59, 'mensajeria', '0021_alter_mensajeria_voice', '2023-07-29 22:53:43'),
+(60, 'mensajeria', '0022_mensajeria_context_from_mensajeria_context_id', '2023-07-30 15:19:32'),
+(61, 'mensajeria', '0023_conversaciones', '2023-08-05 18:09:48'),
+(62, 'mensajeria', '0024_alter_mensajeria_conversacion_id', '2023-08-05 18:23:18'),
+(63, 'mensajeria', '0025_rename_conversacion_id_mensajeria_conversacion', '2023-08-05 18:38:56'),
+(64, 'mensajeria', '0026_alter_destinatarios_persona', '2023-08-05 18:43:41'),
+(65, 'mensajeria', '0027_alter_conversaciones_destinatario', '2023-08-05 18:44:00'),
+(66, 'mensajeria', '0028_alter_personas_telefonomovil_and_more', '2023-08-05 19:08:24'),
+(67, 'mensajeria', '0029_archivos_file', '2023-11-15 18:58:41');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `django_session`
+--
+
+CREATE TABLE `django_session` (
+  `session_key` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `session_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `expire_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `django_session`
+--
+
+INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
+('d2cpnya08au5hvn1e71paahed6ie0rhm', '.eJxVjDkOwjAUBe_iGlnenVDScwbLfzEOIEeKkwpxd4iUAto3M-8lUt7WmrbOS5pInIUWp98NMj647YDuud1miXNblwnkrsiDdnmdiZ-Xw_07qLnXbz2yN8WAhxzI8qBLQRcBvGIb9cCaOCqMENgFO1pUCA4LU1FgvArBiPcHAoc4iw:1qMrZf:4Mdum-KyBOnXleZSVl9ltu874KpIOJvcy9T2Tb9cPiY', '2023-08-04 14:57:44'),
+('fqa3x308fczyzsl9nvln946fdxddch9v', '.eJxVjDkOwjAUBe_iGlnenVDScwbLfzEOIEeKkwpxd4iUAto3M-8lUt7WmrbOS5pInIUWp98NMj647YDuud1miXNblwnkrsiDdnmdiZ-Xw_07qLnXbz2yN8WAhxzI8qBLQRcBvGIb9cCaOCqMENgFO1pUCA4LU1FgvArBiPcHAoc4iw:1qSLkD:_0r3nZbYhYPHQ7QwASq6PylRdx7xkFf51JgJhlqJoYs', '2023-08-19 18:11:18'),
+('rj2kcpd6fcsgpol15vebuvjh7omm25tj', '.eJxVjDkOwjAUBe_iGlnenVDScwbLfzEOIEeKkwpxd4iUAto3M-8lUt7WmrbOS5pInIUWp98NMj647YDuud1miXNblwnkrsiDdnmdiZ-Xw_07qLnXbz2yN8WAhxzI8qBLQRcBvGIb9cCaOCqMENgFO1pUCA4LU1FgvArBiPcHAoc4iw:1qMqvZ:QVkU4F05ZImercs6nb8_uJ8H1R6ueFdVItLh5TfGF9w', '2023-08-04 14:16:17');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `maestras`
+--
+
+CREATE TABLE `maestras` (
+  `id` int NOT NULL,
+  `codigo` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `nombre` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `jerarquia` int DEFAULT NULL,
+  `orden` int DEFAULT NULL,
+  `visible` int DEFAULT NULL,
+  `observacion` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` bigint DEFAULT NULL,
+  `created_by_id` int NOT NULL,
+  `padre_id` int DEFAULT NULL,
+  `updated_by_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `maestras`
+--
+
+INSERT INTO `maestras` (`id`, `codigo`, `nombre`, `jerarquia`, `orden`, `visible`, `observacion`, `created_at`, `updated_at`, `deleted_at`, `deleted_by`, `created_by_id`, `padre_id`, `updated_by_id`) VALUES
+(1, 'LIS_TIPOTABLAS', 'TIPOS DE TABLAS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(2, 'LIS_MODULOS', 'MODULOS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(3, 'LIS_ROLES', 'ROLES', 2, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(4, 'LIS_VISTAS', 'VISTAS', 3, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(5, 'LIS_PERFILES', 'PERFILES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(6, NULL, 'SEGURIDAD', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 2, NULL),
+(7, NULL, 'ADMINISTRADOR', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 5, NULL),
+(8, 'LIS_TIPOSIDENTIFICACIONES', 'TIPOS DE IDENTIFICACIONES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(9, 'TI', 'TARJETA DE IDENTIDAD', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 8, NULL),
+(10, 'CC', 'CEDULA DE CIUDADANIA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 8, NULL),
+(11, 'NI', 'NIT', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 8, NULL),
+(12, 'MS', 'MENOR SIN IDENTIFICACION', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 8, NULL),
+(13, 'AS', 'ADULTO SIN IDENTIFICACION', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 8, NULL),
+(14, 'CE', 'CEDULA DE EXTRANJERIA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 8, NULL),
+(15, 'RC', 'REGISTRO CIVIL', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 8, NULL),
+(16, 'LIS_TIPOSCONTRATOS', 'TIPOS CONTRATOS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(17, '1', 'CAPITADO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 16, NULL),
+(18, '2', 'POR EVENTO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 16, NULL),
+(19, '3', 'POR CASO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 16, NULL),
+(20, 'LIS_SEXOS', 'SEXOS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(21, 'M', 'MASCULINO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 20, NULL),
+(22, 'F', 'FEMENINO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 20, NULL),
+(23, 'ND', 'NO DEFINIDO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 20, NULL),
+(24, 'LIS_ESTADOSCIVILES', 'ESTADOS CIVILES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(25, NULL, 'SOLTERO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 24, NULL),
+(26, NULL, 'CASADO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 24, NULL),
+(27, NULL, 'UNION LIBRE', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 24, NULL),
+(28, NULL, 'DIVORCIADO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 24, NULL),
+(29, NULL, 'VIUDO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 24, NULL),
+(30, 'LIS_CARGOS', 'CARGOS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(31, NULL, 'GERENTE', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 30, NULL),
+(32, NULL, 'VENDEDOR', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 30, NULL),
+(33, NULL, 'INVENTARIO', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 30, NULL),
+(34, NULL, 'CLIENTE', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 30, NULL),
+(35, NULL, 'AUXILIAR', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 30, NULL),
+(36, NULL, 'OTRO', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 30, NULL),
+(37, 'LIS_TIPOSANGRE', 'TIPOS DE SANGRE', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(38, NULL, 'A', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 37, NULL),
+(39, NULL, 'B', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 37, NULL),
+(40, NULL, 'O', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 37, NULL),
+(41, NULL, 'AB', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 37, NULL),
+(42, 'LIS_RH', 'RH', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(43, 'POSITIVO', '+', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 42, NULL),
+(44, 'NEGATIVO', '-', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 42, NULL),
+(45, 'LIS_NIVELESEDUCATIVOS', 'NIVELES EDUCATIVOS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(46, NULL, 'PRIMARIA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 45, NULL),
+(47, NULL, 'SECUNDARIA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 45, NULL),
+(48, NULL, 'MEDIA TECNICA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 45, NULL),
+(49, NULL, 'TECNICO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 45, NULL),
+(50, NULL, 'UNIVERSITARIO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 45, NULL),
+(51, NULL, 'OTRO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 45, NULL),
+(52, NULL, 'NO DEFINIDO (NINGUNO)', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 45, NULL),
+(53, 'LIS_ETNIAS', 'ETNIAS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(54, NULL, 'INDIGENA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 53, NULL),
+(55, NULL, 'ROM (GITANO)', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 53, NULL),
+(56, NULL, 'RAIZAL (ARCHIPIELAGO DE SAN ANDRES Y PROVIDENCIA)', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 53, NULL),
+(57, NULL, 'NINGUNO DE LOS ANTERIORES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 53, NULL),
+(58, 'LIS_RELIGIONES', 'RELIGIONES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(59, NULL, 'CATOLICA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 59, NULL),
+(60, NULL, 'EVANGELICA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 59, NULL),
+(61, NULL, 'PROTESTANTE', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 59, NULL),
+(62, NULL, 'NO SE TIENE INFORMACION', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 59, NULL),
+(63, 'LIS_GRUPOSPOBLACIONALES', 'GRUPOS POBLACIONALES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(64, NULL, 'HABITANTE DE LA CALLE', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(65, NULL, 'POBLACION INFANTIL A CARGO DEL ICBF', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(66, NULL, 'MADRES COMUNITARIAS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(67, NULL, 'CREADOR O GESTOR CULTURAL', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(68, NULL, 'POBLACION SISBENIZADA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(69, NULL, 'MENORES DESVINCULADOS DEL CONFICTO ARMADO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(70, NULL, 'POBLACION DISCAPACITADA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(71, NULL, 'POBLACION DESMOVILIZADA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(72, NULL, 'POBLACION EN CONDICION DE DESPLAZAMIENTO FORZADO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(73, NULL, 'POBLACION INFANTIL VULNERABLE', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(74, NULL, 'PROGRAMA EN PROTECCION A TESTIGOS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(75, NULL, 'POBLACION EN CENTROS PSIQUIATRICOS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(76, NULL, 'POBLACION RURAL MIGRATORIA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(77, NULL, 'POBLACION RECLUSA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(78, NULL, 'POBLACION RURAL NO MIGRATORIA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(79, NULL, 'COMUNIDADES INDIGENAS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(80, NULL, 'ROM (GITANOS)', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(81, NULL, 'NEGRO MULATO AFROCOLOMBIANO O AFRODESCENDIENTE', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(82, NULL, 'PALENQUERO DE SAN BACILIO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(83, NULL, 'POBLACION CARCELARIA DEL INPEC', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 64, NULL),
+(84, 'LIS_OCUPACONES', 'OCUPACIONES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 1, NULL),
+(85, NULL, 'NO TENGO INFORMACION', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(86, NULL, 'FUERZAS MILITARES', 2, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(87, NULL, 'OFICIALES DE LAS FUERZAS MILITARES', 3, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(88, NULL, 'Oficiales de las Fuerzas Militares', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(89, NULL, 'Oficiales de las Fuerzas Militares', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(90, NULL, 'SUBOFICIALES DE LAS FUERZAS MILITARES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(91, NULL, 'Suboficiales de las Fuerzas Militares', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(92, NULL, 'Suboficiales de las Fuerzas Militares', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(93, NULL, 'OTROS MIEMBROS DE LAS FUERZAS MILITARES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(94, NULL, 'Otros miembros de las Fuerzas Militares', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(95, NULL, 'Otros miembros de las Fuerzas Militares', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(96, NULL, 'DIRECTORES Y GERENTES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(97, NULL, 'Directores formuladores de polÃ­ticas y normas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(98, NULL, 'Directores del gobierno', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(99, NULL, 'Jefes de comunidades Ã©tnicas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(100, NULL, 'Directores y gerentes generales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(101, NULL, 'Directores y gerentes generales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(102, NULL, 'DIRECTORES ADMINISTRATIVOS Y COMERCIALES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(103, NULL, 'Directores de administraciÃ³n y servicios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(104, NULL, 'Directores financieros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(105, NULL, 'Directores de recursos humanos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(106, NULL, 'Directores de polÃ­ticas y planeaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(107, NULL, 'Directores de ventas y comercializaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(108, NULL, 'Directores de publicidad y relaciones pÃºblicas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(109, NULL, 'Directores de investigaciÃ³n y desarrollo', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(110, NULL, 'Directores de producciÃ³n de piscicultura y pesca', NULL, NULL, NULL, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(111, NULL, 'Directores de industrias manufactureras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(112, NULL, 'Directores de explotaciones de minerÃ­a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(113, NULL, 'Directores de empresas de construcciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(114, NULL, 'Directores  y gerentes de servicios profesionales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(115, NULL, 'Directores de servicios de cuidados infantiles', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(116, NULL, 'Directores de servicios de salud', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(117, NULL, 'Directores  de servicios de bienestar social', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(118, NULL, 'Directores de servicios de educaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(119, NULL, 'Gerentes de hoteles y restaurantes', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(120, NULL, 'Gerentes de hoteles', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(121, NULL, 'Gerentes de restaurantes', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(122, NULL, 'Gerentes de comercios al por mayor y al por menor', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(123, NULL, 'Gerentes de comercios al por mayor y al por menor', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(124, NULL, 'Otros gerentes de servicios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(125, NULL, 'PROFESIONALES, CIENTÃFICOS E INTELECTUALES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(126, NULL, 'PROFESIONALES DE LAS CIENCIAS Y DE LA INGENIERÃA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(127, NULL, 'FÃ­sicos, quÃ­micos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(128, NULL, 'FÃ­sicos y astrÃ³nomos ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(129, NULL, 'MeteorÃ³logos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(130, NULL, 'QuÃ­micos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(131, NULL, 'GeÃ³logos y geofÃ­sicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(132, NULL, 'MatemÃ¡ticos, actuarios y estadÃ­sticos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(133, NULL, 'MatemÃ¡ticos, actuarios y estadÃ­sticos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(134, NULL, 'Profesionales en ciencias biolÃ³gicas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(135, NULL, 'BiÃ³logos, botÃ¡nicos, zoÃ³logos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(136, NULL, 'AgrÃ³nomos, silvicultores, zootecnistas y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(137, NULL, 'Profesionales de la protecciÃ³n medioambiental', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(138, NULL, 'Ingenieros industriales y de producciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(139, NULL, 'Ingenieros civiles', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(140, NULL, 'Ingenieros medioambientales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(141, NULL, 'Ingenieros mecÃ¡nicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(142, NULL, 'Ingenieros quÃ­micos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(143, NULL, 'Ingenieros de minas, metalÃºrgicos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(144, NULL, 'Ingenieros en electrotecnologÃ­a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(145, NULL, 'Ingenieros electricistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(146, NULL, 'Ingenieros electrÃ³nicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(147, NULL, 'Ingenieros de telecomunicaciones', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(148, NULL, 'Arquitectos constructores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(149, NULL, 'Arquitectos paisajistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(150, NULL, 'DiseÃ±adores de productos y de prendas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(151, NULL, 'Planificadores urbanos, regionales y de trÃ¡nsito', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(152, NULL, 'CartÃ³grafos y topÃ³grafos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(153, NULL, 'DiseÃ±adores grÃ¡ficos y multimedia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(154, NULL, 'PROFESIONALES DE LA SALUD', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(155, NULL, 'MÃ©dicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(156, NULL, 'MÃ©dicos generales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(157, NULL, 'MÃ©dicos especialistas ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(158, NULL, 'Profesionales de enfermerÃ­a y de parterÃ­a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(159, NULL, 'Profesionales de enfermerÃ­a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(160, NULL, 'Profesionales de parterÃ­a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(161, NULL, 'ParamÃ©dicos e instrumentadores quirÃºrgicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(162, NULL, 'ParamÃ©dicos e instrumentadores quirÃºrgicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(163, NULL, 'Veterinarios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(164, NULL, 'Veterinarios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(165, NULL, 'Otros profesionales de la salud', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(166, NULL, 'OdontÃ³logos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(167, NULL, 'FarmacÃ©uticos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(168, NULL, 'Fisioterapeutas ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(169, NULL, 'Dietistas y nutricionistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(170, NULL, 'FonoaudiÃ³logos y terapeutas del lenguaje', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(171, NULL, 'OptÃ³metras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(172, NULL, 'PROFESIONALES DE LA EDUCACIÃ“N', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(173, NULL, 'Profesores de instituciones de educaciÃ³n superior', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(174, NULL, 'Profesores de instituciones de educaciÃ³n superior', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(175, NULL, 'Profesores de formaciÃ³n profesional', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(176, NULL, 'Profesores de formaciÃ³n profesional', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(177, NULL, 'Profesores de educaciÃ³n secundaria', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(178, NULL, 'Profesores de educaciÃ³n secundaria', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(179, NULL, 'Profesores de educaciÃ³n primaria', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(180, NULL, 'Profesores de primera infancia ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(181, NULL, 'Otros profesionales de la educaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(182, NULL, 'Especialistas en mÃ©todos pedagÃ³gicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(183, NULL, 'Profesores de educaciÃ³n especial e inclusiva', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(184, NULL, 'Otros profesores de idiomas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(185, NULL, 'Otros profesores de mÃºsica', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(186, NULL, 'Otros profesores de artes', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(187, NULL, 'Instructores de tecnologÃ­a de la informaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(188, NULL, 'PROFESIONALES DE NEGOCIOS Y DE ADMINISTRACIÃ“N', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(189, NULL, 'Profesionales en finanzas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(190, NULL, 'Contadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(191, NULL, 'Asesores financieros y de inversiones', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(192, NULL, 'Analistas financieros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(193, NULL, 'Profesionales de la administraciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(194, NULL, 'Analistas de gestiÃ³n y organizaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(195, NULL, 'Profesionales en polÃ­ticas de administraciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(196, NULL, 'Profesionales de gestiÃ³n de talento humano', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(197, NULL, 'Profesionales de relaciones pÃºblicas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(198, NULL, 'Analistas de sistemas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(199, NULL, 'Desarrolladores de software', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(200, NULL, 'Desarrolladores web y multimedia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(201, NULL, 'Programadores de aplicaciones', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(202, NULL, 'DiseÃ±adores y administradores de bases de datos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(203, NULL, 'Administradores de sistemas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(204, NULL, 'Profesionales en redes de computadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(205, NULL, 'Profesionales en derecho', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(206, NULL, 'Abogados', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(207, NULL, 'Jueces', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(208, NULL, 'Bibliotecarios, archivistas y curadores de arte', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(209, NULL, 'Archivistas y curadores de arte', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(210, NULL, 'Bibliotecarios, documentalistas y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(211, NULL, 'Profesionales en ciencias sociales y religiosas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(212, NULL, 'Economistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(213, NULL, 'SociÃ³logos, antropÃ³logos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(214, NULL, 'PsicÃ³logos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(215, NULL, 'Profesionales del trabajo social y consejeros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(216, NULL, 'Profesionales religiosos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(217, NULL, 'Autores, periodistas y lingÃºistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(218, NULL, 'Autores y otros escritores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(219, NULL, 'Periodistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(220, NULL, 'Traductores, intÃ©rpretes y otros lingÃºistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(221, NULL, 'Artistas creativos e interpretativos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(222, NULL, 'Escultores, pintores artÃ­sticos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(223, NULL, 'Compositores, mÃºsicos y cantantes', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(224, NULL, 'CoreÃ³grafos y bailarines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(225, NULL, 'Actores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(226, NULL, 'TÃ‰CNICOS Y PROFESIONALES DE NIVEL MEDIO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(227, NULL, 'TÃ©cnicos en ciencias fÃ­sicas y en ingenierÃ­a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(228, NULL, 'TÃ©cnicos en ciencias fÃ­sicas y quÃ­micas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(229, NULL, 'TÃ©cnicos en ingenierÃ­a civil', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(230, NULL, 'ElectrotÃ©cnicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(231, NULL, 'TÃ©cnicos en electrÃ³nica', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(232, NULL, 'TÃ©cnicos en ingenierÃ­a mecÃ¡nica', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(233, NULL, 'TÃ©cnicos en quÃ­mica industrial', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(234, NULL, 'TÃ©cnicos de minas y metalurgia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(235, NULL, 'Delineantes y dibujantes tÃ©cnicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(236, NULL, 'Supervisores de minas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(237, NULL, 'Supervisores de industrias manufactureras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(238, NULL, 'Supervisores de la construcciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(239, NULL, 'TÃ©cnicos en control de procesos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(240, NULL, 'Operadores de plantas de producciÃ³n de energÃ­a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(241, NULL, 'Controladores de procesos de producciÃ³n de metales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(242, NULL, 'TÃ©cnicos agropecuarios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(243, NULL, 'TÃ©cnicos forestales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(244, NULL, 'Oficiales maquinistas en navegaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(245, NULL, 'Capitanes, oficiales de cubierta y prÃ¡cticos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(246, NULL, 'Pilotos de aviaciÃ³n y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(247, NULL, 'Controladores de trÃ¡fico aÃ©reo y marÃ­timo', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(248, NULL, 'TÃ©cnicos en seguridad aeronÃ¡utica', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(249, NULL, 'TÃ©cnicos mÃ©dicos y farmacÃ©uticos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(250, NULL, 'TÃ©cnicos de laboratorios mÃ©dicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(251, NULL, 'TÃ©cnicos y asistentes farmacÃ©uticos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(252, NULL, 'TÃ©cnicos de prÃ³tesis mÃ©dicas y dentales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(253, NULL, 'TÃ©cnicos y asistentes veterinarios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(254, NULL, 'TÃ©cnicos y asistentes veterinarios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(255, NULL, 'Higienistas y asistentes odontologÃ­cos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(256, NULL, 'TÃ©cnicos en documentaciÃ³n sanitaria', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(257, NULL, 'Trabajadores comunitarios de la salud', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(258, NULL, 'TÃ©cnicos en optometrÃ­a y Ã³pticas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(259, NULL, 'TÃ©cnicos y asistentes terapeutas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(260, NULL, 'Asistentes mÃ©dicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(261, NULL, 'TÃ©cnicos en atenciÃ³n prehospitalaria', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(262, NULL, 'Pintores y empapeladores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(263, NULL, 'Analistas de prÃ©stamos y crÃ©ditos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(264, NULL, 'TÃ©cnicos de contabilidad y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(265, NULL, 'Tasadores y evaluadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(266, NULL, 'Agentes comerciales y corredores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(267, NULL, 'Agentes de seguros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(268, NULL, 'Representantes comerciales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(269, NULL, 'Agentes de compras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(270, NULL, 'Agentes de servicios empresariales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(271, NULL, 'Declarantes o gestores de aduana', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(272, NULL, 'Organizadores de conferencias y eventos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(273, NULL, 'Agentes de empleo y contratistas de mano de obra', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(274, NULL, 'Agentes inmobiliarios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(275, NULL, 'Secretarios administrativos y especializados', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(276, NULL, 'Supervisores de oficina', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(277, NULL, 'Secretarios jurÃ­dicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(278, NULL, 'Secretarios administrativos y ejecutivos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(279, NULL, 'Secretarios mÃ©dicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(280, NULL, 'Agentes de aduanas e inspectores de fronteras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(281, NULL, 'Agentes de administraciÃ³n tributaria', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(282, NULL, 'Agentes de servicios de seguridad social', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(283, NULL, 'Agentes gubernamentales de expediciÃ³n de licencias', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(284, NULL, 'Inspectores de policÃ­a y detectives', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(285, NULL, 'Trabajadores y asistentes sociales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(286, NULL, 'Auxiliares laicos de las religiones', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(287, NULL, 'Entrenadores de deportes y aptitud fÃ­sica', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(288, NULL, 'Atletas y deportistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(289, NULL, 'FotÃ³grafos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(290, NULL, 'DiseÃ±adores y decoradores de interiores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(291, NULL, 'TÃ©cnicos en galerÃ­as de arte, museos y bibliotecas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(292, NULL, 'Chefs', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(293, NULL, 'TÃ©cnicos en redes y sistemas de computaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(294, NULL, 'TÃ©cnicos de la Web', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(295, NULL, 'TÃ©cnicos en telecomunicaciones y radiodifusiÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(296, NULL, 'TÃ©cnicos de radiodifusiÃ³n y grabaciÃ³n audio visual', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(297, NULL, 'TÃ©cnicos de ingenierÃ­a de las telecomunicaciones', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(298, NULL, 'PERSONAL DE APOYO ADMINISTRATIVO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(299, NULL, 'OFICINISTAS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(300, NULL, 'Oficinistas generales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(301, NULL, 'Oficinistas generales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(302, NULL, 'Secretarios generales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(303, NULL, 'Secretarios generales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(304, NULL, 'Operadores de mÃ¡quinas de oficina', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(305, NULL, 'Grabadores de datos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(306, NULL, 'EMPLEADOS DE TRATO DIRECTO CON EL PÃƒÅ¡BLICO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(307, NULL, 'Pagadores y cobradores de ventanilla y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(308, NULL, 'Cajeros de bancos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(309, NULL, 'Receptores de apuestas y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(310, NULL, 'Prestamistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(311, NULL, 'Cobradores y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(312, NULL, 'Barnizadores y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(313, NULL, 'Empleados de servicios de informaciÃ³n al cliente', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(314, NULL, 'Empleados y consultores de viajes', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(315, NULL, 'Empleados de centros de llamadas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(316, NULL, 'Telefonistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(317, NULL, 'Recepcionistas de hoteles', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(318, NULL, 'Empleados de ventanillas de informaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(319, NULL, 'Recepcionistas generales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(320, NULL, 'Auxiliares contables y financieros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(321, NULL, 'Auxiliares de contabilidad y cÃ¡lculo de costos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(322, NULL, 'Auxiliares encargados de las nÃ³minas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(323, NULL, 'Empleados de servicios de apoyo a la producciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(324, NULL, 'Empleados de servicios de transporte', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(325, NULL, 'Otro personal de apoyo administrativo', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(326, NULL, 'Otro personal de apoyo administrativo', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(327, NULL, 'Empleados de bibliotecas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(328, NULL, 'Empleados de servicios de correos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(329, NULL, 'Escribientes pÃºblicos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(330, NULL, 'Empleados de archivos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(331, NULL, 'Empleados del servicio de personal', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(332, NULL, 'TRABAJADORES DE LOS SERVICIOS PERSONALES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(333, NULL, 'Personal al servicio directo de los pasajeros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(334, NULL, 'Personal de servicio a pasajeros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(335, NULL, 'Revisores y cobradores de los transportes pÃºblicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(336, NULL, 'GuÃ­as', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(337, NULL, 'Cocineros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(338, NULL, 'Cocineros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(339, NULL, 'Meseros y bÃ¡rmanes', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(340, NULL, 'Meseros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(341, NULL, 'BÃ¡rmanes', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(342, NULL, 'Peluqueros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(343, NULL, 'Especialistas en tratamientos de belleza y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(344, NULL, 'Mayordomos domÃ©sticos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(345, NULL, 'Conserjes y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(346, NULL, 'Otros trabajadores de servicios personales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(347, NULL, 'AstrÃ³logos, adivinos y trabajadores afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(348, NULL, 'AcompaÃ±antes ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(349, NULL, 'Personal de servicios funerarios y embalsamadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(350, NULL, 'Cuidadores de animales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(351, NULL, 'Instructores de conducciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(352, NULL, 'VENDEDORES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(353, NULL, 'Vendedores callejeros y de puestos de mercado ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(354, NULL, 'Vendedores en quioscos y puestos de mercado', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(355, NULL, 'Comerciantes de tiendas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(356, NULL, 'Supervisores de tiendas y almacenes', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(357, NULL, 'Otros vendedores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(358, NULL, 'Modelos de moda, arte y publicidad', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(359, NULL, 'Demostradores de tiendas, almacenes y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(360, NULL, 'Vendedores puerta a puerta ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(361, NULL, 'Vendedores a travÃ©s de medios tecnolÃ­gicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(362, NULL, 'Expendedores de combustibles para vehÃ­culos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(363, NULL, 'Vendedores de comidas en mostrador ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(364, NULL, 'TRABAJADORES DE LOS CUIDADOS PERSONALES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(365, NULL, 'Cuidadores de niÃ±os y auxiliares de maestros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(366, NULL, 'Cuidadores de niÃ±os', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(367, NULL, 'Auxiliares de maestros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(368, NULL, 'PERSONAL DE LOS SERVICIOS DE PROTECCIÃ“N', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(369, NULL, 'Personal de los servicios de protecciÃ­n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(370, NULL, 'Bomberos y rescatistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(371, NULL, 'PolicÃ­as', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(372, NULL, 'Guardianes de prisiÃ­n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(373, NULL, 'Guardias de seguridad', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(374, NULL, 'Trabajadores forestales calificados y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(375, NULL, 'Trabajadores forestales calificados y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(376, NULL, 'Pescadores, cazadores y tramperos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(377, NULL, 'Trabajadores de explotaciones de acuicultura', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(378, NULL, 'Pescadores de agua dulce y en aguas costeras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(379, NULL, 'Pescadores de alta mar', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(380, NULL, 'Cazadores y tramperos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(381, NULL, 'Trabajadores agrÃ­colas de subsistencia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(382, NULL, 'Trabajadores agrÃ­colas de subsistencia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(383, NULL, 'Trabajadores pecuarios de subsistencia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(384, NULL, 'Trabajadores pecuarios de subsistencia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(385, NULL, 'Trabajadores agropecuarios de subsistencia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(386, NULL, 'Trabajadores agropecuarios de subsistencia', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(387, NULL, 'Constructores de casas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(388, NULL, 'AlbaÃ±iles', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(389, NULL, 'Labrantes, tronzadores y grabadores de piedra', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(390, NULL, 'Operarios en cemento armado, enfoscadores y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(391, NULL, 'Carpinteros de armar y de obra blanca', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(392, NULL, 'Techadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(393, NULL, 'Enchapadores, parqueteros y colocadores de suelos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(394, NULL, 'Revocadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(395, NULL, 'Cristaleros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(396, NULL, 'Fontaneros e instaladores de tuberÃ­as', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(397, NULL, 'Pintores, limpiadores de fachadas y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(398, NULL, 'Limpiadores de fachadas y deshollinadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(399, NULL, 'OFICIALES Y OPERARIOS DE LA METALURGIA', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(400, NULL, 'Moldeadores y macheros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(401, NULL, 'Soldadores y oxicortadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(402, NULL, 'Chapistas y caldereros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(403, NULL, 'Montadores de estructuras metÃ¡licas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(404, NULL, 'Aparejadores y empalmadores de cables', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(405, NULL, 'Herreros, herramentistas y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(406, NULL, 'Herreros y forjadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(407, NULL, 'Herramentistas y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(408, NULL, 'Ajustadores y operadores de mÃ¡quinas herramientas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(409, NULL, 'Pulidores de metales y afiladores de herramientas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(410, NULL, 'MecÃ¡nicos y reparadores de mÃ¡quinas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(411, NULL, 'MecÃ¡nicos y reparadores de vehÃ­culos de motor', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(412, NULL, 'Reparadores de bicicletas y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(413, NULL, 'Fabricantes y afinadores de instrumentos musicales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(414, NULL, 'Se desagrega en 7361, 7362 y 7363 por adaptaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(415, NULL, 'Alfareros y ceramistas (barro y arcilla)', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(416, NULL, 'Rotulistas, pintores decorativos y grabadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(417, NULL, 'Oficiales y operarios de las artes grÃ¡ficas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(418, NULL, 'Preimpresores y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL);
+INSERT INTO `maestras` (`id`, `codigo`, `nombre`, `jerarquia`, `orden`, `visible`, `observacion`, `created_at`, `updated_at`, `deleted_at`, `deleted_by`, `created_by_id`, `padre_id`, `updated_by_id`) VALUES
+(419, NULL, 'Impresores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(420, NULL, 'Encuadernadores y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(421, NULL, 'Tejedores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(422, NULL, 'Tejedores con telares', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(423, NULL, 'Tejedores con agujas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(424, NULL, 'Otros tejedores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(425, NULL, 'Cesteros, mimbreros y sombrereros artesanales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(426, NULL, 'Cesteros y mimbreros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(427, NULL, 'Sombrereros artesanales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(428, NULL, 'Artesanos que realizan trabajos en madera', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(429, NULL, 'Tallador piezas artesanales de madera', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(430, NULL, 'Decoradores de piezas artesanales en madera', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(431, NULL, 'Joyeros, orfebres, plateros y bisuteros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(432, NULL, 'Joyeros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(433, NULL, 'Orfebres y plateros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(434, NULL, 'Bisutero', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(435, NULL, 'Artesanos del cuero', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(436, NULL, 'Artesanos del cuero', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(437, NULL, 'Artesanos de papel', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(438, NULL, 'Artesanos del hierro y otros metales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(439, NULL, 'Artesanos de las semillas y cortezas vegetales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(440, NULL, 'Instaladores y reparadores de equipos elÃ©ctricos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(441, NULL, 'Electricistas de obras y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(442, NULL, 'Ajustadores electricistas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(443, NULL, 'Instaladores y reparadores de lÃ­neas elÃ©ctricas ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(444, NULL, 'Ajustadores e instaladores en electrÃ³nica', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(445, NULL, 'Carniceros, pescaderos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(446, NULL, 'Panaderos, pasteleros y confiteros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(447, NULL, 'Operarios de la elaboraciÃ³n de productos lÃ¡cteos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(448, NULL, 'Catadores y clasificadores de alimentos y bebidas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(449, NULL, 'Operarios del tratamiento de la madera', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(450, NULL, 'Oficiales y operarios de la confecciÃ³n y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(451, NULL, 'Sastres, modistos, peleteros y sombrereros', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(452, NULL, 'Patronistas y cortadores de tela, cuero y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(453, NULL, 'Costureros, bordadores y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(454, NULL, 'Tapiceros, colchoneros y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(455, NULL, 'Apelambradores, pellejeros y curtidores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(456, NULL, 'Zapateros y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(457, NULL, 'Otros oficiales, operarios y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(458, NULL, 'Buzos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(459, NULL, 'Dinamiteros y pegadores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(460, NULL, 'OPERADORES DE INSTALACIONES FIJAS Y MAQUINAS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(461, NULL, 'Mineros y operadores de instalaciones mineras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(462, NULL, 'Perforadores y sondistas de pozos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(463, NULL, 'Operadores de telares y otras mÃ¡quinas tejedoras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(464, NULL, 'Operadores de mÃ¡quinas de coser', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(465, NULL, 'Operadores de mÃ¡quinas de lavanderÃ­a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(466, NULL, 'Operadores de mÃ¡quinas de vapor y calderas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(467, NULL, 'ENSAMBLADORES ', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(468, NULL, 'Ensambladores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(469, NULL, 'Ensambladores de maquinaria mecÃ¡nica', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(470, NULL, 'Ensambladores de equipos elÃ©ctricos y electrÃ³nicos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(471, NULL, 'Maquinistas de locomotoras y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(472, NULL, 'Maquinistas de locomotoras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(473, NULL, 'Guardafrenos, guardagujas y agentes de maniobras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(474, NULL, 'Conductores de motocicletas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(475, NULL, 'Se desagrega en 8323 y 8324 por adaptaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(476, NULL, 'Conductores de camionetas y vehÃ­culos livianos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(477, NULL, 'Conductores de taxis', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(478, NULL, 'Conductores de camiones pesados y buses', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(479, NULL, 'Conductores de buses, microbuses y tranvÃ­as', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(480, NULL, 'Conductores de camiones y vehÃ­culos pesados', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(481, NULL, 'Operadores de maquinaria agrÃ­cola y forestal mÃ³vil', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(482, NULL, 'Operadores de grÃºas, aparatos elevadores y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(483, NULL, 'Operadores de montacargas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(484, NULL, 'Marineros de cubierta y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(485, NULL, 'Marineros de cubierta y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(486, NULL, 'OCUPACIONES ELEMENTALES', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(487, NULL, 'PERSONAL DOMESTICO Y DE ASEO', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(488, NULL, 'Personal domÃ©stico', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(489, NULL, 'Lavanderos y planchadores manuales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(490, NULL, 'Lavadores de vehÃ­culos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(491, NULL, 'Limpiadores de ventanas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(492, NULL, 'Obreros y peones de explotaciones agrÃ­colas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(493, NULL, 'Obreros y peones de explotaciones ganaderas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(494, NULL, 'Obreros y peones de explotaciones agropecuarias', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(495, NULL, 'Obreros y peones de jardinerÃ­a y horticultura', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(496, NULL, 'Obreros y peones forestales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(497, NULL, 'Obreros y peones de pesca y acuicultura', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(498, NULL, 'Obreros y peones de la minerÃ­a y la construcciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(499, NULL, 'Obreros y peones de minas y canteras', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(500, NULL, 'Obreros y peones de obras pÃºblicas y mantenimiento', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(501, NULL, 'Obreros y peones de la construcciÃ³n de edificios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(502, NULL, 'Obreros y peones de la industria manufacturera', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(503, NULL, 'Empacadores manuales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(504, NULL, 'Obreros y peones de transporte y almacenamiento', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(505, NULL, 'Obreros y peones de carga', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(506, NULL, 'Surtidores de estanterÃ­as', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(507, NULL, 'AYUDANTES DE PREPARACION DE ALIMENTOS', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(508, NULL, 'Ayudantes de preparaciÃ³n de alimentos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(509, NULL, 'Cocineros de comidas rÃ¡pidas', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(510, NULL, 'Ayudantes de cocina', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(511, NULL, 'Trabajadores ambulantes de servicios y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(512, NULL, 'Trabajadores ambulantes de servicios y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(513, NULL, 'Recolectores de desechos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(514, NULL, 'Recolectores de basura y material reciclable', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(515, NULL, 'Clasificadores de desechos', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(516, NULL, 'Barrenderos y afines', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(517, NULL, 'Otras ocupaciones elementales', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(518, NULL, 'Mensajeros, mandaderos, maleteros y repartidores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(519, NULL, 'Personas que realizan trabajos varios', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(520, NULL, 'Se desagrega en 9625 y 9626 por adaptaciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(521, NULL, 'Acarreadores de agua y recolectores de leÃ±a', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(522, NULL, 'Lectores de medidores', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(523, NULL, 'SIN OCUPACION (NO APLICA)', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(524, NULL, 'Ama de casa', NULL, NULL, 1, NULL, '2022-08-26 00:15:26', NULL, NULL, NULL, 1, 84, NULL),
+(525, 'LIS_REGIMES', 'REGIMENES', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(526, '1', 'CONTRIBUTIVO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 525, NULL),
+(527, '2', 'SUBSIDIADO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 525, NULL),
+(528, '3', 'VINCULADO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 525, NULL),
+(529, '4', 'PARTICULAR', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 525, NULL),
+(530, '5', 'OTRO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 525, NULL),
+(531, 'LIS_TIPOSEMPRESAS', 'TIPOS EMPRESAS', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(532, NULL, 'PRIVADA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 531, NULL),
+(533, NULL, 'PUBLICA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 531, NULL),
+(534, 'LIS_TIPOSAFILIADOS', 'TIPOS AFILIADOS', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(535, NULL, 'BENEFICIARIO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 534, NULL),
+(536, NULL, 'COTIZANTE / AFILIADO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 534, NULL),
+(537, 'LIS_PARENTEZCOS', 'PARENTEZCOS', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(538, NULL, 'MADRE', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 537, NULL),
+(539, NULL, 'PADRE', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 537, NULL),
+(540, NULL, 'HERMANO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 537, NULL),
+(541, NULL, 'TIO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 537, NULL),
+(542, NULL, 'ABUELO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 537, NULL),
+(543, NULL, 'PRIMO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 537, NULL),
+(544, NULL, 'OTRO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 537, NULL),
+(545, 'LIS_RANGOSALARIALES', 'RANGOS SALARIALES', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(546, NULL, 'RANGO 1', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 544, NULL),
+(547, NULL, 'RANGO 2', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 544, NULL),
+(548, NULL, 'RANGO 3', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 544, NULL),
+(549, 'LIS_ZONAS', 'ZONAS', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(550, 'U', 'URBANA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 549, NULL),
+(551, 'R', 'RURAL', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 549, NULL),
+(552, 'LIS_PAISES', 'PAISES', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(553, 'CO', 'COLOMBIA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 552, NULL),
+(554, 'VE', 'VENEZUELA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 552, NULL),
+(555, 'LIS_DEPARTAMENTOS', 'DEPARTAMENTOS', 552, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(556, 'GUA', 'LA GUAJIRA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 555, NULL),
+(557, 'ATL', 'ATLÃNTICO', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 555, NULL),
+(558, 'BOL', 'BOLÃVAR', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 555, NULL),
+(559, 'COR', 'CÃ“RDOBA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 555, NULL),
+(560, 'MAG', 'MAGDALENA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 555, NULL),
+(561, 'CES', 'CESAR', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 555, NULL),
+(562, 'SUC', 'SUCRE', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 555, NULL),
+(563, 'LIS_MUNICIPIOS', 'MUNICIPIOS', 555, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(564, NULL, 'RIOHACHA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(565, NULL, 'URUMITA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(566, NULL, 'VILLANUEVA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(567, NULL, 'URIBIA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(568, NULL, 'SAN JUAN DEL CESAR', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(569, NULL, 'MAICAO', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(570, NULL, 'LA JAGUA DEL PILAR', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(571, NULL, 'HATONUEVO', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(572, NULL, 'DIBULLA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(573, NULL, 'DISTRACCION', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(574, NULL, 'EL MOLINO', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(575, NULL, 'BARRANCAS', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(576, NULL, 'ALBANIA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(577, NULL, 'MANAURE', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(578, NULL, 'MAICAO', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(579, NULL, 'MONTERÃA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(580, NULL, 'VALLEDUPAR', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(581, NULL, 'FONSECA', 553, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 556, NULL),
+(582, 'LIS_DISCAPACIDADES', 'DISCAPACIDADES', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(583, NULL, 'SENSORIAL', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 582, NULL),
+(584, NULL, 'PSICOSOCIAL', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 582, NULL),
+(585, NULL, 'COGNITIVA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 582, NULL),
+(586, NULL, 'MOTRIZ', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 582, NULL),
+(587, 'LIS_NIVELSISBEN', 'NIVELES SISBEN', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(588, '1', 'UNO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 587, NULL),
+(589, '2', 'DOS', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 587, NULL),
+(590, '3', 'TRES', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 587, NULL),
+(591, 'LIS_TIPOSNOTAS', 'TIPOS DE NOTAS PARA PACIENTES', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(592, NULL, 'BLOQUEADO INCUMPLIMIENTO DE CITA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 591, NULL),
+(593, NULL, 'BLOQUEADO DEBE CUOTA MODERADORA', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 591, NULL),
+(594, NULL, 'HABILITADO VACUNACION', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 591, NULL),
+(595, 'LIS_ESTADOS', 'ESTADOS', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(596, NULL, 'ACTIVO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 595, NULL),
+(597, NULL, 'SUSPENDIDO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 595, NULL),
+(598, NULL, 'RETIRADO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 595, NULL),
+(599, 'LIS_TIPOSFUNCIONARIOS', 'TIPOS DE FUNCIONARIO', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(600, NULL, 'PERMANENTE', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 599, NULL),
+(601, NULL, 'TEMPORAL', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 599, NULL),
+(602, 'LIS_TIPOSPUBLICACION', 'TIPOS PUBLICACION', NULL, NULL, 1, NULL, '2022-08-26 00:29:00', NULL, NULL, NULL, 1, 1, NULL),
+(603, NULL, 'COMENTARIO', NULL, NULL, 1, NULL, '2022-08-26 00:42:35', NULL, NULL, NULL, 1, 602, NULL),
+(604, NULL, 'PUBLICACION', NULL, NULL, 1, NULL, '2022-08-26 00:42:35', NULL, NULL, NULL, 1, 602, NULL),
+(605, NULL, 'PREGUNTA', NULL, NULL, 1, NULL, '2022-08-26 00:42:35', NULL, NULL, NULL, 1, 602, NULL),
+(606, NULL, 'RESPUESTA', NULL, NULL, 1, NULL, '2022-08-26 00:42:35', NULL, NULL, NULL, 1, 602, NULL),
+(607, NULL, 'LABORATORIO DESCARGADO', NULL, NULL, 1, NULL, '2022-08-26 00:42:35', NULL, NULL, NULL, 1, 602, NULL),
+(608, 'LIS_RESPUESTASINO', 'RESPUESTAS SI O NO', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 1, NULL),
+(609, NULL, 'SI', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 608, NULL),
+(610, NULL, 'NO', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 608, NULL),
+(611, 'LIS_UNIDADESTIEMPO', 'UNIDADES TIEMPO', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 1, NULL),
+(612, NULL, 'SEGUNDOS', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 611, NULL),
+(613, NULL, 'MINUTOS', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 611, NULL),
+(614, NULL, 'HORAS', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 611, NULL),
+(615, NULL, 'DIAS', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 611, NULL),
+(616, NULL, 'SEMANAS', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 611, NULL),
+(617, NULL, 'MESES', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 611, NULL),
+(618, NULL, 'AÃ‘OS', NULL, NULL, 1, NULL, '2022-08-26 00:43:59', NULL, NULL, NULL, 1, 611, NULL),
+(619, 'LIS_REACCIONES', 'REACCIONES', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 1, NULL),
+(620, NULL, 'ME GUSTA', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 619, NULL),
+(621, NULL, 'ME ENCANTA', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 619, NULL),
+(622, NULL, 'ME DIVIERTE', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 619, NULL),
+(623, NULL, 'ME SORPRENDE', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 619, NULL),
+(624, NULL, 'ME ENTRISTECE', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 619, NULL),
+(625, NULL, 'ME ENOJO', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 619, NULL),
+(626, NULL, 'PROFESOR', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 5, NULL),
+(627, NULL, 'ESTUDIANTE', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 5, NULL),
+(628, NULL, 'PADRE', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 5, NULL),
+(629, 'LIS_TIPOSCAMPOS', 'TIPOS DE CAMPOS HTML', NULL, NULL, 1, NULL, '2022-08-26 00:44:56', NULL, NULL, NULL, 1, 1, NULL),
+(664, 'text', 'Campos de textos', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(665, 'textarea ', 'Ãreas de texto', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(666, 'search ', 'Campos de busqueda', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(667, 'tel ', 'Campos de telefono', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(668, 'url ', 'Campos de url', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(669, 'email ', 'Campos de email', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(670, 'date ', 'Campos de fecha', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(671, 'select', 'Combos de selecciÃ³n', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(672, 'hidden', 'Campos Ocultos', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(673, 'password', 'ContraseÃ±as', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(674, 'checkbox', 'Checkbox', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(675, 'radio', 'Radios', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(676, 'image', 'ImÃ¡genes', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(677, 'file', 'Ficheros', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(678, 'button', 'Botones', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(679, 'submit', 'Botones de envÃ­o', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(680, 'reset', 'Botones de borrado', NULL, NULL, 1, NULL, '2022-08-26 00:48:29', NULL, NULL, NULL, 1, 629, NULL),
+(681, 'LIS_TIPOMATERIA', 'TIPOS DE MATERIAS ESCOLARES', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 1, NULL),
+(682, NULL, 'CIENCIAS NATURALES Y EDUCACIÃ“N AMBIENTAL', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(683, NULL, 'CIENCIAS SOCIALES', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(684, NULL, 'HISTORIA', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(685, NULL, 'GEOGRAFÃA', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(686, NULL, 'CONSTITUCIÃ“N POLÃTICA Y DEMOCRACIA', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(687, NULL, 'ARTÃSTICA Y CULTURAL', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(688, NULL, 'Ã‰TICA Y EN VALORES HUMANOS', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(689, NULL, 'EDUCACIÃ“N FÃSICA, RECREACIÃ“N Y DEPORTES', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(690, NULL, 'RELIGION', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(691, NULL, 'HUMANIDADES', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(692, NULL, 'LENGUA CASTELLANA', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(693, NULL, 'INGLES', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(694, NULL, 'IDIOMAS EXTRANJEROS', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(695, NULL, 'MATEMÃTICAS', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(696, NULL, 'TECNOLOGÃA E INFORMÃTICA', NULL, NULL, 1, NULL, '2022-08-26 01:10:49', NULL, NULL, NULL, 1, 681, NULL),
+(697, 'LIST_GRADOS', 'GRADOS', NULL, NULL, 1, NULL, '2022-08-26 20:57:19', NULL, NULL, NULL, 1, 1, NULL),
+(698, '', 'PRIMERO', NULL, NULL, 1, NULL, '2022-08-26 20:59:14', NULL, NULL, NULL, 1, 697, NULL),
+(699, '', 'SEGUNDO', NULL, NULL, 1, NULL, '2022-08-26 21:01:15', NULL, NULL, NULL, 1, 697, NULL),
+(700, '', 'TERCERO', NULL, NULL, 1, NULL, '2022-08-26 21:01:32', NULL, NULL, NULL, 1, 697, NULL),
+(701, '', 'CUARTO', NULL, NULL, 1, NULL, '2022-08-26 21:01:32', NULL, NULL, NULL, 1, 697, NULL),
+(702, '', 'QUINTO', NULL, NULL, 1, NULL, '2022-08-26 21:01:32', NULL, NULL, NULL, 1, 697, NULL),
+(703, '', 'SEXTO', NULL, NULL, 1, NULL, '2022-08-26 21:01:32', NULL, NULL, NULL, 1, 697, NULL),
+(704, '', 'SEPTIMO', NULL, NULL, 1, NULL, '2022-08-26 21:01:42', NULL, NULL, NULL, 1, 697, NULL),
+(705, '', 'OCTAVO', NULL, NULL, 1, NULL, '2022-08-26 21:01:52', NULL, NULL, NULL, 1, 697, NULL),
+(706, '', 'NOVENO', NULL, NULL, 1, NULL, '2022-08-26 21:02:17', NULL, NULL, NULL, 1, 697, NULL),
+(707, '', 'DECIMO', NULL, NULL, 1, NULL, '2022-08-26 21:02:17', NULL, NULL, NULL, 1, 697, NULL),
+(708, '', 'ONCE', NULL, NULL, 1, NULL, '2022-08-26 21:03:06', NULL, NULL, NULL, 1, 697, NULL),
+(709, '', 'DOCE', NULL, NULL, 1, NULL, '2022-08-26 21:03:06', NULL, NULL, NULL, 1, 697, NULL),
+(710, 'LIS_DIASEMANA', 'DIAS DE LA SEMANA', NULL, NULL, 1, NULL, '2022-08-28 02:40:47', NULL, NULL, NULL, 1, 1, NULL),
+(711, NULL, 'LUNES', NULL, NULL, 1, NULL, '2022-08-28 02:41:42', NULL, NULL, NULL, 1, 710, NULL),
+(712, NULL, 'MARTES', NULL, NULL, 1, NULL, '2022-08-28 02:41:42', NULL, NULL, NULL, 1, 710, NULL),
+(713, NULL, 'MIERCOLES', NULL, NULL, 1, NULL, '2022-08-28 02:41:42', NULL, NULL, NULL, 1, 710, NULL),
+(714, NULL, 'JUEVES', NULL, NULL, 1, NULL, '2022-08-28 02:41:42', NULL, NULL, NULL, 1, 710, NULL),
+(715, NULL, 'VIERNES', NULL, NULL, 1, NULL, '2022-08-28 02:41:42', NULL, NULL, NULL, 1, 710, NULL),
+(716, 'LIS_CORTES', 'CORTES', NULL, NULL, 1, NULL, '2022-09-01 22:29:49', NULL, NULL, NULL, 1, 1, NULL),
+(717, NULL, 'PRIMER PERIODO', NULL, NULL, 1, NULL, '2022-09-01 22:31:41', NULL, NULL, NULL, 1, 716, NULL),
+(718, NULL, 'SEGUNDO PERIODO', NULL, NULL, 1, NULL, '2022-09-01 22:31:41', NULL, NULL, NULL, 1, 716, NULL),
+(719, NULL, 'TERCER PERIODO', NULL, NULL, 1, NULL, '2022-09-01 22:31:41', NULL, NULL, NULL, 1, 716, NULL),
+(720, NULL, 'CUARTO PERIODO', NULL, NULL, 1, NULL, '2022-09-01 22:31:41', NULL, NULL, NULL, 1, 716, NULL),
+(721, NULL, 'QUINTO PERIODO', NULL, NULL, 1, NULL, '2022-09-01 22:31:41', NULL, NULL, NULL, 1, 716, NULL),
+(722, 'LIS_TIPOEVENTO', 'TIPO EVENTO', NULL, NULL, 1, NULL, '2022-09-01 22:31:41', NULL, NULL, NULL, 1, 1, NULL),
+(723, NULL, 'PUBLICO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 722, NULL),
+(724, NULL, 'PRIVADO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 722, NULL),
+(725, NULL, 'GENERAL', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 722, NULL),
+(726, 'LIS_AREAS', 'LISTADO DE AREAS', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 1, NULL),
+(727, '', 'ADMINISTRATIVA', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(728, '', 'VENTAS', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(729, '', 'COMPRAS', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(730, '', 'DEVOLUCIONES', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(731, '', 'MARKETING', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(732, '', 'LOGISTICA', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(733, '', 'INVENTARIOS', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(734, '', 'FINANZAS', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(735, '', 'RECURSOS HUMANOS', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(736, '', 'INVESTIGACION Y DESARROLLO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 726, NULL),
+(737, 'LIS_TIPO_EMPLEADOS', 'TIPOS DE EMPLEADOS', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 1, NULL),
+(738, '', 'PLANTA', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 737, NULL),
+(739, '', 'PRESTADOR DE SERVICIOS', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 737, NULL),
+(740, '', 'TEMPORAL', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 737, NULL),
+(741, '', 'PRACTICANTE', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 2, 737, NULL),
+(742, 'LIS_TIPO_ESTADOS_MENSAJES', 'TIPOS DE ESTADOS MENSAJES', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 1, NULL),
+(743, '', 'PENDIENTE', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 742, NULL),
+(744, '', 'ENVIADO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 742, NULL),
+(745, '', 'ENTREGADO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 742, NULL),
+(746, '', 'LEIDO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 742, NULL),
+(747, 'LIS_TIPO_MENSAJES', 'TIPOS DE MENSAJES', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 1, NULL),
+(748, '', 'TEXTO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(749, '', 'REACION', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(750, '', 'IMAGEN', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(751, '', 'DESCONOCIDO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(752, '', 'UBICACION', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(753, '', 'CONTACTO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(754, '', 'TEMPLATE', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(755, '', 'VIDEO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(756, '', 'DOCUMENTO', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 747, NULL),
+(757, 'LIS_TIPO_ESTADO_CONVERSACION', 'ESTADOS CONVERSACION', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 1, NULL),
+(758, '', 'ACTIVA', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 757, NULL),
+(759, '', 'ARCHIVADA', NULL, NULL, 1, NULL, '2022-09-27 00:51:18', NULL, NULL, NULL, 1, 757, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mensajeria`
+--
+
+CREATE TABLE `mensajeria` (
+  `id` bigint NOT NULL,
+  `mensaje_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `recipiente_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `conversacion_id` bigint DEFAULT NULL,
+  `origin` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `timestamp_w` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `celular` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `created_by_id` int DEFAULT NULL,
+  `estado_id` int DEFAULT NULL,
+  `updated_by_id` int DEFAULT NULL,
+  `destinatario_id` bigint DEFAULT NULL,
+  `texto` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `tipo_id` int DEFAULT NULL,
+  `sha256` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `multimedia_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `mime_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `link` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `filename` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `voice` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `context_from` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `context_id` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `mensajeria`
+--
+
+INSERT INTO `mensajeria` (`id`, `mensaje_id`, `recipiente_id`, `conversacion_id`, `origin`, `timestamp_w`, `celular`, `created_at`, `updated_at`, `created_by_id`, `estado_id`, `updated_by_id`, `destinatario_id`, `texto`, `tipo_id`, `sha256`, `multimedia_id`, `mime_type`, `link`, `filename`, `voice`, `context_from`, `context_id`) VALUES
+(424, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjM4NUQzOTQ5MzI4NzU3M0Q2NjQ4NTBGMUQ1ODBCREIA', '573014582878', 4, NULL, '1699885646', '573014582878', '2023-11-13 14:27:28', '2023-11-13 14:27:28', NULL, 745, NULL, NULL, 'Hjhj', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(425, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjk3OUFDMzI1OTgwNDhCRjFGMDhCRTlFREI4QzAwREYA', '573014582878', 4, NULL, '1699885821', '573014582878', '2023-11-13 14:30:23', '2023-11-13 14:30:23', NULL, 745, NULL, NULL, 'Lklk', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(426, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODVFQ0I1OTgxNTM2OTc3OUREOEFDRDFEQ0I1Njg0NzEA', '573014582878', 4, NULL, '1699885831', '573014582878', '2023-11-13 14:30:33', '2023-11-13 14:30:33', NULL, 745, NULL, NULL, 'Tututu', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(427, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDAyOEJCRkE1RTlCRUJEQ0E0AA==', '573014582878', 4, NULL, '1699885878', '573014582878', '2023-11-13 14:31:18', '2023-11-13 14:31:19', 2, 745, NULL, 3781, 'hhh', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(428, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzE1MTczMDhFQjEyQ0YyOUJGQkJBNzM1MzQ0NjAyQUIA', '573014582878', 4, NULL, '1699885468', '573014582878', '2023-11-13 14:31:21', '2023-11-13 14:31:21', NULL, 745, NULL, NULL, 'Fffr', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(429, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0QzMjBDNkNCMTU1MjA2RURFMzA5MUVGMUYyNDQ0MEMA', '573014582878', 4, NULL, '1699885887', '573014582878', '2023-11-13 14:31:28', '2023-11-13 14:31:28', NULL, 745, NULL, NULL, '....', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(430, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjEzNkVDNUMyMDQ5MzExNzNBN0VENDMyRUVDMTEzRjkA', '573014582878', 4, NULL, '1699885551', '573014582878', '2023-11-13 14:33:18', '2023-11-13 14:33:18', NULL, 745, NULL, NULL, 'Hh', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(431, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTE3RDZEOEZCRjJEMDIyQjMzAA==', '573014582878', 4, NULL, '1699886051', '573014582878', '2023-11-13 14:34:10', '2023-11-13 14:34:13', 2, 745, NULL, 3781, 'hhhh', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(432, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzE5MTVDOTE2NTZCRkE0QUQzRTExNTU4REZDODZBNTEA', '573014582878', 4, NULL, '1699886066', '573014582878', '2023-11-13 14:34:28', '2023-11-13 14:34:28', NULL, 745, NULL, NULL, '...', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(433, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzNFQzY3MTAzQTQ0RDdCMEVCNTA1ODExN0REN0FCQTAA', '573014582878', 4, NULL, '1699886071', '573014582878', '2023-11-13 14:34:33', '2023-11-13 14:34:33', NULL, 745, NULL, NULL, 'Ggg', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(434, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRTZDMjY0NUZFQkYwQzg2NEQzAA==', '573014582878', 4, NULL, '1699886082', '573014582878', '2023-11-13 14:34:42', '2023-11-13 14:34:43', 2, 745, NULL, 3781, 'fgfgfg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(435, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNERCQkI2NkRGODUzNjUzQjA3NzYzN0U2NjA3Njk4MzYA', '573014582878', 4, NULL, '1699886098', '573014582878', '2023-11-13 14:34:59', '2023-11-13 14:34:59', NULL, 745, NULL, NULL, 'Opop', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(436, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQThFRDRDRDU0MDdEMjE1RjFBN0RERUUyNzE5RTg5NTcA', '573014582878', 4, NULL, '1699886102', '573014582878', '2023-11-13 14:35:04', '2023-11-13 14:35:04', NULL, 745, NULL, NULL, '123', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(437, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzlDOTU3MTAwMTFDRUE2MkFBMDU3OTRCN0E4NjM1RDkA', '573014582878', 4, NULL, '1699886106', '573014582878', '2023-11-13 14:35:07', '2023-11-13 14:35:07', NULL, 745, NULL, NULL, '456', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(438, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjk0NzMwMzA5NzhEQ0NGM0I3AA==', '573014582878', 4, NULL, '1699886130', '573014582878', '2023-11-13 14:35:30', '2023-11-13 14:35:33', 2, 745, NULL, 3781, 'jjj', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(439, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSODM1QzI4Q0VFN0IzNkI4OEM3AA==', '573014582878', 4, NULL, '1699886499', '573014582878', '2023-11-13 14:41:29', '2023-11-13 14:41:40', 2, 745, NULL, 3781, 'hhhhh', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(440, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDJFREI5NkM2N0FEOTJFMkYxNDQzRUE1NTgwQkIxOTgA', '573014582878', 4, NULL, '1699886505', '573014582878', '2023-11-13 14:41:47', '2023-11-13 14:41:47', NULL, 745, NULL, NULL, '0000', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(441, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTU4MUJFQkU3Njk0MTJEMUZGQURGNUVFMjFDMDJFRDYA', '573014582878', 4, NULL, '1699886526', '573014582878', '2023-11-13 14:42:07', '2023-11-13 14:42:07', NULL, 745, NULL, NULL, 'Lalala', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(442, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjM0M0U1RTA0RTRCRUU4MDE1AA==', '573014582878', 4, NULL, '1699887170', '573014582878', '2023-11-13 14:52:48', '2023-11-13 14:52:51', 2, 745, NULL, 3781, 'gggg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(443, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNDE2NEQ4OTc2RjNENkJDQjU4OEIyMzcyOTNBNDkzN0MA', '573014582878', 4, NULL, '1699887177', '573014582878', '2023-11-13 14:52:58', '2023-11-13 14:52:58', NULL, 745, NULL, NULL, 'Hhhh', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(444, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTQwQTI5MUVEQkU4RTdBRjkyOUNEQjAwNjBFOTUzQzcA', '573014582878', 4, NULL, '1699887222', '573014582878', '2023-11-13 14:53:44', '2023-11-13 14:53:44', NULL, 745, NULL, NULL, 'Lololo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(445, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDg2QUZDMkU4RDRGQjI4RjI4AA==', '573014582878', 4, NULL, '1699887269', '573014582878', '2023-11-13 14:54:29', '2023-11-13 14:54:30', 2, 745, NULL, 3781, 'fffff', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(446, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjZGRUQ1NDdEMDhEMjRDMzM4OTFGOTU2NjBERDdERjAA', '573014582878', 4, NULL, '1699887279', '573014582878', '2023-11-13 14:54:40', '2023-11-13 14:54:40', NULL, 745, NULL, NULL, 'Fffff', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(447, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjFBNTUzNjY1RTk4RkI1REFFQTY1Q0REMTk0ODBDNkMA', '573014582878', 4, NULL, '1699887326', '573014582878', '2023-11-13 14:55:27', '2023-11-13 14:55:27', NULL, 745, NULL, NULL, 'Mmmm', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(448, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjUwNUM5MzFGQUFDODRBNDJEQTMxMUY0MzdDNkFFOUIA', '573014582878', 4, NULL, '1699887381', '573014582878', '2023-11-13 14:56:22', '2023-11-13 14:56:22', NULL, 745, NULL, NULL, 'Lololo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(449, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0NDOEI3NDYwRTVBOEVFOUEzMDVEQjlEMDQxMjc5NzQA', '573014582878', 4, NULL, '1699887390', '573014582878', '2023-11-13 14:56:31', '2023-11-13 14:56:31', NULL, 745, NULL, NULL, 'Ooo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(450, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQkYwRTMxQTE1MjY0NEEyNzkxMEEyQjIxMjVDNkQwMEQA', '573014582878', 4, NULL, '1699887397', '573014582878', '2023-11-13 14:56:38', '2023-11-13 14:56:38', NULL, 745, NULL, NULL, 'Eee', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(451, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTZDQzA1N0UyQzFGOENBMzk4RDNBRDVFODAwRjlFOEIA', '573014582878', 4, NULL, '1699887402', '573014582878', '2023-11-13 14:56:44', '2023-11-13 14:56:44', NULL, 745, NULL, NULL, '666', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(452, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMkIzMDI5QjU4MzdCNDVENzQ4AA==', '573014582878', 4, NULL, '1699887502', '573014582878', '2023-11-13 14:58:22', '2023-11-13 14:58:24', 2, 744, NULL, 3781, 'fgfgfg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(453, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDc2ODc1Mzc0MDg5QjRFOUQwMDJGNENCNkQzMzc1NTUA', '573014582878', 4, NULL, '1699887592', '573014582878', '2023-11-13 14:59:54', '2023-11-13 14:59:54', NULL, 745, NULL, NULL, 'Fff', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(454, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQThDOUQwNUVBNEZGRERDODFENTc0RTM0M0Q0RDBEQ0MA', '573014582878', 4, NULL, '1699887709', '573014582878', '2023-11-13 15:01:50', '2023-11-13 15:01:50', NULL, 745, NULL, NULL, 'Mm', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(455, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUE3RjhGRTZERkZEMUIwRjY4NzQzMTQ5OTQzNzQ2MDYA', '573014582878', 4, NULL, '1699887734', '573014582878', '2023-11-13 15:02:15', '2023-11-13 15:02:15', NULL, 745, NULL, NULL, '1', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(456, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjhBMTdDQjMxQTMxOEVFREY2MThCMDk0QURBREU4QkMA', '573014582878', 4, NULL, '1699887739', '573014582878', '2023-11-13 15:02:20', '2023-11-13 15:02:20', NULL, 745, NULL, NULL, '2', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(457, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNkY5M0I2MzhENTM3MTI0MkU2OUI0REQ0QTA1NEQ3MDIA', '573014582878', 4, NULL, '1699887894', '573014582878', '2023-11-13 15:04:56', '2023-11-13 15:04:56', NULL, 745, NULL, NULL, '3', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(458, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjFDRkYzNTA3OTlEODM4RUE2OUI3MDkyRUFDQzkzNjQA', '573014582878', 4, NULL, '1699887925', '573014582878', '2023-11-13 15:05:26', '2023-11-13 15:05:26', NULL, 745, NULL, NULL, 'M', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(459, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggN0ZGQUIwQzgzOTE4OTJCREIyMUVDQTcxNzYzQ0JCRDkA', '573014582878', 4, NULL, '1699887953', '573014582878', '2023-11-13 15:05:54', '2023-11-13 15:05:54', NULL, 745, NULL, NULL, 'G', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(460, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOEY3Njk5QjNCNzM1NTEzNjk5MzI4MUNFQjVCNDQ1NEIA', '573014582878', 4, NULL, '1699887993', '573014582878', '2023-11-13 15:06:35', '2023-11-13 15:06:35', NULL, 745, NULL, NULL, 'B', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(461, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTFDMkMzMUEyM0JDMDcyNzZBOTNGMTFCOUQ3Q0JDQUEA', '573014582878', 4, NULL, '1699888065', '573014582878', '2023-11-13 15:07:46', '2023-11-13 15:07:46', NULL, 745, NULL, NULL, 'B', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(462, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNDY5MTAwMTkyN0Y4REREMTkwOUE1MzZFMkE3RTcxMkUA', '573014582878', 4, NULL, '1699888155', '573014582878', '2023-11-13 15:09:17', '2023-11-13 15:09:17', NULL, 745, NULL, NULL, 'I', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(463, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0RBODdBMjg2NTNEQ0NBRDVFNTQ0RTQwRTJCNjJENjcA', '573014582878', 4, NULL, '1699888351', '573014582878', '2023-11-13 15:12:32', '2023-11-13 15:12:32', NULL, 745, NULL, NULL, 'L', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(464, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjVGRTM3N0UyOUUzQjE0MzQxNzYwOUM2N0U5OTcxQUIA', '573014582878', 4, NULL, '1699888406', '573014582878', '2023-11-13 15:13:27', '2023-11-13 15:13:27', NULL, 745, NULL, NULL, 'N', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(465, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDVDREQ4RTA2OTM3MjU5RDY2MDM2MzFEQTI4NkM4NzYA', '573014582878', 4, NULL, '1699888555', '573014582878', '2023-11-13 15:15:56', '2023-11-13 15:15:56', NULL, 745, NULL, NULL, 'B', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(466, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjA2QkEzRjEyMDEzMzc1RDhFRTQ5QjhEODI5Rjk4M0IA', '573014582878', 4, NULL, '1699888633', '573014582878', '2023-11-13 15:17:15', '2023-11-13 15:17:15', NULL, 745, NULL, NULL, 'K', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(467, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDU4NzNEQjFFRTFEQjk1NDA3QzM3MjlGMzI3NjU1NjgA', '573014582878', 4, NULL, '1699888808', '573014582878', '2023-11-13 15:20:10', '2023-11-13 15:20:10', NULL, 745, NULL, NULL, 'M', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(468, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzc2MUFFRTJFMEI1NkRERjJBMUMxMENBQUU2RkI2MzEA', '573014582878', 4, NULL, '1699889188', '573014582878', '2023-11-13 15:26:30', '2023-11-13 15:26:30', NULL, 745, NULL, NULL, 'K', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(469, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0MxQjYyMTBGODJGQTAyODAwAA==', '573014582878', 4, NULL, '1699889230', '573014582878', '2023-11-13 15:27:10', '2023-11-13 15:27:11', 2, 745, NULL, 3781, 'ggg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(470, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0M3M0NDRDI1OTM3NzUzNDg2ODMwQzY5NjQ1MTNBNTcA', '573014582878', 4, NULL, '1699889252', '573014582878', '2023-11-13 15:27:34', '2023-11-13 15:27:34', NULL, 745, NULL, NULL, 'Yy', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(471, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0JEM0U5Mzc4MjVFMTdGRkI2MTBCNDIwQkEyMTcwMTUA', '573014582878', 4, NULL, '1699889290', '573014582878', '2023-11-13 15:28:11', '2023-11-13 15:28:11', NULL, 745, NULL, NULL, 'O', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(472, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggN0YyRDMzNEE5MzBDREZFNDA3QTkwMzEyRjMzQTMyMkIA', '573014582878', 4, NULL, '1699889353', '573014582878', '2023-11-13 15:29:14', '2023-11-13 15:29:14', NULL, 745, NULL, NULL, 'O', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(473, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0JGNTgxODVCNTMxQkRCQzdDRUM4RkQyREUyMDREQTMA', '573014582878', 4, NULL, '1699889408', '573014582878', '2023-11-13 15:30:10', '2023-11-13 15:30:10', NULL, 745, NULL, NULL, 'O', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(474, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTU3RTkzQkJFODY5NzQ4RDZDREU3RjFBOUNBNTgzOUYA', '573014582878', 4, NULL, '1699889511', '573014582878', '2023-11-13 15:31:52', '2023-11-13 15:31:52', NULL, 745, NULL, NULL, 'T', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(475, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzM0Mjk1MkU4RjVEODIyODg4NDU5MEQwMkFERkU4NTcA', '573014582878', 4, NULL, '1699890871', '573014582878', '2023-11-13 15:54:33', '2023-11-13 15:54:33', NULL, 745, NULL, NULL, 'J', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(476, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjc4RDE1QTIwRDZENkJBN0EzNDNFNjZBQTE0NEUwNTEA', '573014582878', 4, NULL, '1699890924', '573014582878', '2023-11-13 15:55:25', '2023-11-13 15:55:25', NULL, 745, NULL, NULL, 'Oo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(477, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggREM5NkRCMTJBQjFCMjlBMzU0NkM4MkUyM0Q1ODk3Q0IA', '573014582878', 4, NULL, '1699890969', '573014582878', '2023-11-13 15:56:10', '2023-11-13 15:56:10', NULL, 745, NULL, NULL, 'Ii', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(478, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTFENDMyNUIwMTZGMTc1NEMzRDE0NzMzOTNDN0IwNjYA', '573014582878', 4, NULL, '1699891027', '573014582878', '2023-11-13 15:57:08', '2023-11-13 15:57:08', NULL, 745, NULL, NULL, 'Kk', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(479, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTcyNThFRjdBRjA1MkEyQkE3NjBCNEJBMTkxOUU5QjQA', '573014582878', 4, NULL, '1699891126', '573014582878', '2023-11-13 15:58:48', '2023-11-13 15:58:48', NULL, 745, NULL, NULL, 'Oo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(480, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjQ3NkZDMDdENUQwNjQyMTYzRkE3RjZCMzBCNUZCRjIA', '573014582878', 4, NULL, '1699891137', '573014582878', '2023-11-13 15:58:59', '2023-11-13 15:58:59', NULL, 745, NULL, NULL, 'Uu', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(481, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTMxNzg3QTgwOUY5MTBFNzFFMTNEOTA1NDRGMEU0NDgA', '573014582878', 4, NULL, '1699891170', '573014582878', '2023-11-13 15:59:32', '2023-11-13 15:59:32', NULL, 745, NULL, NULL, 'Oo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(482, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRURCMDQyNzBFN0RCNDJGMDREMjg4RDY3RjU5QjQ5ODUA', '573014582878', 4, NULL, '1699892785', '573014582878', '2023-11-13 16:26:27', '2023-11-13 16:26:27', NULL, 745, NULL, NULL, 'P', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(483, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNDJEOTU5OTU0MUNDRjk5ODUxNUREQjlFRDBFM0ZFRTQA', '573014582878', 4, NULL, '1699892883', '573014582878', '2023-11-13 16:28:04', '2023-11-13 16:28:04', NULL, 745, NULL, NULL, '7', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(484, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTkzMkQ1RTRERjA5OTNFMjNENTlDMkQxMDAyNTcyMzYA', '573014582878', 4, NULL, '1699892729', '573014582878', '2023-11-13 16:32:23', '2023-11-13 16:32:23', NULL, 745, NULL, NULL, 'P', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(485, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTk4QjQ3RUU5NEZCRDE1RTNCNjlDRUMxNzA2QzFBQjMA', '573014582878', 4, NULL, '1699893267', '573014582878', '2023-11-13 16:34:28', '2023-11-13 16:34:28', NULL, 745, NULL, NULL, 'K', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(486, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTNEQzI0NkRFQTRCQkYyNzYzRkM1NjNFODNEN0RBRkIA', '573014582878', 4, NULL, '1699893288', '573014582878', '2023-11-13 16:34:49', '2023-11-13 16:34:49', NULL, 745, NULL, NULL, 'P', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(487, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjA0RUI3MjdCOUYwMTYyMTlCMkRDOEYzQjI2REQxREYA', '573014582878', 4, NULL, '1699893307', '573014582878', '2023-11-13 16:35:09', '2023-11-13 16:35:09', NULL, 745, NULL, NULL, 'Hy', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(488, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzZGRkE3M0NCODYyMzYyRjE1MDIyQjA1QkQyQTQyRkUA', '573014582878', 4, NULL, '1699893350', '573014582878', '2023-11-13 16:35:51', '2023-11-13 16:35:51', NULL, 745, NULL, NULL, 'Pp', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(489, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNERDODMwRUY0QTk4NzhEMjYxOEZFMjE0OEZCQkJCQTEA', '573014582878', 4, NULL, '1699893445', '573014582878', '2023-11-13 16:37:27', '2023-11-13 16:37:27', NULL, 745, NULL, NULL, '1', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(490, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzdFMDY1NEMyNzUyNTYzQjYxRTEzRDNFOUQ3NzcyQ0EA', '573014582878', 4, NULL, '1699893508', '573014582878', '2023-11-13 16:38:29', '2023-11-13 16:38:29', NULL, 745, NULL, NULL, '2', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(491, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTJFMEI5OUFFNURGRUZGQ0FCOEIwM0Y1ODEwQjA2MkEA', '573014582878', 4, NULL, '1699893610', '573014582878', '2023-11-13 16:40:11', '2023-11-13 16:40:11', NULL, 745, NULL, NULL, '3', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(492, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQkVEMDYxNEIzODQ0OTM0NkFCQjk5MzQ4NzRCNDI0NTYA', '573014582878', 4, NULL, '1699893656', '573014582878', '2023-11-13 16:40:58', '2023-11-13 16:40:58', NULL, 745, NULL, NULL, '9', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(493, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRkJGOEIzMzUwMzM2QzQ1RjhEQ0U5QzlENjBCRjc4MDIA', '573014582878', 4, NULL, '1699893685', '573014582878', '2023-11-13 16:41:26', '2023-11-13 16:41:26', NULL, 745, NULL, NULL, '10', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(494, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzY5NTI5MTdCMEE5OTM2RkYzNDA1OUEzNjFDQkU5QUYA', '573014582878', 4, NULL, '1699893717', '573014582878', '2023-11-13 16:41:58', '2023-11-13 16:41:58', NULL, 745, NULL, NULL, '11', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(495, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzY4RDEyNDdGQjgyNjZCOUVBOTI2NkRBODkwRjc0Q0YA', '573014582878', 4, NULL, '1699893908', '573014582878', '2023-11-13 16:45:10', '2023-11-13 16:45:10', NULL, 745, NULL, NULL, '12', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(496, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTQxMUNEMUFDNzMwRDRFQzA5NzFBREYyRkU2RjQ1MzYA', '573014582878', 4, NULL, '1699893968', '573014582878', '2023-11-13 16:46:09', '2023-11-13 16:46:09', NULL, 745, NULL, NULL, '13', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(497, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzhFRUNERTM5MDlDQUEzNTI1RTg4MkY3NEM0RkUwQ0QA', '573014582878', 4, NULL, '1699895038', '573014582878', '2023-11-13 17:04:00', '2023-11-13 17:04:00', NULL, 745, NULL, NULL, 'Qq', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(498, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjE0OTEzRDA3RTBCQTM2Mjc2RjY1MkY5N0IxOUExOTMA', '573014582878', 4, NULL, '1699895046', '573014582878', '2023-11-13 17:04:07', '2023-11-13 17:04:07', NULL, 745, NULL, NULL, 'Yt', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(499, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTFEQjBBMThGRjdFN0E0NzhDNzM1MThGNkQyQTk1NUYA', '573014582878', 4, NULL, '1699895192', '573014582878', '2023-11-13 17:06:34', '2023-11-13 17:06:34', NULL, 745, NULL, NULL, '2', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(500, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTFEQjBBMThGRjdFN0E0NzhDNzM1MThGNkQyQTk1NUYA', '573014582878', 4, NULL, '1699895192', '573014582878', '2023-11-13 17:06:59', '2023-11-13 17:06:59', NULL, 745, NULL, NULL, '2', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(501, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTJCQjYwMUVFNUE1RjUyNDFDMzFDRDc0RjE5RDE3NkEA', '573014582878', 4, NULL, '1699895378', '573014582878', '2023-11-13 17:09:39', '2023-11-13 17:09:39', NULL, 745, NULL, NULL, '1', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(502, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODFEMUE0RDY3MzI0M0RDMUU4NkJCMzY2QTkzRkQ5NkIA', '573014582878', 4, NULL, '1699895418', '573014582878', '2023-11-13 17:10:19', '2023-11-13 17:10:19', NULL, 745, NULL, NULL, '2', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(503, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODFEMUE0RDY3MzI0M0RDMUU4NkJCMzY2QTkzRkQ5NkIA', '573014582878', 4, NULL, '1699895418', '573014582878', '2023-11-13 17:10:44', '2023-11-13 17:10:44', NULL, 745, NULL, NULL, '2', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(504, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzhFRUNERTM5MDlDQUEzNTI1RTg4MkY3NEM0RkUwQ0QA', '573014582878', 4, NULL, '1699895038', '573014582878', '2023-11-13 17:10:50', '2023-11-13 17:10:50', NULL, 745, NULL, NULL, 'Qq', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(505, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzVDODIyMThFOTA2ODgwQjM5RkQyQkM1QjUyNjk5NjAA', '573014582878', 4, NULL, '1699895248', '573014582878', '2023-11-13 17:14:23', '2023-11-13 17:14:23', NULL, 745, NULL, NULL, '3', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(506, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODk1REQwMDQ4MDVGMjUzOUJDNEM5NTA4OEI2RDkzN0YA', '573014582878', 4, NULL, '1699895696', '573014582878', '2023-11-13 17:14:58', '2023-11-13 17:14:58', NULL, 745, NULL, NULL, '4', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(507, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjVEQzU5QzI4Rjg1NTUzMkUwNTI4NEVENkYxNjFEMDUA', '573014582878', 4, NULL, '1699895939', '573014582878', '2023-11-13 17:19:00', '2023-11-13 17:19:00', NULL, 745, NULL, NULL, '5', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(508, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTlGOTI4NzFFRjZENEUzMzM3RTJFNzQ3QTU5RTFCQzgA', '573014582878', 4, NULL, '1699895967', '573014582878', '2023-11-13 17:19:29', '2023-11-13 17:19:29', NULL, 745, NULL, NULL, '6', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(509, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODFEMUE0RDY3MzI0M0RDMUU4NkJCMzY2QTkzRkQ5NkIA', '573014582878', 4, NULL, '1699895418', '573014582878', '2023-11-13 17:19:44', '2023-11-13 17:19:44', NULL, 745, NULL, NULL, '2', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(510, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEVEMDE3QTdDN0E1MTA0MzE3Qzg1MzdCRTM4RUUwREMA', '573014582878', 4, NULL, '1699896049', '573014582878', '2023-11-13 17:20:50', '2023-11-13 17:20:50', NULL, 745, NULL, NULL, '7', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(511, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjk1OTFDRkI5NzdEMjk2Njg2NjIxREYyODZBNEQzMzAA', '573014582878', 4, NULL, '1699895518', '573014582878', '2023-11-13 17:21:07', '2023-11-13 17:21:07', NULL, 745, NULL, NULL, '3', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(513, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODk1REQwMDQ4MDVGMjUzOUJDNEM5NTA4OEI2RDkzN0YA', '573014582878', 4, NULL, '1699895696', '573014582878', '2023-11-13 17:23:59', '2023-11-13 17:23:59', NULL, 745, NULL, NULL, '4', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(514, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTU5QUUzNkY2NDFGMjYyMzA2MTRCRTUyMUYzRDc1NzAA', '573014582878', 4, NULL, '1699897062', '573014582878', '2023-11-13 17:37:44', '2023-11-13 17:37:44', NULL, 745, NULL, NULL, '8', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(515, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNUEzMEU4RjJGREJEOTM2MUZGMkVBNUIwNjRBOTI1QUQA', '573014582878', 4, NULL, '1699897110', '573014582878', '2023-11-13 17:38:32', '2023-11-13 17:38:32', NULL, 745, NULL, NULL, '9', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(516, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOERBNDRDMzU1RTIwMDBFQzM0MUQ3NUVGOUYwRDczRDYA', '573014582878', 4, NULL, '1699897164', '573014582878', '2023-11-13 17:39:25', '2023-11-13 17:39:25', NULL, 745, NULL, NULL, '10', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(517, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTU5NjlEOTQ1RTk3MDk3M0E4RENFMDI5NDg0Qzg1MEMA', '573014582878', 4, NULL, '1699897196', '573014582878', '2023-11-13 17:39:57', '2023-11-13 17:39:57', NULL, 745, NULL, NULL, '11', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(518, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0ZGODhGNTg4RkE1NDQzRTc2RjQwQkNBMENGODYxOTUA', '573014582878', 4, NULL, '1699897277', '573014582878', '2023-11-13 17:41:19', '2023-11-13 17:41:19', NULL, 745, NULL, NULL, '12', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(519, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTBFODI0QTJDQTc4NTRGMzQxRDU2M0QwREQwNkRERDkA', '573014582878', 4, NULL, '1699897307', '573014582878', '2023-11-13 17:41:48', '2023-11-13 17:41:48', NULL, 745, NULL, NULL, '13', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(520, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQUIwQ0I4Q0ZDQkFENzVBMDAzOUI5RDZBQjFFMDlDQTIA', '573014582878', 4, NULL, '1699897423', '573014582878', '2023-11-13 17:43:45', '2023-11-13 17:43:45', NULL, 745, NULL, NULL, '14', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(521, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjk1RkFERTMzOTk5NkJBQkQxRjEyNzQzNDlBMjA3OEQA', '573014582878', 4, NULL, '1699897476', '573014582878', '2023-11-13 17:44:37', '2023-11-13 17:44:37', NULL, 745, NULL, NULL, '15', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(522, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNDVBNDJFODBBNDZCODRBMzVEODExQ0RCQTNGOEU2NjEA', '573014582878', 4, NULL, '1699897511', '573014582878', '2023-11-13 17:45:12', '2023-11-13 17:45:12', NULL, 745, NULL, NULL, '16', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(523, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjlGOTQ4NkI3QkExOTYzMDdGMzk5MzdEOUYxOTUzNjkA', '573014582878', 4, NULL, '1699897644', '573014582878', '2023-11-13 17:47:26', '2023-11-13 17:47:26', NULL, 745, NULL, NULL, '17', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(524, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTU1NjE3RDg0RTYzNTJEODk3MzgzMzNCRDc1RDA1NkEA', '573014582878', 4, NULL, '1699897685', '573014582878', '2023-11-13 17:48:06', '2023-11-13 17:48:06', NULL, 745, NULL, NULL, '18', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(525, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMkNFNTU0QzNBODI0MEU5MTU0RUE5N0FFMzc2OEMxQjAA', '573014582878', 4, NULL, '1699897779', '573014582878', '2023-11-13 17:49:41', '2023-11-13 17:49:41', NULL, 745, NULL, NULL, '19', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(526, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUMwRjQ2RkI2NEQzRDdENjQ1MEU0REVGOEI4NkRERjMA', '573014582878', 4, NULL, '1699897787', '573014582878', '2023-11-13 17:49:48', '2023-11-13 17:49:48', NULL, 745, NULL, NULL, '20', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(527, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzM3RDNEMjEzOURCQzE2QzAxRTQzMUIyRTlGNTYwQzgA', '573014582878', 4, NULL, '1699897800', '573014582878', '2023-11-13 17:50:01', '2023-11-13 17:50:01', NULL, 745, NULL, NULL, '21', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(528, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODY3MUYzMEJFMjg0OTI0OTU3OEVFNDQ5MTEwNUQwQUMA', '573014582878', 4, NULL, '1699897869', '573014582878', '2023-11-13 17:51:10', '2023-11-13 17:51:10', NULL, 745, NULL, NULL, '22', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(529, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQkIyMzI1QUM3OUJCNDVDODFBQzU0NkRFM0U0QjU2QzEA', '573014582878', 4, NULL, '1699897871', '573014582878', '2023-11-13 17:51:12', '2023-11-13 17:51:12', NULL, 745, NULL, NULL, '23', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(530, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOUE1QzA4OTJCQTM5NDEyMENDMEVGRjNGMjRGRUNGNjYA', '573014582878', 4, NULL, '1699897873', '573014582878', '2023-11-13 17:51:15', '2023-11-13 17:51:15', NULL, 745, NULL, NULL, '24', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(531, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjFFMzUwN0Q1MDJGRUFFNTlCQjlBREZBQ0RGMEQ1NzMA', '573014582878', 4, NULL, '1699898136', '573014582878', '2023-11-13 17:55:38', '2023-11-13 17:55:38', NULL, 745, NULL, NULL, '25', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(532, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNEJENDc4Njc0MTMzMUZGOTFEMjM1NEYxNDFBNjA4NTAA', '573014582878', 4, NULL, '1699898138', '573014582878', '2023-11-13 17:55:39', '2023-11-13 17:55:39', NULL, 745, NULL, NULL, '26', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(533, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzNBQzMwNjU5RTk0MTI4NjM1REQ0MThCOURDQURGRDAA', '573014582878', 4, NULL, '1699898139', '573014582878', '2023-11-13 17:55:40', '2023-11-13 17:55:40', NULL, 745, NULL, NULL, '27', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(534, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDRFM0M1OTQ1NDYzNzk3MkQ5MDBCMzdGQjU1NTdCOTUA', '573014582878', 4, NULL, '1699898314', '573014582878', '2023-11-13 17:58:35', '2023-11-13 17:58:35', NULL, 745, NULL, NULL, '28', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(535, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOUVDQjM1MUFEQjcwRkM2NDAxRUUzOTA3Nzg5NkVDMTUA', '573014582878', 4, NULL, '1699898330', '573014582878', '2023-11-13 17:58:51', '2023-11-13 17:58:51', NULL, 745, NULL, NULL, '29', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(536, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDQ0ODBGMTE1RDhFMDVDQUM5QkJDMjYyMEUxQTBCQTAA', '573014582878', 4, NULL, '1699898331', '573014582878', '2023-11-13 17:58:53', '2023-11-13 17:58:53', NULL, 745, NULL, NULL, '30', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(537, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzczQjkxOTU4RDYyQUNDRTA0OUI2NDhFQUFFNzY3MUUA', '573014582878', 4, NULL, '1699898359', '573014582878', '2023-11-13 17:59:20', '2023-11-13 17:59:20', NULL, 745, NULL, NULL, '31', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(538, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzY4NjE5QzBFRUQzOEZFQzJGRUI1NEE0N0M4MDAzMEMA', '573014582878', 4, NULL, '1699898360', '573014582878', '2023-11-13 17:59:21', '2023-11-13 17:59:21', NULL, 745, NULL, NULL, '32', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(539, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNEJFRjE0MjRGNTg1MUIzMTlBMUE5NzMxQkJEMkM3ODgA', '573014582878', 4, NULL, '1699898360', '573014582878', '2023-11-13 17:59:22', '2023-11-13 17:59:22', NULL, 745, NULL, NULL, '33', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(540, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTI3M0M2MTJDNzE5NTgzMkIzNzc4MUIwNUUwQjI2QkIA', '573014582878', 4, NULL, '1699898456', '573014582878', '2023-11-13 18:00:57', '2023-11-13 18:00:57', NULL, 745, NULL, NULL, '34', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(541, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzZEQTAxNTc2Rjg2QkVGMTg1OEQ2ODA4REMzOThEMjUA', '573014582878', 4, NULL, '1699898457', '573014582878', '2023-11-13 18:00:58', '2023-11-13 18:00:58', NULL, 745, NULL, NULL, '35', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(542, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTUxRTk3NTg0QzIzMDhDOUZGOUEwQTU1M0Q4NDZEM0YA', '573014582878', 4, NULL, '1699898457', '573014582878', '2023-11-13 18:00:59', '2023-11-13 18:00:59', NULL, 745, NULL, NULL, '36', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(543, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDUyOTkwQUM0QkQwN0U1OUE2MzYzMzI2MDgxMTI0NkUA', '573014582878', 4, NULL, '1699898632', '573014582878', '2023-11-13 18:03:54', '2023-11-13 18:03:54', NULL, 745, NULL, NULL, '37', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(544, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTFGMUQyOEQxMkRBOTA4RjIxRjA3OTBEMjUzNEVGN0EA', '573014582878', 4, NULL, '1699898693', '573014582878', '2023-11-13 18:04:55', '2023-11-13 18:04:55', NULL, 745, NULL, NULL, '38', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(545, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzg2NUYwRDczNDVENEFBREU1RTFFMzBCRDNDNjQ1RjUA', '573014582878', 4, NULL, '1699898819', '573014582878', '2023-11-13 18:07:01', '2023-11-13 18:07:01', NULL, 745, NULL, NULL, '39', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(546, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjJDRUMzNkM1NEYxOUFBNTM5M0VCQTg1NEVENzM3NUYA', '573014582878', 4, NULL, '1699898824', '573014582878', '2023-11-13 18:07:05', '2023-11-13 18:07:05', NULL, 745, NULL, NULL, '40', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(547, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjYwRDZFNTYwNkM1OTE0RjI0REZFOTZCQTIzRDI0NUUA', '573014582878', 4, NULL, '1699898828', '573014582878', '2023-11-13 18:07:10', '2023-11-13 18:07:10', NULL, 745, NULL, NULL, '41', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(548, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOERGNzc5NEU3QTM2OTRGQTA1OUE4NkE5MzI0OTcwNUMA', '573014582878', 4, NULL, '1699898966', '573014582878', '2023-11-13 18:09:28', '2023-11-13 18:09:28', NULL, 745, NULL, NULL, '42', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(549, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggREE4QjBDRDVCMkEzNkVFQ0ZCM0E0OTcwOUVCMjE2MTQA', '573014582878', 4, NULL, '1699898972', '573014582878', '2023-11-13 18:09:33', '2023-11-13 18:09:33', NULL, 745, NULL, NULL, '43', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(550, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDQ3Q0Q5MzgyMzUyMDg1M0VENEFDMDE4NjU3NTAyQzgA', '573014582878', 4, NULL, '1699898975', '573014582878', '2023-11-13 18:09:36', '2023-11-13 18:09:36', NULL, 745, NULL, NULL, '44', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(551, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjE5ODRFMkZBMDRBNzZEQ0Y3MUUzRTkyMkNENzBCNjQA', '573014582878', 4, NULL, '1699898976', '573014582878', '2023-11-13 18:09:38', '2023-11-13 18:09:38', NULL, 745, NULL, NULL, '55', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(552, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjRGMDk2MTc1QkE5RTA4NDBDAA==', '573014582878', 4, NULL, '1699898991', '573014582878', '2023-11-13 18:09:51', '2023-11-13 18:09:52', 2, 745, NULL, 3781, 'hello', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(553, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjY3Mzc2MDU3QTVCMEQzNzUzQjBDODZCOTY2Mjk2ODYA', '573014582878', 4, NULL, '1699898996', '573014582878', '2023-11-13 18:09:57', '2023-11-13 18:09:57', NULL, 745, NULL, NULL, 'Como estas?', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(554, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTBFMDgwOTdEMzIzQUVBMUI0NjUwQzdENzdGODk5NjUA', '573014582878', 4, NULL, '1699899027', '573014582878', '2023-11-13 18:10:29', '2023-11-13 18:10:29', NULL, 745, NULL, NULL, 'Bien', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(555, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQThGRjdFMUMxMzgyRTE5QUEzMTI5NDlDOTA3RUNDMDMA', '573014582878', 4, NULL, '1699899058', '573014582878', '2023-11-13 18:10:59', '2023-11-13 18:10:59', NULL, 745, NULL, NULL, 'Ii', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(556, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRkQ0MTE1QjVBNUZGQ0M4QTUzMzAxNjhDNDU0MDFGMjEA', '573014582878', 4, NULL, '1699899065', '573014582878', '2023-11-13 18:11:06', '2023-11-13 18:11:06', NULL, 745, NULL, NULL, 'Oo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(557, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjM0NDExQkFBQzMzMEYxMEZGRTk4NjY4ODE5NzBFRkIA', '573014582878', 4, NULL, '1699899073', '573014582878', '2023-11-13 18:11:14', '2023-11-13 18:11:14', NULL, 745, NULL, NULL, 'Pp', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(558, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0Y1ODUwQ0VFMjQxRTZBRUFDMUI5RTdBNDlDNTEzM0IA', '573014582878', 4, NULL, '1699899120', '573014582878', '2023-11-13 18:12:01', '2023-11-13 18:12:01', NULL, 745, NULL, NULL, 'Oo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(559, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTA3NThFNUU4N0JBMUNCOUI5QTc1RkYxOTFFRTJBOEEA', '573014582878', 4, NULL, '1699899126', '573014582878', '2023-11-13 18:12:07', '2023-11-13 18:12:07', NULL, 745, NULL, NULL, 'Yy', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(560, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNkVBN0U1MzQxOTAzOUVDNzQwNzYyNkZCMjRGQTdCMkMA', '573014582878', 4, NULL, '1699899245', '573014582878', '2023-11-13 18:14:07', '2023-11-13 18:14:07', NULL, 745, NULL, NULL, 'Oo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(561, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjM1NTJCMzc1NzRFMUM2Q0Y3Rjg2RDc2ODI1MzJBQkUA', '573014582878', 4, NULL, '1699899249', '573014582878', '2023-11-13 18:14:10', '2023-11-13 18:14:10', NULL, 745, NULL, NULL, 'Yy', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(562, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTNFMjBCOEIxMkI3MzQxOTcwNUZEMEIzQzUyMzhCMTgA', '573014582878', 4, NULL, '1699899474', '573014582878', '2023-11-13 18:17:55', '2023-11-13 18:17:55', NULL, 745, NULL, NULL, 'Oo', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(563, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTA4NkFENTJBOEUyRkY1OENDNDY4OUE1MTMwMzc1MkIA', '573014582878', 4, NULL, '1699899476', '573014582878', '2023-11-13 18:17:58', '2023-11-13 18:17:58', NULL, 745, NULL, NULL, '11', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(564, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0UxMDU1ODU1QTA0MDcwNTczRDgwODNCOEVFNkYyNzMA', '573014582878', 4, NULL, '1699899479', '573014582878', '2023-11-13 18:18:00', '2023-11-13 18:18:00', NULL, 745, NULL, NULL, '22', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(565, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTFBMkFBQzM1RkZGMkE1REFCOUM2N0EzNERENDM5NTQA', '573014582878', 4, NULL, '1699899484', '573014582878', '2023-11-13 18:18:05', '2023-11-13 18:18:05', NULL, 745, NULL, NULL, '67', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(566, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODdCQjBEMjgwNTczNjIwRjFGMUYxREUwM0UzNTc1NzMA', '573014582878', 4, NULL, '1699899489', '573014582878', '2023-11-13 18:18:11', '2023-11-13 18:18:11', NULL, 745, NULL, NULL, '78', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(567, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzcxQ0RBMkIyNDVFQjVFNjIzAA==', '573014582878', 4, NULL, '1699899500', '573014582878', '2023-11-13 18:18:20', '2023-11-13 18:18:21', 2, 744, NULL, 3781, 'caso', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(568, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNUE1MDQwRDM3NzIzMURGNzE5MDhBRTRDM0ZDOTMzNkQA', '573014582878', 4, NULL, '1699899505', '573014582878', '2023-11-13 18:18:26', '2023-11-13 18:18:26', NULL, 745, NULL, NULL, '45', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(569, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzhBQzU3QUVBNzRCNUM1QzcyMUNGQjA0NEM1MUUxNDcA', '573014582878', 4, NULL, '1699899671', '573014582878', '2023-11-13 18:21:13', '2023-11-13 18:21:13', NULL, 745, NULL, NULL, '46', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(570, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOEJEQUU4Q0VFRTgzMDVCQTZDAA==', '573014582878', 4, NULL, '1699899680', '573014582878', '2023-11-13 18:21:20', '2023-11-13 18:21:21', 2, 745, NULL, 3781, '47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(571, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggREI4RUQ2ODkyNERCOEI4MTg2NjE1NjYzRTNCNTVFQjkA', '573014582878', 4, NULL, '1699899685', '573014582878', '2023-11-13 18:21:26', '2023-11-13 18:21:26', NULL, 745, NULL, NULL, '48', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(572, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0IzRDVCM0VFQkI4Q0FEMzQ1AA==', '573014582878', 4, NULL, '1699975406', '573014582878', '2023-11-14 15:23:20', '2023-11-14 15:23:27', 2, 745, NULL, 3781, 'ggg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(573, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDc2NEQ3ODlGMUQ1OTJFOUIwMUQ4QzMyQzlBQjc0MDYA', '573014582878', 4, NULL, '1699975420', '573014582878', '2023-11-14 15:23:42', '2023-11-14 15:23:42', NULL, 745, NULL, NULL, 'K', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(574, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDdGODIxQ0Y0QkU4QjRDQTRGMDI2RDg5RDhDMUNDNUQA', '573014582878', 4, NULL, '1699975431', '573014582878', '2023-11-14 15:23:53', '2023-11-14 15:23:53', NULL, 745, NULL, NULL, '5', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(575, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNUI4REJDQjQ3MTI3RENEMzlFRDgxNkM5RkY2MUExQzIA', '573014582878', 4, NULL, '1699975467', '573014582878', '2023-11-14 15:24:28', '2023-11-14 15:24:28', NULL, 745, NULL, NULL, '6', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(576, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEVGQTM1RDZCQkYzQkJFRjY3RTQzRUI0ODNGODQyQzMA', '573014582878', 4, NULL, '1699975495', '573014582878', '2023-11-14 15:24:56', '2023-11-14 15:24:56', NULL, 745, NULL, NULL, '7', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(577, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzhFMTM0Q0FBNTgzRDFFNjhBMEI1RkQxODQ0OUJDNEQA', '573014582878', 4, NULL, '1699975518', '573014582878', '2023-11-14 15:25:19', '2023-11-14 15:25:19', NULL, 745, NULL, NULL, '8', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(578, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDg4QTM1MTk4OUVBMkJGMjA4NDBCNzk1MEU0OTI4QjQA', '573014582878', 4, NULL, '1699975557', '573014582878', '2023-11-14 15:25:58', '2023-11-14 15:25:58', NULL, 745, NULL, NULL, '9', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(579, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjNFQTJBNzlDMjU4RkIxOTEzMDE5MUZFOTA2ODgxRUUA', '573014582878', 4, NULL, '1699975560', '573014582878', '2023-11-14 15:26:01', '2023-11-14 15:26:01', NULL, 745, NULL, NULL, '10', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(580, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTUyMkYwRjMxQzIxQTkxRDgxQTE3RjU3RjAyOTYyNUUA', '573014582878', 4, NULL, '1699975563', '573014582878', '2023-11-14 15:26:04', '2023-11-14 15:26:04', NULL, 745, NULL, NULL, '11', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(581, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTg2NzYyQzUxODc1QTI1Q0NCMjY2NEVEOEQwNDlENTAA', '573014582878', 4, NULL, '1699975564', '573014582878', '2023-11-14 15:26:05', '2023-11-14 15:26:05', NULL, 745, NULL, NULL, '12', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(582, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTQzMjAzM0Q4NjdBODkzOEJGNEZGMjNCRDJBNTdBOEEA', '573014582878', 4, NULL, '1699975565', '573014582878', '2023-11-14 15:26:06', '2023-11-14 15:26:06', NULL, 745, NULL, NULL, '13', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(583, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOEUzNDUzQjVBRjg0RUUwMzE4NjRENTJGNEQxMjJGMTAA', '573014582878', 4, NULL, '1699975566', '573014582878', '2023-11-14 15:26:07', '2023-11-14 15:26:07', NULL, 745, NULL, NULL, '14', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(584, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzIwRUU0MzIxNzBERkYyMThDNDhCMjU5MTMxOTA1OEMA', '573014582878', 4, NULL, '1699975568', '573014582878', '2023-11-14 15:26:09', '2023-11-14 15:26:09', NULL, 745, NULL, NULL, '15', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(585, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDczNkU0NUNCQzY2QTI4QTMwNTlFOEE1QjkzNzExODEA', '573014582878', 4, NULL, '1699975569', '573014582878', '2023-11-14 15:26:11', '2023-11-14 15:26:11', NULL, 745, NULL, NULL, '16', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(586, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNUM4NEIyRDkxRTdDQzIwQUFGAA==', '573014582878', 4, NULL, '1699975605', '573014582878', '2023-11-14 15:26:45', '2023-11-14 15:26:45', 2, 745, NULL, 3781, '17', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(587, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTM2QzJBMDY5QkJDQkE3NEQyAA==', '573014582878', 4, NULL, '1699975612', '573014582878', '2023-11-14 15:26:52', '2023-11-14 15:26:53', 2, 745, NULL, 3781, '18', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(588, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMzY5RjA5OENFN0M1RDUwMzVBAA==', '573014582878', 4, NULL, '1699975618', '573014582878', '2023-11-14 15:26:58', '2023-11-14 15:26:59', 2, 745, NULL, 3781, '19', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(589, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMkM2NUFFMzEwNTFCM0U1RjdFQ0E5QURFNDFDOUU0MUQA', '573014582878', 4, NULL, '1699975622', '573014582878', '2023-11-14 15:27:03', '2023-11-14 15:27:03', NULL, 745, NULL, NULL, '20', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(590, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzkwM0RFRjkwRkZBM0JDNzZFRURGMkJBRkE2RjhFMzgA', '573014582878', 4, NULL, '1699976077', '573014582878', '2023-11-14 15:34:38', '2023-11-14 15:34:38', NULL, 745, NULL, NULL, '21', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(591, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUQxQ0ZGRUE2M0RCRTU5NUY0AA==', '573014582878', 4, NULL, '1699976233', '573014582878', '2023-11-14 15:37:12', '2023-11-14 15:37:14', 2, 745, NULL, 3781, '22', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(592, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0UwQjc4RDQxQ0UwMTkyNTgyNkE2RUY0NTAwNDc0RjUA', '573014582878', 4, NULL, '1699976240', '573014582878', '2023-11-14 15:37:21', '2023-11-14 15:37:21', NULL, 745, NULL, NULL, '23', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(593, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0FCNDU4RjIyQjUyRTI3RUZCQ0Q1RkE5QzA1NDNBRUQA', '573014582878', 4, NULL, '1699976293', '573014582878', '2023-11-14 15:38:14', '2023-11-14 15:38:14', NULL, 745, NULL, NULL, '24', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(594, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzYwNTRBNjdGNjU0MTlBMzhFNThBRkY1MEJGQzM3MEYA', '573014582878', 4, NULL, '1699976713', '573014582878', '2023-11-14 15:45:14', '2023-11-14 15:45:14', NULL, 745, NULL, NULL, '25', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(595, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzBDM0M3NzA3N0M4NzcwNTNEQkMwNjgyRkYyNzY1NzcA', '573014582878', 4, NULL, '1699976860', '573014582878', '2023-11-14 15:47:41', '2023-11-14 15:47:41', NULL, 745, NULL, NULL, '26', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(596, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjZFMzhEMkREMUY0NDg5ODAwM0Y4RTdBMTEyRjM4NjAA', '573014582878', 4, NULL, '1699976889', '573014582878', '2023-11-14 15:48:11', '2023-11-14 15:48:11', NULL, 745, NULL, NULL, '27', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(597, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMkQ5QUQ4Q0EwQUQyRjk1QkQxN0I4MUU5RDREOERFMjAA', '573014582878', 4, NULL, '1699976895', '573014582878', '2023-11-14 15:48:16', '2023-11-14 15:48:16', NULL, 745, NULL, NULL, '28', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(598, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRjdDQjdENDBCNkI3NjkxRTZFAA==', '573014582878', 4, NULL, '1699976927', '573014582878', '2023-11-14 15:48:47', '2023-11-14 15:48:49', 2, 745, NULL, 3781, '29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(599, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0REQTM2MTgyMTE0ODdDREFBAA==', '573014582878', 4, NULL, '1699976932', '573014582878', '2023-11-14 15:48:52', '2023-11-14 15:48:53', 2, 745, NULL, 3781, '30', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(600, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRkUxQzQ4MzJBOEYxNjg2M0NFMjM2NjNEMkFEMTdGOEIA', '573014582878', 4, NULL, '1699976936', '573014582878', '2023-11-14 15:48:57', '2023-11-14 15:48:57', NULL, 745, NULL, NULL, '31', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(601, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQUJBRUQ2QTM4M0JGQjEzOTI4N0Y1NDMyNjI4N0VGMDcA', '573014582878', 4, NULL, '1699976942', '573014582878', '2023-11-14 15:49:03', '2023-11-14 15:49:03', NULL, 745, NULL, NULL, '31', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(602, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTU3ODA4QkNDMDZGRDY4QUExAA==', '573014582878', 4, NULL, '1699977026', '573014582878', '2023-11-14 15:50:25', '2023-11-14 15:50:27', 2, 745, NULL, 3781, '32', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(603, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUFENDFDQTBFRTEwNzU3MjczAA==', '573014582878', 4, NULL, '1699977028', '573014582878', '2023-11-14 15:50:28', '2023-11-14 15:50:29', 2, 745, NULL, 3781, '33', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(604, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzE1Q0EyODQ0RjlENEQwRTg4AA==', '573014582878', 4, NULL, '1699977046', '573014582878', '2023-11-14 15:50:45', '2023-11-14 15:50:47', 2, 745, NULL, 3781, '34', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(605, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOUFENTIwMTlGOUZEQzJGNEMzNzdFQ0Q4REVDNTE0MkYA', '573014582878', 4, NULL, '1699977051', '573014582878', '2023-11-14 15:50:52', '2023-11-14 15:50:52', NULL, 745, NULL, NULL, '35', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(606, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzk4ODM4NjE3OUU3MDU2MUY5AA==', '573014582878', 4, NULL, '1699977224', '573014582878', '2023-11-14 15:53:42', '2023-11-14 15:53:45', 2, 745, NULL, 3781, '36', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(607, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQUM1NDc3MzY1QzRGNDQ5RTY1RTUzODMwMzA2QkZERkEA', '573014582878', 4, NULL, '1699977228', '573014582878', '2023-11-14 15:53:49', '2023-11-14 15:53:49', NULL, 745, NULL, NULL, '37', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(608, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTY1QTZGQUM5NDExNjE1NEQ3QUNGQTM5M0U1NzZBMDIA', '573014582878', 4, NULL, '1699979573', '573014582878', '2023-11-14 16:32:54', '2023-11-14 16:32:54', NULL, 745, NULL, NULL, '38', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(609, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzRFMTExMDAzQjEzRTYwRTYyAA==', '573014582878', 4, NULL, '1699979585', '573014582878', '2023-11-14 16:33:06', '2023-11-14 16:33:07', 2, 744, NULL, 3781, '39', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `mensajeria` (`id`, `mensaje_id`, `recipiente_id`, `conversacion_id`, `origin`, `timestamp_w`, `celular`, `created_at`, `updated_at`, `created_by_id`, `estado_id`, `updated_by_id`, `destinatario_id`, `texto`, `tipo_id`, `sha256`, `multimedia_id`, `mime_type`, `link`, `filename`, `voice`, `context_from`, `context_id`) VALUES
+(610, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOEY5NTM5M0Y1QzQ1NkMyNDkxAA==', '573014582878', 4, NULL, '1699980031', '573014582878', '2023-11-14 16:40:30', '2023-11-14 16:40:32', 2, 745, NULL, 3781, 'gggg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(611, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOEFENEMwNjMzRkIxMzYzQjRFRDFGRjkzQTUzODBCMkYA', '573014582878', 4, NULL, '1699980035', '573014582878', '2023-11-14 16:40:36', '2023-11-14 16:40:36', NULL, 745, NULL, NULL, 'G2', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(612, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTRERUIwQjlBQ0U4RDY1Mzk0AA==', '573014582878', 4, NULL, '1699980405', '573014582878', '2023-11-14 16:46:45', '2023-11-14 16:46:46', 2, 745, NULL, 3781, '40', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(613, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTBCMkMxRkVGRDc4RjUxMjRGNkJFQUY4QkJCMjFCNzgA', '573014582878', 4, NULL, '1699980409', '573014582878', '2023-11-14 16:46:50', '2023-11-14 16:46:50', NULL, 745, NULL, NULL, '41', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(614, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzM5NTdCNEU3RjIxMEVBQTVGQTVGMDM1RDZDM0JCODMA', '573014582878', 4, NULL, '1699980524', '573014582878', '2023-11-14 16:48:45', '2023-11-14 16:48:45', NULL, 745, NULL, NULL, '42', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(615, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjcyQUU2N0QwMDUzRjIyQjA5REFEMkUzOTEwNDQ1Q0UA', '573014582878', 4, NULL, '1699980530', '573014582878', '2023-11-14 16:48:51', '2023-11-14 16:48:51', NULL, 745, NULL, NULL, '43', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(616, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzlGMzI3OTdFMDVENDQ2MUYyAA==', '573014582878', 4, NULL, '1699980536', '573014582878', '2023-11-14 16:48:56', '2023-11-14 16:48:57', 2, 745, NULL, 3781, '44', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(617, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMUQ5NEM4QjlDRjhFN0QyMzI0NzRBMDA5NEEyOUJFOTAA', '573014582878', 4, NULL, '1699980543', '573014582878', '2023-11-14 16:49:04', '2023-11-14 16:49:04', NULL, 745, NULL, NULL, '45', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(618, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDJBODgxMTQyMDNEOEVCRUYyAA==', '573014582878', 4, NULL, '1699980955', '573014582878', '2023-11-14 16:55:53', '2023-11-14 16:55:56', 2, 745, NULL, 3781, '46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(619, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDVFRDFCOEI4QUZBQ0IwOERDQUEwOEUxREU1MzVBQTIA', '573014582878', 4, NULL, '1699980962', '573014582878', '2023-11-14 16:56:03', '2023-11-14 16:56:03', NULL, 745, NULL, NULL, '47', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(620, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzM1NTU3MEMyQUE1QTk1NzIzAA==', '573014582878', 4, NULL, '1700061481', '573014582878', '2023-11-15 15:18:00', '2023-11-15 15:18:03', 2, 745, NULL, 3781, 'hhhh', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(621, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzhFRUNERTM5MDlDQUEzNTI1RTg4MkY3NEM0RkUwQ0QA', '573014582878', 4, NULL, '1699895038', '573014582878', '2023-11-15 15:19:13', '2023-11-15 15:19:13', NULL, 745, NULL, NULL, 'Qq', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(622, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjQwODJENTdCM0M4MTM0NTJFRjk4RjM3QTAzQ0NBMkMA', '573014582878', 4, NULL, '1699831783', '573014582878', '2023-11-15 15:20:44', '2023-11-15 15:20:44', NULL, 745, NULL, NULL, 'Saah', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(623, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTkxODBCRDNDOUU0NDRFNzVGODk5N0ExNzQzQkZDNEQA', '573014582878', 4, NULL, '1699833376', '573014582878', '2023-11-15 15:22:15', '2023-11-15 15:22:15', NULL, 745, NULL, NULL, 'Ty', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(624, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNkUyREY5QUI4OEQ3QTM3QzlCMEY5NzIwQjY5MkQ1RjEA', '573014582878', 4, NULL, '1700074352', '573014582878', '2023-11-15 18:52:59', '2023-11-15 18:52:59', NULL, 745, NULL, NULL, 'Iii', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(625, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEIxMUM0RTZDRDg3QjIzQ0E2REE2OUUxMDFFMzhCNjcA', '573014582878', 4, NULL, '1700074391', '573014582878', '2023-11-15 18:53:13', '2023-11-15 18:53:13', NULL, 745, NULL, NULL, 'Op', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(626, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUExQjBEM0REODZEQ0YyMzE1MjNGMUZCQjgyRkM5QjcA', '573014582878', 4, NULL, '1700074392', '573014582878', '2023-11-15 18:53:14', '2023-11-15 18:53:14', NULL, 745, NULL, NULL, 'Po', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(627, 'wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRkRGMTNENEY0NDA0RTc4Q0NGAA==', '573014582878', 4, NULL, '1700074401', '573014582878', '2023-11-15 18:53:21', '2023-11-15 18:53:22', 2, 745, NULL, 3781, 'tesr', NULL, NULL, NULL, 'document', NULL, NULL, NULL, NULL, NULL),
+(628, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMUM4MDhBRUIyN0REOTI5OUMxNDg4QTk5QjVDREMwRDIA', '573014582878', 4, NULL, '1699895161', '573014582878', '2023-11-15 18:55:21', '2023-11-15 18:55:21', NULL, 745, NULL, NULL, '1', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(629, 'wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0ZBM0UyM0UxNEE2OEI2RDQxOThGQzdERkY0MUI4NDgA', '573014582878', 4, NULL, '1699829399', '573014582878', '2023-11-15 18:58:07', '2023-11-15 18:58:07', NULL, 745, NULL, NULL, 'Eeww', 748, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `modulos`
+--
+
+CREATE TABLE `modulos` (
+  `id` bigint NOT NULL,
+  `name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `path` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `icon` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `order` int DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` bigint DEFAULT NULL,
+  `created_by_id` int NOT NULL,
+  `dad_id` bigint DEFAULT NULL,
+  `estado_id` int DEFAULT NULL,
+  `updated_by_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `personas`
+--
+
+CREATE TABLE `personas` (
+  `id` bigint NOT NULL,
+  `identificacion` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `lugarexpedicion` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `fechaexpedicion` date DEFAULT NULL,
+  `direccion` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `telefono` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `telefonomovil` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `telefonowhatsapp` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `sendemail` tinyint(1) DEFAULT NULL,
+  `fechanacimiento` date DEFAULT NULL,
+  `nombre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `segundonombre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `apellido` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `segundoapellido` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `foto` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `barrio` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `observaciones` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted_by` bigint DEFAULT NULL,
+  `ciudad_id` int DEFAULT NULL,
+  `created_by_id` int NOT NULL,
+  `departamento_id` int DEFAULT NULL,
+  `ocupacion_id` int DEFAULT NULL,
+  `pais_id` int DEFAULT NULL,
+  `sexo_id` int DEFAULT NULL,
+  `tipoidentificacion_id` int DEFAULT NULL,
+  `updated_by_id` int DEFAULT NULL,
+  `zona_id` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `personas`
+--
+
+INSERT INTO `personas` (`id`, `identificacion`, `lugarexpedicion`, `fechaexpedicion`, `direccion`, `telefono`, `telefonomovil`, `telefonowhatsapp`, `email`, `sendemail`, `fechanacimiento`, `nombre`, `segundonombre`, `apellido`, `segundoapellido`, `foto`, `barrio`, `observaciones`, `created_at`, `updated_at`, `deleted_at`, `deleted_by`, `ciudad_id`, `created_by_id`, `departamento_id`, `ocupacion_id`, `pais_id`, `sexo_id`, `tipoidentificacion_id`, `updated_by_id`, `zona_id`) VALUES
+(2937, NULL, NULL, NULL, NULL, NULL, '3042115334', '573042115334', NULL, 0, NULL, 'Yilberth', '', 'Galarza', '', NULL, NULL, NULL, '2023-07-18 00:06:27', '2023-07-18 00:06:27', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2938, NULL, NULL, NULL, NULL, NULL, '3014582878', '573014582878', NULL, 0, NULL, 'Nelson', '', 'Borrego', '', NULL, NULL, NULL, '2023-07-19 16:03:05', '2023-07-19 16:03:05', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `peticion`
+--
+
+CREATE TABLE `peticion` (
+  `id` bigint NOT NULL,
+  `estado` varchar(1091) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `peticion`
+--
+
+INSERT INTO `peticion` (`id`, `estado`) VALUES
+(291, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQjJDRUQzQjY2NzE3OTE2MUZEAA==\", \"status\": \"failed\", \"timestamp\": \"1691456798\", \"recipient_id\": \"573042115334\", \"errors\": [{\"code\": 131053, \"title\": \"Media upload error\", \"message\": \"Media upload error\", \"error_data\": {\"details\": \"Downloading media from weblink failed with http code 404, status message Not Found\"}}]}]}, \"field\": \"messages\"}]}]'),
+(292, 'Fallo'),
+(293, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQkQ5RkI2MTMzMUZDMDEyNUQzAA==\", \"status\": \"failed\", \"timestamp\": \"1691457142\", \"recipient_id\": \"573042115334\", \"errors\": [{\"code\": 131053, \"title\": \"Media upload error\", \"message\": \"Media upload error\", \"error_data\": {\"details\": \"Downloading media from weblink failed with http code 404, status message Not Found\"}}]}]}, \"field\": \"messages\"}]}]'),
+(294, 'Fallo'),
+(295, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQ0M1QzJGM0Q2M0Y4NkZGRjlFAA==\", \"status\": \"sent\", \"timestamp\": \"1691457573\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(296, 'Fallo'),
+(297, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQ0M1QzJGM0Q2M0Y4NkZGRjlFAA==\", \"status\": \"delivered\", \"timestamp\": \"1691457573\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(298, 'Fallo'),
+(299, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNkE0QkQ0NjEyODFFMDY1MTM1AA==\", \"status\": \"sent\", \"timestamp\": \"1691458404\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(300, 'Fallo'),
+(301, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNkE0QkQ0NjEyODFFMDY1MTM1AA==\", \"status\": \"delivered\", \"timestamp\": \"1691458404\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(302, 'Fallo'),
+(303, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTU0Q0ZERTAyNkE2MjVCRkE2AA==\", \"status\": \"sent\", \"timestamp\": \"1691458490\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(304, 'Fallo'),
+(305, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTU0Q0ZERTAyNkE2MjVCRkE2AA==\", \"status\": \"delivered\", \"timestamp\": \"1691458490\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(306, 'Fallo'),
+(307, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQ0E0MkI2N0I5RDUxQzZCM0FDAA==\", \"status\": \"sent\", \"timestamp\": \"1691458669\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(308, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQ0E0MkI2N0I5RDUxQzZCM0FDAA==\", \"status\": \"delivered\", \"timestamp\": \"1691458670\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(309, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOUUwMEM2Q0Q4MkYwRDU1MzBDAA==\", \"status\": \"sent\", \"timestamp\": \"1691458941\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(310, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOUUwMEM2Q0Q4MkYwRDU1MzBDAA==\", \"status\": \"delivered\", \"timestamp\": \"1691458941\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(311, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOUY4NkFBNjMyQ0M2MzFDNDhCAA==\", \"status\": \"sent\", \"timestamp\": \"1691459049\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(312, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOUY4NkFBNjMyQ0M2MzFDNDhCAA==\", \"status\": \"delivered\", \"timestamp\": \"1691459049\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(313, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNEE2N0YyMTlFQTY2NDAyRDJBAA==\", \"status\": \"failed\", \"timestamp\": \"1691536768\", \"recipient_id\": \"573042115334\", \"errors\": [{\"code\": 131053, \"title\": \"Media upload error\", \"message\": \"Media upload error\", \"error_data\": {\"details\": \"Downloading media from weblink failed with http code 404, status message Not Found\"}}]}]}, \"field\": \"messages\"}]}]'),
+(314, 'Fallo'),
+(315, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRjgwOTNCNDZCNUJDNjI3NDg2AA==\", \"status\": \"sent\", \"timestamp\": \"1691536971\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(316, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRjgwOTNCNDZCNUJDNjI3NDg2AA==\", \"status\": \"delivered\", \"timestamp\": \"1691536971\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(317, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNjFFRjRCNjQwMkZCMUYxRDhBAA==\", \"status\": \"sent\", \"timestamp\": \"1691537270\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(318, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNjFFRjRCNjQwMkZCMUYxRDhBAA==\", \"status\": \"delivered\", \"timestamp\": \"1691537270\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(319, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQjNFNjg3MTJCQzcyMzNDRERBAA==\", \"status\": \"delivered\", \"timestamp\": \"1691537412\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(320, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQjNFNjg3MTJCQzcyMzNDRERBAA==\", \"status\": \"sent\", \"timestamp\": \"1691537411\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(321, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzMyNjVFRkZGMTExNjA2ODY1AA==\", \"status\": \"sent\", \"timestamp\": \"1691537555\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(322, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzMyNjVFRkZGMTExNjA2ODY1AA==\", \"status\": \"delivered\", \"timestamp\": \"1691537557\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(323, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0EyNzVFMzA1MEMyMkE5MENGAA==\", \"status\": \"sent\", \"timestamp\": \"1691537659\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(324, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0EyNzVFMzA1MEMyMkE5MENGAA==\", \"status\": \"delivered\", \"timestamp\": \"1691537661\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(325, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSREY4MDA5OEFEMTRCRjRFRUY1AA==\", \"status\": \"sent\", \"timestamp\": \"1691537711\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(326, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSREY4MDA5OEFEMTRCRjRFRUY1AA==\", \"status\": \"delivered\", \"timestamp\": \"1691537712\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(327, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDhBRkI3RTE3NDFCMjgyNjU3AA==\", \"status\": \"sent\", \"timestamp\": \"1691537730\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(328, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDhBRkI3RTE3NDFCMjgyNjU3AA==\", \"status\": \"delivered\", \"timestamp\": \"1691537730\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(329, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNzdDRjRDNzYzMTIwQjg5NDIzAA==\", \"status\": \"sent\", \"timestamp\": \"1691538026\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"expiration_timestamp\": \"1691539800\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(330, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNzdDRjRDNzYzMTIwQjg5NDIzAA==\", \"status\": \"delivered\", \"timestamp\": \"1691538028\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c76692afedd664c6b0ef3af3d2fa56da\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(331, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMkIzN0IyMTVCN0QzQjcwQjc0M0E1MUJDRDc4NEFGQ0QA\", \"timestamp\": \"1691541036\", \"text\": {\"body\": \"Hola\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(332, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzM0RUYyQkE5RjJGNTc4RDcyAA==\", \"status\": \"sent\", \"timestamp\": \"1691541049\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(333, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMzM0RUYyQkE5RjJGNTc4RDcyAA==\", \"status\": \"delivered\", \"timestamp\": \"1691541049\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(334, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRjJFMTc3OEQ4MUIxREI4QzNGAA==\", \"status\": \"sent\", \"timestamp\": \"1691541175\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(335, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRjJFMTc3OEQ4MUIxREI4QzNGAA==\", \"status\": \"delivered\", \"timestamp\": \"1691541176\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(336, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTBEN0M5RTgzRkRCOUY1NkE5AA==\", \"status\": \"sent\", \"timestamp\": \"1691541216\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(337, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTBEN0M5RTgzRkRCOUY1NkE5AA==\", \"status\": \"delivered\", \"timestamp\": \"1691541216\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(338, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRkZFNkI3RDJENEMwNjEwREM2AA==\", \"status\": \"delivered\", \"timestamp\": \"1691541268\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(339, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRkZFNkI3RDJENEMwNjEwREM2AA==\", \"status\": \"sent\", \"timestamp\": \"1691541268\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(340, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDAzOUUyMzJBREQ5RENBMzY4AA==\", \"status\": \"sent\", \"timestamp\": \"1691541655\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(341, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRDAzOUUyMzJBREQ5RENBMzY4AA==\", \"status\": \"delivered\", \"timestamp\": \"1691541655\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(342, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggQkJBNkJEOUQ1Rjk1RDE3M0Q4ODAxODk1MUYyQkU1MkIA\", \"timestamp\": \"1691542621\", \"type\": \"image\", \"image\": {\"mime_type\": \"image/jpeg\", \"sha256\": \"PScjhKexFpb5O6ByfQf41mkzY//w2uMUeL0zWvN1P10=\", \"id\": \"261466763406626\"}}]}, \"field\": \"messages\"}]}]'),
+(343, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDFFQTQ5NUMzRDVDMzM5MjE1OENCNjFBREY2NUI2RUEA\", \"timestamp\": \"1691543552\", \"text\": {\"body\": \"Hola\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(344, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMzQ4RERBNzI4MjE2ODBGRkEzN0E5QjE2MTc1QkVBNjgA\", \"timestamp\": \"1691543629\", \"text\": {\"body\": \".Hola\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(345, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMTQ0MEM3QUE0OTM1NkMyOEQ5NkJBODg4OUQyMjdEQTgA\", \"timestamp\": \"1691543650\", \"text\": {\"body\": \".\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(346, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMjFFNEE2RTE1ODZGMzQ2MjZDNDE0OEEwRDIyQzQ4NDAA\", \"timestamp\": \"1691543695\", \"text\": {\"body\": \".....\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(347, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDQ1OTlFMzg0RDk2OEU3Q0ExRTczRjk4NEY4REY0MzkA\", \"timestamp\": \"1691543706\", \"text\": {\"body\": \"Hola\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(348, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOEZFMTkxNDIwNkVEQkNGQUUyAA==\", \"status\": \"sent\", \"timestamp\": \"1691543851\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(349, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSOEZFMTkxNDIwNkVEQkNGQUUyAA==\", \"status\": \"delivered\", \"timestamp\": \"1691543851\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(350, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggRDNEMkY2M0M2QzBCMjcwNjEwNzhEMjBEOUQxQzRBN0IA\", \"timestamp\": \"1691544868\", \"type\": \"image\", \"image\": {\"mime_type\": \"image/jpeg\", \"sha256\": \"/vFqJHo6649VXiufqv/wIAQ5P98qq0+hIS6LoyGyrpA=\", \"id\": \"306709195083724\"}}]}, \"field\": \"messages\"}]}]'),
+(351, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNDY4OTQ5OUU2NDAwQTFCNzVBAA==\", \"status\": \"sent\", \"timestamp\": \"1691544959\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(352, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNDY4OTQ5OUU2NDAwQTFCNzVBAA==\", \"status\": \"delivered\", \"timestamp\": \"1691544959\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(353, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMTU2N0ZERUVEOTVDMTEzRUM2AA==\", \"status\": \"sent\", \"timestamp\": \"1691545283\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(354, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMTU2N0ZERUVEOTVDMTEzRUM2AA==\", \"status\": \"delivered\", \"timestamp\": \"1691545283\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(355, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRUVEM0E3N0I0MDExODU4MDAxAA==\", \"status\": \"sent\", \"timestamp\": \"1691545291\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(356, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRUVEM0E3N0I0MDExODU4MDAxAA==\", \"status\": \"delivered\", \"timestamp\": \"1691545291\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(357, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMDdEQTEyMDQ3RkVGN0Q2QjY5AA==\", \"status\": \"sent\", \"timestamp\": \"1691545306\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"expiration_timestamp\": \"1691627460\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(358, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMDdEQTEyMDQ3RkVGN0Q2QjY5AA==\", \"status\": \"delivered\", \"timestamp\": \"1691545306\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"9bb367673fbdf8774371516539f6ce74\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(359, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggQUU2MjZGMkVDOTYxQTEwQzU4OEIxNzY1REE5NDZGQTUA\", \"timestamp\": \"1691545757\", \"type\": \"video\", \"video\": {\"mime_type\": \"video/mp4\", \"sha256\": \"qJ6GXJlQTvOKniQLZ+3dZPIVgF4mWwO1AtsWwKYqFTY=\", \"id\": \"837519771050729\"}}]}, \"field\": \"messages\"}]}]'),
+(360, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggNzQ0QTc2Q0M1QUVFNDZCQjM3RTJDQTczODVERkUxQUEA\", \"timestamp\": \"1691546469\", \"type\": \"video\", \"video\": {\"mime_type\": \"video/mp4\", \"sha256\": \"DegOR/D0BcHcgDw7oYLhzFvKYVBmtLgQQnOrBeBNCLc=\", \"id\": \"655534253296939\"}}]}, \"field\": \"messages\"}]}]'),
+(361, '[{\"id\": \"103916249443809\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550491736\", \"phone_number_id\": \"112605838565124\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMENBNEE5NDFBOEExOTg0NTE1MDlDQTdCQTlEMjY4NjMA\", \"timestamp\": \"1691546900\", \"type\": \"document\", \"document\": {\"filename\": \"2.1. Art\\u00edculo.pdf\", \"mime_type\": \"application/pdf\", \"sha256\": \"BOaFxAuWyLlzU5pkT2eOk7RGLvqp/ZcaEAJ6SEMj32g=\", \"id\": \"288871103728020\"}}]}, \"field\": \"messages\"}]}]'),
+(362, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0Q1OUEyOUI5MjRDQkEzMDMzAA==\", \"status\": \"sent\", \"timestamp\": \"1698947281\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(363, 'Fallo'),
+(364, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0Q1OUEyOUI5MjRDQkEzMDMzAA==\", \"status\": \"delivered\", \"timestamp\": \"1698947290\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(365, 'Fallo'),
+(366, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRTM3Q0Y5NkE2MUNCRDA5QzgwAA==\", \"status\": \"sent\", \"timestamp\": \"1698947979\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(367, 'Fallo'),
+(368, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRTM3Q0Y5NkE2MUNCRDA5QzgwAA==\", \"status\": \"delivered\", \"timestamp\": \"1698947981\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(369, 'Fallo'),
+(370, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0ZENEYzMTRCNUJCQkNEMTE0AA==\", \"status\": \"sent\", \"timestamp\": \"1699026112\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(371, 'Fallo'),
+(372, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0ZENEYzMTRCNUJCQkNEMTE0AA==\", \"status\": \"delivered\", \"timestamp\": \"1699026113\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(373, 'Fallo'),
+(374, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODc4Q0U2RThGNjVCMDkzN0E0RTdGQkQ5MjJENTI1NDMA\", \"timestamp\": \"1699026117\", \"text\": {\"body\": \"R\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(375, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzA2MUI2MzZCRUJBRUE4MzhDAA==\", \"status\": \"sent\", \"timestamp\": \"1699026288\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(376, 'Fallo'),
+(377, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzA2MUI2MzZCRUJBRUE4MzhDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699026292\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(378, 'Fallo'),
+(379, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzQxMzIyQjgzN0Q0NUFBNDQyAA==\", \"status\": \"sent\", \"timestamp\": \"1699026425\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(380, 'Fallo'),
+(381, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzQxMzIyQjgzN0Q0NUFBNDQyAA==\", \"status\": \"delivered\", \"timestamp\": \"1699026425\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(382, 'Fallo'),
+(383, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzAzODIzMjQ0MUYzMDIzQzUxAA==\", \"status\": \"sent\", \"timestamp\": \"1699026695\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(384, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzAzODIzMjQ0MUYzMDIzQzUxAA==\", \"status\": \"delivered\", \"timestamp\": \"1699026696\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(385, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTQ0NEU1NkY3NTBDQzIzRjRBAA==\", \"status\": \"sent\", \"timestamp\": \"1699026712\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(386, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTQ0NEU1NkY3NTBDQzIzRjRBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699026712\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(387, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUI5RTZCNTE0MkE1MTkxRUQzAA==\", \"status\": \"sent\", \"timestamp\": \"1699026779\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(388, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUI5RTZCNTE0MkE1MTkxRUQzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699026779\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]');
+INSERT INTO `peticion` (`id`, `estado`) VALUES
+(389, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0M2Q0Q3RTdBMUM5QkUyREZEAA==\", \"status\": \"sent\", \"timestamp\": \"1699026840\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(390, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0M2Q0Q3RTdBMUM5QkUyREZEAA==\", \"status\": \"delivered\", \"timestamp\": \"1699026843\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(391, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTc5Q0EwRTZERjBDQjBGRjMwAA==\", \"status\": \"sent\", \"timestamp\": \"1699027511\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(392, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTc5Q0EwRTZERjBDQjBGRjMwAA==\", \"status\": \"delivered\", \"timestamp\": \"1699027522\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(393, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTdCRDkyQTFFOEJBNTMxN0ZDAA==\", \"status\": \"sent\", \"timestamp\": \"1699027564\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(394, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTdCRDkyQTFFOEJBNTMxN0ZDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699027575\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(395, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0Q0NDdERTIyQkNBQkZGQUY3AA==\", \"status\": \"sent\", \"timestamp\": \"1699027620\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"expiration_timestamp\": \"1699033740\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(396, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0Q0NDdERTIyQkNBQkZGQUY3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699027627\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"8ccca7f1874f13d43f51e300f22fbccc\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(397, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDFEOUI0NjUxQjA3NjREMUVGAA==\", \"status\": \"sent\", \"timestamp\": \"1699043775\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"72c6cbfbae5cfc1109996f190fb563ba\", \"expiration_timestamp\": \"1699130220\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(398, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDFEOUI0NjUxQjA3NjREMUVGAA==\", \"status\": \"delivered\", \"timestamp\": \"1699043776\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"72c6cbfbae5cfc1109996f190fb563ba\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(399, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRjU5RDAwNjc0NTc5NkRGMERGAA==\", \"status\": \"sent\", \"timestamp\": \"1699045082\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"72c6cbfbae5cfc1109996f190fb563ba\", \"expiration_timestamp\": \"1699130220\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(400, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRjU5RDAwNjc0NTc5NkRGMERGAA==\", \"status\": \"delivered\", \"timestamp\": \"1699045095\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"72c6cbfbae5cfc1109996f190fb563ba\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(401, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjVGQ0Q3RDJDQzM4QkNFMjdEAA==\", \"status\": \"sent\", \"timestamp\": \"1699048798\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"72c6cbfbae5cfc1109996f190fb563ba\", \"expiration_timestamp\": \"1699130220\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(402, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjVGQ0Q3RDJDQzM4QkNFMjdEAA==\", \"status\": \"delivered\", \"timestamp\": \"1699048800\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"72c6cbfbae5cfc1109996f190fb563ba\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(403, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMERBNzgzMTFENDA1RDcxRjBDAA==\", \"status\": \"sent\", \"timestamp\": \"1699114179\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"expiration_timestamp\": \"1699200600\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(404, 'Fallo'),
+(405, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMERBNzgzMTFENDA1RDcxRjBDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699114184\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(406, 'Fallo'),
+(407, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQkQ0QTQ3QkFENEZEQTQ2QkU0AA==\", \"status\": \"sent\", \"timestamp\": \"1699114252\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"expiration_timestamp\": \"1699200600\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(408, 'Fallo'),
+(409, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQkQ0QTQ3QkFENEZEQTQ2QkU0AA==\", \"status\": \"delivered\", \"timestamp\": \"1699114253\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(410, 'Fallo'),
+(411, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNDQ1QkE2NDQ4N0M3NDEzMzQ3AA==\", \"status\": \"sent\", \"timestamp\": \"1699150652\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"expiration_timestamp\": \"1699200600\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(412, 'Fallo'),
+(413, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNDQ1QkE2NDQ4N0M3NDEzMzQ3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699150653\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(414, 'Fallo'),
+(415, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUY3MkUyNEU4N0Y3QzI4MDE2AA==\", \"status\": \"sent\", \"timestamp\": \"1699150681\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"expiration_timestamp\": \"1699200600\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(416, 'Fallo'),
+(417, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUY3MkUyNEU4N0Y3QzI4MDE2AA==\", \"status\": \"delivered\", \"timestamp\": \"1699150682\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(418, 'Fallo'),
+(419, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkMwMUU0OTU1RTZDM0EyNDU4AA==\", \"status\": \"sent\", \"timestamp\": \"1699150793\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"expiration_timestamp\": \"1699200600\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(420, 'Fallo'),
+(421, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkMwMUU0OTU1RTZDM0EyNDU4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699150800\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(422, 'Fallo'),
+(423, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNjFCQ0Q2ODIzRkI2NDJFRUE1AA==\", \"status\": \"sent\", \"timestamp\": \"1699153687\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"6b5540d381811c20355e2d58d4dea6e3\", \"expiration_timestamp\": \"1699240140\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(424, 'Fallo'),
+(425, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUVEQzU0RkREOUNCOTBERUVBAA==\", \"status\": \"sent\", \"timestamp\": \"1699153687\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"expiration_timestamp\": \"1699200600\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(426, 'Fallo'),
+(427, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNjFCQ0Q2ODIzRkI2NDJFRUE1AA==\", \"status\": \"delivered\", \"timestamp\": \"1699153688\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"6b5540d381811c20355e2d58d4dea6e3\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(428, 'Fallo'),
+(429, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUVEQzU0RkREOUNCOTBERUVBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699153701\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"7789397959049f0cb6b4a450a8964699\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(430, 'Fallo'),
+(431, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNkI4MUFENjM2NTA3MjQ2NjVFAA==\", \"status\": \"sent\", \"timestamp\": \"1699206214\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"6b5540d381811c20355e2d58d4dea6e3\", \"expiration_timestamp\": \"1699240140\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(432, 'Fallo'),
+(433, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOUNFQzA1NkJFNDFFNjRCREU3AA==\", \"status\": \"sent\", \"timestamp\": \"1699206214\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"daca6a326e4b5420239e7a388dd90aaf\", \"expiration_timestamp\": \"1699292640\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(434, 'Fallo'),
+(435, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOUNFQzA1NkJFNDFFNjRCREU3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699206215\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"daca6a326e4b5420239e7a388dd90aaf\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(436, 'Fallo'),
+(437, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNkI4MUFENjM2NTA3MjQ2NjVFAA==\", \"status\": \"delivered\", \"timestamp\": \"1699206215\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"6b5540d381811c20355e2d58d4dea6e3\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(438, 'Fallo'),
+(439, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTZDN0ZGNzMyN0E3NERDM0I4AA==\", \"status\": \"sent\", \"timestamp\": \"1699282894\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"b1c96b888f420f875eb0d09d3982d306\", \"expiration_timestamp\": \"1699369320\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(440, 'Fallo'),
+(441, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRTZDN0ZGNzMyN0E3NERDM0I4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699282895\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"b1c96b888f420f875eb0d09d3982d306\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(442, 'Fallo'),
+(443, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjFCMTNGMDdBQUI3NDQwQkQzAA==\", \"status\": \"sent\", \"timestamp\": \"1699282895\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"daca6a326e4b5420239e7a388dd90aaf\", \"expiration_timestamp\": \"1699292640\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(444, 'Fallo'),
+(445, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjFCMTNGMDdBQUI3NDQwQkQzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699282897\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"daca6a326e4b5420239e7a388dd90aaf\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(446, 'Fallo'),
+(447, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzE2RUQ3RDc2OUExNjUxREQ5RjBFMjNEQzZGOUM5OTUA\", \"timestamp\": \"1699458083\", \"text\": {\"body\": \"Uu\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(448, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSREZEN0NENkEzMUZCQTk3NjUxAA==\", \"status\": \"sent\", \"timestamp\": \"1699458114\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"6c6dd22ea49b89bfc21d41e4b5717a59\", \"expiration_timestamp\": \"1699544520\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(449, 'Fallo'),
+(450, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSREZEN0NENkEzMUZCQTk3NjUxAA==\", \"status\": \"delivered\", \"timestamp\": \"1699458115\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"6c6dd22ea49b89bfc21d41e4b5717a59\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(451, 'Fallo'),
+(452, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNkNGMEJBRjZENUFGNUI2QjcxAA==\", \"status\": \"sent\", \"timestamp\": \"1699458122\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c1b14d8ea0db90ea9c0cf8be025e79b0\", \"expiration_timestamp\": \"1699544580\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(453, 'Fallo'),
+(454, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSNkNGMEJBRjZENUFGNUI2QjcxAA==\", \"status\": \"delivered\", \"timestamp\": \"1699458122\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c1b14d8ea0db90ea9c0cf8be025e79b0\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(455, 'Fallo'),
+(456, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMDU0QUU1NzZCQkYxRTJGQkNCAA==\", \"status\": \"sent\", \"timestamp\": \"1699458122\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c1b14d8ea0db90ea9c0cf8be025e79b0\", \"expiration_timestamp\": \"1699544580\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(457, 'Fallo'),
+(458, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSMDU0QUU1NzZCQkYxRTJGQkNCAA==\", \"status\": \"delivered\", \"timestamp\": \"1699458122\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c1b14d8ea0db90ea9c0cf8be025e79b0\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(459, 'Fallo'),
+(460, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNDgyNzkyQjRGOEZGM0I5NTM5AA==\", \"status\": \"sent\", \"timestamp\": \"1699458166\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"6c6dd22ea49b89bfc21d41e4b5717a59\", \"expiration_timestamp\": \"1699544520\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(461, 'Fallo'),
+(462, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNDgyNzkyQjRGOEZGM0I5NTM5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699458167\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"6c6dd22ea49b89bfc21d41e4b5717a59\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(463, 'Fallo'),
+(464, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"context\": {\"from\": \"15550344211\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSREZEN0NENkEzMUZCQTk3NjUxAA==\"}, \"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEUwNEFGQUJBNTQ4MDEzOTA2MEVEMDkyRDE4OTU2NEUA\", \"timestamp\": \"1699458176\", \"type\": \"button\", \"button\": {\"payload\": \"PAYLOAD\", \"text\": \"Detener promociones\"}}]}, \"field\": \"messages\"}]}]'),
+(465, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0ZBNTNBMUMxNjNCNzUyNTZGAA==\", \"status\": \"sent\", \"timestamp\": \"1699462260\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"aa1a3a7318286587c6841ea07851fde6\", \"expiration_timestamp\": \"1699548660\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(466, 'Fallo'),
+(467, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0ZBNTNBMUMxNjNCNzUyNTZGAA==\", \"status\": \"delivered\", \"timestamp\": \"1699462260\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"aa1a3a7318286587c6841ea07851fde6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(468, 'Fallo'),
+(469, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMEZENTVCQ0RCRDNDRjY5OTREAA==\", \"status\": \"sent\", \"timestamp\": \"1699462261\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"30cdf3991672fb9b072fefef50c51a90\", \"expiration_timestamp\": \"1699548720\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(470, 'Fallo'),
+(471, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMEZENTVCQ0RCRDNDRjY5OTREAA==\", \"status\": \"delivered\", \"timestamp\": \"1699462262\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"30cdf3991672fb9b072fefef50c51a90\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(472, 'Fallo'),
+(473, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQTMyMTUyMkUzMDNDOUY5RDgxAA==\", \"status\": \"sent\", \"timestamp\": \"1699462349\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c1b14d8ea0db90ea9c0cf8be025e79b0\", \"expiration_timestamp\": \"1699544580\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(474, 'Fallo'),
+(475, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSQTMyMTUyMkUzMDNDOUY5RDgxAA==\", \"status\": \"delivered\", \"timestamp\": \"1699462349\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c1b14d8ea0db90ea9c0cf8be025e79b0\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(476, 'Fallo'),
+(477, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNUE3Q0M2MEI1REYzMkUyRkFEAA==\", \"status\": \"sent\", \"timestamp\": \"1699462350\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"6c6dd22ea49b89bfc21d41e4b5717a59\", \"expiration_timestamp\": \"1699544520\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(478, 'Fallo'),
+(479, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNUE3Q0M2MEI1REYzMkUyRkFEAA==\", \"status\": \"delivered\", \"timestamp\": \"1699462350\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"6c6dd22ea49b89bfc21d41e4b5717a59\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(480, 'Fallo'),
+(481, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRkM2NDMyMzE5ODE0Q0VDNEE4AA==\", \"status\": \"sent\", \"timestamp\": \"1699561538\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"294ca8bc389612bc4fff91a883a76ee5\", \"expiration_timestamp\": \"1699647960\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(482, 'Fallo'),
+(483, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSRkM2NDMyMzE5ODE0Q0VDNEE4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699561539\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"294ca8bc389612bc4fff91a883a76ee5\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(484, 'Fallo'),
+(485, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTA1NjhBREUwNjg3RkY3OTI4AA==\", \"status\": \"sent\", \"timestamp\": \"1699561543\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"dbd1aaa2d9797a81ea4024d074e5dea2\", \"expiration_timestamp\": \"1699647960\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(486, 'Fallo'),
+(487, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTA1NjhBREUwNjg3RkY3OTI4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699561543\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"dbd1aaa2d9797a81ea4024d074e5dea2\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(488, 'Fallo'),
+(489, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzk3Q0REMjRFNDc1MzE1OTBBAA==\", \"status\": \"sent\", \"timestamp\": \"1699561813\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"20569426b5b3becdeff2d1aa2181de8a\", \"expiration_timestamp\": \"1699648260\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(490, 'Fallo'),
+(491, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzk3Q0REMjRFNDc1MzE1OTBBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699561815\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"20569426b5b3becdeff2d1aa2181de8a\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(492, 'Fallo'),
+(493, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNkU0M0UwOTI5NkRFNDA1QTlEMjZBMUM2NDE2RTcxMDYA\", \"timestamp\": \"1699562151\", \"text\": {\"body\": \"Hhhs\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(494, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOUY5QThFN0NGNTY5QTI1MEU2AA==\", \"status\": \"sent\", \"timestamp\": \"1699563364\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"20569426b5b3becdeff2d1aa2181de8a\", \"expiration_timestamp\": \"1699648260\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(495, 'Fallo'),
+(496, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOUY5QThFN0NGNTY5QTI1MEU2AA==\", \"status\": \"delivered\", \"timestamp\": \"1699563373\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"20569426b5b3becdeff2d1aa2181de8a\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(497, 'Fallo'),
+(498, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDQxMzYwQzJDMzQ1NjRENDQ5NTA5N0EwRjIxMzcwNzgA\", \"timestamp\": \"1699563376\", \"text\": {\"body\": \"Rr\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(499, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Yilberth Andres\"}, \"wa_id\": \"573042115334\"}], \"messages\": [{\"from\": \"573042115334\", \"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggNUZBNkNEODJDN0I0Q0YwMDBGNzgxOEZBNkMwM0Q0QzcA\", \"timestamp\": \"1699563758\", \"text\": {\"body\": \".....\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(500, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDA1NUM5OUVEMDExNjI0M0Y2QUVDQ0MwOEUxQzgwMEIA\", \"timestamp\": \"1699575582\", \"text\": {\"body\": \"Hello\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(501, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0JBQzlGNzMxOTUxMzhBRjA2RTBBNEUzNEZCQTUzRTgA\", \"timestamp\": \"1699575606\", \"text\": {\"body\": \"Uuu\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(502, 'Error peticion inicial: (\'Expecting value: line 1 column 1 (char 0)\',)'),
+(503, 'Expecting value: line 1 column 1 (char 0)'),
+(504, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSODQ3RTY1MkQxOTY2NzA5RTU3AA==\", \"status\": \"sent\", \"timestamp\": \"1699815898\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(505, 'Error al actualizar mensaje: '),
+(506, 'Mensajeria matching query does not exist.'),
+(507, 'Error peticion inicial: (\'Invalid request\',)'),
+(508, 'Invalid request'),
+(509, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSODQ3RTY1MkQxOTY2NzA5RTU3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699815900\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(510, 'Error al actualizar mensaje: '),
+(511, 'Mensajeria matching query does not exist.'),
+(512, 'Error peticion inicial: (\'Invalid request\',)'),
+(513, 'Invalid request'),
+(514, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjJDQkI3MEZBREU1MEQ3NDRFMDk0NjU3REEzNkE0MjgA\", \"timestamp\": \"1699816110\", \"text\": {\"body\": \"Dss\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(515, 'Error peticion inicial: (\'Invalid request\',)'),
+(516, 'Invalid request'),
+(517, 'Error peticion inicial: (\'Expecting value: line 1 column 1 (char 0)\',)'),
+(518, 'Expecting value: line 1 column 1 (char 0)'),
+(519, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjM4RDM0MDhCQTkyNjdGMUM4AA==\", \"status\": \"sent\", \"timestamp\": \"1699816544\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(520, 'Error al actualizar mensaje: '),
+(521, 'Mensajeria matching query does not exist.'),
+(522, 'Error peticion inicial: (\'Invalid request\',)'),
+(523, 'Invalid request'),
+(524, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjM4RDM0MDhCQTkyNjdGMUM4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699816545\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(525, 'Error al actualizar mensaje: '),
+(526, 'Mensajeria matching query does not exist.'),
+(527, 'Error peticion inicial: (\'Invalid request\',)'),
+(528, 'Invalid request'),
+(529, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNEFEQTc5NDE2M0RCQ0IzRTc0NjBFNEMzQjJEMTlGNjkA\", \"timestamp\": \"1699816565\", \"text\": {\"body\": \"766\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(530, 'Error peticion inicial: (\'Invalid request\',)'),
+(531, 'Invalid request'),
+(532, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0EwNjAxODNDNjU0MEVGNjFBAA==\", \"status\": \"sent\", \"timestamp\": \"1699816840\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(533, 'Error al actualizar mensaje: '),
+(534, 'Mensajeria matching query does not exist.'),
+(535, 'Error peticion inicial: (\'Invalid request\',)'),
+(536, 'Invalid request'),
+(537, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0EwNjAxODNDNjU0MEVGNjFBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699816841\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(538, 'Error al actualizar mensaje: '),
+(539, 'Mensajeria matching query does not exist.'),
+(540, 'Error peticion inicial: (\'Invalid request\',)'),
+(541, 'Invalid request'),
+(542, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjIzNjc0QzJBNTY3NzlEMDBDAA==\", \"status\": \"sent\", \"timestamp\": \"1699816902\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(543, 'Error peticion inicial: (\'Invalid request\',)'),
+(544, 'Invalid request');
+INSERT INTO `peticion` (`id`, `estado`) VALUES
+(545, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjIzNjc0QzJBNTY3NzlEMDBDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699816902\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(546, 'Error peticion inicial: (\'Invalid request\',)'),
+(547, 'Invalid request'),
+(548, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRkJEMkNDMjJGQkJGOEMyQjlCAA==\", \"status\": \"sent\", \"timestamp\": \"1699816987\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(549, 'Error peticion inicial: (\'Invalid request\',)'),
+(550, 'Invalid request'),
+(551, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRkJEMkNDMjJGQkJGOEMyQjlCAA==\", \"status\": \"delivered\", \"timestamp\": \"1699816987\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(552, 'Error peticion inicial: (\'Invalid request\',)'),
+(553, 'Invalid request'),
+(554, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTlDREJCQjExQkE2MTNFQ0Y2AA==\", \"status\": \"sent\", \"timestamp\": \"1699817112\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(555, 'Error peticion inicial: (\'Invalid request\',)'),
+(556, 'Invalid request'),
+(557, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTlDREJCQjExQkE2MTNFQ0Y2AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817113\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(558, 'Error peticion inicial: (\'Invalid request\',)'),
+(559, 'Invalid request'),
+(560, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTZFNjlBQzI5MjFBNUZENTJFAA==\", \"status\": \"sent\", \"timestamp\": \"1699817120\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(561, 'Error peticion inicial: (\'Invalid request\',)'),
+(562, 'Invalid request'),
+(563, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTZFNjlBQzI5MjFBNUZENTJFAA==\", \"status\": \"delivered\", \"timestamp\": \"1699817121\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(564, 'Error peticion inicial: (\'Invalid request\',)'),
+(565, 'Invalid request'),
+(566, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUIwQ0M5M0Y5MTMyMzk5NUZBAA==\", \"status\": \"sent\", \"timestamp\": \"1699817224\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(567, 'Error peticion inicial: (\'Invalid request\',)'),
+(568, 'Invalid request'),
+(569, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUIwQ0M5M0Y5MTMyMzk5NUZBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699817231\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(570, 'Error peticion inicial: (\'Invalid request\',)'),
+(571, 'Invalid request'),
+(572, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTRBNTNFREQ1NjI3RTJGMjc4AA==\", \"status\": \"sent\", \"timestamp\": \"1699817438\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(573, 'Error peticion inicial: (\'Invalid request\',)'),
+(574, 'Invalid request'),
+(575, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTRBNTNFREQ1NjI3RTJGMjc4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817443\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(576, 'Error peticion inicial: (\'Invalid request\',)'),
+(577, 'Invalid request'),
+(578, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTUyNDc1N0M1OEYzN0U2ODg5AA==\", \"status\": \"sent\", \"timestamp\": \"1699817500\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(579, 'Error peticion inicial: (\'Invalid request\',)'),
+(580, 'Invalid request'),
+(581, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTUyNDc1N0M1OEYzN0U2ODg5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817501\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(582, 'Error peticion inicial: (\'Invalid request\',)'),
+(583, 'Invalid request'),
+(584, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMEJDMkFBOEYyMDNBN0U3RTkyAA==\", \"status\": \"sent\", \"timestamp\": \"1699817544\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(585, 'Error peticion inicial: (\'Invalid request\',)'),
+(586, 'Invalid request'),
+(587, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMEJDMkFBOEYyMDNBN0U3RTkyAA==\", \"status\": \"delivered\", \"timestamp\": \"1699817544\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(588, 'Error peticion inicial: (\'Invalid request\',)'),
+(589, 'Invalid request'),
+(590, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNDJDMkY2MkYyNUE4QkIyODREAA==\", \"status\": \"sent\", \"timestamp\": \"1699817593\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(591, 'Error peticion inicial: (\'Invalid request\',)'),
+(592, 'Invalid request'),
+(593, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNDJDMkY2MkYyNUE4QkIyODREAA==\", \"status\": \"delivered\", \"timestamp\": \"1699817593\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(594, 'Error peticion inicial: (\'Invalid request\',)'),
+(595, 'Invalid request'),
+(596, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzlDNzE3MkY0MTMxQkZGMDcwAA==\", \"status\": \"sent\", \"timestamp\": \"1699817620\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(597, 'Error peticion inicial: (\'Invalid request\',)'),
+(598, 'Invalid request'),
+(599, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzlDNzE3MkY0MTMxQkZGMDcwAA==\", \"status\": \"delivered\", \"timestamp\": \"1699817620\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(600, 'Error peticion inicial: (\'Invalid request\',)'),
+(601, 'Invalid request'),
+(602, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDYwQzdCNEYzMjEzRDk0MkU5AA==\", \"status\": \"sent\", \"timestamp\": \"1699817649\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(603, 'Error peticion inicial: (\'Invalid request\',)'),
+(604, 'Invalid request'),
+(605, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDYwQzdCNEYzMjEzRDk0MkU5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817649\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(606, 'Error peticion inicial: (\'Invalid request\',)'),
+(607, 'Invalid request'),
+(608, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTc5REZEQThCNjM5NkNGREM3AA==\", \"status\": \"sent\", \"timestamp\": \"1699817725\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(609, 'Error peticion inicial: (\'Invalid request\',)'),
+(610, 'Invalid request'),
+(611, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTc5REZEQThCNjM5NkNGREM3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817731\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(612, 'Error peticion inicial: (\'Invalid request\',)'),
+(613, 'Invalid request'),
+(614, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjhCMDRGNzJERTMwQTg1MjY3AA==\", \"status\": \"sent\", \"timestamp\": \"1699817750\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(615, 'Error peticion inicial: (\'Invalid request\',)'),
+(616, 'Invalid request'),
+(617, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjhCMDRGNzJERTMwQTg1MjY3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817750\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(618, 'Error peticion inicial: (\'Invalid request\',)'),
+(619, 'Invalid request'),
+(620, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzQ5MjhBQUYxQzVBMjVCRDc1AA==\", \"status\": \"sent\", \"timestamp\": \"1699817772\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(621, 'Error peticion inicial: (\'Invalid request\',)'),
+(622, 'Invalid request'),
+(623, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzQ5MjhBQUYxQzVBMjVCRDc1AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817772\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(624, 'Error peticion inicial: (\'Invalid request\',)'),
+(625, 'Invalid request'),
+(626, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzhENjlCRjA4ODY0NTlDNEQyAA==\", \"status\": \"sent\", \"timestamp\": \"1699817835\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(627, 'Error peticion inicial: (\'Invalid request\',)'),
+(628, 'Invalid request'),
+(629, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzhENjlCRjA4ODY0NTlDNEQyAA==\", \"status\": \"delivered\", \"timestamp\": \"1699817835\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(630, 'Error peticion inicial: (\'Invalid request\',)'),
+(631, 'Invalid request'),
+(632, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTJCMkUwQjgzMkIyNUFGMTVCAA==\", \"status\": \"sent\", \"timestamp\": \"1699817844\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(633, 'Error peticion inicial: (\'Invalid request\',)'),
+(634, 'Invalid request'),
+(635, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTJCMkUwQjgzMkIyNUFGMTVCAA==\", \"status\": \"delivered\", \"timestamp\": \"1699817844\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(636, 'Error peticion inicial: (\'Invalid request\',)'),
+(637, 'Invalid request'),
+(638, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjg5NTFFMDFFMjkxQ0FBMjBBAA==\", \"status\": \"sent\", \"timestamp\": \"1699817875\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(639, 'Error peticion inicial: (\'Invalid request\',)'),
+(640, 'Invalid request'),
+(641, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjg5NTFFMDFFMjkxQ0FBMjBBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699817875\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(642, 'Error peticion inicial: (\'Invalid request\',)'),
+(643, 'Invalid request'),
+(644, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUFDRDI2OTgwRjk4N0M1MTU2AA==\", \"status\": \"sent\", \"timestamp\": \"1699817912\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(645, 'Error peticion inicial: (\'Invalid request\',)'),
+(646, 'Invalid request'),
+(647, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUFDRDI2OTgwRjk4N0M1MTU2AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817912\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(648, 'Error peticion inicial: (\'Invalid request\',)'),
+(649, 'Invalid request'),
+(650, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTk1MDBFNjFCMjZBQTY3OTM5AA==\", \"status\": \"sent\", \"timestamp\": \"1699817936\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(651, 'Error peticion inicial: (\'Invalid request\',)'),
+(652, 'Invalid request'),
+(653, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTk1MDBFNjFCMjZBQTY3OTM5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699817937\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(654, 'Error peticion inicial: (\'Invalid request\',)'),
+(655, 'Invalid request'),
+(656, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDBBMzRBMTRFQUJFRDg4QjVDAA==\", \"status\": \"sent\", \"timestamp\": \"1699818300\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(657, 'Error peticion inicial: (\'Invalid request\',)'),
+(658, 'Invalid request'),
+(659, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDBBMzRBMTRFQUJFRDg4QjVDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699818301\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(660, 'Error peticion inicial: (\'Invalid request\',)'),
+(661, 'Invalid request'),
+(662, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTg5NjQ5MzZGQThCMURBMzczAA==\", \"status\": \"sent\", \"timestamp\": \"1699818568\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(663, 'Error peticion inicial: (\'Invalid request\',)'),
+(664, 'Invalid request'),
+(665, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTg5NjQ5MzZGQThCMURBMzczAA==\", \"status\": \"delivered\", \"timestamp\": \"1699818570\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(666, 'Error peticion inicial: (\'Invalid request\',)'),
+(667, 'Invalid request'),
+(668, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMkZGQTdGNzdGNjZDQjE2MURDAA==\", \"status\": \"sent\", \"timestamp\": \"1699818850\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(669, 'Error peticion inicial: (\'Invalid request\',)'),
+(670, 'Invalid request'),
+(671, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMkZGQTdGNzdGNjZDQjE2MURDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699818851\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(672, 'Error peticion inicial: (\'Invalid request\',)'),
+(673, 'Invalid request'),
+(674, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSODY3NkE2QUY0NTU2NDRDMUExAA==\", \"status\": \"sent\", \"timestamp\": \"1699818943\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(675, 'Error peticion inicial: (\'Invalid request\',)'),
+(676, 'Invalid request'),
+(677, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSODY3NkE2QUY0NTU2NDRDMUExAA==\", \"status\": \"delivered\", \"timestamp\": \"1699818949\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(678, 'Error peticion inicial: (\'Invalid request\',)'),
+(679, 'Invalid request'),
+(680, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMzM3MzM3NkY5MjNEQzBGNDEzAA==\", \"status\": \"sent\", \"timestamp\": \"1699819009\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(681, 'Error peticion inicial: (\'Invalid request\',)'),
+(682, 'Invalid request'),
+(683, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMzM3MzM3NkY5MjNEQzBGNDEzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819010\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(684, 'Error peticion inicial: (\'Invalid request\',)'),
+(685, 'Invalid request'),
+(686, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMzg0MTVGNDQ1NjRGRTkxMTc4AA==\", \"status\": \"sent\", \"timestamp\": \"1699819061\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(687, 'Error peticion inicial: (\'Invalid request\',)'),
+(688, 'Invalid request'),
+(689, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMzg0MTVGNDQ1NjRGRTkxMTc4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819068\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(690, 'Error peticion inicial: (\'Invalid request\',)'),
+(691, 'Invalid request'),
+(692, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjI1N0I2REZDQTE1MTU3MTMzAA==\", \"status\": \"sent\", \"timestamp\": \"1699819132\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(693, 'Error peticion inicial: (\'Invalid request\',)'),
+(694, 'Invalid request'),
+(695, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjI1N0I2REZDQTE1MTU3MTMzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819133\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(696, 'Error peticion inicial: (\'Invalid request\',)'),
+(697, 'Invalid request'),
+(698, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTczRTZBMDE1OTI1MDcyN0JBAA==\", \"status\": \"sent\", \"timestamp\": \"1699819251\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(699, 'Error peticion inicial: (\'Invalid request\',)'),
+(700, 'Invalid request'),
+(701, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTczRTZBMDE1OTI1MDcyN0JBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819259\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(702, 'Error peticion inicial: (\'Invalid request\',)'),
+(703, 'Invalid request'),
+(704, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMkVCRUE3MUQ4NTdFNkE3QjM5AA==\", \"status\": \"sent\", \"timestamp\": \"1699819393\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(705, 'Error peticion inicial: (\'Invalid request\',)'),
+(706, 'Invalid request'),
+(707, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMkVCRUE3MUQ4NTdFNkE3QjM5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819397\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(708, 'Error peticion inicial: (\'Invalid request\',)'),
+(709, 'Invalid request'),
+(710, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzZFNzZCNTM4QUYzMjc3QTYzRTA1MzUxNEMyMzc4QTAA\", \"timestamp\": \"1699819401\", \"text\": {\"body\": \"Hello\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(711, 'Error peticion inicial: (\'Invalid request\',)'),
+(712, 'Invalid request'),
+(713, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMEExRDUyQzk5NjVEMDhEMUNGAA==\", \"status\": \"sent\", \"timestamp\": \"1699819462\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(714, 'Error peticion inicial: (\'Invalid request\',)'),
+(715, 'Invalid request'),
+(716, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMEExRDUyQzk5NjVEMDhEMUNGAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819463\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(717, 'Error peticion inicial: (\'Invalid request\',)'),
+(718, 'Invalid request'),
+(719, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkM1NEE3QkNDNTI4RDg5OTNGAA==\", \"status\": \"sent\", \"timestamp\": \"1699819467\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(720, 'Error peticion inicial: (\'Invalid request\',)'),
+(721, 'Invalid request'),
+(722, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkM1NEE3QkNDNTI4RDg5OTNGAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819467\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(723, 'Error peticion inicial: (\'Invalid request\',)'),
+(724, 'Invalid request'),
+(725, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDNFRDVBNkFENTk1QUZGMEZBAA==\", \"status\": \"sent\", \"timestamp\": \"1699819490\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(726, 'Error peticion inicial: (\'Invalid request\',)'),
+(727, 'Invalid request'),
+(728, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDNFRDVBNkFENTk1QUZGMEZBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819490\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(729, 'Error peticion inicial: (\'Invalid request\',)'),
+(730, 'Invalid request'),
+(731, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjRERUEyQzc1NTYyQjE3REIwAA==\", \"status\": \"sent\", \"timestamp\": \"1699819491\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(732, 'Error peticion inicial: (\'Invalid request\',)'),
+(733, 'Invalid request'),
+(734, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjRERUEyQzc1NTYyQjE3REIwAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819491\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(735, 'Error peticion inicial: (\'Invalid request\',)'),
+(736, 'Invalid request'),
+(737, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDJBMTNGMTNCQkNGNTE0QTBFAA==\", \"status\": \"sent\", \"timestamp\": \"1699819492\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(738, 'Error peticion inicial: (\'Invalid request\',)'),
+(739, 'Invalid request'),
+(740, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDJBMTNGMTNCQkNGNTE0QTBFAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819492\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(741, 'Error peticion inicial: (\'Invalid request\',)'),
+(742, 'Invalid request'),
+(743, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUU2RTg2NzUzNzFDNkU2RUNDAA==\", \"status\": \"sent\", \"timestamp\": \"1699819493\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(744, 'Error peticion inicial: (\'Invalid request\',)'),
+(745, 'Invalid request'),
+(746, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUU2RTg2NzUzNzFDNkU2RUNDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819493\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(747, 'Error peticion inicial: (\'Invalid request\',)'),
+(748, 'Invalid request'),
+(749, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMUY5QkYyMzk1NjMxQjI4OEQ5AA==\", \"status\": \"sent\", \"timestamp\": \"1699819494\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(750, 'Error peticion inicial: (\'Invalid request\',)'),
+(751, 'Invalid request'),
+(752, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMUY5QkYyMzk1NjMxQjI4OEQ5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819494\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(753, 'Error peticion inicial: (\'Invalid request\',)'),
+(754, 'Invalid request');
+INSERT INTO `peticion` (`id`, `estado`) VALUES
+(755, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTBEQzIwNEVGMDlEQzU1REE0AA==\", \"status\": \"sent\", \"timestamp\": \"1699819519\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(756, 'Error peticion inicial: (\'Invalid request\',)'),
+(757, 'Invalid request'),
+(758, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTBEQzIwNEVGMDlEQzU1REE0AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819520\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(759, 'Error peticion inicial: (\'Invalid request\',)'),
+(760, 'Invalid request'),
+(761, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDJBOEZBNThFRjBDMjY4MDU5AA==\", \"status\": \"sent\", \"timestamp\": \"1699819520\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(762, 'Error peticion inicial: (\'Invalid request\',)'),
+(763, 'Invalid request'),
+(764, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDJBOEZBNThFRjBDMjY4MDU5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819520\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(765, 'Error peticion inicial: (\'Invalid request\',)'),
+(766, 'Invalid request'),
+(767, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRkEyNjUyODkxMjQ1MDA3OTk1AA==\", \"status\": \"sent\", \"timestamp\": \"1699819521\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(768, 'Error peticion inicial: (\'Invalid request\',)'),
+(769, 'Invalid request'),
+(770, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRkEyNjUyODkxMjQ1MDA3OTk1AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819521\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(771, 'Error peticion inicial: (\'Invalid request\',)'),
+(772, 'Invalid request'),
+(773, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRjhCODEyRkM1MzRBMUI0RDc4AA==\", \"status\": \"sent\", \"timestamp\": \"1699819522\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(774, 'Error peticion inicial: (\'Invalid request\',)'),
+(775, 'Invalid request'),
+(776, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRjhCODEyRkM1MzRBMUI0RDc4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819522\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(777, 'Error peticion inicial: (\'Invalid request\',)'),
+(778, 'Invalid request'),
+(779, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzY4RDBDREI0Q0QyQzJDNjY5AA==\", \"status\": \"sent\", \"timestamp\": \"1699819523\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(780, 'Error peticion inicial: (\'Invalid request\',)'),
+(781, 'Invalid request'),
+(782, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzY4RDBDREI0Q0QyQzJDNjY5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819523\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(783, 'Error peticion inicial: (\'Invalid request\',)'),
+(784, 'Invalid request'),
+(785, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDQ2MzQzMDlCNTFBRDU4OENDAA==\", \"status\": \"sent\", \"timestamp\": \"1699819523\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(786, 'Error peticion inicial: (\'Invalid request\',)'),
+(787, 'Invalid request'),
+(788, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDQ2MzQzMDlCNTFBRDU4OENDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819524\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(789, 'Error peticion inicial: (\'Invalid request\',)'),
+(790, 'Invalid request'),
+(791, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0NEMzgxNEE0REJFRTM3MERCAA==\", \"status\": \"sent\", \"timestamp\": \"1699819524\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(792, 'Error peticion inicial: (\'Invalid request\',)'),
+(793, 'Invalid request'),
+(794, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0NEMzgxNEE0REJFRTM3MERCAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819524\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(795, 'Error peticion inicial: (\'Invalid request\',)'),
+(796, 'Invalid request'),
+(797, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTJGMjk1NTIwQzAyMDRBNjU1AA==\", \"status\": \"sent\", \"timestamp\": \"1699819525\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(798, 'Error peticion inicial: (\'Invalid request\',)'),
+(799, 'Invalid request'),
+(800, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTJGMjk1NTIwQzAyMDRBNjU1AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819525\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(801, 'Error peticion inicial: (\'Invalid request\',)'),
+(802, 'Invalid request'),
+(803, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTI5QTIyMTRFNTAzQkYwN0I3AA==\", \"status\": \"sent\", \"timestamp\": \"1699819565\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(804, 'Error peticion inicial: (\'Invalid request\',)'),
+(805, 'Invalid request'),
+(806, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTI5QTIyMTRFNTAzQkYwN0I3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699819566\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(807, 'Error peticion inicial: (\'Invalid request\',)'),
+(808, 'Invalid request'),
+(809, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzRDRUVGQjYxMTM4MzFFRkY1NUFBNUMyMjdEOUVBRjkA\", \"timestamp\": \"1699819576\", \"text\": {\"body\": \"Ultimo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(810, 'Error peticion inicial: (\'Invalid request\',)'),
+(811, 'Invalid request'),
+(812, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjg1QjE2MkUwRjREMDU4MUVFQzMyMTAzNTAyQ0JDNTkA\", \"timestamp\": \"1699819775\", \"text\": {\"body\": \"\\u00daltimo 2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(813, 'Error peticion inicial: (\'Invalid request\',)'),
+(814, 'Invalid request'),
+(815, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNDhFNERENDBDNDNEODYyODJEAA==\", \"status\": \"sent\", \"timestamp\": \"1699819801\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(816, 'Error peticion inicial: (\'Invalid request\',)'),
+(817, 'Invalid request'),
+(818, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNDhFNERENDBDNDNEODYyODJEAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819801\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(819, 'Error peticion inicial: (\'Invalid request\',)'),
+(820, 'Invalid request'),
+(821, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkYwMDc4OUQ4MUY4NzY1MzVCAA==\", \"status\": \"sent\", \"timestamp\": \"1699819846\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(822, 'Error peticion inicial: (\'Invalid request\',)'),
+(823, 'Invalid request'),
+(824, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkYwMDc4OUQ4MUY4NzY1MzVCAA==\", \"status\": \"delivered\", \"timestamp\": \"1699819846\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(825, 'Error peticion inicial: (\'Invalid request\',)'),
+(826, 'Invalid request'),
+(827, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMEFGRTRDNUNGNjY2MzMxQjk2AA==\", \"status\": \"sent\", \"timestamp\": \"1699820119\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(828, 'Error peticion inicial: (\'Invalid request\',)'),
+(829, 'Invalid request'),
+(830, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMEFGRTRDNUNGNjY2MzMxQjk2AA==\", \"status\": \"delivered\", \"timestamp\": \"1699820322\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(831, 'Error peticion inicial: (\'Invalid request\',)'),
+(832, 'Invalid request'),
+(833, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjU5ODc4OTk0MTZBRUVDQUExAA==\", \"status\": \"sent\", \"timestamp\": \"1699822922\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(834, 'Error peticion inicial: (\'Invalid request\',)'),
+(835, 'Invalid request'),
+(836, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjU5ODc4OTk0MTZBRUVDQUExAA==\", \"status\": \"delivered\", \"timestamp\": \"1699822924\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(837, 'Error peticion inicial: (\'Invalid request\',)'),
+(838, 'Invalid request'),
+(839, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTA5M0Q1NkM2NTAzQ0NDQkM5AA==\", \"status\": \"sent\", \"timestamp\": \"1699824755\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(840, 'Error peticion inicial: (\'Invalid request\',)'),
+(841, 'Invalid request'),
+(842, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTA5M0Q1NkM2NTAzQ0NDQkM5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699824756\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(843, 'Error peticion inicial: (\'Invalid request\',)'),
+(844, 'Invalid request'),
+(845, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkNBNzc1OUIxMjU0NkJENjgxAA==\", \"status\": \"sent\", \"timestamp\": \"1699824787\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(846, 'Error peticion inicial: (\'Invalid request\',)'),
+(847, 'Invalid request'),
+(848, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkNBNzc1OUIxMjU0NkJENjgxAA==\", \"status\": \"delivered\", \"timestamp\": \"1699824789\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(849, 'Error peticion inicial: (\'Invalid request\',)'),
+(850, 'Invalid request'),
+(851, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkQwMEU0NkVBRjJBODA1OURDAA==\", \"status\": \"sent\", \"timestamp\": \"1699824815\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(852, 'Error peticion inicial: (\'Invalid request\',)'),
+(853, 'Invalid request'),
+(854, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNkQwMEU0NkVBRjJBODA1OURDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699824819\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(855, 'Error peticion inicial: (\'Invalid request\',)'),
+(856, 'Invalid request'),
+(857, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjE5MEU0Q0FCOEVCMzRBMDhBMTY3ODA0QTc0Q0VERkMA\", \"timestamp\": \"1699824826\", \"text\": {\"body\": \"Uuu\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(858, 'Error peticion inicial: (\'Invalid request\',)'),
+(859, 'Invalid request'),
+(860, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNERBNzhDREVEN0NEQjM2ODVCAA==\", \"status\": \"sent\", \"timestamp\": \"1699824841\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(861, 'Error peticion inicial: (\'Invalid request\',)'),
+(862, 'Invalid request'),
+(863, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNERBNzhDREVEN0NEQjM2ODVCAA==\", \"status\": \"delivered\", \"timestamp\": \"1699824841\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(864, 'Error peticion inicial: (\'Invalid request\',)'),
+(865, 'Invalid request'),
+(866, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUU3M0U3Q0UyQUMyNUJEQjc5AA==\", \"status\": \"sent\", \"timestamp\": \"1699824857\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(867, 'Error peticion inicial: (\'Invalid request\',)'),
+(868, 'Invalid request'),
+(869, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUU3M0U3Q0UyQUMyNUJEQjc5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699824859\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(870, 'Error peticion inicial: (\'Invalid request\',)'),
+(871, 'Invalid request'),
+(872, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTgyRTI3MTk1MjNFQzZFNDZEAA==\", \"status\": \"sent\", \"timestamp\": \"1699824863\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(873, 'Error peticion inicial: (\'Invalid request\',)'),
+(874, 'Invalid request'),
+(875, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTgyRTI3MTk1MjNFQzZFNDZEAA==\", \"status\": \"delivered\", \"timestamp\": \"1699824864\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(876, 'Error peticion inicial: (\'Invalid request\',)'),
+(877, 'Invalid request'),
+(878, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTU2NDdEQkVGNjVDNTlCN0JCAA==\", \"status\": \"sent\", \"timestamp\": \"1699824885\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(879, 'Error peticion inicial: (\'Invalid request\',)'),
+(880, 'Invalid request'),
+(881, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTU2NDdEQkVGNjVDNTlCN0JCAA==\", \"status\": \"delivered\", \"timestamp\": \"1699824885\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(882, 'Error peticion inicial: (\'Invalid request\',)'),
+(883, 'Invalid request'),
+(884, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0I4NENDMDMxRUI2RDQ4NzgwAA==\", \"status\": \"sent\", \"timestamp\": \"1699825176\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(885, 'Error peticion inicial: (\'Invalid request\',)'),
+(886, 'Invalid request'),
+(887, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0I4NENDMDMxRUI2RDQ4NzgwAA==\", \"status\": \"delivered\", \"timestamp\": \"1699825178\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(888, 'Error peticion inicial: (\'Invalid request\',)'),
+(889, 'Invalid request'),
+(890, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzU2QkJEMTRERjM0NDA3MkY3RjZBQjA2QzI4NUE3QzUA\", \"timestamp\": \"1699825473\", \"text\": {\"body\": \"Gg\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(891, 'Error peticion inicial: (\'Invalid request\',)'),
+(892, 'Invalid request'),
+(893, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzVCMDE1MjM2NEJCQkVGNDFEMzMzNEY4NTI4QUU2RjMA\", \"timestamp\": \"1699825543\", \"text\": {\"body\": \"Hhg\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(894, 'Error peticion inicial: (\'Invalid request\',)'),
+(895, 'Invalid request'),
+(896, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQkZGOTgyQUQ1NDdGMzIzOTc4Nzg4NzBBOUQzQzkxNTEA\", \"timestamp\": \"1699825949\", \"text\": {\"body\": \"Ss\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(897, 'Error peticion inicial: (\'Invalid request\',)'),
+(898, 'Invalid request'),
+(899, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTgwMzU2RjE5RjBCNjRFNDlDQjM4RjEwNDNGNTM3NTIA\", \"timestamp\": \"1699826049\", \"text\": {\"body\": \"Tt\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(900, 'Error peticion inicial: (\'Invalid request\',)'),
+(901, 'Invalid request'),
+(902, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNUUyQUQ1NDQ2NkU0NzE0NDQ5REQ5NkE1NDJGNEJFMEUA\", \"timestamp\": \"1699826080\", \"text\": {\"body\": \"Hh\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(903, 'Error peticion inicial: (\'Invalid request\',)'),
+(904, 'Invalid request'),
+(905, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggN0M0MkZDRDYyNkQ2NTQ0NDc0MTdGNjhCOUVCRDRCODEA\", \"timestamp\": \"1699826347\", \"text\": {\"body\": \"Hh\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(906, 'Error peticion inicial: (\'Invalid request\',)'),
+(907, 'Invalid request'),
+(908, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDlGMkY3RENGM0ZBQjYxMTVGM0IzQzc0RDFDRkE5RUEA\", \"timestamp\": \"1699826372\", \"text\": {\"body\": \"Jj\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(909, 'Error peticion inicial: (\'Invalid request\',)'),
+(910, 'Invalid request'),
+(911, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMkRBOTY4Q0MwMTcyNEQ5OUM2NkQ1NUYwRDVFMDIwMjcA\", \"timestamp\": \"1699826463\", \"text\": {\"body\": \"Iii\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(912, 'Error peticion inicial: (\'Invalid request\',)'),
+(913, 'Invalid request'),
+(914, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzE3OTUyREIyQjFDOEJEQTEzNUE2MkI3QTQwRDhDQzcA\", \"timestamp\": \"1699826481\", \"text\": {\"body\": \"Ppp\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(915, 'Error peticion inicial: (\'Invalid request\',)'),
+(916, 'Invalid request'),
+(917, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0Q0QkExNDk0MDgzM0FBOTRFNEUxQ0E1RjU3OTlBRDMA\", \"timestamp\": \"1699826550\", \"text\": {\"body\": \"Rrr\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(918, 'Error peticion inicial: (\'Invalid request\',)'),
+(919, 'Invalid request'),
+(920, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODIxNEUyRDY1NzE1QTEzMTZEOURBQUUxMzI0MEQ1OEQA\", \"timestamp\": \"1699826561\", \"text\": {\"body\": \"Ree\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(921, 'Error peticion inicial: (\'Invalid request\',)'),
+(922, 'Invalid request'),
+(923, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjY1NjEzMENENTA5ODhCNjYyMDE0MTg5Qjk1QzUxNjMA\", \"timestamp\": \"1699826565\", \"text\": {\"body\": \"Yy\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(924, 'Error peticion inicial: (\'Invalid request\',)'),
+(925, 'Invalid request'),
+(926, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTYyMjQ0OTI1MDQwOTVCNjJDNzQzQjVFNUJDNUY0NDIA\", \"timestamp\": \"1699826569\", \"text\": {\"body\": \"Dd\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(927, 'Error peticion inicial: (\'Invalid request\',)'),
+(928, 'Invalid request'),
+(929, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTg0NkM3MUYxMTkzODM5MEZBQkVCQjI3Q0UyNDg1QjIA\", \"timestamp\": \"1699826704\", \"text\": {\"body\": \"Lll\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(930, 'Error peticion inicial: (\'Invalid request\',)'),
+(931, 'Invalid request'),
+(932, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjA3QkE5RDgzMTE0MjQzNDgyMTE2NTM3N0Y4NTAyNUQA\", \"timestamp\": \"1699826928\", \"text\": {\"body\": \"Kkk\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(933, 'Error peticion inicial: (\'Invalid request\',)'),
+(934, 'Invalid request'),
+(935, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzEyRjczQkNGMENDM0FCOTE2OTE1MEI5MzA0RkJBM0MA\", \"timestamp\": \"1699827025\", \"text\": {\"body\": \"Kkkk\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(936, 'Error peticion inicial: (\'Invalid request\',)'),
+(937, 'Invalid request'),
+(938, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTM1Qzc3NDExQkFCNjFFRTgwMDUwMzdDRjc5MEVFMUIA\", \"timestamp\": \"1699827066\", \"text\": {\"body\": \"Uuu\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(939, 'Error peticion inicial: (\'Invalid request\',)'),
+(940, 'Invalid request'),
+(941, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNERCNjc5MzQ0RTYyRUI3NzkyN0QwM0Y0QTFBMzM3QTAA\", \"timestamp\": \"1699827337\", \"text\": {\"body\": \"Ultimo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(942, 'Error peticion inicial: (\'Invalid request\',)'),
+(943, 'Invalid request'),
+(944, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTIzNDQyNjI1MkIzRTVDNzFDQ0I4MjRFRkQ2MjY4RDgA\", \"timestamp\": \"1699827362\", \"text\": {\"body\": \"Ultimo 2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(945, 'Error peticion inicial: (\'Invalid request\',)'),
+(946, 'Invalid request'),
+(947, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNEVENUQ0RjRBRUNGQUREMjEwQjZBRUY5QTQ0QTM0Q0QA\", \"timestamp\": \"1699827416\", \"text\": {\"body\": \"Uuu\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(948, 'Error peticion inicial: (\'Invalid request\',)'),
+(949, 'Invalid request'),
+(950, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjI4RTg4ODVCOTNDNDcyMDYyMTkyQzNGOUVGQkJEQTMA\", \"timestamp\": \"1699827421\", \"text\": {\"body\": \"Ppp\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(951, 'Error peticion inicial: (\'Invalid request\',)'),
+(952, 'Invalid request'),
+(953, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjE0MDUwOTVDMkI3N0I3NDRCQ0UzNzRBMkUzRDA3MzgA\", \"timestamp\": \"1699827460\", \"text\": {\"body\": \"Ooo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(954, 'Error peticion inicial: (\'Invalid request\',)'),
+(955, 'Invalid request'),
+(956, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzY1MkRFOEY5RjFGM0NGRTkzODE3RDdCNzhCMTQzQjUA\", \"timestamp\": \"1699827529\", \"text\": {\"body\": \"Jjj\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(957, 'Error peticion inicial: (\'Invalid request\',)'),
+(958, 'Invalid request'),
+(959, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDY5QjFFMTU1QTFFMTE4RTMxOTNBNjA1OURDRDY1QkIA\", \"timestamp\": \"1699827536\", \"text\": {\"body\": \"Fff\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(960, 'Error peticion inicial: (\'Invalid request\',)'),
+(961, 'Invalid request'),
+(962, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjJBMEM4MjVFQzMzMEMwMTNFAA==\", \"status\": \"delivered\", \"timestamp\": \"1699827545\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(963, 'Error peticion inicial: (\'Invalid request\',)'),
+(964, 'Invalid request'),
+(965, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjJBMEM4MjVFQzMzMEMwMTNFAA==\", \"status\": \"sent\", \"timestamp\": \"1699827544\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(966, 'Error peticion inicial: (\'Invalid request\',)'),
+(967, 'Invalid request'),
+(968, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUY1RjIyRTBFODZGN0E1NTI4RTI1OTYyQTU4MzRDRTYA\", \"timestamp\": \"1699827559\", \"text\": {\"body\": \"Uuu\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(969, 'Error peticion inicial: (\'Invalid request\',)'),
+(970, 'Invalid request'),
+(971, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQkMxMUVENjUyQjNEMUIyOTVDMzQzNTJFNThERjQwMEEA\", \"timestamp\": \"1699827563\", \"text\": {\"body\": \"Ffr\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(972, 'Error peticion inicial: (\'Invalid request\',)'),
+(973, 'Invalid request'),
+(974, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzg3MDY1Q0VCNTc4NkNCN0JDAA==\", \"status\": \"sent\", \"timestamp\": \"1699827577\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(975, 'Error peticion inicial: (\'Invalid request\',)'),
+(976, 'Invalid request');
+INSERT INTO `peticion` (`id`, `estado`) VALUES
+(977, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzg3MDY1Q0VCNTc4NkNCN0JDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699827578\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(978, 'Error peticion inicial: (\'Invalid request\',)'),
+(979, 'Invalid request'),
+(980, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDdGQjYyQzcwQzcyMzQzM0MxAA==\", \"status\": \"sent\", \"timestamp\": \"1699827587\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(981, 'Error peticion inicial: (\'Invalid request\',)'),
+(982, 'Invalid request'),
+(983, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDdGQjYyQzcwQzcyMzQzM0MxAA==\", \"status\": \"delivered\", \"timestamp\": \"1699827587\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(984, 'Error peticion inicial: (\'Invalid request\',)'),
+(985, 'Invalid request'),
+(986, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzgzNUE3NTA4NTYxREQzMjVFAA==\", \"status\": \"sent\", \"timestamp\": \"1699827596\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(987, 'Error peticion inicial: (\'Invalid request\',)'),
+(988, 'Invalid request'),
+(989, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzgzNUE3NTA4NTYxREQzMjVFAA==\", \"status\": \"delivered\", \"timestamp\": \"1699827596\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(990, 'Error peticion inicial: (\'Invalid request\',)'),
+(991, 'Invalid request'),
+(992, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzMwODM2NUFFOEM5QzE1Q0FGRkZCNzcwQkM0QzcyMTgA\", \"timestamp\": \"1699827599\", \"text\": {\"body\": \"Ooo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(993, 'Error peticion inicial: (\'Invalid request\',)'),
+(994, 'Invalid request'),
+(995, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTJDMkI4RDYyQzY5NTUyRDc4AA==\", \"status\": \"sent\", \"timestamp\": \"1699827651\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(996, 'Error peticion inicial: (\'Invalid request\',)'),
+(997, 'Invalid request'),
+(998, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjQ1QjBENDZENzc0NUMzRjQzAA==\", \"status\": \"sent\", \"timestamp\": \"1699827656\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(999, 'Error peticion inicial: (\'Invalid request\',)'),
+(1000, 'Invalid request'),
+(1001, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTJDMkI4RDYyQzY5NTUyRDc4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699827659\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(1002, 'Error peticion inicial: (\'Invalid request\',)'),
+(1003, 'Invalid request'),
+(1004, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjQ1QjBENDZENzc0NUMzRjQzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699827659\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(1005, 'Error peticion inicial: (\'Invalid request\',)'),
+(1006, 'Invalid request'),
+(1007, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQkI1Qzg5RTIzMjhFRkExODJFAA==\", \"status\": \"sent\", \"timestamp\": \"1699827663\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(1008, 'Error peticion inicial: (\'Invalid request\',)'),
+(1009, 'Invalid request'),
+(1010, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQkI1Qzg5RTIzMjhFRkExODJFAA==\", \"status\": \"delivered\", \"timestamp\": \"1699827663\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(1011, 'Error peticion inicial: (\'Invalid request\',)'),
+(1012, 'Invalid request'),
+(1013, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNkJGRDQzNDE0ODg1ODVBQUM4NTk3OUIyOEEyMjUzQTQA\", \"timestamp\": \"1699827669\", \"text\": {\"body\": \"Nnn\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1014, 'Error peticion inicial: (\'Invalid request\',)'),
+(1015, 'Invalid request'),
+(1016, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjEyRkRGRjVBMDcyRUZEMTEzRjg3MTIyRkUxREI3RjYA\", \"timestamp\": \"1699827670\", \"text\": {\"body\": \"Mmm\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1017, 'Error peticion inicial: (\'Invalid request\',)'),
+(1018, 'Invalid request'),
+(1019, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUYzOUE4QTYwNTRERDUzM0VCNjdBNzNGNEU3MDg2NEQA\", \"timestamp\": \"1699827672\", \"text\": {\"body\": \"Jjj\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1020, 'Error peticion inicial: (\'Invalid request\',)'),
+(1021, 'Invalid request'),
+(1022, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNUUyNjI0NzUzQjI3QjY0MzZDOTg4QzFFM0QyNzY4ODAA\", \"timestamp\": \"1699827673\", \"text\": {\"body\": \"Yy\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1023, 'Error peticion inicial: (\'Invalid request\',)'),
+(1024, 'Invalid request'),
+(1025, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjVERDdDRTc3RjJFNTc0NzRGQzA0N0VFNTYzQTAzRDIA\", \"timestamp\": \"1699827674\", \"text\": {\"body\": \"Ggg\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1026, 'Error peticion inicial: (\'Invalid request\',)'),
+(1027, 'Invalid request'),
+(1028, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzlGNjVBQjBEMTMyQzIwQ0U2REQxQ0QwQkU2RkQyRjgA\", \"timestamp\": \"1699827675\", \"text\": {\"body\": \"Yy\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1029, 'Error peticion inicial: (\'Invalid request\',)'),
+(1030, 'Invalid request'),
+(1031, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTVENTc5OTJDOEI0QTY2QzFGMjVDMzdEQUQ2MkM2QzkA\", \"timestamp\": \"1699827676\", \"text\": {\"body\": \"Jj\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1032, 'Error peticion inicial: (\'Invalid request\',)'),
+(1033, 'Invalid request'),
+(1034, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTU3QkZDRjVFQzc4OUQ0MjQzMjgxNTRCRDgxOTYzRDEA\", \"timestamp\": \"1699827677\", \"text\": {\"body\": \"Y\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1035, 'Error peticion inicial: (\'Invalid request\',)'),
+(1036, 'Invalid request'),
+(1037, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTQyNTkzNUIxODVCRkZCNkE4NEZFM0E1Q0IxNUI0ODkA\", \"timestamp\": \"1699827679\", \"text\": {\"body\": \"Gggf\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1038, 'Error peticion inicial: (\'Invalid request\',)'),
+(1039, 'Invalid request'),
+(1040, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEEwRDBDRDEyODNGRUI0M0FGQUU1RkZFNjFCRkZFRDIA\", \"timestamp\": \"1699827680\", \"text\": {\"body\": \"Hh\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1041, 'Error peticion inicial: (\'Invalid request\',)'),
+(1042, 'Invalid request'),
+(1043, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTk0M0Q1MEYyQzQ5ODNBNzAwRkIxOTU0OUE4NjUzODcA\", \"timestamp\": \"1699827681\", \"text\": {\"body\": \"Jjj\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1044, 'Error peticion inicial: (\'Invalid request\',)'),
+(1045, 'Invalid request'),
+(1046, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEU4MUVFNzM4MTc3QTEzN0M3MzBFRkQxQ0QwMEE0OTMA\", \"timestamp\": \"1699827682\", \"text\": {\"body\": \"Ddd\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1047, 'Error peticion inicial: (\'Invalid request\',)'),
+(1048, 'Invalid request'),
+(1049, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjUzMkJGQjhCNTlDQThGNjQ2ODcyODc0NUFFRjQwNzcA\", \"timestamp\": \"1699827683\", \"text\": {\"body\": \"Yyy\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1050, 'Error peticion inicial: (\'Invalid request\',)'),
+(1051, 'Invalid request'),
+(1052, 'Error peticion inicial: (\'Expecting value: line 1 column 1 (char 0)\',)'),
+(1053, 'Expecting value: line 1 column 1 (char 0)'),
+(1054, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjM4NUQzOTQ5MzI4NzU3M0Q2NjQ4NTBGMUQ1ODBCREIA\", \"timestamp\": \"1699885646\", \"text\": {\"body\": \"Hjhj\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1055, 'Error peticion inicial: (\'Invalid request\',)'),
+(1056, 'Invalid request'),
+(1057, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjk3OUFDMzI1OTgwNDhCRjFGMDhCRTlFREI4QzAwREYA\", \"timestamp\": \"1699885821\", \"text\": {\"body\": \"Lklk\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1058, 'Error peticion inicial: (\'Invalid request\',)'),
+(1059, 'Invalid request'),
+(1060, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODVFQ0I1OTgxNTM2OTc3OUREOEFDRDFEQ0I1Njg0NzEA\", \"timestamp\": \"1699885831\", \"text\": {\"body\": \"Tututu\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1061, 'Error peticion inicial: (\'Invalid request\',)'),
+(1062, 'Invalid request'),
+(1063, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDAyOEJCRkE1RTlCRUJEQ0E0AA==\", \"status\": \"sent\", \"timestamp\": \"1699885878\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1064, 'Error peticion inicial: (\'Invalid request\',)'),
+(1065, 'Invalid request'),
+(1066, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDAyOEJCRkE1RTlCRUJEQ0E0AA==\", \"status\": \"delivered\", \"timestamp\": \"1699885878\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1067, 'Error peticion inicial: (\'Invalid request\',)'),
+(1068, 'Invalid request'),
+(1069, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzE1MTczMDhFQjEyQ0YyOUJGQkJBNzM1MzQ0NjAyQUIA\", \"timestamp\": \"1699885468\", \"text\": {\"body\": \"Fffr\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1070, 'Error peticion inicial: (\'Invalid request\',)'),
+(1071, 'Invalid request'),
+(1072, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0QzMjBDNkNCMTU1MjA2RURFMzA5MUVGMUYyNDQ0MEMA\", \"timestamp\": \"1699885887\", \"text\": {\"body\": \"....\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1073, 'Error peticion inicial: (\'Invalid request\',)'),
+(1074, 'Invalid request'),
+(1075, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjEzNkVDNUMyMDQ5MzExNzNBN0VENDMyRUVDMTEzRjkA\", \"timestamp\": \"1699885551\", \"text\": {\"body\": \"Hh\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1076, 'Error peticion inicial: (\'Invalid request\',)'),
+(1077, 'Invalid request'),
+(1078, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTE3RDZEOEZCRjJEMDIyQjMzAA==\", \"status\": \"sent\", \"timestamp\": \"1699886050\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1079, 'Error peticion inicial: (\'Invalid request\',)'),
+(1080, 'Invalid request'),
+(1081, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTE3RDZEOEZCRjJEMDIyQjMzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699886051\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1082, 'Error peticion inicial: (\'Invalid request\',)'),
+(1083, 'Invalid request'),
+(1084, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzE5MTVDOTE2NTZCRkE0QUQzRTExNTU4REZDODZBNTEA\", \"timestamp\": \"1699886066\", \"text\": {\"body\": \"...\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1085, 'Error peticion inicial: (\'Invalid request\',)'),
+(1086, 'Invalid request'),
+(1087, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzNFQzY3MTAzQTQ0RDdCMEVCNTA1ODExN0REN0FCQTAA\", \"timestamp\": \"1699886071\", \"text\": {\"body\": \"Ggg\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1088, 'Error peticion inicial: (\'Invalid request\',)'),
+(1089, 'Invalid request'),
+(1090, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRTZDMjY0NUZFQkYwQzg2NEQzAA==\", \"status\": \"sent\", \"timestamp\": \"1699886081\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1091, 'Error peticion inicial: (\'Invalid request\',)'),
+(1092, 'Invalid request'),
+(1093, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRTZDMjY0NUZFQkYwQzg2NEQzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699886082\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1094, 'Error peticion inicial: (\'Invalid request\',)'),
+(1095, 'Invalid request'),
+(1096, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNERCQkI2NkRGODUzNjUzQjA3NzYzN0U2NjA3Njk4MzYA\", \"timestamp\": \"1699886098\", \"text\": {\"body\": \"Opop\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1097, 'Error peticion inicial: (\'Invalid request\',)'),
+(1098, 'Invalid request'),
+(1099, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQThFRDRDRDU0MDdEMjE1RjFBN0RERUUyNzE5RTg5NTcA\", \"timestamp\": \"1699886102\", \"text\": {\"body\": \"123\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1100, 'Error peticion inicial: (\'Invalid request\',)'),
+(1101, 'Invalid request'),
+(1102, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzlDOTU3MTAwMTFDRUE2MkFBMDU3OTRCN0E4NjM1RDkA\", \"timestamp\": \"1699886106\", \"text\": {\"body\": \"456\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1103, 'Error peticion inicial: (\'Invalid request\',)'),
+(1104, 'Invalid request'),
+(1105, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjk0NzMwMzA5NzhEQ0NGM0I3AA==\", \"status\": \"sent\", \"timestamp\": \"1699886130\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1106, 'Error peticion inicial: (\'Invalid request\',)'),
+(1107, 'Invalid request'),
+(1108, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjk0NzMwMzA5NzhEQ0NGM0I3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699886130\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1109, 'Error peticion inicial: (\'Invalid request\',)'),
+(1110, 'Invalid request'),
+(1111, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSODM1QzI4Q0VFN0IzNkI4OEM3AA==\", \"status\": \"sent\", \"timestamp\": \"1699886489\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1112, 'Error peticion inicial: (\'Invalid request\',)'),
+(1113, 'Invalid request'),
+(1114, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSODM1QzI4Q0VFN0IzNkI4OEM3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699886499\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1115, 'Error peticion inicial: (\'Invalid request\',)'),
+(1116, 'Invalid request'),
+(1117, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDJFREI5NkM2N0FEOTJFMkYxNDQzRUE1NTgwQkIxOTgA\", \"timestamp\": \"1699886505\", \"text\": {\"body\": \"0000\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1118, 'Error peticion inicial: (\'Invalid request\',)'),
+(1119, 'Invalid request'),
+(1120, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTU4MUJFQkU3Njk0MTJEMUZGQURGNUVFMjFDMDJFRDYA\", \"timestamp\": \"1699886526\", \"text\": {\"body\": \"Lalala\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1121, 'Error peticion inicial: (\'Invalid request\',)'),
+(1122, 'Invalid request'),
+(1123, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTcwQzAxREM4NkUxMDlFNTFBAA==\", \"status\": \"sent\", \"timestamp\": \"1699886908\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1124, 'Error al actualizar mensaje: '),
+(1125, 'Mensajeria matching query does not exist.'),
+(1126, 'Error peticion inicial: (\'Invalid request\',)'),
+(1127, 'Invalid request'),
+(1128, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTcwQzAxREM4NkUxMDlFNTFBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699886909\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1129, 'Error al actualizar mensaje: '),
+(1130, 'Mensajeria matching query does not exist.'),
+(1131, 'Error peticion inicial: (\'Invalid request\',)'),
+(1132, 'Invalid request'),
+(1133, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjM0M0U1RTA0RTRCRUU4MDE1AA==\", \"status\": \"sent\", \"timestamp\": \"1699887168\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1134, 'Error peticion inicial: (\'Invalid request\',)'),
+(1135, 'Invalid request'),
+(1136, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjM0M0U1RTA0RTRCRUU4MDE1AA==\", \"status\": \"delivered\", \"timestamp\": \"1699887170\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1137, 'Error peticion inicial: (\'Invalid request\',)'),
+(1138, 'Invalid request'),
+(1139, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNDE2NEQ4OTc2RjNENkJDQjU4OEIyMzcyOTNBNDkzN0MA\", \"timestamp\": \"1699887177\", \"text\": {\"body\": \"Hhhh\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1140, 'Error peticion inicial: (\'Invalid request\',)'),
+(1141, 'Invalid request'),
+(1142, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTQwQTI5MUVEQkU4RTdBRjkyOUNEQjAwNjBFOTUzQzcA\", \"timestamp\": \"1699887222\", \"text\": {\"body\": \"Lololo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1143, 'Error peticion inicial: (\'Invalid request\',)'),
+(1144, 'Invalid request'),
+(1145, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDg2QUZDMkU4RDRGQjI4RjI4AA==\", \"status\": \"sent\", \"timestamp\": \"1699887269\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1146, 'Error peticion inicial: (\'Invalid request\',)'),
+(1147, 'Invalid request'),
+(1148, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDg2QUZDMkU4RDRGQjI4RjI4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699887269\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1149, 'Error peticion inicial: (\'Invalid request\',)'),
+(1150, 'Invalid request'),
+(1151, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjZGRUQ1NDdEMDhEMjRDMzM4OTFGOTU2NjBERDdERjAA\", \"timestamp\": \"1699887279\", \"text\": {\"body\": \"Fffff\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1152, 'Error peticion inicial: (\'Invalid request\',)'),
+(1153, 'Invalid request'),
+(1154, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjFBNTUzNjY1RTk4RkI1REFFQTY1Q0REMTk0ODBDNkMA\", \"timestamp\": \"1699887326\", \"text\": {\"body\": \"Mmmm\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1155, 'Error peticion inicial: (\'Invalid request\',)'),
+(1156, 'Invalid request'),
+(1157, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjUwNUM5MzFGQUFDODRBNDJEQTMxMUY0MzdDNkFFOUIA\", \"timestamp\": \"1699887381\", \"text\": {\"body\": \"Lololo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1158, 'Error peticion inicial: (\'Invalid request\',)'),
+(1159, 'Invalid request'),
+(1160, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0NDOEI3NDYwRTVBOEVFOUEzMDVEQjlEMDQxMjc5NzQA\", \"timestamp\": \"1699887390\", \"text\": {\"body\": \"Ooo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1161, 'Error peticion inicial: (\'Invalid request\',)'),
+(1162, 'Invalid request'),
+(1163, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSREJBRDBCMTlEMzg2MkU1NzE4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699481664\", \"recipient_id\": \"573042115334\", \"conversation\": {\"id\": \"c1b14d8ea0db90ea9c0cf8be025e79b0\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1164, 'Error al actualizar mensaje: '),
+(1165, 'Mensajeria matching query does not exist.'),
+(1166, 'Error peticion inicial: (\'Invalid request\',)'),
+(1167, 'Invalid request'),
+(1168, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQkYwRTMxQTE1MjY0NEEyNzkxMEEyQjIxMjVDNkQwMEQA\", \"timestamp\": \"1699887397\", \"text\": {\"body\": \"Eee\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1169, 'Error peticion inicial: (\'Invalid request\',)'),
+(1170, 'Invalid request'),
+(1171, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTZDQzA1N0UyQzFGOENBMzk4RDNBRDVFODAwRjlFOEIA\", \"timestamp\": \"1699887402\", \"text\": {\"body\": \"666\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1172, 'Error peticion inicial: (\'Invalid request\',)'),
+(1173, 'Invalid request'),
+(1174, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMkIzMDI5QjU4MzdCNDVENzQ4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699887503\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1175, 'Error peticion inicial: (\'Invalid request\',)'),
+(1176, 'Invalid request'),
+(1177, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMkIzMDI5QjU4MzdCNDVENzQ4AA==\", \"status\": \"sent\", \"timestamp\": \"1699887502\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1178, 'Error peticion inicial: (\'Invalid request\',)'),
+(1179, 'Invalid request'),
+(1180, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDc2ODc1Mzc0MDg5QjRFOUQwMDJGNENCNkQzMzc1NTUA\", \"timestamp\": \"1699887592\", \"text\": {\"body\": \"Fff\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1181, 'Error peticion inicial: (\'Invalid request\',)'),
+(1182, 'Invalid request'),
+(1183, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQThDOUQwNUVBNEZGRERDODFENTc0RTM0M0Q0RDBEQ0MA\", \"timestamp\": \"1699887709\", \"text\": {\"body\": \"Mm\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1184, 'Error peticion inicial: (\'Invalid request\',)'),
+(1185, 'Invalid request'),
+(1186, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUE3RjhGRTZERkZEMUIwRjY4NzQzMTQ5OTQzNzQ2MDYA\", \"timestamp\": \"1699887734\", \"text\": {\"body\": \"1\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1187, 'Error peticion inicial: (\'Invalid request\',)'),
+(1188, 'Invalid request'),
+(1189, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjhBMTdDQjMxQTMxOEVFREY2MThCMDk0QURBREU4QkMA\", \"timestamp\": \"1699887739\", \"text\": {\"body\": \"2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1190, 'Error peticion inicial: (\'Invalid request\',)'),
+(1191, 'Invalid request'),
+(1192, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNkY5M0I2MzhENTM3MTI0MkU2OUI0REQ0QTA1NEQ3MDIA\", \"timestamp\": \"1699887894\", \"text\": {\"body\": \"3\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1193, 'Error peticion inicial: (\'Invalid request\',)'),
+(1194, 'Invalid request'),
+(1195, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjAxMzZEQzBCQjRFOTkzQkFDAA==\", \"status\": \"sent\", \"timestamp\": \"1699833366\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1196, 'Error al actualizar mensaje: '),
+(1197, 'Mensajeria matching query does not exist.'),
+(1198, 'Error peticion inicial: (\'Invalid request\',)'),
+(1199, 'Invalid request'),
+(1200, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjFDRkYzNTA3OTlEODM4RUE2OUI3MDkyRUFDQzkzNjQA\", \"timestamp\": \"1699887925\", \"text\": {\"body\": \"M\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1201, 'Error peticion inicial: (\'Invalid request\',)'),
+(1202, 'Invalid request'),
+(1203, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggN0ZGQUIwQzgzOTE4OTJCREIyMUVDQTcxNzYzQ0JCRDkA\", \"timestamp\": \"1699887953\", \"text\": {\"body\": \"G\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1204, 'Error peticion inicial: (\'Invalid request\',)'),
+(1205, 'Invalid request'),
+(1206, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOEY3Njk5QjNCNzM1NTEzNjk5MzI4MUNFQjVCNDQ1NEIA\", \"timestamp\": \"1699887993\", \"text\": {\"body\": \"B\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1207, 'Error peticion inicial: (\'Invalid request\',)'),
+(1208, 'Invalid request'),
+(1209, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTFDMkMzMUEyM0JDMDcyNzZBOTNGMTFCOUQ3Q0JDQUEA\", \"timestamp\": \"1699888065\", \"text\": {\"body\": \"B\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1210, 'Error peticion inicial: (\'Invalid request\',)'),
+(1211, 'Invalid request');
+INSERT INTO `peticion` (`id`, `estado`) VALUES
+(1212, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNDY5MTAwMTkyN0Y4REREMTkwOUE1MzZFMkE3RTcxMkUA\", \"timestamp\": \"1699888155\", \"text\": {\"body\": \"I\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1213, 'Error peticion inicial: (\'Invalid request\',)'),
+(1214, 'Invalid request'),
+(1215, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0RBODdBMjg2NTNEQ0NBRDVFNTQ0RTQwRTJCNjJENjcA\", \"timestamp\": \"1699888351\", \"text\": {\"body\": \"L\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1216, 'Error peticion inicial: (\'Invalid request\',)'),
+(1217, 'Invalid request'),
+(1218, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjVGRTM3N0UyOUUzQjE0MzQxNzYwOUM2N0U5OTcxQUIA\", \"timestamp\": \"1699888406\", \"text\": {\"body\": \"N\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1219, 'Error peticion inicial: (\'Invalid request\',)'),
+(1220, 'Invalid request'),
+(1221, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDVDREQ4RTA2OTM3MjU5RDY2MDM2MzFEQTI4NkM4NzYA\", \"timestamp\": \"1699888555\", \"text\": {\"body\": \"B\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1222, 'Error peticion inicial: (\'Invalid request\',)'),
+(1223, 'Invalid request'),
+(1224, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjA2QkEzRjEyMDEzMzc1RDhFRTQ5QjhEODI5Rjk4M0IA\", \"timestamp\": \"1699888633\", \"text\": {\"body\": \"K\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1225, 'Error peticion inicial: (\'Invalid request\',)'),
+(1226, 'Invalid request'),
+(1227, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDU4NzNEQjFFRTFEQjk1NDA3QzM3MjlGMzI3NjU1NjgA\", \"timestamp\": \"1699888808\", \"text\": {\"body\": \"M\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1228, 'Error peticion inicial: (\'Invalid request\',)'),
+(1229, 'Invalid request'),
+(1230, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQkJFQ0RGRjgxMzM0NzMyOTIzAA==\", \"status\": \"sent\", \"timestamp\": \"1699830356\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1231, 'Error al actualizar mensaje: '),
+(1232, 'Mensajeria matching query does not exist.'),
+(1233, 'Error peticion inicial: (\'Invalid request\',)'),
+(1234, 'Invalid request'),
+(1235, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzc2MUFFRTJFMEI1NkRERjJBMUMxMENBQUU2RkI2MzEA\", \"timestamp\": \"1699889188\", \"text\": {\"body\": \"K\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1236, 'Error peticion inicial: (\'Invalid request\',)'),
+(1237, 'Invalid request'),
+(1238, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0MxQjYyMTBGODJGQTAyODAwAA==\", \"status\": \"sent\", \"timestamp\": \"1699889230\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1239, 'Error peticion inicial: (\'Invalid request\',)'),
+(1240, 'Invalid request'),
+(1241, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQ0MxQjYyMTBGODJGQTAyODAwAA==\", \"status\": \"delivered\", \"timestamp\": \"1699889230\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1242, 'Error peticion inicial: (\'Invalid request\',)'),
+(1243, 'Invalid request'),
+(1244, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0M3M0NDRDI1OTM3NzUzNDg2ODMwQzY5NjQ1MTNBNTcA\", \"timestamp\": \"1699889252\", \"text\": {\"body\": \"Yy\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1245, 'Error peticion inicial: (\'Invalid request\',)'),
+(1246, 'Invalid request'),
+(1247, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0JEM0U5Mzc4MjVFMTdGRkI2MTBCNDIwQkEyMTcwMTUA\", \"timestamp\": \"1699889290\", \"text\": {\"body\": \"O\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1248, 'Fallo websockets: (\"local variable \'row\' referenced before assignment\",)'),
+(1249, 'Error peticion inicial: (\'Invalid request\',)'),
+(1250, 'Invalid request'),
+(1251, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggN0YyRDMzNEE5MzBDREZFNDA3QTkwMzEyRjMzQTMyMkIA\", \"timestamp\": \"1699889353\", \"text\": {\"body\": \"O\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1252, 'Fallo websockets: (\"local variable \'row\' referenced before assignment\",)'),
+(1253, 'Error peticion inicial: (\'Invalid request\',)'),
+(1254, 'Invalid request'),
+(1255, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0JGNTgxODVCNTMxQkRCQzdDRUM4RkQyREUyMDREQTMA\", \"timestamp\": \"1699889408\", \"text\": {\"body\": \"O\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1256, 'Error peticion inicial: (\'Invalid request\',)'),
+(1257, 'Invalid request'),
+(1258, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTU3RTkzQkJFODY5NzQ4RDZDREU3RjFBOUNBNTgzOUYA\", \"timestamp\": \"1699889511\", \"text\": {\"body\": \"T\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1259, 'Error peticion inicial: (\'Invalid request\',)'),
+(1260, 'Invalid request'),
+(1261, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzM0Mjk1MkU4RjVEODIyODg4NDU5MEQwMkFERkU4NTcA\", \"timestamp\": \"1699890871\", \"text\": {\"body\": \"J\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1262, 'Fallo websockets: (\"type object \'datetime.timezone\' has no attribute \'now\'\",)'),
+(1263, 'Error peticion inicial: (\'Invalid request\',)'),
+(1264, 'Invalid request'),
+(1265, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjc4RDE1QTIwRDZENkJBN0EzNDNFNjZBQTE0NEUwNTEA\", \"timestamp\": \"1699890924\", \"text\": {\"body\": \"Oo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1266, 'Fallo websockets: (\"type object \'datetime.timezone\' has no attribute \'now\'\",)'),
+(1267, 'Error peticion inicial: (\'Invalid request\',)'),
+(1268, 'Invalid request'),
+(1269, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggREM5NkRCMTJBQjFCMjlBMzU0NkM4MkUyM0Q1ODk3Q0IA\", \"timestamp\": \"1699890969\", \"text\": {\"body\": \"Ii\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1270, 'Fallo websockets: (\"type object \'datetime.timezone\' has no attribute \'now\'\",)'),
+(1271, 'Error peticion inicial: (\'Invalid request\',)'),
+(1272, 'Invalid request'),
+(1273, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTFENDMyNUIwMTZGMTc1NEMzRDE0NzMzOTNDN0IwNjYA\", \"timestamp\": \"1699891027\", \"text\": {\"body\": \"Kk\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1274, 'Fallo websockets: (\"type object \'datetime.timezone\' has no attribute \'now\'\",)'),
+(1275, 'Error peticion inicial: (\'Invalid request\',)'),
+(1276, 'Invalid request'),
+(1277, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTcyNThFRjdBRjA1MkEyQkE3NjBCNEJBMTkxOUU5QjQA\", \"timestamp\": \"1699891126\", \"text\": {\"body\": \"Oo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1278, 'Fallo websockets: (\"type object \'datetime.timezone\' has no attribute \'now\'\",)'),
+(1279, 'Error peticion inicial: (\'Invalid request\',)'),
+(1280, 'Invalid request'),
+(1281, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjQ3NkZDMDdENUQwNjQyMTYzRkE3RjZCMzBCNUZCRjIA\", \"timestamp\": \"1699891137\", \"text\": {\"body\": \"Uu\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1282, 'Fallo websockets: (\"type object \'datetime.timezone\' has no attribute \'now\'\",)'),
+(1283, 'Error peticion inicial: (\'Invalid request\',)'),
+(1284, 'Invalid request'),
+(1285, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTMxNzg3QTgwOUY5MTBFNzFFMTNEOTA1NDRGMEU0NDgA\", \"timestamp\": \"1699891170\", \"text\": {\"body\": \"Oo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1286, 'Error peticion inicial: (\'Invalid request\',)'),
+(1287, 'Invalid request'),
+(1288, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTNDRjU2QzgzODc0NkI5ODRCOTY5RkZBMjYxNTNFQUYA\", \"timestamp\": \"1699891354\", \"text\": {\"body\": \"P\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1289, 'error1: type object \'datetime.timezone\' has no attribute \'now\''),
+(1290, 'Error peticion inicial: (\'Invalid request\',)'),
+(1291, 'Invalid request'),
+(1292, 'Error peticion inicial: (\'Expecting value: line 1 column 1 (char 0)\',)'),
+(1293, 'Expecting value: line 1 column 1 (char 0)'),
+(1294, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRURCMDQyNzBFN0RCNDJGMDREMjg4RDY3RjU5QjQ5ODUA\", \"timestamp\": \"1699892785\", \"text\": {\"body\": \"P\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1295, 'Error peticion inicial: (\'Invalid request\',)'),
+(1296, 'Invalid request'),
+(1297, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNDJEOTU5OTU0MUNDRjk5ODUxNUREQjlFRDBFM0ZFRTQA\", \"timestamp\": \"1699892883\", \"text\": {\"body\": \"7\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1298, 'Error peticion inicial: (\'Invalid request\',)'),
+(1299, 'Invalid request'),
+(1300, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTkzMkQ1RTRERjA5OTNFMjNENTlDMkQxMDAyNTcyMzYA\", \"timestamp\": \"1699892729\", \"text\": {\"body\": \"P\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1301, 'Error peticion inicial: (\'Invalid request\',)'),
+(1302, 'Invalid request'),
+(1303, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTk4QjQ3RUU5NEZCRDE1RTNCNjlDRUMxNzA2QzFBQjMA\", \"timestamp\": \"1699893267\", \"text\": {\"body\": \"K\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1304, 'Error peticion inicial: (\'Invalid request\',)'),
+(1305, 'Invalid request'),
+(1306, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTNEQzI0NkRFQTRCQkYyNzYzRkM1NjNFODNEN0RBRkIA\", \"timestamp\": \"1699893288\", \"text\": {\"body\": \"P\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1307, 'Error peticion inicial: (\'Invalid request\',)'),
+(1308, 'Invalid request'),
+(1309, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjA0RUI3MjdCOUYwMTYyMTlCMkRDOEYzQjI2REQxREYA\", \"timestamp\": \"1699893307\", \"text\": {\"body\": \"Hy\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1310, 'Error peticion inicial: (\'Invalid request\',)'),
+(1311, 'Invalid request'),
+(1312, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzZGRkE3M0NCODYyMzYyRjE1MDIyQjA1QkQyQTQyRkUA\", \"timestamp\": \"1699893350\", \"text\": {\"body\": \"Pp\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1313, 'Error peticion inicial: (\'Invalid request\',)'),
+(1314, 'Invalid request'),
+(1315, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNERDODMwRUY0QTk4NzhEMjYxOEZFMjE0OEZCQkJCQTEA\", \"timestamp\": \"1699893445\", \"text\": {\"body\": \"1\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1316, 'Error peticion inicial: (\'Invalid request\',)'),
+(1317, 'Invalid request'),
+(1318, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzdFMDY1NEMyNzUyNTYzQjYxRTEzRDNFOUQ3NzcyQ0EA\", \"timestamp\": \"1699893508\", \"text\": {\"body\": \"2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1319, 'Error peticion inicial: (\'Invalid request\',)'),
+(1320, 'Invalid request'),
+(1321, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTJFMEI5OUFFNURGRUZGQ0FCOEIwM0Y1ODEwQjA2MkEA\", \"timestamp\": \"1699893610\", \"text\": {\"body\": \"3\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1322, 'Fallo websockets: (\"name \'chats\' is not defined\",)'),
+(1323, 'Error peticion inicial: (\'Invalid request\',)'),
+(1324, 'Invalid request'),
+(1325, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQkVEMDYxNEIzODQ0OTM0NkFCQjk5MzQ4NzRCNDI0NTYA\", \"timestamp\": \"1699893656\", \"text\": {\"body\": \"9\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1326, 'Error peticion inicial: (\'Invalid request\',)'),
+(1327, 'Invalid request'),
+(1328, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRkJGOEIzMzUwMzM2QzQ1RjhEQ0U5QzlENjBCRjc4MDIA\", \"timestamp\": \"1699893685\", \"text\": {\"body\": \"10\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1329, 'Error peticion inicial: (\'Invalid request\',)'),
+(1330, 'Invalid request'),
+(1331, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzY5NTI5MTdCMEE5OTM2RkYzNDA1OUEzNjFDQkU5QUYA\", \"timestamp\": \"1699893717\", \"text\": {\"body\": \"11\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1332, 'Error peticion inicial: (\'Invalid request\',)'),
+(1333, 'Invalid request'),
+(1334, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzY4RDEyNDdGQjgyNjZCOUVBOTI2NkRBODkwRjc0Q0YA\", \"timestamp\": \"1699893908\", \"text\": {\"body\": \"12\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1335, 'Error peticion inicial: (\'Invalid request\',)'),
+(1336, 'Invalid request'),
+(1337, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTQxMUNEMUFDNzMwRDRFQzA5NzFBREYyRkU2RjQ1MzYA\", \"timestamp\": \"1699893968\", \"text\": {\"body\": \"13\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1338, 'Error peticion inicial: (\'Invalid request\',)'),
+(1339, 'Invalid request'),
+(1340, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTUxRkNERkI3ODNCRkE0NEFDREE0Mjk5RDA0MEFEMkIA\", \"timestamp\": \"1699894039\", \"text\": {\"body\": \"14\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1341, 'Error peticion inicial: (\'Invalid request\',)'),
+(1342, 'Invalid request'),
+(1343, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzExREM5MzE4ODAxMTJBRkVBNjZFQkU4QkFBRTJGMjEA\", \"timestamp\": \"1699894451\", \"text\": {\"body\": \"0\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1344, 'Error peticion inicial: (\'Invalid request\',)'),
+(1345, 'Invalid request'),
+(1346, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjZDN0Y0Q0EzNEI1QkEyRTIzNEZBMjEzMUJGNzAyODIA\", \"timestamp\": \"1699894501\", \"text\": {\"body\": \"0\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1347, 'error1: You cannot call this from an async context - use a thread or sync_to_async.'),
+(1348, 'Error peticion inicial: (\'Invalid request\',)'),
+(1349, 'Invalid request'),
+(1350, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOEI2RTI0MzE2OTBDQjJBQzNBQjlEMTQ4MUU1REI5QkMA\", \"timestamp\": \"1699894222\", \"text\": {\"body\": \"0\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1351, 'Error peticion inicial: (\'Invalid request\',)'),
+(1352, 'Invalid request'),
+(1353, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjhEOUU1Rjc3OTFCRkFENjEyRTU1Q0E2NjA4NTM2MDIA\", \"timestamp\": \"1699894304\", \"text\": {\"body\": \"O\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1354, 'error1: You cannot call this from an async context - use a thread or sync_to_async.'),
+(1355, 'Error peticion inicial: (\'Invalid request\',)'),
+(1356, 'Invalid request'),
+(1357, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTQ3RkNCRDI4NkNFODMzQTYyMzlENTdDMTk3RjRENUEA\", \"timestamp\": \"1699894729\", \"text\": {\"body\": \"Pp\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1358, 'error1: You cannot call this from an async context - use a thread or sync_to_async.'),
+(1359, 'Error peticion inicial: (\'Invalid request\',)'),
+(1360, 'Invalid request'),
+(1361, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUJBRTJENDY3MEYxQ0JFNzhBNjc5M0JGQjJFMzIwNTQA\", \"timestamp\": \"1699894387\", \"text\": {\"body\": \"P\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1362, 'error1: You cannot call this from an async context - use a thread or sync_to_async.'),
+(1363, 'Error peticion inicial: (\'Invalid request\',)'),
+(1364, 'Invalid request'),
+(1365, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0NCODRBN0U1ODkwNkQyM0IxRkY5MDc2Q0VGN0UxNTkA\", \"timestamp\": \"1699894836\", \"text\": {\"body\": \"Pp\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1366, 'error1: You cannot call this from an async context - use a thread or sync_to_async.'),
+(1367, 'Error peticion inicial: (\'Invalid request\',)'),
+(1368, 'Invalid request'),
+(1369, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzhFRUNERTM5MDlDQUEzNTI1RTg4MkY3NEM0RkUwQ0QA\", \"timestamp\": \"1699895038\", \"text\": {\"body\": \"Qq\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1370, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjE0OTEzRDA3RTBCQTM2Mjc2RjY1MkY5N0IxOUExOTMA\", \"timestamp\": \"1699895046\", \"text\": {\"body\": \"Yt\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1371, 'Error peticion inicial: (\'Expecting value: line 1 column 1 (char 0)\',)'),
+(1372, 'Expecting value: line 1 column 1 (char 0)'),
+(1373, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTFEQjBBMThGRjdFN0E0NzhDNzM1MThGNkQyQTk1NUYA\", \"timestamp\": \"1699895192\", \"text\": {\"body\": \"2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1374, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTFEQjBBMThGRjdFN0E0NzhDNzM1MThGNkQyQTk1NUYA\", \"timestamp\": \"1699895192\", \"text\": {\"body\": \"2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1375, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTJCQjYwMUVFNUE1RjUyNDFDMzFDRDc0RjE5RDE3NkEA\", \"timestamp\": \"1699895378\", \"text\": {\"body\": \"1\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1376, 'Error peticion inicial: (\'Invalid request\',)'),
+(1377, 'Invalid request'),
+(1378, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODFEMUE0RDY3MzI0M0RDMUU4NkJCMzY2QTkzRkQ5NkIA\", \"timestamp\": \"1699895418\", \"text\": {\"body\": \"2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1379, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODFEMUE0RDY3MzI0M0RDMUU4NkJCMzY2QTkzRkQ5NkIA\", \"timestamp\": \"1699895418\", \"text\": {\"body\": \"2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1380, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzhFRUNERTM5MDlDQUEzNTI1RTg4MkY3NEM0RkUwQ0QA\", \"timestamp\": \"1699895038\", \"text\": {\"body\": \"Qq\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1381, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzVDODIyMThFOTA2ODgwQjM5RkQyQkM1QjUyNjk5NjAA\", \"timestamp\": \"1699895248\", \"text\": {\"body\": \"3\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1382, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODk1REQwMDQ4MDVGMjUzOUJDNEM5NTA4OEI2RDkzN0YA\", \"timestamp\": \"1699895696\", \"text\": {\"body\": \"4\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1383, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQjVEQzU5QzI4Rjg1NTUzMkUwNTI4NEVENkYxNjFEMDUA\", \"timestamp\": \"1699895939\", \"text\": {\"body\": \"5\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1384, 'Fallo creando: no running event loop'),
+(1385, 'Error peticion inicial: (\'Invalid request\',)'),
+(1386, 'Invalid request'),
+(1387, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTlGOTI4NzFFRjZENEUzMzM3RTJFNzQ3QTU5RTFCQzgA\", \"timestamp\": \"1699895967\", \"text\": {\"body\": \"6\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1388, 'Fallo creando: no running event loop'),
+(1389, 'Error peticion inicial: (\'Invalid request\',)'),
+(1390, 'Invalid request'),
+(1391, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODFEMUE0RDY3MzI0M0RDMUU4NkJCMzY2QTkzRkQ5NkIA\", \"timestamp\": \"1699895418\", \"text\": {\"body\": \"2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1392, 'Fallo creando: no running event loop'),
+(1393, 'Error peticion inicial: (\'Invalid request\',)'),
+(1394, 'Invalid request'),
+(1395, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEVEMDE3QTdDN0E1MTA0MzE3Qzg1MzdCRTM4RUUwREMA\", \"timestamp\": \"1699896049\", \"text\": {\"body\": \"7\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1396, 'Fallo creando: no running event loop'),
+(1397, 'Error peticion inicial: (\'Invalid request\',)'),
+(1398, 'Invalid request'),
+(1399, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjk1OTFDRkI5NzdEMjk2Njg2NjIxREYyODZBNEQzMzAA\", \"timestamp\": \"1699895518\", \"text\": {\"body\": \"3\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1400, 'Fallo creando: no running event loop'),
+(1401, 'Error peticion inicial: (\'Invalid request\',)'),
+(1402, 'Invalid request'),
+(1403, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOUYxNUEzMTJGOTI1OUQ4OEQ5RjNFOEE1MzYwNTA2ODgA\", \"timestamp\": \"1699828611\", \"text\": {\"body\": \"Ee2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1404, 'Fallo creando: no running event loop'),
+(1405, 'Error peticion inicial: (\'Invalid request\',)'),
+(1406, 'Invalid request'),
+(1407, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTlFRThFRjU2MUJENjk4MDdBAA==\", \"status\": \"sent\", \"timestamp\": \"1699828632\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"expiration_timestamp\": \"1699902300\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(1408, 'Error al actualizar mensaje: '),
+(1409, 'Mensajeria matching query does not exist.'),
+(1410, 'Error peticion inicial: (\'Invalid request\',)'),
+(1411, 'Invalid request'),
+(1412, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODk1REQwMDQ4MDVGMjUzOUJDNEM5NTA4OEI2RDkzN0YA\", \"timestamp\": \"1699895696\", \"text\": {\"body\": \"4\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1413, 'Fallo creando: no running event loop'),
+(1414, 'Error peticion inicial: (\'Invalid request\',)'),
+(1415, 'Invalid request'),
+(1416, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTU5QUUzNkY2NDFGMjYyMzA2MTRCRTUyMUYzRDc1NzAA\", \"timestamp\": \"1699897062\", \"text\": {\"body\": \"8\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1417, 'Error peticion inicial: (\'Invalid request\',)'),
+(1418, 'Invalid request'),
+(1419, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNUEzMEU4RjJGREJEOTM2MUZGMkVBNUIwNjRBOTI1QUQA\", \"timestamp\": \"1699897110\", \"text\": {\"body\": \"9\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1420, 'Error peticion inicial: (\'Invalid request\',)'),
+(1421, 'Invalid request'),
+(1422, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOERBNDRDMzU1RTIwMDBFQzM0MUQ3NUVGOUYwRDczRDYA\", \"timestamp\": \"1699897164\", \"text\": {\"body\": \"10\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1423, 'Error peticion inicial: (\'Invalid request\',)'),
+(1424, 'Invalid request'),
+(1425, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTU5NjlEOTQ1RTk3MDk3M0E4RENFMDI5NDg0Qzg1MEMA\", \"timestamp\": \"1699897196\", \"text\": {\"body\": \"11\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1426, 'Error peticion inicial: (\'Invalid request\',)'),
+(1427, 'Invalid request'),
+(1428, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0ZGODhGNTg4RkE1NDQzRTc2RjQwQkNBMENGODYxOTUA\", \"timestamp\": \"1699897277\", \"text\": {\"body\": \"12\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1429, 'Error peticion inicial: (\'Invalid request\',)'),
+(1430, 'Invalid request'),
+(1431, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQTBFODI0QTJDQTc4NTRGMzQxRDU2M0QwREQwNkRERDkA\", \"timestamp\": \"1699897307\", \"text\": {\"body\": \"13\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1432, 'Error peticion inicial: (\'Invalid request\',)'),
+(1433, 'Invalid request'),
+(1434, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQUIwQ0I4Q0ZDQkFENzVBMDAzOUI5RDZBQjFFMDlDQTIA\", \"timestamp\": \"1699897423\", \"text\": {\"body\": \"14\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1435, 'Error peticion inicial: (\'Invalid request\',)'),
+(1436, 'Invalid request'),
+(1437, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjk1RkFERTMzOTk5NkJBQkQxRjEyNzQzNDlBMjA3OEQA\", \"timestamp\": \"1699897476\", \"text\": {\"body\": \"15\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1438, 'Error peticion inicial: (\'Invalid request\',)'),
+(1439, 'Invalid request'),
+(1440, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNDVBNDJFODBBNDZCODRBMzVEODExQ0RCQTNGOEU2NjEA\", \"timestamp\": \"1699897511\", \"text\": {\"body\": \"16\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1441, 'Error peticion inicial: (\'Invalid request\',)'),
+(1442, 'Invalid request'),
+(1443, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjlGOTQ4NkI3QkExOTYzMDdGMzk5MzdEOUYxOTUzNjkA\", \"timestamp\": \"1699897644\", \"text\": {\"body\": \"17\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1444, 'Error peticion inicial: (\'Invalid request\',)'),
+(1445, 'Invalid request'),
+(1446, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTU1NjE3RDg0RTYzNTJEODk3MzgzMzNCRDc1RDA1NkEA\", \"timestamp\": \"1699897685\", \"text\": {\"body\": \"18\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1447, 'Error peticion inicial: (\'Invalid request\',)'),
+(1448, 'Invalid request'),
+(1449, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMkNFNTU0QzNBODI0MEU5MTU0RUE5N0FFMzc2OEMxQjAA\", \"timestamp\": \"1699897779\", \"text\": {\"body\": \"19\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1450, 'Error peticion inicial: (\'Invalid request\',)'),
+(1451, 'Invalid request'),
+(1452, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUMwRjQ2RkI2NEQzRDdENjQ1MEU0REVGOEI4NkRERjMA\", \"timestamp\": \"1699897787\", \"text\": {\"body\": \"20\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1453, 'Error peticion inicial: (\'Invalid request\',)'),
+(1454, 'Invalid request'),
+(1455, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzM3RDNEMjEzOURCQzE2QzAxRTQzMUIyRTlGNTYwQzgA\", \"timestamp\": \"1699897800\", \"text\": {\"body\": \"21\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1456, 'Error peticion inicial: (\'Invalid request\',)');
+INSERT INTO `peticion` (`id`, `estado`) VALUES
+(1457, 'Invalid request'),
+(1458, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODY3MUYzMEJFMjg0OTI0OTU3OEVFNDQ5MTEwNUQwQUMA\", \"timestamp\": \"1699897869\", \"text\": {\"body\": \"22\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1459, 'Error peticion inicial: (\'Invalid request\',)'),
+(1460, 'Invalid request'),
+(1461, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQkIyMzI1QUM3OUJCNDVDODFBQzU0NkRFM0U0QjU2QzEA\", \"timestamp\": \"1699897871\", \"text\": {\"body\": \"23\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1462, 'Error peticion inicial: (\'Invalid request\',)'),
+(1463, 'Invalid request'),
+(1464, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOUE1QzA4OTJCQTM5NDEyMENDMEVGRjNGMjRGRUNGNjYA\", \"timestamp\": \"1699897873\", \"text\": {\"body\": \"24\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1465, 'Error peticion inicial: (\'Invalid request\',)'),
+(1466, 'Invalid request'),
+(1467, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjFFMzUwN0Q1MDJGRUFFNTlCQjlBREZBQ0RGMEQ1NzMA\", \"timestamp\": \"1699898136\", \"text\": {\"body\": \"25\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1468, 'Error peticion inicial: (\'Invalid request\',)'),
+(1469, 'Invalid request'),
+(1470, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNEJENDc4Njc0MTMzMUZGOTFEMjM1NEYxNDFBNjA4NTAA\", \"timestamp\": \"1699898138\", \"text\": {\"body\": \"26\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1471, 'Error peticion inicial: (\'Invalid request\',)'),
+(1472, 'Invalid request'),
+(1473, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzNBQzMwNjU5RTk0MTI4NjM1REQ0MThCOURDQURGRDAA\", \"timestamp\": \"1699898139\", \"text\": {\"body\": \"27\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1474, 'Error peticion inicial: (\'Invalid request\',)'),
+(1475, 'Invalid request'),
+(1476, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDRFM0M1OTQ1NDYzNzk3MkQ5MDBCMzdGQjU1NTdCOTUA\", \"timestamp\": \"1699898314\", \"text\": {\"body\": \"28\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1477, 'Error peticion inicial: (\'Invalid request\',)'),
+(1478, 'Invalid request'),
+(1479, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOUVDQjM1MUFEQjcwRkM2NDAxRUUzOTA3Nzg5NkVDMTUA\", \"timestamp\": \"1699898330\", \"text\": {\"body\": \"29\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1480, 'Error peticion inicial: (\'Invalid request\',)'),
+(1481, 'Invalid request'),
+(1482, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDQ0ODBGMTE1RDhFMDVDQUM5QkJDMjYyMEUxQTBCQTAA\", \"timestamp\": \"1699898331\", \"text\": {\"body\": \"30\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1483, 'Error peticion inicial: (\'Invalid request\',)'),
+(1484, 'Invalid request'),
+(1485, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzczQjkxOTU4RDYyQUNDRTA0OUI2NDhFQUFFNzY3MUUA\", \"timestamp\": \"1699898359\", \"text\": {\"body\": \"31\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1486, 'Error peticion inicial: (\'Invalid request\',)'),
+(1487, 'Invalid request'),
+(1488, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzY4NjE5QzBFRUQzOEZFQzJGRUI1NEE0N0M4MDAzMEMA\", \"timestamp\": \"1699898360\", \"text\": {\"body\": \"32\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1489, 'Error peticion inicial: (\'Invalid request\',)'),
+(1490, 'Invalid request'),
+(1491, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNEJFRjE0MjRGNTg1MUIzMTlBMUE5NzMxQkJEMkM3ODgA\", \"timestamp\": \"1699898360\", \"text\": {\"body\": \"33\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1492, 'Error peticion inicial: (\'Invalid request\',)'),
+(1493, 'Invalid request'),
+(1494, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTI3M0M2MTJDNzE5NTgzMkIzNzc4MUIwNUUwQjI2QkIA\", \"timestamp\": \"1699898456\", \"text\": {\"body\": \"34\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1495, 'Error peticion inicial: (\'Invalid request\',)'),
+(1496, 'Invalid request'),
+(1497, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzZEQTAxNTc2Rjg2QkVGMTg1OEQ2ODA4REMzOThEMjUA\", \"timestamp\": \"1699898457\", \"text\": {\"body\": \"35\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1498, 'Error peticion inicial: (\'Invalid request\',)'),
+(1499, 'Invalid request'),
+(1500, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTUxRTk3NTg0QzIzMDhDOUZGOUEwQTU1M0Q4NDZEM0YA\", \"timestamp\": \"1699898457\", \"text\": {\"body\": \"36\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1501, 'Error peticion inicial: (\'Invalid request\',)'),
+(1502, 'Invalid request'),
+(1503, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDUyOTkwQUM0QkQwN0U1OUE2MzYzMzI2MDgxMTI0NkUA\", \"timestamp\": \"1699898632\", \"text\": {\"body\": \"37\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1504, 'Error peticion inicial: (\'Invalid request\',)'),
+(1505, 'Invalid request'),
+(1506, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTFGMUQyOEQxMkRBOTA4RjIxRjA3OTBEMjUzNEVGN0EA\", \"timestamp\": \"1699898693\", \"text\": {\"body\": \"38\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1507, 'Error peticion inicial: (\'Invalid request\',)'),
+(1508, 'Invalid request'),
+(1509, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzg2NUYwRDczNDVENEFBREU1RTFFMzBCRDNDNjQ1RjUA\", \"timestamp\": \"1699898819\", \"text\": {\"body\": \"39\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1510, 'Error peticion inicial: (\'Invalid request\',)'),
+(1511, 'Invalid request'),
+(1512, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjJDRUMzNkM1NEYxOUFBNTM5M0VCQTg1NEVENzM3NUYA\", \"timestamp\": \"1699898824\", \"text\": {\"body\": \"40\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1513, 'Error peticion inicial: (\'Invalid request\',)'),
+(1514, 'Invalid request'),
+(1515, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjYwRDZFNTYwNkM1OTE0RjI0REZFOTZCQTIzRDI0NUUA\", \"timestamp\": \"1699898828\", \"text\": {\"body\": \"41\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1516, 'Error peticion inicial: (\'Invalid request\',)'),
+(1517, 'Invalid request'),
+(1518, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOERGNzc5NEU3QTM2OTRGQTA1OUE4NkE5MzI0OTcwNUMA\", \"timestamp\": \"1699898966\", \"text\": {\"body\": \"42\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1519, 'Error peticion inicial: (\'Invalid request\',)'),
+(1520, 'Invalid request'),
+(1521, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggREE4QjBDRDVCMkEzNkVFQ0ZCM0E0OTcwOUVCMjE2MTQA\", \"timestamp\": \"1699898972\", \"text\": {\"body\": \"43\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1522, 'Error peticion inicial: (\'Invalid request\',)'),
+(1523, 'Invalid request'),
+(1524, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDQ3Q0Q5MzgyMzUyMDg1M0VENEFDMDE4NjU3NTAyQzgA\", \"timestamp\": \"1699898975\", \"text\": {\"body\": \"44\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1525, 'Error peticion inicial: (\'Invalid request\',)'),
+(1526, 'Invalid request'),
+(1527, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjE5ODRFMkZBMDRBNzZEQ0Y3MUUzRTkyMkNENzBCNjQA\", \"timestamp\": \"1699898976\", \"text\": {\"body\": \"55\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1528, 'Error peticion inicial: (\'Invalid request\',)'),
+(1529, 'Invalid request'),
+(1530, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjRGMDk2MTc1QkE5RTA4NDBDAA==\", \"status\": \"sent\", \"timestamp\": \"1699898990\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1531, 'Error peticion inicial: (\'Invalid request\',)'),
+(1532, 'Invalid request'),
+(1533, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNjRGMDk2MTc1QkE5RTA4NDBDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699898991\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1534, 'Error peticion inicial: (\'Invalid request\',)'),
+(1535, 'Invalid request'),
+(1536, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjY3Mzc2MDU3QTVCMEQzNzUzQjBDODZCOTY2Mjk2ODYA\", \"timestamp\": \"1699898996\", \"text\": {\"body\": \"Como estas?\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1537, 'Error peticion inicial: (\'Invalid request\',)'),
+(1538, 'Invalid request'),
+(1539, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTBFMDgwOTdEMzIzQUVBMUI0NjUwQzdENzdGODk5NjUA\", \"timestamp\": \"1699899027\", \"text\": {\"body\": \"Bien\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1540, 'Error peticion inicial: (\'Invalid request\',)'),
+(1541, 'Invalid request'),
+(1542, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQThGRjdFMUMxMzgyRTE5QUEzMTI5NDlDOTA3RUNDMDMA\", \"timestamp\": \"1699899058\", \"text\": {\"body\": \"Ii\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1543, 'Error peticion inicial: (\'Invalid request\',)'),
+(1544, 'Invalid request'),
+(1545, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRkQ0MTE1QjVBNUZGQ0M4QTUzMzAxNjhDNDU0MDFGMjEA\", \"timestamp\": \"1699899065\", \"text\": {\"body\": \"Oo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1546, 'Error peticion inicial: (\'Invalid request\',)'),
+(1547, 'Invalid request'),
+(1548, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjM0NDExQkFBQzMzMEYxMEZGRTk4NjY4ODE5NzBFRkIA\", \"timestamp\": \"1699899073\", \"text\": {\"body\": \"Pp\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1549, 'Error peticion inicial: (\'Invalid request\',)'),
+(1550, 'Invalid request'),
+(1551, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0Y1ODUwQ0VFMjQxRTZBRUFDMUI5RTdBNDlDNTEzM0IA\", \"timestamp\": \"1699899120\", \"text\": {\"body\": \"Oo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1552, 'Error peticion inicial: (\'Invalid request\',)'),
+(1553, 'Invalid request'),
+(1554, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTA3NThFNUU4N0JBMUNCOUI5QTc1RkYxOTFFRTJBOEEA\", \"timestamp\": \"1699899126\", \"text\": {\"body\": \"Yy\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1555, 'Error peticion inicial: (\'Invalid request\',)'),
+(1556, 'Invalid request'),
+(1557, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNkVBN0U1MzQxOTAzOUVDNzQwNzYyNkZCMjRGQTdCMkMA\", \"timestamp\": \"1699899245\", \"text\": {\"body\": \"Oo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1558, 'Error peticion inicial: (\'Invalid request\',)'),
+(1559, 'Invalid request'),
+(1560, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjM1NTJCMzc1NzRFMUM2Q0Y3Rjg2RDc2ODI1MzJBQkUA\", \"timestamp\": \"1699899249\", \"text\": {\"body\": \"Yy\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1561, 'Error peticion inicial: (\'Invalid request\',)'),
+(1562, 'Invalid request'),
+(1563, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTNFMjBCOEIxMkI3MzQxOTcwNUZEMEIzQzUyMzhCMTgA\", \"timestamp\": \"1699899474\", \"text\": {\"body\": \"Oo\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1564, 'Error peticion inicial: (\'Invalid request\',)'),
+(1565, 'Invalid request'),
+(1566, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOTA4NkFENTJBOEUyRkY1OENDNDY4OUE1MTMwMzc1MkIA\", \"timestamp\": \"1699899476\", \"text\": {\"body\": \"11\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1567, 'Error peticion inicial: (\'Invalid request\',)'),
+(1568, 'Invalid request'),
+(1569, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggM0UxMDU1ODU1QTA0MDcwNTczRDgwODNCOEVFNkYyNzMA\", \"timestamp\": \"1699899479\", \"text\": {\"body\": \"22\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1570, 'Error peticion inicial: (\'Invalid request\',)'),
+(1571, 'Invalid request'),
+(1572, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTFBMkFBQzM1RkZGMkE1REFCOUM2N0EzNERENDM5NTQA\", \"timestamp\": \"1699899484\", \"text\": {\"body\": \"67\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1573, 'Error peticion inicial: (\'Invalid request\',)'),
+(1574, 'Invalid request'),
+(1575, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggODdCQjBEMjgwNTczNjIwRjFGMUYxREUwM0UzNTc1NzMA\", \"timestamp\": \"1699899489\", \"text\": {\"body\": \"78\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1576, 'Error peticion inicial: (\'Invalid request\',)'),
+(1577, 'Invalid request'),
+(1578, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzcxQ0RBMkIyNDVFQjVFNjIzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699899500\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1579, 'Error peticion inicial: (\'Invalid request\',)'),
+(1580, 'Invalid request'),
+(1581, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzcxQ0RBMkIyNDVFQjVFNjIzAA==\", \"status\": \"sent\", \"timestamp\": \"1699899500\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1582, 'Error peticion inicial: (\'Invalid request\',)'),
+(1583, 'Invalid request'),
+(1584, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNUE1MDQwRDM3NzIzMURGNzE5MDhBRTRDM0ZDOTMzNkQA\", \"timestamp\": \"1699899505\", \"text\": {\"body\": \"45\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1585, 'Error peticion inicial: (\'Invalid request\',)'),
+(1586, 'Invalid request'),
+(1587, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzhBQzU3QUVBNzRCNUM1QzcyMUNGQjA0NEM1MUUxNDcA\", \"timestamp\": \"1699899671\", \"text\": {\"body\": \"46\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1588, 'Error peticion inicial: (\'Invalid request\',)'),
+(1589, 'Invalid request'),
+(1590, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOEJEQUU4Q0VFRTgzMDVCQTZDAA==\", \"status\": \"sent\", \"timestamp\": \"1699899680\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1591, 'Error peticion inicial: (\'Invalid request\',)'),
+(1592, 'Invalid request'),
+(1593, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOEJEQUU4Q0VFRTgzMDVCQTZDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699899680\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1594, 'Error peticion inicial: (\'Invalid request\',)'),
+(1595, 'Invalid request'),
+(1596, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggREI4RUQ2ODkyNERCOEI4MTg2NjE1NjYzRTNCNTVFQjkA\", \"timestamp\": \"1699899685\", \"text\": {\"body\": \"48\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1597, 'Error peticion inicial: (\'Invalid request\',)'),
+(1598, 'Invalid request'),
+(1599, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTg2QzMyRTI5Rjk4OTM3MDExAA==\", \"status\": \"sent\", \"timestamp\": \"1699830058\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"expiration_timestamp\": \"1699915920\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1600, 'Error al actualizar mensaje: '),
+(1601, 'Mensajeria matching query does not exist.'),
+(1602, 'Error peticion inicial: (\'Invalid request\',)'),
+(1603, 'Invalid request'),
+(1604, 'Error peticion inicial: (\'Expecting value: line 1 column 1 (char 0)\',)'),
+(1605, 'Expecting value: line 1 column 1 (char 0)'),
+(1606, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0IzRDVCM0VFQkI4Q0FEMzQ1AA==\", \"status\": \"sent\", \"timestamp\": \"1699975400\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1607, 'Error peticion inicial: (\'Invalid request\',)'),
+(1608, 'Invalid request'),
+(1609, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0IzRDVCM0VFQkI4Q0FEMzQ1AA==\", \"status\": \"delivered\", \"timestamp\": \"1699975406\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1610, 'Error peticion inicial: (\'Invalid request\',)'),
+(1611, 'Invalid request'),
+(1612, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDc2NEQ3ODlGMUQ1OTJFOUIwMUQ4QzMyQzlBQjc0MDYA\", \"timestamp\": \"1699975420\", \"text\": {\"body\": \"K\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1613, 'Error peticion inicial: (\'Invalid request\',)'),
+(1614, 'Invalid request'),
+(1615, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDdGODIxQ0Y0QkU4QjRDQTRGMDI2RDg5RDhDMUNDNUQA\", \"timestamp\": \"1699975431\", \"text\": {\"body\": \"5\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1616, 'Error peticion inicial: (\'Invalid request\',)'),
+(1617, 'Invalid request'),
+(1618, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNUI4REJDQjQ3MTI3RENEMzlFRDgxNkM5RkY2MUExQzIA\", \"timestamp\": \"1699975467\", \"text\": {\"body\": \"6\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1619, 'Error peticion inicial: (\'Invalid request\',)'),
+(1620, 'Invalid request'),
+(1621, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQkJFQ0RGRjgxMzM0NzMyOTIzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699830358\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1622, 'Error al actualizar mensaje: '),
+(1623, 'Mensajeria matching query does not exist.'),
+(1624, 'Error peticion inicial: (\'Invalid request\',)'),
+(1625, 'Invalid request'),
+(1626, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEVGQTM1RDZCQkYzQkJFRjY3RTQzRUI0ODNGODQyQzMA\", \"timestamp\": \"1699975495\", \"text\": {\"body\": \"7\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1627, 'Error peticion inicial: (\'Invalid request\',)'),
+(1628, 'Invalid request'),
+(1629, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMzhFMTM0Q0FBNTgzRDFFNjhBMEI1RkQxODQ0OUJDNEQA\", \"timestamp\": \"1699975518\", \"text\": {\"body\": \"8\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1630, 'Error peticion inicial: (\'Invalid request\',)'),
+(1631, 'Invalid request'),
+(1632, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDg4QTM1MTk4OUVBMkJGMjA4NDBCNzk1MEU0OTI4QjQA\", \"timestamp\": \"1699975557\", \"text\": {\"body\": \"9\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1633, 'Error peticion inicial: (\'Invalid request\',)'),
+(1634, 'Invalid request'),
+(1635, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMjNFQTJBNzlDMjU4RkIxOTEzMDE5MUZFOTA2ODgxRUUA\", \"timestamp\": \"1699975560\", \"text\": {\"body\": \"10\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1636, 'Error peticion inicial: (\'Invalid request\',)'),
+(1637, 'Invalid request'),
+(1638, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTUyMkYwRjMxQzIxQTkxRDgxQTE3RjU3RjAyOTYyNUUA\", \"timestamp\": \"1699975563\", \"text\": {\"body\": \"11\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1639, 'Error peticion inicial: (\'Invalid request\',)'),
+(1640, 'Invalid request'),
+(1641, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTg2NzYyQzUxODc1QTI1Q0NCMjY2NEVEOEQwNDlENTAA\", \"timestamp\": \"1699975564\", \"text\": {\"body\": \"12\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1642, 'Error peticion inicial: (\'Invalid request\',)'),
+(1643, 'Invalid request'),
+(1644, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMTQzMjAzM0Q4NjdBODkzOEJGNEZGMjNCRDJBNTdBOEEA\", \"timestamp\": \"1699975565\", \"text\": {\"body\": \"13\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1645, 'Error peticion inicial: (\'Invalid request\',)'),
+(1646, 'Invalid request'),
+(1647, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOEUzNDUzQjVBRjg0RUUwMzE4NjRENTJGNEQxMjJGMTAA\", \"timestamp\": \"1699975566\", \"text\": {\"body\": \"14\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1648, 'Error peticion inicial: (\'Invalid request\',)'),
+(1649, 'Invalid request'),
+(1650, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzIwRUU0MzIxNzBERkYyMThDNDhCMjU5MTMxOTA1OEMA\", \"timestamp\": \"1699975568\", \"text\": {\"body\": \"15\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1651, 'Error peticion inicial: (\'Invalid request\',)'),
+(1652, 'Invalid request'),
+(1653, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRDczNkU0NUNCQzY2QTI4QTMwNTlFOEE1QjkzNzExODEA\", \"timestamp\": \"1699975569\", \"text\": {\"body\": \"16\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1654, 'Error peticion inicial: (\'Invalid request\',)'),
+(1655, 'Invalid request'),
+(1656, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNUM4NEIyRDkxRTdDQzIwQUFGAA==\", \"status\": \"sent\", \"timestamp\": \"1699975604\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1657, 'Error peticion inicial: (\'Invalid request\',)'),
+(1658, 'Invalid request'),
+(1659, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNUM4NEIyRDkxRTdDQzIwQUFGAA==\", \"status\": \"delivered\", \"timestamp\": \"1699975605\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1660, 'Error peticion inicial: (\'Invalid request\',)'),
+(1661, 'Invalid request'),
+(1662, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTM2QzJBMDY5QkJDQkE3NEQyAA==\", \"status\": \"sent\", \"timestamp\": \"1699975612\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1663, 'Error peticion inicial: (\'Invalid request\',)'),
+(1664, 'Invalid request'),
+(1665, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOTM2QzJBMDY5QkJDQkE3NEQyAA==\", \"status\": \"delivered\", \"timestamp\": \"1699975612\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1666, 'Error peticion inicial: (\'Invalid request\',)'),
+(1667, 'Invalid request'),
+(1668, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMzY5RjA5OENFN0M1RDUwMzVBAA==\", \"status\": \"sent\", \"timestamp\": \"1699975618\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1669, 'Error peticion inicial: (\'Invalid request\',)'),
+(1670, 'Invalid request'),
+(1671, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMzY5RjA5OENFN0M1RDUwMzVBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699975618\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1672, 'Error peticion inicial: (\'Invalid request\',)'),
+(1673, 'Invalid request'),
+(1674, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMkM2NUFFMzEwNTFCM0U1RjdFQ0E5QURFNDFDOUU0MUQA\", \"timestamp\": \"1699975622\", \"text\": {\"body\": \"20\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1675, 'Error peticion inicial: (\'Invalid request\',)'),
+(1676, 'Invalid request'),
+(1677, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzkwM0RFRjkwRkZBM0JDNzZFRURGMkJBRkE2RjhFMzgA\", \"timestamp\": \"1699976077\", \"text\": {\"body\": \"21\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1678, 'Error peticion inicial: (\'Invalid request\',)'),
+(1679, 'Invalid request'),
+(1680, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUQxQ0ZGRUE2M0RCRTU5NUY0AA==\", \"status\": \"sent\", \"timestamp\": \"1699976231\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1681, 'Error peticion inicial: (\'Invalid request\',)'),
+(1682, 'Invalid request'),
+(1683, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRUQxQ0ZGRUE2M0RCRTU5NUY0AA==\", \"status\": \"delivered\", \"timestamp\": \"1699976233\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1684, 'Error peticion inicial: (\'Invalid request\',)'),
+(1685, 'Invalid request'),
+(1686, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0UwQjc4RDQxQ0UwMTkyNTgyNkE2RUY0NTAwNDc0RjUA\", \"timestamp\": \"1699976240\", \"text\": {\"body\": \"23\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1687, 'Error peticion inicial: (\'Invalid request\',)'),
+(1688, 'Invalid request'),
+(1689, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0FCNDU4RjIyQjUyRTI3RUZCQ0Q1RkE5QzA1NDNBRUQA\", \"timestamp\": \"1699976293\", \"text\": {\"body\": \"24\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1690, 'Error peticion inicial: (\'Invalid request\',)'),
+(1691, 'Invalid request'),
+(1692, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzYwNTRBNjdGNjU0MTlBMzhFNThBRkY1MEJGQzM3MEYA\", \"timestamp\": \"1699976713\", \"text\": {\"body\": \"25\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1693, 'Error peticion inicial: (\'Invalid request\',)'),
+(1694, 'Invalid request');
+INSERT INTO `peticion` (`id`, `estado`) VALUES
+(1695, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzBDM0M3NzA3N0M4NzcwNTNEQkMwNjgyRkYyNzY1NzcA\", \"timestamp\": \"1699976860\", \"text\": {\"body\": \"26\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1696, 'Error peticion inicial: (\'Invalid request\',)'),
+(1697, 'Invalid request'),
+(1698, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjZFMzhEMkREMUY0NDg5ODAwM0Y4RTdBMTEyRjM4NjAA\", \"timestamp\": \"1699976889\", \"text\": {\"body\": \"27\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1699, 'Error peticion inicial: (\'Invalid request\',)'),
+(1700, 'Invalid request'),
+(1701, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMkQ5QUQ4Q0EwQUQyRjk1QkQxN0I4MUU5RDREOERFMjAA\", \"timestamp\": \"1699976895\", \"text\": {\"body\": \"28\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1702, 'Error peticion inicial: (\'Invalid request\',)'),
+(1703, 'Invalid request'),
+(1704, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRjdDQjdENDBCNkI3NjkxRTZFAA==\", \"status\": \"sent\", \"timestamp\": \"1699976927\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1705, 'Error peticion inicial: (\'Invalid request\',)'),
+(1706, 'Invalid request'),
+(1707, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRjdDQjdENDBCNkI3NjkxRTZFAA==\", \"status\": \"delivered\", \"timestamp\": \"1699976927\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1708, 'Error peticion inicial: (\'Invalid request\',)'),
+(1709, 'Invalid request'),
+(1710, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0REQTM2MTgyMTE0ODdDREFBAA==\", \"status\": \"sent\", \"timestamp\": \"1699976931\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1711, 'Error peticion inicial: (\'Invalid request\',)'),
+(1712, 'Invalid request'),
+(1713, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSM0REQTM2MTgyMTE0ODdDREFBAA==\", \"status\": \"delivered\", \"timestamp\": \"1699976932\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1714, 'Error peticion inicial: (\'Invalid request\',)'),
+(1715, 'Invalid request'),
+(1716, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRkUxQzQ4MzJBOEYxNjg2M0NFMjM2NjNEMkFEMTdGOEIA\", \"timestamp\": \"1699976936\", \"text\": {\"body\": \"31\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1717, 'Error peticion inicial: (\'Invalid request\',)'),
+(1718, 'Invalid request'),
+(1719, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQUJBRUQ2QTM4M0JGQjEzOTI4N0Y1NDMyNjI4N0VGMDcA\", \"timestamp\": \"1699976942\", \"text\": {\"body\": \"31\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1720, 'Error peticion inicial: (\'Invalid request\',)'),
+(1721, 'Invalid request'),
+(1722, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTU3ODA4QkNDMDZGRDY4QUExAA==\", \"status\": \"sent\", \"timestamp\": \"1699977025\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1723, 'Error peticion inicial: (\'Invalid request\',)'),
+(1724, 'Invalid request'),
+(1725, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQTU3ODA4QkNDMDZGRDY4QUExAA==\", \"status\": \"delivered\", \"timestamp\": \"1699977026\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1726, 'Error peticion inicial: (\'Invalid request\',)'),
+(1727, 'Invalid request'),
+(1728, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUFENDFDQTBFRTEwNzU3MjczAA==\", \"status\": \"sent\", \"timestamp\": \"1699977028\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1729, 'Error peticion inicial: (\'Invalid request\',)'),
+(1730, 'Invalid request'),
+(1731, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQUFENDFDQTBFRTEwNzU3MjczAA==\", \"status\": \"delivered\", \"timestamp\": \"1699977028\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1732, 'Error peticion inicial: (\'Invalid request\',)'),
+(1733, 'Invalid request'),
+(1734, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzE1Q0EyODQ0RjlENEQwRTg4AA==\", \"status\": \"sent\", \"timestamp\": \"1699977044\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1735, 'Error peticion inicial: (\'Invalid request\',)'),
+(1736, 'Invalid request'),
+(1737, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQzE1Q0EyODQ0RjlENEQwRTg4AA==\", \"status\": \"delivered\", \"timestamp\": \"1699977046\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1738, 'Error peticion inicial: (\'Invalid request\',)'),
+(1739, 'Invalid request'),
+(1740, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOUFENTIwMTlGOUZEQzJGNEMzNzdFQ0Q4REVDNTE0MkYA\", \"timestamp\": \"1699977051\", \"text\": {\"body\": \"35\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1741, 'Error peticion inicial: (\'Invalid request\',)'),
+(1742, 'Invalid request'),
+(1743, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzk4ODM4NjE3OUU3MDU2MUY5AA==\", \"status\": \"sent\", \"timestamp\": \"1699977221\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1744, 'Error peticion inicial: (\'Invalid request\',)'),
+(1745, 'Invalid request'),
+(1746, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzk4ODM4NjE3OUU3MDU2MUY5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699977224\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1747, 'Error peticion inicial: (\'Invalid request\',)'),
+(1748, 'Invalid request'),
+(1749, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQUM1NDc3MzY1QzRGNDQ5RTY1RTUzODMwMzA2QkZERkEA\", \"timestamp\": \"1699977228\", \"text\": {\"body\": \"37\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1750, 'Error peticion inicial: (\'Invalid request\',)'),
+(1751, 'Invalid request'),
+(1752, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSREJGRDAyOThGRUMyOEREMDUwAA==\", \"status\": \"delivered\", \"timestamp\": \"1699831097\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1753, 'Error al actualizar mensaje: '),
+(1754, 'Mensajeria matching query does not exist.'),
+(1755, 'Error peticion inicial: (\'Invalid request\',)'),
+(1756, 'Invalid request'),
+(1757, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMDZCNTY3MjlERDM5RjNERjM5AA==\", \"status\": \"delivered\", \"timestamp\": \"1699829715\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1758, 'Error al actualizar mensaje: '),
+(1759, 'Mensajeria matching query does not exist.'),
+(1760, 'Error peticion inicial: (\'Invalid request\',)'),
+(1761, 'Invalid request'),
+(1762, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTY1QTZGQUM5NDExNjE1NEQ3QUNGQTM5M0U1NzZBMDIA\", \"timestamp\": \"1699979573\", \"text\": {\"body\": \"38\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1763, 'Error peticion inicial: (\'Invalid request\',)'),
+(1764, 'Invalid request'),
+(1765, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzRFMTExMDAzQjEzRTYwRTYyAA==\", \"status\": \"delivered\", \"timestamp\": \"1699979586\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1766, 'Error peticion inicial: (\'Invalid request\',)'),
+(1767, 'Invalid request'),
+(1768, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzRFMTExMDAzQjEzRTYwRTYyAA==\", \"status\": \"sent\", \"timestamp\": \"1699979585\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1769, 'Error peticion inicial: (\'Invalid request\',)'),
+(1770, 'Invalid request'),
+(1771, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOEY5NTM5M0Y1QzQ1NkMyNDkxAA==\", \"status\": \"sent\", \"timestamp\": \"1699980030\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1772, 'Error peticion inicial: (\'Invalid request\',)'),
+(1773, 'Invalid request'),
+(1774, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOEY5NTM5M0Y1QzQ1NkMyNDkxAA==\", \"status\": \"delivered\", \"timestamp\": \"1699980031\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1775, 'Error peticion inicial: (\'Invalid request\',)'),
+(1776, 'Invalid request'),
+(1777, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggOEFENEMwNjMzRkIxMzYzQjRFRDFGRjkzQTUzODBCMkYA\", \"timestamp\": \"1699980035\", \"text\": {\"body\": \"G2\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1778, 'Error peticion inicial: (\'Invalid request\',)'),
+(1779, 'Invalid request'),
+(1780, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTRERUIwQjlBQ0U4RDY1Mzk0AA==\", \"status\": \"sent\", \"timestamp\": \"1699980404\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1781, 'Error peticion inicial: (\'Invalid request\',)'),
+(1782, 'Invalid request'),
+(1783, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMTRERUIwQjlBQ0U4RDY1Mzk0AA==\", \"status\": \"delivered\", \"timestamp\": \"1699980405\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1784, 'Error peticion inicial: (\'Invalid request\',)'),
+(1785, 'Invalid request'),
+(1786, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNTBCMkMxRkVGRDc4RjUxMjRGNkJFQUY4QkJCMjFCNzgA\", \"timestamp\": \"1699980409\", \"text\": {\"body\": \"41\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1787, 'Error peticion inicial: (\'Invalid request\',)'),
+(1788, 'Invalid request'),
+(1789, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNzM5NTdCNEU3RjIxMEVBQTVGQTVGMDM1RDZDM0JCODMA\", \"timestamp\": \"1699980524\", \"text\": {\"body\": \"42\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1790, 'Error peticion inicial: (\'Invalid request\',)'),
+(1791, 'Invalid request'),
+(1792, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNjcyQUU2N0QwMDUzRjIyQjA5REFEMkUzOTEwNDQ1Q0UA\", \"timestamp\": \"1699980530\", \"text\": {\"body\": \"43\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1793, 'Error peticion inicial: (\'Invalid request\',)'),
+(1794, 'Invalid request'),
+(1795, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzlGMzI3OTdFMDVENDQ2MUYyAA==\", \"status\": \"sent\", \"timestamp\": \"1699980535\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1796, 'Error peticion inicial: (\'Invalid request\',)'),
+(1797, 'Invalid request'),
+(1798, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzlGMzI3OTdFMDVENDQ2MUYyAA==\", \"status\": \"delivered\", \"timestamp\": \"1699980536\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1799, 'Error peticion inicial: (\'Invalid request\',)'),
+(1800, 'Invalid request'),
+(1801, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMUQ5NEM4QjlDRjhFN0QyMzI0NzRBMDA5NEEyOUJFOTAA\", \"timestamp\": \"1699980543\", \"text\": {\"body\": \"45\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1802, 'Error peticion inicial: (\'Invalid request\',)'),
+(1803, 'Invalid request'),
+(1804, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDJBODgxMTQyMDNEOEVCRUYyAA==\", \"status\": \"sent\", \"timestamp\": \"1699980953\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1805, 'Error peticion inicial: (\'Invalid request\',)'),
+(1806, 'Invalid request'),
+(1807, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRDJBODgxMTQyMDNEOEVCRUYyAA==\", \"status\": \"delivered\", \"timestamp\": \"1699980955\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1808, 'Error peticion inicial: (\'Invalid request\',)'),
+(1809, 'Invalid request'),
+(1810, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMDVFRDFCOEI4QUZBQ0IwOERDQUEwOEUxREU1MzVBQTIA\", \"timestamp\": \"1699980962\", \"text\": {\"body\": \"47\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1811, 'Error peticion inicial: (\'Invalid request\',)'),
+(1812, 'Invalid request'),
+(1813, 'Error peticion inicial: (\'Expecting value: line 1 column 1 (char 0)\',)'),
+(1814, 'Expecting value: line 1 column 1 (char 0)'),
+(1815, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMjExMEU4MzM5NjEyQUIxN0JEAA==\", \"status\": \"delivered\", \"timestamp\": \"1699833427\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1816, 'Error al actualizar mensaje: '),
+(1817, 'Mensajeria matching query does not exist.'),
+(1818, 'Error peticion inicial: (\'Invalid request\',)'),
+(1819, 'Invalid request'),
+(1820, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzM1NTU3MEMyQUE1QTk1NzIzAA==\", \"status\": \"sent\", \"timestamp\": \"1700061480\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"expiration_timestamp\": \"1700061840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1821, 'Error peticion inicial: (\'Invalid request\',)'),
+(1822, 'Invalid request'),
+(1823, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNzM1NTU3MEMyQUE1QTk1NzIzAA==\", \"status\": \"delivered\", \"timestamp\": \"1700061481\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a9a37a1b2017d35d3a77977f53d98d9f\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1824, 'Error peticion inicial: (\'Invalid request\',)'),
+(1825, 'Invalid request'),
+(1826, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQzhFRUNERTM5MDlDQUEzNTI1RTg4MkY3NEM0RkUwQ0QA\", \"timestamp\": \"1699895038\", \"text\": {\"body\": \"Qq\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1827, 'Error peticion inicial: (\'Invalid request\',)'),
+(1828, 'Invalid request'),
+(1829, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjQyNjc4NUZBMDZBOUE2N0JGAA==\", \"status\": \"delivered\", \"timestamp\": \"1699481729\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"6c6dd22ea49b89bfc21d41e4b5717a59\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1830, 'Error al actualizar mensaje: '),
+(1831, 'Mensajeria matching query does not exist.'),
+(1832, 'Error peticion inicial: (\'Invalid request\',)'),
+(1833, 'Invalid request'),
+(1834, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjU3NDhEMDBDMzc2RUFGMDY3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699829120\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"a64944f73172b28c61ec259df4060df6\", \"origin\": {\"type\": \"utility\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"utility\"}}]}, \"field\": \"messages\"}]}]'),
+(1835, 'Error al actualizar mensaje: '),
+(1836, 'Mensajeria matching query does not exist.'),
+(1837, 'Error peticion inicial: (\'Invalid request\',)'),
+(1838, 'Invalid request'),
+(1839, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRjQwODJENTdCM0M4MTM0NTJFRjk4RjM3QTAzQ0NBMkMA\", \"timestamp\": \"1699831783\", \"text\": {\"body\": \"Saah\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1840, 'Error peticion inicial: (\'Invalid request\',)'),
+(1841, 'Invalid request'),
+(1842, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTgzQzJDRkYwRkJCQkQ1MENFAA==\", \"status\": \"delivered\", \"timestamp\": \"1699829512\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1843, 'Error al actualizar mensaje: '),
+(1844, 'Mensajeria matching query does not exist.'),
+(1845, 'Error peticion inicial: (\'Invalid request\',)'),
+(1846, 'Invalid request'),
+(1847, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRTkxODBCRDNDOUU0NDRFNzVGODk5N0ExNzQzQkZDNEQA\", \"timestamp\": \"1699833376\", \"text\": {\"body\": \"Ty\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1848, 'Error peticion inicial: (\'Invalid request\',)'),
+(1849, 'Invalid request'),
+(1850, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSNTMwQUYyMDg4QjI0NDY3NjQ0AA==\", \"status\": \"delivered\", \"timestamp\": \"1699830596\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1851, 'Error al actualizar mensaje: '),
+(1852, 'Mensajeria matching query does not exist.'),
+(1853, 'Error peticion inicial: (\'Invalid request\',)'),
+(1854, 'Invalid request'),
+(1855, 'Error peticion inicial: (\'Expecting value: line 1 column 1 (char 0)\',)'),
+(1856, 'Expecting value: line 1 column 1 (char 0)'),
+(1857, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggNkUyREY5QUI4OEQ3QTM3QzlCMEY5NzIwQjY5MkQ1RjEA\", \"timestamp\": \"1700074352\", \"text\": {\"body\": \"Iii\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1858, 'Error peticion inicial: (\'Invalid request\',)'),
+(1859, 'Invalid request'),
+(1860, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMEIxMUM0RTZDRDg3QjIzQ0E2REE2OUUxMDFFMzhCNjcA\", \"timestamp\": \"1700074391\", \"text\": {\"body\": \"Op\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1861, 'Error peticion inicial: (\'Invalid request\',)'),
+(1862, 'Invalid request'),
+(1863, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggRUExQjBEM0REODZEQ0YyMzE1MjNGMUZCQjgyRkM5QjcA\", \"timestamp\": \"1700074392\", \"text\": {\"body\": \"Po\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1864, 'Error peticion inicial: (\'Invalid request\',)'),
+(1865, 'Invalid request'),
+(1866, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRkRGMTNENEY0NDA0RTc4Q0NGAA==\", \"status\": \"sent\", \"timestamp\": \"1700074400\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"b2ce63befef0a4284d6a90774cfa8235\", \"expiration_timestamp\": \"1700160840\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1867, 'Error peticion inicial: (\'Invalid request\',)'),
+(1868, 'Invalid request'),
+(1869, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSRkRGMTNENEY0NDA0RTc4Q0NGAA==\", \"status\": \"delivered\", \"timestamp\": \"1700074401\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"b2ce63befef0a4284d6a90774cfa8235\", \"origin\": {\"type\": \"service\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"service\"}}]}, \"field\": \"messages\"}]}]'),
+(1870, 'Error peticion inicial: (\'Invalid request\',)'),
+(1871, 'Invalid request'),
+(1872, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSMUQwNEUwMTJERUYxRjA4NUI3AA==\", \"status\": \"delivered\", \"timestamp\": \"1699830971\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1873, 'Error al actualizar mensaje: '),
+(1874, 'Mensajeria matching query does not exist.'),
+(1875, 'Error peticion inicial: (\'Invalid request\',)'),
+(1876, 'Invalid request'),
+(1877, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSOURDOTc4NDlFNzBFRDQxREYzAA==\", \"status\": \"delivered\", \"timestamp\": \"1699831241\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1878, 'Error al actualizar mensaje: '),
+(1879, 'Mensajeria matching query does not exist.'),
+(1880, 'Error peticion inicial: (\'Invalid request\',)'),
+(1881, 'Invalid request'),
+(1882, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggMUM4MDhBRUIyN0REOTI5OUMxNDg4QTk5QjVDREMwRDIA\", \"timestamp\": \"1699895161\", \"text\": {\"body\": \"1\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1883, 'Error peticion inicial: (\'Invalid request\',)'),
+(1884, 'Invalid request'),
+(1885, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"statuses\": [{\"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAERgSQjAxMzZEQzBCQjRFOTkzQkFDAA==\", \"status\": \"delivered\", \"timestamp\": \"1699833366\", \"recipient_id\": \"573014582878\", \"conversation\": {\"id\": \"ba22f4f3023918c1cd69ed0e5f5a244b\", \"origin\": {\"type\": \"marketing\"}}, \"pricing\": {\"billable\": true, \"pricing_model\": \"CBP\", \"category\": \"marketing\"}}]}, \"field\": \"messages\"}]}]'),
+(1886, 'Error al actualizar mensaje: '),
+(1887, 'Mensajeria matching query does not exist.'),
+(1888, 'Error peticion inicial: (\'Invalid request\',)'),
+(1889, 'Invalid request'),
+(1890, '[{\"id\": \"115904928131631\", \"changes\": [{\"value\": {\"messaging_product\": \"whatsapp\", \"metadata\": {\"display_phone_number\": \"15550344211\", \"phone_number_id\": \"118294544557141\"}, \"contacts\": [{\"profile\": {\"name\": \"Nelson\"}, \"wa_id\": \"573014582878\"}], \"messages\": [{\"from\": \"573014582878\", \"id\": \"wamid.HBgMNTczMDE0NTgyODc4FQIAEhggQ0ZBM0UyM0UxNEE2OEI2RDQxOThGQzdERkY0MUI4NDgA\", \"timestamp\": \"1699829399\", \"text\": {\"body\": \"Eeww\"}, \"type\": \"text\"}]}, \"field\": \"messages\"}]}]'),
+(1891, 'Error peticion inicial: (\'Invalid request\',)'),
+(1892, 'Invalid request');
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `archivos`
+--
 ALTER TABLE `archivos`
-	ADD CONSTRAINT `archivos_created_by_id_45f66317_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `archivos_created_by_id_45f66317_fk_auth_user_id` (`created_by_id`) USING BTREE,
+  ADD KEY `archivos_updated_by_id_69a44904_fk_auth_user_id` (`updated_by_id`) USING BTREE;
 
+--
+-- Indices de la tabla `auth_group`
+--
+ALTER TABLE `auth_group`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
 
--- CREATE LINK "archivos_updated_by_id_69a44904_fk_auth_user_id" 
-ALTER TABLE `archivos`
-	ADD CONSTRAINT `archivos_updated_by_id_69a44904_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "auth_group_permissions_group_id_b120cbf9_fk_auth_group_id" 
+--
+-- Indices de la tabla `auth_group_permissions`
+--
 ALTER TABLE `auth_group_permissions`
-	ADD CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY ( `group_id` )
-	REFERENCES `auth_group`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
+  ADD KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`) USING BTREE;
 
-
--- CREATE LINK "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm" 
-ALTER TABLE `auth_group_permissions`
-	ADD CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY ( `permission_id` )
-	REFERENCES `auth_permission`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "auth_permission_content_type_id_2f476e4b_fk_django_co" 
+--
+-- Indices de la tabla `auth_permission`
+--
 ALTER TABLE `auth_permission`
-	ADD CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY ( `content_type_id` )
-	REFERENCES `django_content_type`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`);
 
+--
+-- Indices de la tabla `auth_user`
+--
+ALTER TABLE `auth_user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
--- CREATE LINK "auth_user_groups_group_id_97559544_fk_auth_group_id" 
+--
+-- Indices de la tabla `auth_user_groups`
+--
 ALTER TABLE `auth_user_groups`
-	ADD CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY ( `group_id` )
-	REFERENCES `auth_group`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
+  ADD KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`) USING BTREE;
 
+--
+-- Indices de la tabla `auth_user_user_permissions`
+--
+ALTER TABLE `auth_user_user_permissions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
+  ADD KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`) USING BTREE;
 
--- CREATE LINK "auth_user_groups_user_id_6a12ed8b_fk_auth_user_id" 
+--
+-- Indices de la tabla `conversaciones`
+--
+ALTER TABLE `conversaciones`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `conversaciones_destinatario_id_db2d6e39_uniq` (`destinatario_id`),
+  ADD KEY `conversaciones_created_by_id_014c1b6c_fk_auth_user_id` (`created_by_id`) USING BTREE,
+  ADD KEY `conversaciones_estado_id_f313842a_fk_maestras_id` (`estado_id`) USING BTREE,
+  ADD KEY `conversaciones_updated_by_id_182bbfbc_fk_auth_user_id` (`updated_by_id`) USING BTREE;
+
+--
+-- Indices de la tabla `destinatarios`
+--
+ALTER TABLE `destinatarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `destinatarios_persona_id_dda68fc7_uniq` (`persona_id`),
+  ADD KEY `destinatarios_created_by_id_06bab4f5_fk_auth_user_id` (`created_by_id`) USING BTREE,
+  ADD KEY `destinatarios_estado_id_6746a127_fk_maestras_id` (`estado_id`) USING BTREE,
+  ADD KEY `destinatarios_updated_by_id_d4b37cc3_fk_auth_user_id` (`updated_by_id`) USING BTREE;
+
+--
+-- Indices de la tabla `django_admin_log`
+--
+ALTER TABLE `django_admin_log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `django_admin_log_content_type_id_c4bce8eb_fk_django_co` (`content_type_id`) USING BTREE,
+  ADD KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`) USING BTREE;
+
+--
+-- Indices de la tabla `django_celery_beat_clockedschedule`
+--
+ALTER TABLE `django_celery_beat_clockedschedule`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `django_celery_beat_crontabschedule`
+--
+ALTER TABLE `django_celery_beat_crontabschedule`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `django_celery_beat_intervalschedule`
+--
+ALTER TABLE `django_celery_beat_intervalschedule`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `django_celery_beat_periodictask`
+--
+ALTER TABLE `django_celery_beat_periodictask`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD KEY `django_celery_beat_p_clocked_id_47a69f82_fk_django_ce` (`clocked_id`) USING BTREE,
+  ADD KEY `django_celery_beat_p_crontab_id_d3cba168_fk_django_ce` (`crontab_id`) USING BTREE,
+  ADD KEY `django_celery_beat_p_interval_id_a8ca27da_fk_django_ce` (`interval_id`) USING BTREE,
+  ADD KEY `django_celery_beat_p_solar_id_a87ce72c_fk_django_ce` (`solar_id`) USING BTREE;
+
+--
+-- Indices de la tabla `django_celery_beat_periodictasks`
+--
+ALTER TABLE `django_celery_beat_periodictasks`
+  ADD PRIMARY KEY (`ident`);
+
+--
+-- Indices de la tabla `django_celery_beat_solarschedule`
+--
+ALTER TABLE `django_celery_beat_solarschedule`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `django_celery_beat_solar_event_latitude_longitude_ba64999a_uniq` (`event`,`latitude`,`longitude`);
+
+--
+-- Indices de la tabla `django_content_type`
+--
+ALTER TABLE `django_content_type`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`);
+
+--
+-- Indices de la tabla `django_migrations`
+--
+ALTER TABLE `django_migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `django_session`
+--
+ALTER TABLE `django_session`
+  ADD PRIMARY KEY (`session_key`),
+  ADD KEY `django_session_expire_date_a5c62663` (`expire_date`) USING BTREE;
+
+--
+-- Indices de la tabla `maestras`
+--
+ALTER TABLE `maestras`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `maestras_created_by_id_0d5f633f_fk_auth_user_id` (`created_by_id`) USING BTREE,
+  ADD KEY `maestras_padre_id_efdba410_fk_maestras_id` (`padre_id`) USING BTREE,
+  ADD KEY `maestras_updated_by_id_6785499a_fk_auth_user_id` (`updated_by_id`) USING BTREE;
+
+--
+-- Indices de la tabla `mensajeria`
+--
+ALTER TABLE `mensajeria`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `mensajeria_conversacion_id_id_2a3cd020` (`conversacion_id`) USING BTREE,
+  ADD KEY `mensajeria_created_by_id_0660a5f4_fk_auth_user_id` (`created_by_id`) USING BTREE,
+  ADD KEY `mensajeria_destinatario_id_d20046d0_fk_destinatarios_id` (`destinatario_id`) USING BTREE,
+  ADD KEY `mensajeria_estado_id_8bce68b8_fk_maestras_id` (`estado_id`) USING BTREE,
+  ADD KEY `mensajeria_tipo_id_226751bf_fk_maestras_id` (`tipo_id`) USING BTREE,
+  ADD KEY `mensajeria_updated_by_id_9d97231f_fk_auth_user_id` (`updated_by_id`) USING BTREE;
+
+--
+-- Indices de la tabla `modulos`
+--
+ALTER TABLE `modulos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `modulos_created_by_id_682736db_fk_auth_user_id` (`created_by_id`) USING BTREE,
+  ADD KEY `modulos_dad_id_7911d8fa_fk_modulos_id` (`dad_id`) USING BTREE,
+  ADD KEY `modulos_estado_id_b131b6f8_fk_maestras_id` (`estado_id`) USING BTREE,
+  ADD KEY `modulos_updated_by_id_379626ca_fk_auth_user_id` (`updated_by_id`) USING BTREE;
+
+--
+-- Indices de la tabla `personas`
+--
+ALTER TABLE `personas`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `personas_telefonomovil_d10349bb_uniq` (`telefonomovil`),
+  ADD UNIQUE KEY `personas_telefonowhatsapp_8bb213d6_uniq` (`telefonowhatsapp`),
+  ADD KEY `personas_ciudad_id_33741ae6_fk_maestras_id` (`ciudad_id`) USING BTREE,
+  ADD KEY `personas_created_by_id_843eac77_fk_auth_user_id` (`created_by_id`) USING BTREE,
+  ADD KEY `personas_departamento_id_57efcde3_fk_maestras_id` (`departamento_id`) USING BTREE,
+  ADD KEY `personas_ocupacion_id_e546e79a_fk_maestras_id` (`ocupacion_id`) USING BTREE,
+  ADD KEY `personas_pais_id_45bcdd53_fk_maestras_id` (`pais_id`) USING BTREE,
+  ADD KEY `personas_sexo_id_05557b10_fk_maestras_id` (`sexo_id`) USING BTREE,
+  ADD KEY `personas_tipoidentificacion_id_319d71c0_fk_maestras_id` (`tipoidentificacion_id`) USING BTREE,
+  ADD KEY `personas_updated_by_id_7e6ba61e_fk_auth_user_id` (`updated_by_id`) USING BTREE,
+  ADD KEY `personas_zona_id_0e8ab25d_fk_maestras_id` (`zona_id`) USING BTREE;
+
+--
+-- Indices de la tabla `peticion`
+--
+ALTER TABLE `peticion`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `archivos`
+--
+ALTER TABLE `archivos`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT de la tabla `auth_group`
+--
+ALTER TABLE `auth_group`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `auth_group_permissions`
+--
+ALTER TABLE `auth_group_permissions`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `auth_permission`
+--
+ALTER TABLE `auth_permission`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+
+--
+-- AUTO_INCREMENT de la tabla `auth_user`
+--
+ALTER TABLE `auth_user`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT de la tabla `auth_user_groups`
+--
 ALTER TABLE `auth_user_groups`
-	ADD CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY ( `user_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
 
-
--- CREATE LINK "auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id" 
+--
+-- AUTO_INCREMENT de la tabla `auth_user_user_permissions`
+--
 ALTER TABLE `auth_user_user_permissions`
-	ADD CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY ( `user_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
 
+--
+-- AUTO_INCREMENT de la tabla `conversaciones`
+--
+ALTER TABLE `conversaciones`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
--- CREATE LINK "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm" 
+--
+-- AUTO_INCREMENT de la tabla `destinatarios`
+--
+ALTER TABLE `destinatarios`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3782;
+
+--
+-- AUTO_INCREMENT de la tabla `django_admin_log`
+--
+ALTER TABLE `django_admin_log`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `django_celery_beat_clockedschedule`
+--
+ALTER TABLE `django_celery_beat_clockedschedule`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `django_celery_beat_crontabschedule`
+--
+ALTER TABLE `django_celery_beat_crontabschedule`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `django_celery_beat_intervalschedule`
+--
+ALTER TABLE `django_celery_beat_intervalschedule`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `django_celery_beat_periodictask`
+--
+ALTER TABLE `django_celery_beat_periodictask`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `django_celery_beat_solarschedule`
+--
+ALTER TABLE `django_celery_beat_solarschedule`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `django_content_type`
+--
+ALTER TABLE `django_content_type`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `django_migrations`
+--
+ALTER TABLE `django_migrations`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+
+--
+-- AUTO_INCREMENT de la tabla `maestras`
+--
+ALTER TABLE `maestras`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=760;
+
+--
+-- AUTO_INCREMENT de la tabla `mensajeria`
+--
+ALTER TABLE `mensajeria`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=630;
+
+--
+-- AUTO_INCREMENT de la tabla `modulos`
+--
+ALTER TABLE `modulos`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `personas`
+--
+ALTER TABLE `personas`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2939;
+
+--
+-- AUTO_INCREMENT de la tabla `peticion`
+--
+ALTER TABLE `peticion`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1893;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `archivos`
+--
+ALTER TABLE `archivos`
+  ADD CONSTRAINT `archivos_created_by_id_45f66317_fk_auth_user_id` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
+  ADD CONSTRAINT `archivos_updated_by_id_69a44904_fk_auth_user_id` FOREIGN KEY (`updated_by_id`) REFERENCES `auth_user` (`id`);
+
+--
+-- Filtros para la tabla `auth_group_permissions`
+--
+ALTER TABLE `auth_group_permissions`
+  ADD CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  ADD CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`);
+
+--
+-- Filtros para la tabla `auth_permission`
+--
+ALTER TABLE `auth_permission`
+  ADD CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`);
+
+--
+-- Filtros para la tabla `auth_user_groups`
+--
+ALTER TABLE `auth_user_groups`
+  ADD CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  ADD CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
+
+--
+-- Filtros para la tabla `auth_user_user_permissions`
+--
 ALTER TABLE `auth_user_user_permissions`
-	ADD CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY ( `permission_id` )
-	REFERENCES `auth_permission`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  ADD CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
-
--- CREATE LINK "conversaciones_created_by_id_014c1b6c_fk_auth_user_id" 
+--
+-- Filtros para la tabla `conversaciones`
+--
 ALTER TABLE `conversaciones`
-	ADD CONSTRAINT `conversaciones_created_by_id_014c1b6c_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `conversaciones_created_by_id_014c1b6c_fk_auth_user_id` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
+  ADD CONSTRAINT `conversaciones_destinatario_id_db2d6e39_fk_destinatarios_id` FOREIGN KEY (`destinatario_id`) REFERENCES `destinatarios` (`id`),
+  ADD CONSTRAINT `conversaciones_estado_id_f313842a_fk_maestras_id` FOREIGN KEY (`estado_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `conversaciones_updated_by_id_182bbfbc_fk_auth_user_id` FOREIGN KEY (`updated_by_id`) REFERENCES `auth_user` (`id`);
 
-
--- CREATE LINK "conversaciones_destinatario_id_db2d6e39_fk_destinatarios_id" 
-ALTER TABLE `conversaciones`
-	ADD CONSTRAINT `conversaciones_destinatario_id_db2d6e39_fk_destinatarios_id` FOREIGN KEY ( `destinatario_id` )
-	REFERENCES `destinatarios`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "conversaciones_estado_id_f313842a_fk_maestras_id" 
-ALTER TABLE `conversaciones`
-	ADD CONSTRAINT `conversaciones_estado_id_f313842a_fk_maestras_id` FOREIGN KEY ( `estado_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "conversaciones_updated_by_id_182bbfbc_fk_auth_user_id" 
-ALTER TABLE `conversaciones`
-	ADD CONSTRAINT `conversaciones_updated_by_id_182bbfbc_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "destinatarios_created_by_id_06bab4f5_fk_auth_user_id" 
+--
+-- Filtros para la tabla `destinatarios`
+--
 ALTER TABLE `destinatarios`
-	ADD CONSTRAINT `destinatarios_created_by_id_06bab4f5_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `destinatarios_created_by_id_06bab4f5_fk_auth_user_id` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
+  ADD CONSTRAINT `destinatarios_estado_id_6746a127_fk_maestras_id` FOREIGN KEY (`estado_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `destinatarios_persona_id_dda68fc7_fk_personas_id` FOREIGN KEY (`persona_id`) REFERENCES `personas` (`id`),
+  ADD CONSTRAINT `destinatarios_updated_by_id_d4b37cc3_fk_auth_user_id` FOREIGN KEY (`updated_by_id`) REFERENCES `auth_user` (`id`);
 
-
--- CREATE LINK "destinatarios_estado_id_6746a127_fk_maestras_id" 
-ALTER TABLE `destinatarios`
-	ADD CONSTRAINT `destinatarios_estado_id_6746a127_fk_maestras_id` FOREIGN KEY ( `estado_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "destinatarios_persona_id_dda68fc7_fk_personas_id" 
-ALTER TABLE `destinatarios`
-	ADD CONSTRAINT `destinatarios_persona_id_dda68fc7_fk_personas_id` FOREIGN KEY ( `persona_id` )
-	REFERENCES `personas`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "destinatarios_updated_by_id_d4b37cc3_fk_auth_user_id" 
-ALTER TABLE `destinatarios`
-	ADD CONSTRAINT `destinatarios_updated_by_id_d4b37cc3_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "django_admin_log_content_type_id_c4bce8eb_fk_django_co" 
+--
+-- Filtros para la tabla `django_admin_log`
+--
 ALTER TABLE `django_admin_log`
-	ADD CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY ( `content_type_id` )
-	REFERENCES `django_content_type`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
+  ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
-
--- CREATE LINK "django_admin_log_user_id_c564eba6_fk_auth_user_id" 
-ALTER TABLE `django_admin_log`
-	ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY ( `user_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "django_celery_beat_p_clocked_id_47a69f82_fk_django_ce" 
+--
+-- Filtros para la tabla `django_celery_beat_periodictask`
+--
 ALTER TABLE `django_celery_beat_periodictask`
-	ADD CONSTRAINT `django_celery_beat_p_clocked_id_47a69f82_fk_django_ce` FOREIGN KEY ( `clocked_id` )
-	REFERENCES `django_celery_beat_clockedschedule`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `django_celery_beat_p_clocked_id_47a69f82_fk_django_ce` FOREIGN KEY (`clocked_id`) REFERENCES `django_celery_beat_clockedschedule` (`id`),
+  ADD CONSTRAINT `django_celery_beat_p_crontab_id_d3cba168_fk_django_ce` FOREIGN KEY (`crontab_id`) REFERENCES `django_celery_beat_crontabschedule` (`id`),
+  ADD CONSTRAINT `django_celery_beat_p_interval_id_a8ca27da_fk_django_ce` FOREIGN KEY (`interval_id`) REFERENCES `django_celery_beat_intervalschedule` (`id`),
+  ADD CONSTRAINT `django_celery_beat_p_solar_id_a87ce72c_fk_django_ce` FOREIGN KEY (`solar_id`) REFERENCES `django_celery_beat_solarschedule` (`id`);
 
-
--- CREATE LINK "django_celery_beat_p_crontab_id_d3cba168_fk_django_ce" 
-ALTER TABLE `django_celery_beat_periodictask`
-	ADD CONSTRAINT `django_celery_beat_p_crontab_id_d3cba168_fk_django_ce` FOREIGN KEY ( `crontab_id` )
-	REFERENCES `django_celery_beat_crontabschedule`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "django_celery_beat_p_interval_id_a8ca27da_fk_django_ce" 
-ALTER TABLE `django_celery_beat_periodictask`
-	ADD CONSTRAINT `django_celery_beat_p_interval_id_a8ca27da_fk_django_ce` FOREIGN KEY ( `interval_id` )
-	REFERENCES `django_celery_beat_intervalschedule`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "django_celery_beat_p_solar_id_a87ce72c_fk_django_ce" 
-ALTER TABLE `django_celery_beat_periodictask`
-	ADD CONSTRAINT `django_celery_beat_p_solar_id_a87ce72c_fk_django_ce` FOREIGN KEY ( `solar_id` )
-	REFERENCES `django_celery_beat_solarschedule`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
-
--- CREATE LINK "maestras_padre_id_efdba410_fk_maestras_id" -----
+--
+-- Filtros para la tabla `maestras`
+--
 ALTER TABLE `maestras`
-	ADD CONSTRAINT `maestras_padre_id_efdba410_fk_maestras_id` FOREIGN KEY ( `padre_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `maestras_padre_id_efdba410_fk_maestras_id` FOREIGN KEY (`padre_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `maestras_updated_by_id_6785499a_fk_auth_user_id` FOREIGN KEY (`updated_by_id`) REFERENCES `auth_user` (`id`);
 
-
--- CREATE LINK "maestras_updated_by_id_6785499a_fk_auth_user_id" 
-ALTER TABLE `maestras`
-	ADD CONSTRAINT `maestras_updated_by_id_6785499a_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "mensajeria_conversacion_id_92157ae1_fk_conversaciones_id" 
+--
+-- Filtros para la tabla `mensajeria`
+--
 ALTER TABLE `mensajeria`
-	ADD CONSTRAINT `mensajeria_conversacion_id_92157ae1_fk_conversaciones_id` FOREIGN KEY ( `conversacion_id` )
-	REFERENCES `conversaciones`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `mensajeria_conversacion_id_92157ae1_fk_conversaciones_id` FOREIGN KEY (`conversacion_id`) REFERENCES `conversaciones` (`id`),
+  ADD CONSTRAINT `mensajeria_created_by_id_0660a5f4_fk_auth_user_id` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
+  ADD CONSTRAINT `mensajeria_destinatario_id_d20046d0_fk_destinatarios_id` FOREIGN KEY (`destinatario_id`) REFERENCES `destinatarios` (`id`),
+  ADD CONSTRAINT `mensajeria_estado_id_8bce68b8_fk_maestras_id` FOREIGN KEY (`estado_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `mensajeria_tipo_id_226751bf_fk_maestras_id` FOREIGN KEY (`tipo_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `mensajeria_updated_by_id_9d97231f_fk_auth_user_id` FOREIGN KEY (`updated_by_id`) REFERENCES `auth_user` (`id`);
 
-
--- CREATE LINK "mensajeria_created_by_id_0660a5f4_fk_auth_user_id" 
-ALTER TABLE `mensajeria`
-	ADD CONSTRAINT `mensajeria_created_by_id_0660a5f4_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "mensajeria_destinatario_id_d20046d0_fk_destinatarios_id" 
-ALTER TABLE `mensajeria`
-	ADD CONSTRAINT `mensajeria_destinatario_id_d20046d0_fk_destinatarios_id` FOREIGN KEY ( `destinatario_id` )
-	REFERENCES `destinatarios`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "mensajeria_estado_id_8bce68b8_fk_maestras_id" --
-ALTER TABLE `mensajeria`
-	ADD CONSTRAINT `mensajeria_estado_id_8bce68b8_fk_maestras_id` FOREIGN KEY ( `estado_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "mensajeria_tipo_id_226751bf_fk_maestras_id" ----
-ALTER TABLE `mensajeria`
-	ADD CONSTRAINT `mensajeria_tipo_id_226751bf_fk_maestras_id` FOREIGN KEY ( `tipo_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "mensajeria_updated_by_id_9d97231f_fk_auth_user_id" 
-ALTER TABLE `mensajeria`
-	ADD CONSTRAINT `mensajeria_updated_by_id_9d97231f_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "modulos_created_by_id_682736db_fk_auth_user_id" 
+--
+-- Filtros para la tabla `modulos`
+--
 ALTER TABLE `modulos`
-	ADD CONSTRAINT `modulos_created_by_id_682736db_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `modulos_created_by_id_682736db_fk_auth_user_id` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
+  ADD CONSTRAINT `modulos_dad_id_7911d8fa_fk_modulos_id` FOREIGN KEY (`dad_id`) REFERENCES `modulos` (`id`),
+  ADD CONSTRAINT `modulos_estado_id_b131b6f8_fk_maestras_id` FOREIGN KEY (`estado_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `modulos_updated_by_id_379626ca_fk_auth_user_id` FOREIGN KEY (`updated_by_id`) REFERENCES `auth_user` (`id`);
 
-
--- CREATE LINK "modulos_dad_id_7911d8fa_fk_modulos_id" ---------
-ALTER TABLE `modulos`
-	ADD CONSTRAINT `modulos_dad_id_7911d8fa_fk_modulos_id` FOREIGN KEY ( `dad_id` )
-	REFERENCES `modulos`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "modulos_estado_id_b131b6f8_fk_maestras_id" -----
-ALTER TABLE `modulos`
-	ADD CONSTRAINT `modulos_estado_id_b131b6f8_fk_maestras_id` FOREIGN KEY ( `estado_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "modulos_updated_by_id_379626ca_fk_auth_user_id" 
-ALTER TABLE `modulos`
-	ADD CONSTRAINT `modulos_updated_by_id_379626ca_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "personas_ciudad_id_33741ae6_fk_maestras_id" ----
+--
+-- Filtros para la tabla `personas`
+--
 ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_ciudad_id_33741ae6_fk_maestras_id` FOREIGN KEY ( `ciudad_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
+  ADD CONSTRAINT `personas_ciudad_id_33741ae6_fk_maestras_id` FOREIGN KEY (`ciudad_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `personas_created_by_id_843eac77_fk_auth_user_id` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
+  ADD CONSTRAINT `personas_departamento_id_57efcde3_fk_maestras_id` FOREIGN KEY (`departamento_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `personas_ocupacion_id_e546e79a_fk_maestras_id` FOREIGN KEY (`ocupacion_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `personas_pais_id_45bcdd53_fk_maestras_id` FOREIGN KEY (`pais_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `personas_sexo_id_05557b10_fk_maestras_id` FOREIGN KEY (`sexo_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `personas_tipoidentificacion_id_319d71c0_fk_maestras_id` FOREIGN KEY (`tipoidentificacion_id`) REFERENCES `maestras` (`id`),
+  ADD CONSTRAINT `personas_updated_by_id_7e6ba61e_fk_auth_user_id` FOREIGN KEY (`updated_by_id`) REFERENCES `auth_user` (`id`),
+  ADD CONSTRAINT `personas_zona_id_0e8ab25d_fk_maestras_id` FOREIGN KEY (`zona_id`) REFERENCES `maestras` (`id`);
+COMMIT;
 
-
--- CREATE LINK "personas_created_by_id_843eac77_fk_auth_user_id" 
-ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_created_by_id_843eac77_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "personas_departamento_id_57efcde3_fk_maestras_id" 
-ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_departamento_id_57efcde3_fk_maestras_id` FOREIGN KEY ( `departamento_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "personas_ocupacion_id_e546e79a_fk_maestras_id" -
-ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_ocupacion_id_e546e79a_fk_maestras_id` FOREIGN KEY ( `ocupacion_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "personas_pais_id_45bcdd53_fk_maestras_id" ------
-ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_pais_id_45bcdd53_fk_maestras_id` FOREIGN KEY ( `pais_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "personas_sexo_id_05557b10_fk_maestras_id" ------
-ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_sexo_id_05557b10_fk_maestras_id` FOREIGN KEY ( `sexo_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "personas_tipoidentificacion_id_319d71c0_fk_maestras_id" 
-ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_tipoidentificacion_id_319d71c0_fk_maestras_id` FOREIGN KEY ( `tipoidentificacion_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "personas_updated_by_id_7e6ba61e_fk_auth_user_id" 
-ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_updated_by_id_7e6ba61e_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
-	REFERENCES `auth_user`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
--- CREATE LINK "personas_zona_id_0e8ab25d_fk_maestras_id" ------
-ALTER TABLE `personas`
-	ADD CONSTRAINT `personas_zona_id_0e8ab25d_fk_maestras_id` FOREIGN KEY ( `zona_id` )
-	REFERENCES `maestras`( `id` )
-	ON DELETE No Action
-	ON UPDATE No Action;
-
-
-
-
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

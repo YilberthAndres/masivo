@@ -1,12 +1,8 @@
-from celery.schedules import crontab
-from django_celery_beat.models import PeriodicTask, IntervalSchedule, CrontabSchedule
-import masivo.tasks
+from django_celery_beat.models import PeriodicTask, CrontabSchedule
 import json
 
 
-def agregar_tarea_dinamicamente(
-    nombre_tarea, fecha_ejecucion, fecha_terminacion, texto, adjunto, asunto
-):
+def agregar_tarea_dinamicamente(nombre_tarea, fecha_ejecucion, send_to):
     crontab = CrontabSchedule.objects.create(
         day_of_month=str(fecha_ejecucion.day),
         month_of_year=str(fecha_ejecucion.month),
@@ -16,11 +12,11 @@ def agregar_tarea_dinamicamente(
 
     tarea = PeriodicTask.objects.create(
         name=nombre_tarea,
-        task="masivo.tasks.ejecutar_tarea",
+        task="mensajeria.tasks.ejecutar_tarea",
         crontab=crontab,
-        kwargs=json.dumps({"texto":texto, "adjunto":adjunto, "asunto":asunto}),
+        kwargs=json.dumps({**send_to}),
         enabled=True,
         one_off=True,
     )
 
-    return tarea
+    return {"id": tarea.pk, "name": tarea.name}
