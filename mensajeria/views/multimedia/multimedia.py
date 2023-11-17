@@ -1,19 +1,5 @@
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.contrib.auth.models import User, Group
-from django.contrib.auth import login, logout, authenticate
-from django.db import IntegrityError
-from django.contrib.auth.decorators import login_required, permission_required
 from mensajeria.models import Archivos
-from mensajeria.forms import ArchivosForm
-from django.http import HttpResponse
-from datetime import datetime
-import boto3
-from django.core.files.storage import get_storage_class
-import requests
 import os
-from django.conf import settings
-import json
 import dotenv
 
 dotenv.load_dotenv()
@@ -27,15 +13,11 @@ ID_WHATSAPP_NUMBER_ENV = os.getenv("ID_WHATSAPP_NUMBER")
 API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
 
 
-from rest_framework.generics import CreateAPIView, GenericAPIView
+from rest_framework.generics import CreateAPIView
 from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
-from ...serializers.auth.signin_serializers import SigninSerializers
 from rest_framework.response import Response
 from rest_framework import status
-
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
 
 
 class Uploaded(CreateAPIView, ResponseMixin):
@@ -84,17 +66,17 @@ class AllMultimedia(CreateAPIView, ResponseMixin):
         files = []
         for archivo in archivos:
             file = {
-                "file_id"   : archivo.id,
-                "name"      : archivo.nombre,
-                "dir"       : archivo.file.url,
-                "type"      : archivo.tipo,
+                "file_id": archivo.id,
+                "name": archivo.nombre,
+                "dir": archivo.file.url,
+                "type": archivo.tipo,
             }
 
             files.append(file)
 
         self.data = {
             "status": status.HTTP_400_BAD_REQUEST,
-            "data"  : {"files": files},
-            "state" : False,
+            "data": {"files": files},
+            "state": False,
         }
         return Response(self.response_obj)
