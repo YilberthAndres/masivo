@@ -4,6 +4,7 @@ from mensajeria.models import (
     Archivos,
     Mensajeria,
     Conversaciones,
+    Peticion
 )
 
 dotenv.load_dotenv()
@@ -65,65 +66,72 @@ def post_conversation(recipient_id):
 
 
 def send_message_api(data):
-    payload = get_payload(
-        data["recipient_w"], data["message"], data["type_message"], data["file_id"]
-    )
+    try: 
+        payload = get_payload(
+            data["recipient_w"], data["message"], data["type_message"], data["file_id"]
+        )
 
-    response = response = api_connect(
-        ID_WHATSAPP_NUMBER_ENV, "/messages", payload=payload, method="POST"
-    )
-    response_json = response.json()
+        response = response = api_connect(
+            ID_WHATSAPP_NUMBER_ENV, "/messages", payload=payload, method="POST"
+        )
+        response_json = response.json()
 
-    conversacion_id = post_conversation(data["recipient_id"])
+        conversacion_id = post_conversation(data["recipient_id"])
 
-    waId = response_json["contacts"][0]["wa_id"]
-    messageId = response_json["messages"][0]["id"]
 
-    mime_type = ""
-    tipo = data["type_message"]
-    if tipo == "image":
-        mime_type = "image/jpeg"
-    elif tipo == "video":
-        mime_type = "video/mp4"
-    elif tipo == "audio":
-        mime_type = "audio/mpeg"
-    elif tipo == "document":
-        mime_type = "document"
-    elif tipo == "text":
-        mime_type = "document"
+        waId = response_json["contacts"][0]["wa_id"]
+        messageId = response_json["messages"][0]["id"]
 
-    nuevo_mensaje = Mensajeria(
-        destinatario_id=data["recipient_id"],
-        texto=data["message"],
-        celular=waId,
-        recipiente_id=waId,
-        mensaje_id=messageId,
-        conversacion_id=conversacion_id,
-        mime_type=mime_type,
-        created_by_id=data["user_id"],
-    )
+        mime_type = ""
+        tipo = data["type_message"]
+        if tipo == "image":
+            mime_type = "image/jpeg"
+        elif tipo == "video":
+            mime_type = "video/mp4"
+        elif tipo == "audio":
+            mime_type = "audio/mpeg"
+        elif tipo == "document":
+            mime_type = "document"
+        elif tipo == "text":
+            mime_type = "document"
 
-    if data["file_id"] != "":
-        nuevo_mensaje.multimedia_id = data["file_id"]
+        nuevo_mensaje = Mensajeria(
+            destinatario_id=data["recipient_id"],
+            texto=data["message"],
+            celular=waId,
+            recipiente_id=waId,
+            mensaje_id=messageId,
+            conversacion_id=conversacion_id,
+            mime_type=mime_type,
+            created_by_id=data["user_id"],
+        )
 
-    nuevo_mensaje.save()
-    fecha = nuevo_mensaje.created_at.strftime("%Y/%m/%d")
+        if data["file_id"] != "":
+            nuevo_mensaje.multimedia_id = data["file_id"]
 
-    timestamp = nuevo_mensaje.created_at
-    hora = timestamp.strftime("%H")
-    minutos = timestamp.strftime("%M")
-    hora_completa = hora + ":" + minutos
+        nuevo_mensaje.save()
+        fecha = nuevo_mensaje.created_at.strftime("%Y/%m/%d")
 
-    return {
-        "recipiente_id": nuevo_mensaje.recipiente_id,
-        "fecha": fecha,
-        "id": nuevo_mensaje.id,
-        "estado": "enviado" if nuevo_mensaje.estado_id == None else "recibido",
-        "texto": nuevo_mensaje.texto,
-        "mensaje_id": nuevo_mensaje.mensaje_id,
-        "mime_type": nuevo_mensaje.mime_type,
-        "dir": nuevo_mensaje.link,
-        "filename": nuevo_mensaje.filename,
-        "voice": nuevo_mensaje.voice,
-        "hora": hora_completa,
-    }
+        timestamp = nuevo_mensaje.created_at
+        hora = timestamp.strftime("%H")
+        minutos = timestamp.strftime("%M")
+        hora_completa = hora + ":" + minutos
+
+        return {
+            "recipiente_id": nuevo_mensaje.recipiente_id,
+            "fecha": fecha,
+            "id": nuevo_mensaje.id,
+            "estado": "enviado" if nuevo_mensaje.estado_id == None else "recibido",
+            "texto": nuevo_mensaje.texto,
+            "mensaje_id": nuevo_mensaje.mensaje_id,
+            "mime_type": nuevo_mensaje.mime_type,
+            "dir": nuevo_mensaje.link,
+            "filename": nuevo_mensaje.filename,
+            "voice": nuevo_mensaje.voice,
+            "hora": hora_completa,
+            "estado_envio": True
+        }
+    except Exception as e:
+            return {
+                "estado_envio": False
+            }

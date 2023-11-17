@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from mensajeria.models import Destinatarios
+from mensajeria.models import Destinatarios, Maestras
 from rest_framework.views import APIView
 from rest_framework.generics import DestroyAPIView
 from ...mixins.base import ResponseMixin

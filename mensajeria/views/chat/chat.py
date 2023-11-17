@@ -240,49 +240,57 @@ class MenssageSend(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
     def post(self, request, *args, **kwargs):
-        # try:
-        info = json.loads(request.body)
-        recipient = info[0]["recipient"]
-        file_id = info[0].get("file_id", "")
-        dir = info[0].get("dir", "")
-        type_message = info[0]["type"]
-        message = info[0].get("message", "")
+        try:
+            info = json.loads(request.body)
+            recipient = info[0]["recipient"]
+            file_id = info[0].get("file_id", "")
+            dir = info[0].get("dir", "")
+            type_message = info[0]["type"]
+            message = info[0].get("message", "")
 
-        user = request.user
+            user = request.user
 
-        persona_model = Personas.objects.get(telefonowhatsapp=recipient)
-        recipient_model = Destinatarios.objects.get(persona=persona_model)
-        recipient_id = recipient_model.id
+            persona_model = Personas.objects.get(telefonowhatsapp=recipient)
+            recipient_model = Destinatarios.objects.get(persona=persona_model)
+            recipient_id = recipient_model.id
 
-        data_send = {}
+            data_send = {}
 
-        if persona_model:
-            data_send = {
-                "recipient_id": recipient_id,
-                "recipient_w": recipient,
-                "message": message,
-                "type_message": type_message,
-                "file_id": file_id,
-                "user": user,
-                "user_id": user.id,
-            }
+            if persona_model:
+                data_send = {
+                    "recipient_id": recipient_id,
+                    "recipient_w": recipient,
+                    "message": message,
+                    "type_message": type_message,
+                    "file_id": file_id,
+                    "user": user,
+                    "user_id": user.id,
+                }
 
-            data_message = send_message_api(data_send)
+                data_message = send_message_api(data_send)
 
-            self.data = {
-                "status": status.HTTP_200_OK,
-                "data": data_message,
-                "state": True,
-            }
-            return Response(self.response_obj)
-        else:
-            self.error = {"error": "Error destinatario no valido"}
+                if(data_message['estado_envio']):
+                    self.data = {
+                        "status": status.HTTP_200_OK,
+                        "data": data_message,
+                        "message": "Exitoso.",
+                    }
+                else:
+                    self.data = {
+                        "status": status.HTTP_401_UNAUTHORIZED,
+                        "data": {},
+                        "message": "Crededenciales Invalidas.",
+                    }
+                    
+                return Response(self.response_obj)
+            else:
+                self.error = {"error": "Error destinatario no valido"}
 
-            return Response(self.response_obj)
+                return Response(self.response_obj)
 
-    # except Exception as e:
-    #     response_data = {"status": status.HTTP_404_NOT_FOUND, "message": "error", "state": False}
-    #     return Response(response_data)
+        except Exception as e:
+            response_data = {"status": status.HTTP_404_NOT_FOUND, "message": "error", "state": False}
+            return Response(response_data)
 
 
 class ProgrammedSend(GenericAPIView, ResponseMixin):
