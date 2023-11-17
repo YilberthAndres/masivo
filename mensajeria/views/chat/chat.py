@@ -19,7 +19,9 @@ import os
 from ..base import send_message_api
 import uuid
 from masivo.utils import agregar_tarea_dinamicamente
-
+from django.shortcuts import get_object_or_404
+from django_celery_beat.models import PeriodicTask
+from crontab import CronTab
 
 API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
@@ -269,7 +271,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
 
                 data_message = send_message_api(data_send)
 
-                if(data_message['estado_envio']):
+                if data_message["estado_envio"]:
                     self.data = {
                         "status": status.HTTP_200_OK,
                         "data": data_message,
@@ -281,7 +283,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
                         "data": {},
                         "message": "Crededenciales Invalidas.",
                     }
-                    
+
                 return Response(self.response_obj)
             else:
                 self.error = {"error": "Error destinatario no valido"}
@@ -289,31 +291,50 @@ class MenssageSend(CreateAPIView, ResponseMixin):
                 return Response(self.response_obj)
 
         except Exception as e:
-            response_data = {"status": status.HTTP_404_NOT_FOUND, "message": "error", "state": False}
+            response_data = {
+                "status": status.HTTP_404_NOT_FOUND,
+                "message": e.args,
+                "state": False,
+            }
             return Response(response_data)
 
 
 class ProgrammedSend(GenericAPIView, ResponseMixin):
     def post(self, request, *args, **kwargs):
-        data = request.data
-        asunto = data.get("asunto", "")
-        fecha = data.get("fecha", "")
-        hora = data.get("hora", "")
-        adjunto = data.get("adjunto", "")
-        to = data.get("to", "")
+        try:
+            data = request.data
+            asunto = data.get("asunto", "")
+            fecha = data.get("fecha", "")
+            hora = data.get("hora", "")
+            adjunto = data.get("adjunto", "")
+            to = data.get("to", "")
 
-        nombre_tarea = str(uuid.uuid4())
-        fecha_ejecucion = datetime.strptime(fecha + " " + hora, "%Y-%m-%d %H:%M")
+            if to == "" or fecha == [] or hora == "":
+                self.error = "Datos faltantes"
+                self.status = status.HTTP_400_BAD_REQUEST
+                return Response(self.response_obj)
 
-        user = request.user
+            fecha_terminacion = None
+            length = len(fecha)
 
-        persona_model = Personas.objects.get(telefonowhatsapp=to)
-        recipient_model = Destinatarios.objects.get(persona=persona_model)
-        recipient_id = recipient_model.id
+            fecha_ejecucion = datetime.strptime(fecha[0] + " " + hora, "%Y-%m-%d %H:%M")
 
-        data_send = {}
+            if length == 2:
+                fecha_terminacion = datetime.strptime(
+                    fecha[1] + " " + hora, "%Y-%m-%d %H:%M"
+                )
 
-        if persona_model:
+            elif length > 2:
+                fecha_terminacion = [
+                    datetime.strptime(i + " " + hora, "%Y-%m-%d %H:%M") for i in fecha
+                ]
+
+            user = request.user
+
+            persona_model = get_object_or_404(Personas, telefonowhatsapp=to)
+            recipient_model = get_object_or_404(Destinatarios, persona=persona_model)
+            recipient_id = recipient_model.id
+
             data_send = {
                 "recipient_id": recipient_id,
                 "recipient_w": to,
@@ -323,18 +344,63 @@ class ProgrammedSend(GenericAPIView, ResponseMixin):
                 "user_id": user.id,
             }
 
-        tarea = agregar_tarea_dinamicamente(
-            nombre_tarea,
-            fecha_ejecucion,
-            send_to=data_send,
-        )
+            tarea = agregar_tarea_dinamicamente(
+                nombre_tarea=str(uuid.uuid4()),
+                fecha_ejecucion=fecha_ejecucion,
+                send_to=data_send,
+                fecha_terminacion=fecha_terminacion,
+            )
 
-        self.data = {
-            "response": {
+            if not tarea["valid"]:
+                self.error = tarea["error"]
+                self.status = status.HTTP_400_BAD_REQUEST
+                return Response(self.response_obj)
+
+            self.data = {
                 "tarea": tarea["id"],
                 "nombre": tarea["name"],
                 "message": "Fue creada exitosamente",
             }
-        }
 
-        return Response(self.response_obj)
+            return Response(self.response_obj)
+        except Exception as e:
+            self.status = status.HTTP_400_BAD_REQUEST
+            self.error = str(e)
+            return Response(self.response_obj)
+
+
+class GetTaskProgrammed(GenericAPIView, ResponseMixin):
+    def get(self, request, *args, **kwargs):
+        try:
+            data = (
+                PeriodicTask.objects.select_related("crontab")
+                .values(
+                    "name",
+                    "id",
+                    "crontab__day_of_month",
+                    "crontab__day_of_week",
+                    "crontab__hour",
+                    "crontab__minute",
+                    "crontab__month_of_year",
+                )
+                .all()
+            )
+            data_body = []
+
+            for i in data:
+                fecha = CronTab(
+                    user=True,
+                    tab=f"{i['crontab__day_of_month']} {i['crontab__day_of_week']} {i['crontab__hour']} {i['crontab__minute']} {i['crontab__month_of_year']}",
+                )
+
+                body = {"id": i["id"], "name": i["id"], "fecha": fecha}
+                data_body.append(body)
+
+            self.status = status.HTTP_200_OK
+            self.data = data_body
+            return Response(self.response_obj)
+
+        except Exception as e:
+            self.error = str(e)
+            self.status = status.HTTP_400_BAD_REQUEST
+            return Response(self.response_obj)

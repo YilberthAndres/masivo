@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from ...mixins.base import ResponseMixin
 from rest_framework_simplejwt.tokens import RefreshToken
+from ..base import get_errors
 
 
 class Signup(CreateAPIView, ResponseMixin):
@@ -14,22 +15,18 @@ class Signup(CreateAPIView, ResponseMixin):
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
-            self.error = {
-                "errors": serializer.errors,
-                "status": status.HTTP_400_BAD_REQUEST,
-                "valid": False,
-            }
+            self.error = serializer.errors
+            self.status = status.HTTP_400_BAD_REQUEST
+
             return Response(self.response_obj)
 
         try:
             serializer.save()
-            self.data = {"status": status.HTTP_200_OK, "data": "Ok", "valid": True}
+            self.data = "Ok"
+            self.status = status.HTTP_200_OK
         except Exception as e:
-            self.error = {
-                "errors": e.args,
-                "status": status.HTTP_400_BAD_REQUEST,
-                "valid": False,
-            }
+            self.error = e.args
+            self.status = status.HTTP_400_BAD_REQUEST
 
         return Response(self.response_obj)
 
@@ -48,16 +45,15 @@ class Signin(GenericAPIView, ResponseMixin):
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
-            self.error = {
-                "errors": serializer.errors,
-                "status": status.HTTP_400_BAD_REQUEST,
-                "valid": False,
-            }
+            errors = get_errors(serializer.errors)
+
+            self.error = errors
             return Response(self.response_obj)
 
         user = serializer.validated_data
 
         token = self.get_tokens_for_user(user)
-        self.data = {"status": status.HTTP_200_OK, "data": token, "valid": True}
+        self.data = {"data": token}
+        self.status = status.HTTP_200_OK
 
         return Response(self.response_obj)

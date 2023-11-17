@@ -1,11 +1,6 @@
 import dotenv, os, requests
 from django.shortcuts import get_object_or_404
-from mensajeria.models import (
-    Archivos,
-    Mensajeria,
-    Conversaciones,
-    Peticion
-)
+from mensajeria.models import Archivos, Mensajeria, Conversaciones, Peticion
 
 dotenv.load_dotenv()
 
@@ -66,7 +61,7 @@ def post_conversation(recipient_id):
 
 
 def send_message_api(data):
-    try: 
+    try:
         payload = get_payload(
             data["recipient_w"], data["message"], data["type_message"], data["file_id"]
         )
@@ -77,7 +72,6 @@ def send_message_api(data):
         response_json = response.json()
 
         conversacion_id = post_conversation(data["recipient_id"])
-
 
         waId = response_json["contacts"][0]["wa_id"]
         messageId = response_json["messages"][0]["id"]
@@ -129,9 +123,18 @@ def send_message_api(data):
             "filename": nuevo_mensaje.filename,
             "voice": nuevo_mensaje.voice,
             "hora": hora_completa,
-            "estado_envio": True
+            "estado_envio": True,
         }
     except Exception as e:
-            return {
-                "estado_envio": False
-            }
+        return {"estado_envio": False}
+
+
+def get_errors(errors):
+    keys = errors.keys()
+
+    if "non_field_errors" in keys:
+        
+        if len(errors["non_field_errors"]) == 1:
+            return errors["non_field_errors"][0]
+        return errors["non_field_errors"]
+        
