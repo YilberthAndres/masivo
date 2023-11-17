@@ -35,48 +35,70 @@ class Uploaded(CreateAPIView, ResponseMixin):
         return file_format
 
     def post(self, request, *args, **kwargs):
-        file = request.FILES["file"]
-        name = request.POST.get("name")
+        try:
+            file = request.FILES["file"]
+            name = request.POST.get("name")
 
-        file_format = self.get_info(file)
-        user = request.user
+            file_format = self.get_info(file)
+            user = request.user
 
-        file_model = Archivos()
-        file_model.file = file
-        file_model.nombre = name
-        file_model.tipo = file_format
-        file_model.created_by = user
+            file_model = Archivos()
+            file_model.file = file
+            file_model.nombre = name
+            file_model.tipo = file_format
+            file_model.created_by = user
 
-        file_model.save()
+            file_model.save()
 
-        self.data = {
-            "status": status.HTTP_400_BAD_REQUEST,
-            "data": {"message": "exitoso"},
-            "state": False,
-        }
-        return Response(self.response_obj)
+            self.data = {
+                "status": status.HTTP_200_OK,
+                "data": {},
+                "message": "Exitoso",
+                "error": False,
+            }
+            return Response(self.response_obj)
+
+        except Exception as e:
+            self.data = {
+                "status": status.HTTP_400_BAD_REQUEST,
+                "data": {},
+                "message": "Ocurrio un error",
+                "error": True,
+            }
+            return Response(self.response_obj)
 
 
 class AllMultimedia(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
     def get(self, file):
-        archivos = Archivos.objects.all()
+        try:
+            archivos = Archivos.objects.all()
 
-        files = []
-        for archivo in archivos:
-            file = {
-                "file_id": archivo.id,
-                "name": archivo.nombre,
-                "dir": archivo.file.url,
-                "type": archivo.tipo,
+            files = []
+            for archivo in archivos:
+                file = {
+                    "file_id"   : archivo.id,
+                    "name"      : archivo.nombre,
+                    "dir"       : archivo.file.url,
+                    "type"      : archivo.tipo,
+                }
+
+                files.append(file)
+
+            self.data = {
+                "status": status.HTTP_200_OK,
+                "data": files,
+                "message": "Exitoso",
+                "error": False,
             }
+            return Response(self.response_obj)
 
-            files.append(file)
-
-        self.data = {
-            "status": status.HTTP_400_BAD_REQUEST,
-            "data": {"files": files},
-            "state": False,
-        }
-        return Response(self.response_obj)
+        except Exception as e:
+            self.data = {
+                "status": status.HTTP_400_BAD_REQUEST,
+                "data": {},
+                "message": "Ocurrio un error.",
+                "error": True,
+            }
+            return Response(self.response_obj)

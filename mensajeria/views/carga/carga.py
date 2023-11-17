@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, permission_required
 import numpy as np
-from mensajeria.models import Archivos, Destinatarios, Personas, Maestras
+from mensajeria.models import Archivos, Destinatarios, Personas, Maestras, Peticion
 from mensajeria.forms import ArchivosForm
 import os
 from datetime import datetime
@@ -214,8 +214,6 @@ class Uploaded(CreateAPIView, ResponseMixin):
         return Response(self.response_obj)
     
 
-
-    
 class Save(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
@@ -299,3 +297,43 @@ class Save(CreateAPIView, ResponseMixin):
 
         self.data = {"status": status.HTTP_200_OK, "data": data, "state": True}
         return Response(self.response_obj)
+
+class DestinatarioCreate(CreateAPIView, ResponseMixin):
+    def get(self, request, *args, **kwargs):
+
+        try:
+            tipo_documentos = Maestras.objects.filter(padre_id=8)
+            tipo_sexos = Maestras.objects.filter(padre_id=20)
+
+            list_documentos = []
+            for documento in tipo_documentos:
+                list_documentos.append(
+                    {
+                        "id": documento.id,
+                        "nombre": documento.nombre,
+                    }
+                )
+
+            list_sexos = []
+            for sexo in tipo_sexos:
+                list_sexos.append(
+                    {
+                        "id": sexo.id,
+                        "nombre": sexo.nombre,
+                    }
+                )
+
+            self.data = {
+                "status": status.HTTP_200_OK,
+                "data": {
+                    "tipos_documentos": list_documentos,
+                    "tipos_sexos": list_sexos,
+                    },
+                "message": "Exitoso.",
+                "error": False
+            }
+
+            return Response(self.response_obj)
+        except Exception as e:
+            # Handle exceptions or log errors
+            return Response({"status": status.HTTP_500_INTERNAL_SERVER_ERROR, "message": str(e), "error": True})
