@@ -13,8 +13,7 @@ from mensajeria.models import (
 from django.utils import timezone
 from django.db.models.functions import TruncDate
 from django.db.models import Count, Case, When, Value, CharField
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 import os
 from ..base import send_message_api
 import uuid
@@ -22,6 +21,7 @@ from masivo.utils import agregar_tarea_dinamicamente
 from django.shortcuts import get_object_or_404
 from django_celery_beat.models import PeriodicTask
 from crontab import CronTab
+from croniter import croniter
 
 API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
@@ -308,6 +308,7 @@ class ProgrammedSend(GenericAPIView, ResponseMixin):
             hora = data.get("hora", "")
             adjunto = data.get("adjunto", "")
             to = data.get("to", "")
+            description = data.get("descripcion", "")
 
             if to == "" or fecha == [] or hora == "":
                 self.error = "Datos faltantes"
@@ -349,6 +350,7 @@ class ProgrammedSend(GenericAPIView, ResponseMixin):
                 fecha_ejecucion=fecha_ejecucion,
                 send_to=data_send,
                 fecha_terminacion=fecha_terminacion,
+                description=description,
             )
 
             if not tarea["valid"]:
@@ -382,18 +384,39 @@ class GetTaskProgrammed(GenericAPIView, ResponseMixin):
                     "crontab__hour",
                     "crontab__minute",
                     "crontab__month_of_year",
+                    "description",
                 )
                 .all()
             )
+
             data_body = []
 
+            now = datetime.now()
+
             for i in data:
-                fecha = CronTab(
-                    user=True,
-                    tab=f"{i['crontab__day_of_month']} {i['crontab__day_of_week']} {i['crontab__hour']} {i['crontab__minute']} {i['crontab__month_of_year']}",
+                fecha_inicio = datetime(
+                    now.year,
+                    int(i["crontab__month_of_year"]),
+                    int(i["crontab__day_of_month"][:2]),
+                    int(i["crontab__hour"]),
+                    int(i["crontab__minute"]),
+                )
+                fecha_final = datetime(
+                    now.year,
+                    int(i["crontab__month_of_year"]),
+                    int(i["crontab__day_of_month"][-2:]),
+                    int(i["crontab__hour"]),
+                    int(i["crontab__minute"]),
                 )
 
-                body = {"id": i["id"], "name": i["id"], "fecha": fecha}
+                body = {
+                    "id": i["id"],
+                    "name": i["name"],
+                    "descripcion": i["description"],
+                    "fecha_inicio": fecha_inicio,
+                    "fecha_final": fecha_final,
+                    "activo": fecha_inicio < fecha_final,
+                }
                 data_body.append(body)
 
             self.status = status.HTTP_200_OK

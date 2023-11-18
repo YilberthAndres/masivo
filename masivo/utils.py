@@ -3,7 +3,7 @@ import json
 
 
 def agregar_tarea_dinamicamente(
-    nombre_tarea, send_to, fecha_ejecucion, fecha_terminacion
+    nombre_tarea, send_to, fecha_ejecucion, fecha_terminacion, description
 ):
     try:
         cron = {
@@ -29,6 +29,7 @@ def agregar_tarea_dinamicamente(
             kwargs=json.dumps({**send_to}),
             enabled=True,
             one_off=True,
+            description=description,
         )
 
         return {"id": tarea.pk, "name": tarea.name, "valid": True}
