@@ -1,4 +1,5 @@
 import dotenv, os, requests
+from pydantic import ValidationError
 from django.shortcuts import get_object_or_404
 from mensajeria.models import Archivos, Mensajeria, Conversaciones, Peticion
 
@@ -133,8 +134,13 @@ def get_errors(errors):
     keys = errors.keys()
 
     if "non_field_errors" in keys:
-        
         if len(errors["non_field_errors"]) == 1:
             return errors["non_field_errors"][0]
         return errors["non_field_errors"]
-        
+
+
+def validate_image(fieldfile_obj):
+    filesize = fieldfile_obj.file.size
+    megabyte_limit = 15.0
+    if filesize > megabyte_limit * 1024 * 1024:
+        raise ValidationError("Max file size is %sMB" % str(megabyte_limit))
