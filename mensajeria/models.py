@@ -1,6 +1,6 @@
 from django.db import models
 from .validators import validate_image as validate_file
-
+from django.contrib.auth.models import User, Group
 # Create your models here.
 
 
