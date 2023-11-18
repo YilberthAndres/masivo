@@ -1,6 +1,5 @@
 from django.db import models
-from .views.base import validate_image as validate_file
-from .models import *
+from .validators import validate_image as validate_file
 
 # Create your models here.
 
