@@ -20,8 +20,6 @@ import uuid
 from masivo.utils import agregar_tarea_dinamicamente
 from django.shortcuts import get_object_or_404
 from django_celery_beat.models import PeriodicTask
-from crontab import CronTab
-from croniter import croniter
 
 API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
@@ -116,11 +114,8 @@ class MenssageLeft(GenericAPIView, ResponseMixin):
             self.data = {"status": status.HTTP_200_OK, "data": data, "state": True}
             return Response(self.response_obj)
         except Exception as e:
-            self.error = {
-                "status": status.HTTP_404_NOT_FOUND,
-                "message": str(e.args),
-                "state": True,
-            }
+            self.status = status.HTTP_404_NOT_FOUND
+            self.error = str(e.args)
             return Response(self.response_obj)
 
 
@@ -129,7 +124,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
 
     def get(self, request, *args, **kwargs):
         try:
-            telefonowhatsapp = request.GET.get("user_phone")
+            telefonowhatsapp = request.GET.get("user_phone", "")
 
             persona = (
                 Personas.objects.filter(telefonowhatsapp=telefonowhatsapp)
@@ -223,12 +218,9 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                 }
                 return Response(response_data)
             else:
-                response_data = {
-                    "status": status.HTTP_404_NOT_FOUND,
-                    "message": "No tienes acceso.",
-                    "state": False,
-                }
-                return Response(response_data)
+                self.status = status.HTTP_404_NOT_FOUND
+                self.error = "No tienes acceso."
+                return Response(self.response_obj)
         except Exception as e:
             response_data = {
                 "status": status.HTTP_404_NOT_FOUND,

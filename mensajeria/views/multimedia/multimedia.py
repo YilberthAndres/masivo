@@ -3,9 +3,9 @@ import os
 import dotenv
 
 dotenv.load_dotenv()
-import hashlib
-import re
+from django.core.files.storage import get_storage_class
 
+media_storage = get_storage_class()()
 
 API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
@@ -71,34 +71,25 @@ class Uploaded(CreateAPIView, ResponseMixin):
 class AllMultimedia(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
-    def get(self, file):
+    def get(self, request, *args, **kwargs):
         try:
             archivos = Archivos.objects.all()
 
             files = []
             for archivo in archivos:
-                file = {
-                    "file_id"   : archivo.id,
-                    "name"      : archivo.nombre,
-                    "dir"       : archivo.file.url,
-                    "type"      : archivo.tipo,
+                aws_file = {
+                    "file_id": archivo.id,
+                    "name": archivo.nombre,
+                    "dir": media_storage.url(name=archivo.file.name),
+                    "type": archivo.tipo,
                 }
 
-                files.append(file)
+                files.append(aws_file)
 
-            self.data = {
-                "status": status.HTTP_200_OK,
-                "data": files,
-                "message": "Exitoso",
-                "error": False,
-            }
+            self.data = files
             return Response(self.response_obj)
 
         except Exception as e:
-            self.data = {
-                "status": status.HTTP_400_BAD_REQUEST,
-                "data": {},
-                "message": "Ocurrio un error.",
-                "error": True,
-            }
+            self.error = str(e.args)
+            self.status = status.HTTP_400_BAD_REQUEST
             return Response(self.response_obj)
