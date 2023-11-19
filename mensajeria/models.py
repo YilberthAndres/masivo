@@ -1,6 +1,7 @@
 from django.db import models
 from .validators import validate_image as validate_file
 from django.contrib.auth.models import User, Group
+
 # Create your models here.
 
 
@@ -275,7 +276,12 @@ class Mensajeria(models.Model):
         db_index=True,
     )
     texto = models.TextField(null=True, blank=True)
-    multimedia_id = models.CharField(null=True, blank=True, max_length=100)
+    multimedia_id = models.ForeignKey(
+        Archivos,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+    )
     mime_type = models.CharField(null=True, blank=True, max_length=100)
     sha256 = models.TextField(null=True, blank=True)
     link = models.TextField(null=True, blank=True)

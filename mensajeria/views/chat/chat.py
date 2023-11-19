@@ -20,6 +20,9 @@ import uuid
 from masivo.utils import agregar_tarea_dinamicamente
 from django.shortcuts import get_object_or_404
 from django_celery_beat.models import PeriodicTask
+from django.core.files.storage import get_storage_class
+
+media_storage = get_storage_class()()
 
 API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
@@ -146,6 +149,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                         ),
                         fecha=TruncDate("created_at"),
                     )
+                    .select_related("multimedia_id")
                     .values(
                         "estado_annotation",
                         "recipiente_id",
@@ -159,6 +163,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                         "filename",
                         "voice",
                         "id",
+                        "multimedia_id__file",
                     )
                     .annotate(cantidad_registros=Count("id"))
                     .order_by("fecha", "created_at")
@@ -192,6 +197,11 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                             "filename": mensaje["filename"],
                             "voice": mensaje["voice"],
                             "hora": hora_completa,
+                            "multimedia": media_storage.url(
+                                mensaje["multimedia_id__file"]
+                            )
+                            if mensaje["multimedia_id__file"] != None
+                            else None,
                         }
                     )
                 now = timezone.now()
@@ -270,15 +280,13 @@ class MenssageSend(CreateAPIView, ResponseMixin):
                         "message": "Exitoso.",
                     }
                 else:
-                    self.data = {
-                        "status": status.HTTP_401_UNAUTHORIZED,
-                        "data": {},
-                        "message": "Crededenciales Invalidas.",
-                    }
+                    self.status = status.HTTP_400_BAD_REQUEST
+                    self.error = data_message
 
                 return Response(self.response_obj)
             else:
-                self.error = {"error": "Error destinatario no valido"}
+                self.status = status.HTTP_400_BAD_REQUEST
+                self.error = "Error destinatario no valido"
 
                 return Response(self.response_obj)
 

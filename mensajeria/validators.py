@@ -1,3 +1,6 @@
+from pydantic import ValidationError
+
+
 def validate_image(fieldfile_obj):
     filesize = fieldfile_obj.file.size
     megabyte_limit = 15.0

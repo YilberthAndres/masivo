@@ -2,7 +2,9 @@ import dotenv, os, requests
 from pydantic import ValidationError
 from django.shortcuts import get_object_or_404
 from mensajeria.models import Archivos, Mensajeria, Conversaciones, Peticion
+from django.core.files.storage import get_storage_class
 
+media_storage = get_storage_class()()
 dotenv.load_dotenv()
 
 API_KEY_ENV = os.getenv("API_KEY")
@@ -102,7 +104,7 @@ def send_message_api(data):
         )
 
         if data["file_id"] != "":
-            nuevo_mensaje.multimedia_id = data["file_id"]
+            nuevo_mensaje.multimedia_id_id = data["file_id"]
 
         nuevo_mensaje.save()
         fecha = nuevo_mensaje.created_at.strftime("%Y/%m/%d")
@@ -125,9 +127,12 @@ def send_message_api(data):
             "voice": nuevo_mensaje.voice,
             "hora": hora_completa,
             "estado_envio": True,
+            "multimedia": media_storage.url(nuevo_mensaje.multimedia_id.file.name)
+            if nuevo_mensaje.multimedia_id != None
+            else None,
         }
     except Exception as e:
-        return {"estado_envio": False}
+        return ({"error": str(e.args)},)
 
 
 def get_errors(errors):
@@ -137,6 +142,3 @@ def get_errors(errors):
         if len(errors["non_field_errors"]) == 1:
             return errors["non_field_errors"][0]
         return errors["non_field_errors"]
-
-
-
