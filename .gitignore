@@ -23,6 +23,7 @@ settings_local.py
 
 # Archivos de registro
 logs/
+log/
 
 # Otros archivos y directorios específicos del proyecto
 text.txt

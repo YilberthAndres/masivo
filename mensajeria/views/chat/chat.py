@@ -164,6 +164,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                         "voice",
                         "id",
                         "multimedia_id__file",
+                        "multimedia_id__nombre",
                     )
                     .annotate(cantidad_registros=Count("id"))
                     .order_by("fecha", "created_at")
@@ -197,11 +198,12 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                             "filename": mensaje["filename"],
                             "voice": mensaje["voice"],
                             "hora": hora_completa,
-                            "multimedia": media_storage.url(
-                                mensaje["multimedia_id__file"]
-                            )
-                            if mensaje["multimedia_id__file"] != None
-                            else None,
+                            "multimedia": {
+                                "url": media_storage.url(mensaje["multimedia_id__file"])
+                                if mensaje["multimedia_id__file"] != None
+                                else None,
+                                "name": mensaje["multimedia_id__nombre"],
+                            },
                         }
                     )
                 now = timezone.now()
@@ -245,12 +247,11 @@ class MenssageSend(CreateAPIView, ResponseMixin):
 
     def post(self, request, *args, **kwargs):
         try:
-            info = json.loads(request.body)
-            recipient = info[0]["recipient"]
-            file_id = info[0].get("file_id", "")
-            dir = info[0].get("dir", "")
-            type_message = info[0]["type"]
-            message = info[0].get("message", "")
+            data = request.data[0]
+            recipient = data.get("recipient", None)
+            file_id = data.get("file_id", "")
+            type_message = data.get("type")
+            message = data.get("message", "")
 
             user = request.user
 
@@ -281,7 +282,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
                     }
                 else:
                     self.status = status.HTTP_400_BAD_REQUEST
-                    self.error = data_message
+                    self.error = data_message["error"]
 
                 return Response(self.response_obj)
             else:

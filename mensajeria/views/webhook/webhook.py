@@ -74,7 +74,6 @@ def get_data():
 
         rows = cursor.fetchall()
 
-    print(rows)
     chats = []
     for row in rows:
         recipiente_id = row[0]

@@ -1,5 +1,5 @@
 import dotenv, os, requests
-from pydantic import ValidationError
+from datetime import datetime
 from django.shortcuts import get_object_or_404
 from mensajeria.models import Archivos, Mensajeria, Conversaciones, Peticion
 from django.core.files.storage import get_storage_class
@@ -90,7 +90,7 @@ def send_message_api(data):
         elif tipo == "document":
             mime_type = "document"
         elif tipo == "text":
-            mime_type = "document"
+            mime_type = None
 
         nuevo_mensaje = Mensajeria(
             destinatario_id=data["recipient_id"],
@@ -101,6 +101,7 @@ def send_message_api(data):
             conversacion_id=conversacion_id,
             mime_type=mime_type,
             created_by_id=data["user_id"],
+            timestamp_w=datetime.now(),
         )
 
         if data["file_id"] != "":
@@ -114,7 +115,7 @@ def send_message_api(data):
         minutos = timestamp.strftime("%M")
         hora_completa = hora + ":" + minutos
 
-        return {
+        response = {
             "recipiente_id": nuevo_mensaje.recipiente_id,
             "fecha": fecha,
             "id": nuevo_mensaje.id,
@@ -127,12 +128,21 @@ def send_message_api(data):
             "voice": nuevo_mensaje.voice,
             "hora": hora_completa,
             "estado_envio": True,
-            "multimedia": media_storage.url(nuevo_mensaje.multimedia_id.file.name)
-            if nuevo_mensaje.multimedia_id != None
-            else None,
+            "multimedia": {"url": None, "name": None},
         }
+
+        if nuevo_mensaje.multimedia_id != None:
+            response["multimedia"] = {
+                "url": media_storage.url(nuevo_mensaje.multimedia_id.file.name),
+                "name": nuevo_mensaje.multimedia_id.nombre,
+            }
+
+        return response
     except Exception as e:
-        return ({"error": str(e.args)},)
+        return {
+            "error": str(e.args),
+            "estado_envio": False,
+        }
 
 
 def get_errors(errors):

@@ -59,12 +59,8 @@ class Uploaded(CreateAPIView, ResponseMixin):
             return Response(self.response_obj)
 
         except Exception as e:
-            self.data = {
-                "status": status.HTTP_400_BAD_REQUEST,
-                "data": {},
-                "message": "Ocurrio un error",
-                "error": True,
-            }
+            self.error = str(e.args)
+            self.status = status.HTTP_400_BAD_REQUEST
             return Response(self.response_obj)
 
 
