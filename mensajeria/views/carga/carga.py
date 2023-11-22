@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required, permission_required
 import numpy as np
-from mensajeria.models import Archivos, Destinatarios, Personas, Maestras, Peticion
+from mensajeria.models import Archivos, Destinatarios, Personas, Maestras, Peticion, Paises
 from mensajeria.forms import ArchivosForm
 import os
 from datetime import datetime
@@ -87,7 +87,14 @@ class Uploaded(CreateAPIView, ResponseMixin):
                     num_errados     = 0
 
                     personas_actuales = Personas.objects.all().order_by('telefonowhatsapp')
-                    # 
+                    paises_actuales   = Paises.objects.all()
+
+                    paises_validos = []
+                    paises_codigo = []
+
+                    for pais in paises_actuales:
+                        paises_validos.append(pais.nombre)
+                        paises_codigo.append(pais.codigo)
 
 
                     validos_actuales = []
@@ -117,6 +124,24 @@ class Uploaded(CreateAPIView, ResponseMixin):
                         ciudad              = row[16]
                         departamento        = row[17]
                         ocupacion           = row[18]
+
+                        try:
+                            if(pais == 'Colombia'):
+                                pais_id = 39
+                                codigo = paises_codigo[38]
+                            else:
+                                index = self.get_binary_search(paises_validos, pais)
+                                
+                                if index != -1:
+                                    pais_id = (index + 1)
+                                    codigo = paises_codigo[index]
+                                else:
+                                    pais_id = 39
+                                    codigo = paises_codigo[38]
+
+                        except ValueError:
+                            pais_id = 39
+                            codigo = paises_codigo[38]
 
                         try:
                             fechaexpedicion = datetime.strptime(fechaexpedicion, '%Y-%m-%d %H:%M:%S').date()
@@ -152,8 +177,9 @@ class Uploaded(CreateAPIView, ResponseMixin):
                                     "apellido"          :   apellido,
                                     "segundo_apellido"  :   segundo_apellido,
                                     "celular_whatsapp"  :   celular,
+                                    "whatsapp_prefijo"  :   codigo + celular,
                                     "celular_llamada"   :   celular_llamada,
-                                    "pais"              :   pais,
+                                    "pais"              :   pais_id,
                                     "documento"         :   documento,
                                     "tipoidentificacion":   tipoidentificacion,
                                     "lugarexpedicion"   :   lugarexpedicion,
@@ -230,6 +256,7 @@ class Save(CreateAPIView, ResponseMixin):
             fechanacimiento     = data['fechanacimiento'],
             barrio              = data['barrio'],
             sexo_id             = data['sexo_id'],
+            pais_id             = data['pais_id'],
             created_by          = user
         )
 
@@ -269,7 +296,7 @@ class Save(CreateAPIView, ResponseMixin):
                 "segundo_nombre"    :   persona["segundo_nombre"],
                 "apellido"          :   persona["apellido"],
                 "segundo_apellido"  :   persona["segundo_apellido"],
-                "celular_whatsapp"  :   persona["celular_whatsapp"],
+                "celular_whatsapp"  :   persona["whatsapp_prefijo"],
                 "celular_llamada"   :   persona["celular_llamada"],
                 "documento"         :   persona["documento"],
                 "direccion"         :   persona["direccion"],
@@ -277,6 +304,7 @@ class Save(CreateAPIView, ResponseMixin):
                 "fechanacimiento"   :   persona["fechanacimiento"],
                 "barrio"            :   persona["barrio"],
                 "sexo_id"           :   sexo_id,
+                "pais_id"           :   persona["pais"],
                 }
             try:
                 self.post_add_person(persona_new, user)
@@ -304,7 +332,17 @@ class DestinatarioCreate(CreateAPIView, ResponseMixin):
         try:
             tipo_documentos = Maestras.objects.filter(padre_id=8)
             tipo_sexos = Maestras.objects.filter(padre_id=20)
+            paises_actuales   = Paises.objects.all()
 
+            list_paises = []
+            for pais in paises_actuales:
+                list_paises.append(
+                    {
+                        "id": pais.id,
+                        "nombre": pais.nombre,
+                        "codigo": pais.codigo,
+                    }
+                )
             list_documentos = []
             for documento in tipo_documentos:
                 list_documentos.append(
@@ -328,6 +366,7 @@ class DestinatarioCreate(CreateAPIView, ResponseMixin):
                 "data": {
                     "tipos_documentos": list_documentos,
                     "tipos_sexos": list_sexos,
+                    "tipos_paises": list_paises,
                     },
                 "message": "Exitoso.",
                 "error": False
