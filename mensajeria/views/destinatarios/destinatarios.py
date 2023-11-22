@@ -30,8 +30,11 @@ class ListDestinatarios(APIView, ResponseMixin):
                 destinatarioslist = {
                     "id": destinatario.id,
                     "nombre": nombre_persona,
-                    "celular": persona.telefonomovil,
+                    "celular": persona.telefonowhatsapp,
                     "estado": destinatario.estado_id,
+                    "estado_nombre": destinatario.estado.nombre,
+                    "pais": persona.pais.nombre,
+                    "pais_codigo": persona.pais.codigo,
                 }
                 destinatariosnew.append(destinatarioslist)
 

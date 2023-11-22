@@ -3,6 +3,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from mensajeria.models import (
+    Paises,
     Peticion,
     Mensajeria,
     Destinatarios,
@@ -190,6 +191,20 @@ def update_message(statuses):
         nueva_peticion = Peticion(estado=e)
         nueva_peticion.save()
 
+def get_binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+
+    while left <= right:
+        mid = (left + right) // 2  
+
+        if arr[mid] == target:
+            return mid  
+        elif arr[mid] < target:
+            left = mid + 1  
+        else:
+            right = mid - 1  
+
+    return -1
 
 def new_message(message, perfil):
     message_id = message["id"]
@@ -208,6 +223,26 @@ def new_message(message, perfil):
         # El registro existe
     except ObjectDoesNotExist:
         resultado = from_num[2:]
+        codigo_pais = "+" + from_num[:2]
+        paises_actuales   = Paises.objects.all()
+        paises_validos = []
+        for pais in paises_actuales:
+            paises_validos.append(pais.codigo)
+
+        try:
+            if(pais == '+57'):
+                pais_id = 39
+            else:
+                index = get_binary_search(paises_validos, codigo_pais)
+                
+                if index != -1:
+                    pais_id = (index + 1)
+                else:
+                    pais_id = 39
+
+        except ValueError:
+            pais_id = 39
+
         nueva_persona = Personas(
             nombre="",
             segundonombre="",
@@ -215,13 +250,13 @@ def new_message(message, perfil):
             segundoapellido="",
             telefonowhatsapp=from_num,
             telefonomovil=resultado,
+            pais_id=pais_id,
+            sexo_id=23,
             created_by_id=1,
         )
 
         nueva_persona.save()
         persona_id = nueva_persona.id
-
-        # nombre_persona = nueva_persona.nombre + ' ' + nueva_persona.segundonombre
 
         envia = Destinatarios(persona_id=persona_id, created_by_id=1, estado_id=596)
         envia.save()
