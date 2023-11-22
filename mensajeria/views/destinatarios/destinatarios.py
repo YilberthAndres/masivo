@@ -31,7 +31,7 @@ class ListDestinatarios(APIView, ResponseMixin):
                     "id": destinatario.id,
                     "nombre": nombre_persona,
                     "celular": persona.telefonomovil,
-                    "estado": destinatario.estado_id,
+                    "estado": destinatario.estado_id
                 }
                 destinatariosnew.append(destinatarioslist)
 
