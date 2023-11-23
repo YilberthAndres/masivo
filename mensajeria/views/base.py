@@ -14,6 +14,7 @@ API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
 
 
 def api_connect(id_whatsap, path: str, payload={}, method="GET", headers={}):
+    print(payload)
     url = (
         "https://graph.facebook.com/"
         + API_VERSION_WHATSAPP_ENV
@@ -66,7 +67,10 @@ def post_conversation(recipient_id):
 def send_message_api(data):
     try:
         payload = get_payload(
-            data["recipient_w"], data["message"], data["type_message"], data["file_id"]
+            data["recipient_w"],
+            data["message"],
+            data["type_message"],
+            data["file_id"],
         )
 
         response = response = api_connect(

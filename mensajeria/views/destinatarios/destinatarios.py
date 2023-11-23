@@ -9,9 +9,8 @@ from rest_framework.response import Response
 class ListDestinatarios(APIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
         try:
-            destinatarios = (
-                Destinatarios.objects.only("persona", "id")
-                .select_related("persona")
+            destinatarios = Destinatarios.objects.only("persona", "id").select_related(
+                "persona"
             )
             destinatariosnew = []
 
@@ -30,17 +29,20 @@ class ListDestinatarios(APIView, ResponseMixin):
                 destinatarioslist = {
                     "id": destinatario.id,
                     "nombre": nombre_persona,
-                    "celular": persona.telefonomovil,
-                    "estado": destinatario.estado_id
+                    "celular": persona.telefonowhatsapp,
+                    "estado": destinatario.estado_id,
+                    "estado_nombre": destinatario.estado.nombre,
+                    "pais": persona.pais.nombre,
+                    "pais_codigo": persona.pais.codigo,
                 }
                 destinatariosnew.append(destinatarioslist)
 
-            self.data = {"data": destinatariosnew}
+            self.data = destinatariosnew
 
             return Response(self.response_obj)
         except Exception as e:
             error_message = str(e)
-            self.error = {"error": error_message}
+            self.error = error_message
             return JsonResponse(self.response_obj)
 
 

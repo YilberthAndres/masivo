@@ -33,21 +33,16 @@ class Maestras(models.Model):
         verbose_name = "maestra"
         verbose_name_plural = "maestras"
 
+
 class Paises(models.Model):
     nombre = models.CharField(max_length=50)
     codigo = models.CharField(max_length=50)
+
     class Meta:
         db_table = "paises"
         verbose_name = "pais"
         verbose_name_plural = "paises"
-        
-class Paises(models.Model):
-    nombre = models.CharField(max_length=50)
-    codigo = models.CharField(max_length=50)
-    class Meta:
-        db_table = "paises"
-        verbose_name = "pais"
-        verbose_name_plural = "paises"
+
 
 class Personas(models.Model):
     identificacion = models.CharField(
@@ -188,7 +183,6 @@ class Archivos(models.Model):
         db_table = "archivos"
         verbose_name = "archivos"
         verbose_name_plural = "archivos"
-
 
 
 class Destinatarios(models.Model):

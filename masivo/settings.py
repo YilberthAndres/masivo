@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
-import dotenv 
+import dotenv
 
 dotenv.load_dotenv()
 
@@ -25,17 +25,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 
-SECRET_KEY_ENV              = os.getenv("SECRET_KEY")
-AWS_ACCESS_KEY_ID_ENV       = os.getenv("AWS_ACCESS_KEY_ID_N")
-AWS_SECRET_ACCESS_KEY_ENV   = os.getenv("AWS_SECRET_ACCESS_KEY_N")
+SECRET_KEY_ENV = os.getenv("SECRET_KEY")
+AWS_ACCESS_KEY_ID_ENV = os.getenv("AWS_ACCESS_KEY_ID_N")
+AWS_SECRET_ACCESS_KEY_ENV = os.getenv("AWS_SECRET_ACCESS_KEY_N")
 AWS_STORAGE_BUCKET_NAME_ENV = os.getenv("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_REGION_NAME_ENV      = os.getenv("AWS_S3_REGION_NAME")
+AWS_S3_REGION_NAME_ENV = os.getenv("AWS_S3_REGION_NAME")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY_ENV
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "debug_toolbar",
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
@@ -60,12 +61,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django.middleware.gzip.GZipMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "middleware.auth.CustomMiddleware",
+    # "middleware.auth.CustomMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -93,6 +96,28 @@ TEMPLATES = [
         },
     },
 ]
+
+
+DEBUG_TOOLBAR_PANELS = [
+    "debug_toolbar.panels.history.HistoryPanel",
+    "debug_toolbar.panels.versions.VersionsPanel",
+    "debug_toolbar.panels.timer.TimerPanel",
+    "debug_toolbar.panels.settings.SettingsPanel",
+    "debug_toolbar.panels.headers.HeadersPanel",
+    "debug_toolbar.panels.request.RequestPanel",
+    "debug_toolbar.panels.sql.SQLPanel",
+    "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+    "debug_toolbar.panels.templates.TemplatesPanel",
+    "debug_toolbar.panels.cache.CachePanel",
+    "debug_toolbar.panels.signals.SignalsPanel",
+    "debug_toolbar.panels.redirects.RedirectsPanel",
+    "debug_toolbar.panels.profiling.ProfilingPanel"
+]
+
+RENDER_PANELS = True
+
+INTERNAL_IPS = ["127.0.0.1"]
+
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=12),
@@ -122,9 +147,8 @@ SIMPLE_JWT = {
 }
 
 WSGI_APPLICATION = "masivo.wsgi.application"
-# ASGI_APPLICATION = 'masivo.asgi.application'
 
-ASGI_APPLICATION = "masivo.asgi.application"  # routing.py will be created later
+ASGI_APPLICATION = "masivo.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -157,7 +181,11 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ]
+    ],
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ),
 }
 
 # Database
@@ -171,6 +199,14 @@ DATABASES = {
         "HOST": DB_HOST,
         "PORT": DB_PORT,
     }
+}
+
+import mimetypes
+
+mimetypes.add_type("application/javascript", ".js", True)
+
+DEBUG_TOOLBAR_CONFIG = {
+    "INTERCEPT_REDIRECTS": False,
 }
 
 # Password validation
@@ -209,50 +245,37 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+STORAGES = {"staticfiles": {"BACKEND": "masivo.storage.MediaStorage"}}
 
 # print(BASE_DIR)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 15000000
-AWS_ACCESS_KEY_ID       = AWS_ACCESS_KEY_ID_ENV
-AWS_SECRET_ACCESS_KEY   = AWS_SECRET_ACCESS_KEY_ENV
+AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID_ENV
+AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY_ENV
 AWS_STORAGE_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME_ENV
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_LOCATION = 'static'
-STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-AWS_S3_SIGNATURE_NAME   = 's3v4',
-AWS_S3_REGION_NAME      = AWS_S3_REGION_NAME_ENV
-AWS_S3_FILE_OVERWRITE   = False
-AWS_DEFAULT_ACL         =  None
-AWS_S3_VERITY           = True
-DEFAULT_FILE_STORAGE = 'masivo.storage.MediaStorage'
+AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+AWS_LOCATION = "static"
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+AWS_S3_SIGNATURE_NAME = ("s3v4",)
+AWS_S3_REGION_NAME = AWS_S3_REGION_NAME_ENV
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = "masivo.storage.MediaStorage"
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Almacenamiento de archivos multimedia
-MEDIA_URL = '/media/'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = "/media/"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-# AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-# AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-# AWS_STORAGE_BUCKET_NAME = "masivo"
-# AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
-# AWS_S3_REGION_NAME = "us-east-1"
-# AWS_S3_OBJECT_PARAMETERS = {
-#     "CacheControl": "max-age=86400",
-# }
-# AWS_DEFAULT_ACL = None
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'mensajeria/static'),
-# ]
-
-STATIC_URL = "static/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "static/")
+# STATIC_URL = "static/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "static/")
 
 # AWS_LOCATION = 'static'
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 # STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 # DEFAULT_FILE_STORAGE = 'masivo.storage_backends.MediaStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-STATIC_ROOT = os.path.join(BASE_DIR, "mensajeria/static")
+# STATIC_ROOT = os.path.join(BASE_DIR, "mensajeria/static")

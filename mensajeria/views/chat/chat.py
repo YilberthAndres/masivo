@@ -326,6 +326,13 @@ class ProgrammedSend(GenericAPIView, ResponseMixin):
                     fecha[1] + " " + hora, "%Y-%m-%d %H:%M"
                 )
 
+                if fecha_terminacion < fecha_ejecucion:
+                    self.error = (
+                        "Fecha de terminacion no puede ser menor a la fecha de inicio"
+                    )
+                    self.status = status.HTTP_400_BAD_REQUEST
+                    return Response(self.response_obj)
+
             elif length > 2:
                 fecha_terminacion = [
                     datetime.strptime(i + " " + hora, "%Y-%m-%d %H:%M") for i in fecha
@@ -333,9 +340,14 @@ class ProgrammedSend(GenericAPIView, ResponseMixin):
 
             user = request.user
 
-            persona_model = get_object_or_404(Personas, telefonowhatsapp=to)
-            recipient_model = get_object_or_404(Destinatarios, persona=persona_model)
-            recipient_id = recipient_model.id
+            recipient_id = Destinatarios.objects.get(
+                persona__telefonowhatsapp=to
+            ).pk
+
+            if not recipient_id:
+                self.error = "Numero no existe en nuestra base de datos"
+                self.status = status.HTTP_400_BAD_REQUEST
+                return Response(self.response_obj)
 
             data_send = {
                 "recipient_id": recipient_id,
@@ -368,7 +380,7 @@ class ProgrammedSend(GenericAPIView, ResponseMixin):
             return Response(self.response_obj)
         except Exception as e:
             self.status = status.HTTP_400_BAD_REQUEST
-            self.error = str(e)
+            self.error = str(e.args)
             return Response(self.response_obj)
 
 
@@ -416,7 +428,7 @@ class GetTaskProgrammed(GenericAPIView, ResponseMixin):
                     "descripcion": i["description"],
                     "fecha_inicio": fecha_inicio,
                     "fecha_final": fecha_final,
-                    "activo": fecha_inicio < fecha_final,
+                    "activo": fecha_inicio < fecha_final and fecha_final > now,
                 }
                 data_body.append(body)
 

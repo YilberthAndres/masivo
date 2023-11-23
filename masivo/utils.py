@@ -18,7 +18,10 @@ def agregar_tarea_dinamicamente(
                 str(fecha_ejecucion.day) + "-" + str(fecha_terminacion.day)
             )
         elif fecha_terminacion:
-            cron["day_of_month"] = ",".join([str(x.day) for x in fecha_terminacion])
+            for i in fecha_terminacion:
+                if i < fecha_ejecucion:
+                    raise TypeError(f"Fecha invalidad, {i}")
+                cron["day_of_month"] += f",{i.day}"
 
         crontab = CrontabSchedule.objects.create(**cron)
 
