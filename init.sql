@@ -1,18 +1,38 @@
 
 
+
 -- CREATE TABLE "archivos" -------------------------------------
 CREATE TABLE `archivos`( 
 	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
-	`nombre` VarChar( 650 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`descripcion` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`tipo` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`formato` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`dir` VarChar( 500 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-	`created_at` DateTime NOT NULL,
-	`updated_at` DateTime NOT NULL,
-	`created_by_id` Int( 0 ) NOT NULL,
+	`nombre` VarChar( 650 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+	`descripcion` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+	`tipo` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+	`formato` VarChar( 50 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+	`dir` VarChar( 500 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+	`created_at` DateTime NULL DEFAULT NULL,
+	`updated_at` DateTime NULL DEFAULT NULL,
+	`created_by_id` Int( 0 ) NULL DEFAULT NULL,
 	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
 	`file` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`grupo` Int( 0 ) NULL DEFAULT NULL,
+	PRIMARY KEY ( `id` ) )
+CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+ENGINE = InnoDB
+AUTO_INCREMENT = 34;-- -------------------------------------------------------------;
+
+
+-- CREATE TABLE "areas" ----------------------------------------
+CREATE TABLE `areas`( 
+	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
+	`nombre` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`descripcion` VarChar( 250 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`codigo` VarChar( 25 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`created_at` DateTime NOT NULL,
+	`updated_at` DateTime NOT NULL,
+	`created_by_id` Int( 0 ) NULL DEFAULT NULL,
+	`estado_id` Int( 0 ) NULL DEFAULT NULL,
+	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
@@ -28,8 +48,7 @@ CREATE TABLE `auth_group`(
 	CONSTRAINT `name` UNIQUE( `name` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+ENGINE = InnoDB;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "auth_group_permissions" -----------------------
@@ -56,7 +75,7 @@ CREATE TABLE `auth_permission`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 81;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 101;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "auth_user" ------------------------------------
@@ -77,7 +96,7 @@ CREATE TABLE `auth_user`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 4;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "auth_user_groups" -----------------------------
@@ -120,7 +139,7 @@ CREATE TABLE `conversaciones`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 4;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "destinatarios" --------------------------------
@@ -132,12 +151,16 @@ CREATE TABLE `destinatarios`(
 	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
 	`persona_id` BigInt( 0 ) NULL DEFAULT NULL,
 	`estado_id` Int( 0 ) NULL DEFAULT NULL,
+	`grupo_id` BigInt( 0 ) NULL DEFAULT NULL,
+	`seccion_id` BigInt( 0 ) NULL DEFAULT NULL,
 	PRIMARY KEY ( `id` ),
-	CONSTRAINT `destinatarios_persona_id_dda68fc7_uniq` UNIQUE( `persona_id` ) )
+	CONSTRAINT `destinatarios_persona_id_dda68fc7_uniq` UNIQUE( `persona_id` ),
+	CONSTRAINT `grupo_id` UNIQUE( `grupo_id` ),
+	CONSTRAINT `seccion_id` UNIQUE( `seccion_id` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 72;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "django_admin_log" -----------------------------
@@ -164,8 +187,7 @@ CREATE TABLE `django_celery_beat_clockedschedule`(
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+ENGINE = InnoDB;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "django_celery_beat_crontabschedule" -----------
@@ -180,8 +202,7 @@ CREATE TABLE `django_celery_beat_crontabschedule`(
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+ENGINE = InnoDB;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "django_celery_beat_intervalschedule" ----------
@@ -192,7 +213,7 @@ CREATE TABLE `django_celery_beat_intervalschedule`(
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB;
+ENGINE = InnoDB;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "django_celery_beat_periodictask" --------------
@@ -217,15 +238,14 @@ CREATE TABLE `django_celery_beat_periodictask`(
 	`one_off` TinyInt( 1 ) NOT NULL,
 	`start_time` DateTime NULL DEFAULT NULL,
 	`priority` Int( 0 ) UNSIGNED NULL DEFAULT NULL,
-	`headers` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+	`headers` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '_utf8mb3',
 	`clocked_id` Int( 0 ) NULL DEFAULT NULL,
 	`expire_seconds` Int( 0 ) UNSIGNED NULL DEFAULT NULL,
 	PRIMARY KEY ( `id` ),
 	CONSTRAINT `name` UNIQUE( `name` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+ENGINE = InnoDB;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "django_celery_beat_periodictasks" -------------
@@ -248,8 +268,7 @@ CREATE TABLE `django_celery_beat_solarschedule`(
 	CONSTRAINT `django_celery_beat_solar_event_latitude_longitude_ba64999a_uniq` UNIQUE( `event`, `latitude`, `longitude` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+ENGINE = InnoDB;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "django_content_type" --------------------------
@@ -262,7 +281,7 @@ CREATE TABLE `django_content_type`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 21;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 26;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "django_migrations" ----------------------------
@@ -275,7 +294,7 @@ CREATE TABLE `django_migrations`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 69;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 75;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "django_session" -------------------------------
@@ -287,6 +306,25 @@ CREATE TABLE `django_session`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB;-- -------------------------------------------------------------;
+
+
+-- CREATE TABLE "grupos" ---------------------------------------
+CREATE TABLE `grupos`( 
+	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
+	`nombre` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`descripcion` VarChar( 250 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`codigo` VarChar( 25 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`created_at` DateTime NOT NULL,
+	`updated_at` DateTime NOT NULL,
+	`created_by_id` Int( 0 ) NULL DEFAULT NULL,
+	`estado_id` Int( 0 ) NULL DEFAULT NULL,
+	`seccion_id` BigInt( 0 ) NULL DEFAULT NULL,
+	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
+	PRIMARY KEY ( `id` ) )
+CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+ENGINE = InnoDB
+AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "maestras" -------------------------------------
@@ -309,7 +347,7 @@ CREATE TABLE `maestras`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 759;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "mensajeria" -----------------------------------
@@ -338,6 +376,24 @@ CREATE TABLE `mensajeria`(
 	`context_from` VarChar( 25 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
 	`context_id` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
 	PRIMARY KEY ( `id` ) )
+CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+ENGINE = InnoDB
+AUTO_INCREMENT = 70;-- -------------------------------------------------------------;
+
+
+-- CREATE TABLE "mensajeria_gruposdestinatarios" ---------------
+CREATE TABLE `mensajeria_gruposdestinatarios`( 
+	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
+	`created_at` DateTime NOT NULL,
+	`updated_at` DateTime NOT NULL,
+	`created_by_id` Int( 0 ) NULL DEFAULT NULL,
+	`destinatario_id` BigInt( 0 ) NULL DEFAULT NULL,
+	`grupo_id` BigInt( 0 ) NULL DEFAULT NULL,
+	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
+	PRIMARY KEY ( `id` ),
+	CONSTRAINT `destinatario_id` UNIQUE( `destinatario_id` ),
+	CONSTRAINT `grupo_id` UNIQUE( `grupo_id` ) )
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
@@ -375,7 +431,7 @@ CREATE TABLE `paises`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 181;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "personas" -------------------------------------
@@ -417,7 +473,7 @@ CREATE TABLE `personas`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
-AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
+AUTO_INCREMENT = 73;-- -------------------------------------------------------------;
 
 
 -- CREATE TABLE "peticion" -------------------------------------
@@ -428,10 +484,47 @@ CREATE TABLE `peticion`(
 CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci
 ENGINE = InnoDB
+AUTO_INCREMENT = 367;-- -------------------------------------------------------------;
+
+
+-- CREATE TABLE "secciones" ------------------------------------
+CREATE TABLE `secciones`( 
+	`id` BigInt( 0 ) AUTO_INCREMENT NOT NULL,
+	`nombre` VarChar( 100 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`descripcion` VarChar( 250 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`codigo` VarChar( 25 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+	`created_at` DateTime NOT NULL,
+	`updated_at` DateTime NOT NULL,
+	`area_id` BigInt( 0 ) NULL DEFAULT NULL,
+	`created_by_id` Int( 0 ) NULL DEFAULT NULL,
+	`estado_id` Int( 0 ) NULL DEFAULT NULL,
+	`updated_by_id` Int( 0 ) NULL DEFAULT NULL,
+	PRIMARY KEY ( `id` ) )
+CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci
+ENGINE = InnoDB
 AUTO_INCREMENT = 1;-- -------------------------------------------------------------;
 
 
 -- Dump data of "archivos" ---------------------------------
+BEGIN;
+
+INSERT INTO `archivos`(`id`,`nombre`,`descripcion`,`tipo`,`formato`,`dir`,`created_at`,`updated_at`,`created_by_id`,`updated_by_id`,`file`,`grupo`) VALUES 
+( '33', 'bdc7387adfcc4cfea2eb09fcac85c9fe.jpeg', '', '', '', '', '2023-11-24 04:29:08', '2023-11-24 04:29:08', NULL, NULL, 'mesagge/multimedia/bdc7387adfcc4cfea2eb09fcac85c9fe.jpeg', '2' ),
+( '34', '7acf79b2319c67d8fb470b525ef2fedb.jpeg', '', '', '', '', '2023-11-26 20:36:34', '2023-11-26 20:36:34', NULL, NULL, 'mesagge/multimedia/7acf79b2319c67d8fb470b525ef2fedb.jpeg', '2' ),
+( '35', 'ace8d47c246db2289679f81534542fd1.jpeg', '', '', '', '', '2023-11-26 20:38:27', '2023-11-26 20:38:27', NULL, NULL, 'mesagge/multimedia/ace8d47c246db2289679f81534542fd1.jpeg', '2' ),
+( '36', 'cf0c83067f4fe2396a0916dde0e2694d.jpeg', '', '', '', '', '2023-11-26 20:46:43', '2023-11-26 20:46:43', NULL, NULL, 'message/multimedia/cf0c83067f4fe2396a0916dde0e2694d.jpeg', '2' );
+COMMIT;
+-- ---------------------------------------------------------
+
+
+-- Dump data of "areas" ------------------------------------
+BEGIN;
+
+INSERT INTO `areas`(`id`,`nombre`,`descripcion`,`codigo`,`created_at`,`updated_at`,`created_by_id`,`estado_id`,`updated_by_id`) VALUES 
+( '6', 'Mercadeo actualizado', 'Area de mercadeo actualizado', '', '2023-11-26 18:19:13.273307', '2023-11-26 20:03:47.603639', '1', '597', '1' ),
+( '7', 'Mercadeo 2', 'Area de mercadeo 2', '', '2023-11-26 18:21:33.920809', '2023-11-26 18:21:33.920809', '1', '596', NULL );
+COMMIT;
 -- ---------------------------------------------------------
 
 
@@ -530,7 +623,23 @@ INSERT INTO `auth_permission`(`id`,`name`,`content_type_id`,`codename`) VALUES
 ( '81', 'Can add paises', '21', 'add_paises' ),
 ( '82', 'Can change paises', '21', 'change_paises' ),
 ( '83', 'Can delete paises', '21', 'delete_paises' ),
-( '84', 'Can view paises', '21', 'view_paises' );
+( '84', 'Can view paises', '21', 'view_paises' ),
+( '85', 'Can add grupo', '22', 'add_grupos' ),
+( '86', 'Can change grupo', '22', 'change_grupos' ),
+( '87', 'Can delete grupo', '22', 'delete_grupos' ),
+( '88', 'Can view grupo', '22', 'view_grupos' ),
+( '89', 'Can add area', '23', 'add_areas' ),
+( '90', 'Can change area', '23', 'change_areas' ),
+( '91', 'Can delete area', '23', 'delete_areas' ),
+( '92', 'Can view area', '23', 'view_areas' ),
+( '93', 'Can add seccion', '24', 'add_secciones' ),
+( '94', 'Can change seccion', '24', 'change_secciones' ),
+( '95', 'Can delete seccion', '24', 'delete_secciones' ),
+( '96', 'Can view seccion', '24', 'view_secciones' ),
+( '97', 'Can add grupos destinatarios', '25', 'add_gruposdestinatarios' ),
+( '98', 'Can change grupos destinatarios', '25', 'change_gruposdestinatarios' ),
+( '99', 'Can delete grupos destinatarios', '25', 'delete_gruposdestinatarios' ),
+( '100', 'Can view grupos destinatarios', '25', 'view_gruposdestinatarios' );
 COMMIT;
 -- ---------------------------------------------------------
 
@@ -554,46 +663,19 @@ COMMIT;
 
 
 -- Dump data of "conversaciones" ---------------------------
+BEGIN;
+
+INSERT INTO `conversaciones`(`id`,`created_at`,`updated_at`,`created_by_id`,`destinatario_id`,`estado_id`,`updated_by_id`) VALUES 
+( '4', '2023-11-24 04:29:05.216400', '2023-11-26 20:46:39.386598', '1', '71', '758', NULL );
+COMMIT;
 -- ---------------------------------------------------------
 
 
 -- Dump data of "destinatarios" ----------------------------
 BEGIN;
 
-INSERT INTO `destinatarios`(`id`,`created_at`,`updated_at`,`created_by_id`,`updated_by_id`,`persona_id`,`estado_id`) VALUES 
-( '37', '2023-11-22 04:38:21.407082', '2023-11-22 04:38:21.407082', '1', NULL, '39', '596' ),
-( '38', '2023-11-22 04:38:21.410595', '2023-11-22 04:38:21.410595', '1', NULL, '40', '596' ),
-( '39', '2023-11-22 04:38:21.410595', '2023-11-22 04:38:21.410595', '1', NULL, '41', '596' ),
-( '40', '2023-11-22 04:38:21.415154', '2023-11-22 04:38:21.415154', '1', NULL, '42', '596' ),
-( '41', '2023-11-22 04:38:21.425528', '2023-11-22 04:38:21.425528', '1', NULL, '43', '596' ),
-( '42', '2023-11-22 04:38:21.425528', '2023-11-22 04:38:21.425528', '1', NULL, '44', '596' ),
-( '43', '2023-11-22 04:38:21.430552', '2023-11-22 04:38:21.430552', '1', NULL, '45', '596' ),
-( '44', '2023-11-22 04:38:21.430552', '2023-11-22 04:38:21.430552', '1', NULL, '46', '596' ),
-( '45', '2023-11-22 04:38:21.440527', '2023-11-22 04:38:21.440527', '1', NULL, '47', '596' ),
-( '46', '2023-11-22 04:38:21.440527', '2023-11-22 04:38:21.440527', '1', NULL, '48', '596' ),
-( '47', '2023-11-22 04:38:21.440527', '2023-11-22 04:38:21.440527', '1', NULL, '49', '596' ),
-( '48', '2023-11-22 04:38:21.440527', '2023-11-22 04:38:21.440527', '1', NULL, '50', '596' ),
-( '49', '2023-11-22 04:38:21.455100', '2023-11-22 04:38:21.455100', '1', NULL, '51', '596' ),
-( '50', '2023-11-22 04:38:21.460121', '2023-11-22 04:38:21.460121', '1', NULL, '52', '596' ),
-( '51', '2023-11-22 04:38:21.460121', '2023-11-22 04:38:21.460121', '1', NULL, '53', '596' ),
-( '52', '2023-11-22 04:38:21.460121', '2023-11-22 04:38:21.460121', '1', NULL, '54', '596' ),
-( '53', '2023-11-22 04:38:21.465155', '2023-11-22 04:38:21.465155', '1', NULL, '55', '596' ),
-( '54', '2023-11-22 04:38:21.470184', '2023-11-22 04:38:21.470184', '1', NULL, '56', '596' ),
-( '55', '2023-11-22 04:38:21.470184', '2023-11-22 04:38:21.470184', '1', NULL, '57', '596' ),
-( '56', '2023-11-22 04:38:21.470184', '2023-11-22 04:38:21.470184', '1', NULL, '58', '596' ),
-( '57', '2023-11-22 04:38:21.480317', '2023-11-22 04:38:21.480317', '1', NULL, '59', '596' ),
-( '58', '2023-11-22 04:38:21.483871', '2023-11-22 04:38:21.483871', '1', NULL, '60', '596' ),
-( '59', '2023-11-22 04:38:21.490542', '2023-11-22 04:38:21.490542', '1', NULL, '61', '596' ),
-( '60', '2023-11-22 04:38:21.490542', '2023-11-22 04:38:21.490542', '1', NULL, '62', '596' ),
-( '61', '2023-11-22 04:38:21.490542', '2023-11-22 04:38:21.490542', '1', NULL, '63', '596' ),
-( '62', '2023-11-22 04:38:21.499638', '2023-11-22 04:38:21.499638', '1', NULL, '64', '596' ),
-( '63', '2023-11-22 04:38:21.500148', '2023-11-22 04:38:21.500148', '1', NULL, '65', '596' ),
-( '64', '2023-11-22 04:38:21.505203', '2023-11-22 04:38:21.505203', '1', NULL, '66', '596' ),
-( '65', '2023-11-22 04:38:21.510223', '2023-11-22 04:38:21.510223', '1', NULL, '67', '596' ),
-( '66', '2023-11-22 04:38:21.510223', '2023-11-22 04:38:21.510223', '1', NULL, '68', '596' ),
-( '67', '2023-11-22 04:38:21.515371', '2023-11-22 04:38:21.515371', '1', NULL, '69', '596' ),
-( '68', '2023-11-22 04:38:21.515371', '2023-11-22 04:38:21.515371', '1', NULL, '70', '596' ),
-( '69', '2023-11-22 04:38:21.520493', '2023-11-22 04:38:21.520493', '1', NULL, '71', '596' );
+INSERT INTO `destinatarios`(`id`,`created_at`,`updated_at`,`created_by_id`,`updated_by_id`,`persona_id`,`estado_id`,`grupo_id`,`seccion_id`) VALUES 
+( '71', '2023-11-24 04:29:05.206611', '2023-11-24 04:29:05.206611', '1', NULL, '73', '596', NULL, NULL );
 COMMIT;
 -- ---------------------------------------------------------
 
@@ -642,14 +724,18 @@ INSERT INTO `django_content_type`(`id`,`app_label`,`model`) VALUES
 ( '10', 'django_celery_beat', 'periodictasks' ),
 ( '11', 'django_celery_beat', 'solarschedule' ),
 ( '14', 'mensajeria', 'archivos' ),
+( '23', 'mensajeria', 'areas' ),
 ( '20', 'mensajeria', 'conversaciones' ),
 ( '13', 'mensajeria', 'destinatarios' ),
+( '22', 'mensajeria', 'grupos' ),
+( '25', 'mensajeria', 'gruposdestinatarios' ),
 ( '15', 'mensajeria', 'maestras' ),
 ( '18', 'mensajeria', 'mensajeria' ),
 ( '17', 'mensajeria', 'modulos' ),
 ( '21', 'mensajeria', 'paises' ),
 ( '16', 'mensajeria', 'personas' ),
 ( '19', 'mensajeria', 'peticion' ),
+( '24', 'mensajeria', 'secciones' ),
 ( '6', 'sessions', 'session' );
 COMMIT;
 -- ---------------------------------------------------------
@@ -729,12 +815,20 @@ INSERT INTO `django_migrations`(`id`,`app`,`name`,`applied`) VALUES
 ( '68', 'sessions', '0001_initial', '2023-11-22 02:15:03.445652' ),
 ( '69', 'mensajeria', '0031_paises_alter_personas_pais', '2023-11-22 02:58:39.379882' ),
 ( '70', 'mensajeria', '0032_alter_paises_options_alter_paises_table', '2023-11-22 02:59:53.825802' ),
-( '71', 'mensajeria', '0033_alter_paises_options_paises_codigo', '2023-11-22 03:07:50.778320' );
+( '71', 'mensajeria', '0033_alter_paises_options_paises_codigo', '2023-11-22 03:07:50.778320' ),
+( '72', 'mensajeria', '0034_archivos_grupo', '2023-11-24 01:48:16.711869' ),
+( '73', 'mensajeria', '0035_areas_grupos_secciones_gruposdestinatarios_and_more', '2023-11-26 15:06:13.621425' ),
+( '74', 'mensajeria', '0036_destinatarios_grupo_destinatarios_seccion', '2023-11-26 15:06:14.049482' ),
+( '75', 'mensajeria', '0037_alter_archivos_file', '2023-11-26 20:46:16.737823' );
 COMMIT;
 -- ---------------------------------------------------------
 
 
 -- Dump data of "django_session" ---------------------------
+-- ---------------------------------------------------------
+
+
+-- Dump data of "grupos" -----------------------------------
 -- ---------------------------------------------------------
 
 
@@ -784,7 +878,7 @@ INSERT INTO `maestras`(`id`,`codigo`,`nombre`,`jerarquia`,`orden`,`visible`,`obs
 ( '40', NULL, 'O', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '37', NULL ),
 ( '41', NULL, 'AB', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '37', NULL ),
 ( '42', 'LIS_RH', 'RH', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
-( '43', 'POSITIVO', '', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '42', NULL ),
+( '43', 'POSITIVO', '+', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '42', NULL ),
 ( '44', 'NEGATIVO', '-', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '42', NULL ),
 ( '45', 'LIS_NIVELESEDUCATIVOS', 'NIVELES EDUCATIVOS', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '1', NULL ),
 ( '46', NULL, 'PRIMARIA', NULL, NULL, '1', NULL, '2022-08-26 00:15:26.000000', NULL, NULL, NULL, '1', '45', NULL ),
@@ -1476,6 +1570,21 @@ COMMIT;
 
 
 -- Dump data of "mensajeria" -------------------------------
+BEGIN;
+
+INSERT INTO `mensajeria`(`id`,`mensaje_id`,`recipiente_id`,`conversacion_id`,`origin`,`timestamp_w`,`celular`,`created_at`,`updated_at`,`created_by_id`,`estado_id`,`updated_by_id`,`destinatario_id`,`texto`,`tipo_id`,`sha256`,`multimedia_id_id`,`mime_type`,`link`,`filename`,`voice`,`context_from`,`context_id`) VALUES 
+( '70', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggOEU3Q0VFNjdGRDJCRkRBMzM1QUQ2QkI5Q0E3NkEwRUMA', '573042115334', '4', NULL, '1700800143', '573042115334', '2023-11-24 04:29:07.864627', '2023-11-24 04:29:07.864627', NULL, '745', NULL, NULL, NULL, '750', 'PTquy/njLyrrj90hNHp9fJ8/07hSIul+Jhx7/wOcgag=', '33', 'image/jpeg', NULL, '', NULL, NULL, NULL ),
+( '71', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggNzE2Mzk0Q0JDQTRCMUYyOUJEQzVEQTM3OEIyRjNEOEEA', '573042115334', '4', NULL, '1701030479', '573042115334', '2023-11-26 20:28:01.603985', '2023-11-26 20:28:01.603985', NULL, '745', NULL, NULL, '...', '748', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
+( '72', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMDRDNjY4NkNENkY0MkYzQjA0NjlDRThGQzk0QjNCQjYA', '573042115334', '4', NULL, '1701030496', '573042115334', '2023-11-26 20:28:16.103975', '2023-11-26 20:28:16.103975', NULL, '745', NULL, NULL, '.', '748', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
+( '73', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggNURGRTU2QzU5RTBENjgxODNCNjY3QkFBOEJDQUU0RjgA', '573042115334', '4', NULL, '1701030988', '573042115334', '2023-11-26 20:36:34.307672', '2023-11-26 20:36:34.307672', NULL, '745', NULL, NULL, NULL, '750', 'kZD3AN0JmhRzZ/F+NXH4gn4sRxuZT0XaiO/f4g71Tw8=', '34', 'image/jpeg', NULL, '', NULL, NULL, NULL ),
+( '74', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMTZDRjJBODhBOTM2NTY0RkVGMDY1MTlBQUM2RjVENUIA', '573042115334', '4', NULL, '1701031101', '573042115334', '2023-11-26 20:38:26.661669', '2023-11-26 20:38:26.661669', NULL, '745', NULL, NULL, NULL, '750', 'kZD3AN0JmhRzZ/F+NXH4gn4sRxuZT0XaiO/f4g71Tw8=', '35', 'image/jpeg', NULL, '', NULL, NULL, NULL ),
+( '75', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0U2MjIwMUZEQzdERTVGQTU0AA==', '573042115334', '4', NULL, '1701031444', '573042115334', '2023-11-26 20:44:02.970594', '2023-11-26 20:44:04.958502', '1', '745', NULL, '71', '*Hola Yilberth* Queremos invitarte a una reunión este 20/11/2023 ☺️. Te esperamos ', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ),
+( '76', 'wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggREJDNDA0NUY1RjBCOEI5NDUyMTc4NzJENjRGRkUyRDcA', '573042115334', '4', NULL, '1701031597', '573042115334', '2023-11-26 20:46:43.152283', '2023-11-26 20:46:43.152283', NULL, '745', NULL, NULL, NULL, '750', 'kZD3AN0JmhRzZ/F+NXH4gn4sRxuZT0XaiO/f4g71Tw8=', '36', 'image/jpeg', NULL, '', NULL, NULL, NULL );
+COMMIT;
+-- ---------------------------------------------------------
+
+
+-- Dump data of "mensajeria_gruposdestinatarios" -----------
 -- ---------------------------------------------------------
 
 
@@ -1487,186 +1596,187 @@ COMMIT;
 BEGIN;
 
 INSERT INTO `paises`(`id`,`nombre`,`codigo`) VALUES 
-( '1', 'Afganistán', '93' ),
-( '2', 'Albania', '355' ),
-( '3', 'Alemania', '49' ),
-( '4', 'Andorra', '376' ),
-( '5', 'Angola', '244' ),
-( '6', 'Antigua y Barbuda', '268' ),
-( '7', 'Arabia Saudita', '966' ),
-( '8', 'Argelia', '213' ),
-( '9', 'Argentina', '54' ),
-( '10', 'Armenia', '374' ),
-( '11', 'Australia', '61' ),
-( '12', 'Austria', '43' ),
-( '13', 'Azerbaiyán', '994' ),
-( '14', 'Bahamas', '242' ),
-( '15', 'Bangladés', '880' ),
-( '16', 'Barbados', '246' ),
-( '17', 'Baréin', '973' ),
-( '18', 'Bélgica', '32' ),
-( '19', 'Belice', '501' ),
-( '20', 'Benín', '229' ),
-( '21', 'Bhután', '975' ),
-( '22', 'Bielorrusia', '375' ),
-( '23', 'Bolivia', '591' ),
-( '24', 'Bosnia y Herzegovina', '387' ),
-( '25', 'Botsuana', '267' ),
-( '26', 'Brasil', '55' ),
-( '27', 'Brunéi', '673' ),
-( '28', 'Bulgaria', '359' ),
-( '29', 'Burkina Faso', '226' ),
-( '30', 'Burundi', '257' ),
-( '31', 'Camboya', '855' ),
-( '32', 'Camerún', '237' ),
-( '33', 'Canadá', '1' ),
-( '34', 'Cabo Verde', '238' ),
-( '35', 'Chad', '235' ),
-( '36', 'Chile', '56' ),
-( '37', 'China', '86' ),
-( '38', 'Chipre', '357' ),
+( '1', 'Afganistán', '+93' ),
+( '2', 'Albania', '+355' ),
+( '3', 'Alemania', '+49' ),
+( '4', 'Andorra', '+376' ),
+( '5', 'Angola', '+244' ),
+( '6', 'Antigua y Barbuda', '+268' ),
+( '7', 'Arabia Saudita', '+966' ),
+( '8', 'Argelia', '+213' ),
+( '9', 'Argentina', '+54' ),
+( '10', 'Armenia', '+374' ),
+( '11', 'Australia', '+61' ),
+( '12', 'Austria', '+43' ),
+( '13', 'Azerbaiyán', '+994' ),
+( '14', 'Bahamas', '+242' ),
+( '15', 'Bangladés', '+880' ),
+( '16', 'Barbados', '+246' ),
+( '17', 'Baréin', '+973' ),
+( '18', 'Bélgica', '+32' ),
+( '19', 'Belice', '+501' ),
+( '20', 'Benín', '+229' ),
+( '21', 'Bhután', '+975' ),
+( '22', 'Bielorrusia', '+375' ),
+( '23', 'Bolivia', '+591' ),
+( '24', 'Bosnia y Herzegovina', '+387' ),
+( '25', 'Botsuana', '+267' ),
+( '26', 'Brasil', '+55' ),
+( '27', 'Brunéi', '+673' ),
+( '28', 'Bulgaria', '+359' ),
+( '29', 'Burkina Faso', '+226' ),
+( '30', 'Burundi', '+257' ),
+( '31', 'Camboya', '+855' ),
+( '32', 'Camerún', '+237' ),
+( '33', 'Canadá', '+1' ),
+( '34', 'Cabo Verde', '+238' ),
+( '35', 'Chad', '+235' ),
+( '36', 'Chile', '+56' ),
+( '37', 'China', '+86' ),
+( '38', 'Chipre', '+357' ),
 ( '39', 'Colombia', '57' ),
-( '40', 'Comoras', '269' ),
-( '41', 'Congo', '242' ),
-( '42', 'Congo, República Democrática del', '243' ),
-( '43', 'Corea del Norte', '850' ),
-( '44', 'Corea del Sur', '82' ),
-( '45', 'Costa de Marfil', '225' ),
-( '46', 'Costa Rica', '506' ),
-( '48', 'Croacia', '385' ),
-( '49', 'Cuba', '53' ),
-( '50', 'Curazao', '599' ),
-( '51', 'Dinamarca', '45' ),
-( '52', 'Dominica', '1' ),
-( '53', 'República Dominicana', '1' ),
-( '54', 'Ecuador', '593' ),
-( '55', 'Egipto', '20' ),
-( '56', 'El Salvador', '503' ),
-( '57', 'Emiratos Árabes Unidos', '971' ),
-( '58', 'Eritrea', '291' ),
-( '59', 'Eslovaquia', '421' ),
-( '60', 'Eslovenia', '386' ),
-( '61', 'España', '34' ),
-( '62', 'Estados Unidos', '1' ),
-( '63', 'Estonia', '372' ),
-( '64', 'Etiopía', '251' ),
-( '65', 'Filipinas', '63' ),
-( '66', 'Finlandia', '358' ),
-( '67', 'Fiyi', '679' ),
-( '68', 'Francia', '33' ),
-( '69', 'Gabón', '241' ),
-( '70', 'Gambia', '220' ),
-( '71', 'Georgia', '995' ),
-( '72', 'Ghana', '233' ),
-( '73', 'Gibraltar', '350' ),
-( '74', 'Grecia', '30' ),
-( '75', 'Grenada', '1' ),
-( '76', 'Guatemala', '502' ),
-( '77', 'Guinea', '224' ),
-( '78', 'Guinea-Bissau', '245' ),
-( '79', 'Guinea Ecuatorial', '240' ),
-( '80', 'Guyana', '592' ),
-( '81', 'Haití', '509' ),
-( '82', 'Honduras', '504' ),
-( '83', 'Hungría', '36' ),
-( '84', 'India', '91' ),
-( '85', 'Indonesia', '62' ),
-( '86', 'Irán', '98' ),
-( '87', 'Iraq', '964' ),
-( '88', 'Irlanda', '353' ),
-( '89', 'Islandia', '354' ),
-( '90', 'Israel', '972' ),
-( '91', 'Italia', '39' ),
-( '92', 'Jamaica', '1' ),
-( '93', 'Japón', '81' ),
-( '94', 'Jordania', '962' ),
-( '95', 'Kazajistán', '7' ),
-( '96', 'Kenia', '254' ),
-( '97', 'Kirguistán', '996' ),
-( '98', 'Kiribati', '686' ),
-( '99', 'Kosovo', '383' ),
-( '100', 'Kuwait', '965' ),
-( '101', 'Laos', '856' ),
-( '102', 'Letonia', '371' ),
-( '103', 'Líbano', '961' ),
-( '104', 'Lesoto', '266' ),
-( '105', 'Liberia', '231' ),
-( '106', 'Libia', '218' ),
-( '107', 'Liechtenstein', '423' ),
-( '108', 'Lituania', '370' ),
-( '109', 'Luxemburgo', '352' ),
-( '110', 'Macedonia del Norte', '389' ),
-( '111', 'Madagascar', '261' ),
-( '112', 'Malasia', '60' ),
-( '113', 'Malawi', '265' ),
-( '114', 'Maldivas', '960' ),
-( '115', 'Malí', '223' ),
-( '116', 'Malta', '356' ),
-( '117', 'Marruecos', '212' ),
-( '118', 'Mauricio', '230' ),
-( '119', 'Mauritania', '222' ),
-( '120', 'México', '52' ),
-( '121', 'Micronesia', '691' ),
-( '122', 'Moldavia', '373' ),
-( '123', 'Mónaco', '377' ),
-( '124', 'Mongolia', '976' ),
-( '125', 'Montenegro', '382' ),
-( '126', 'Marruecos', '212' ),
-( '127', 'Mozambique', '258' ),
-( '128', 'Myanmar (Birmania)', '95' ),
-( '129', 'Namibia', '264' ),
-( '130', 'Nauru', '674' ),
-( '131', 'Nepal', '977' ),
-( '132', 'Países Bajos', '31' ),
-( '133', 'Nueva Zelanda', '64' ),
-( '134', 'Nicaragua', '505' ),
-( '135', 'Níger', '227' ),
-( '136', 'Nigeria', '234' ),
-( '137', 'Noruega', '47' ),
-( '138', 'Omán', '968' ),
-( '139', 'Pakistán', '92' ),
-( '140', 'Palaos', '680' ),
-( '141', 'Palestina', '970' ),
-( '142', 'Panamá', '507' ),
-( '143', 'Papúa Nueva Guinea', '675' ),
-( '144', 'Paraguay', '595' ),
-( '145', 'Perú', '51' ),
-( '146', 'Filipinas', '63' ),
-( '147', 'Polonia', '48' ),
-( '148', 'Portugal', '351' ),
-( '149', 'Puerto Rico', '1' ),
-( '150', 'Qatar', '974' ),
-( '151', 'Reino Unido', '44' ),
-( '152', 'Ruanda', '250' ),
-( '153', 'Rumania', '40' ),
-( '154', 'Rusia', '7' ),
-( '155', 'Samoa', '685' ),
-( '156', 'San Cristóbal y Nieves', '1' ),
-( '157', 'San Marino', '378' ),
-( '158', 'San Vicente y las Granadinas', '1' ),
-( '159', 'Santa Lucía', '1' ),
-( '160', 'Santo Tomé y Príncipe', '239' ),
-( '161', 'Senegal', '221' ),
-( '162', 'Serbia', '381' ),
-( '163', 'Seychelles', '248' ),
-( '164', 'Sierra Leona', '232' ),
-( '165', 'Singapur', '65' ),
-( '166', 'Siria', '963' ),
-( '167', 'Somalia', '252' ),
-( '168', 'Sri Lanka', '94' ),
-( '169', 'Sudáfrica', '27' ),
-( '170', 'Sudán', '249' ),
-( '171', 'Sudán del Sur', '211' ),
-( '172', 'Suecia', '46' ),
-( '173', 'Suiza', '41' ),
-( '174', 'Suriname', '597' ),
-( '175', 'Tailandia', '66' ),
-( '176', 'Tajikistan', '992' ),
-( '177', 'Tanzania', '255' ),
-( '178', 'Taylandia', '66' ),
-( '179', 'Timor Oriental', '670' ),
-( '180', 'Togo', '228' ),
-( '181', 'Venezuela', '58' );
+( '40', 'Comoras', '+269' ),
+( '41', 'Congo', '+242' ),
+( '42', 'Congo, República Democrática del', '+243' ),
+( '43', 'Corea del Norte', '+850' ),
+( '44', 'Corea del Sur', '+82' ),
+( '45', 'Costa de Marfil', '+225' ),
+( '46', 'Costa Rica', '+506' ),
+( '47', 'Côte d\'Ivoire', '+225' ),
+( '48', 'Croacia', '+385' ),
+( '49', 'Cuba', '+53' ),
+( '50', 'Curazao', '+599' ),
+( '51', 'Dinamarca', '+45' ),
+( '52', 'Dominica', '+1' ),
+( '53', 'República Dominicana', '+1' ),
+( '54', 'Ecuador', '+593' ),
+( '55', 'Egipto', '+20' ),
+( '56', 'El Salvador', '+503' ),
+( '57', 'Emiratos Árabes Unidos', '+971' ),
+( '58', 'Eritrea', '+291' ),
+( '59', 'Eslovaquia', '+421' ),
+( '60', 'Eslovenia', '+386' ),
+( '61', 'España', '+34' ),
+( '62', 'Estados Unidos', '+1' ),
+( '63', 'Estonia', '+372' ),
+( '64', 'Etiopía', '+251' ),
+( '65', 'Filipinas', '+63' ),
+( '66', 'Finlandia', '+358' ),
+( '67', 'Fiyi', '+679' ),
+( '68', 'Francia', '+33' ),
+( '69', 'Gabón', '+241' ),
+( '70', 'Gambia', '+220' ),
+( '71', 'Georgia', '+995' ),
+( '72', 'Ghana', '+233' ),
+( '73', 'Gibraltar', '+350' ),
+( '74', 'Grecia', '+30' ),
+( '75', 'Grenada', '+1' ),
+( '76', 'Guatemala', '+502' ),
+( '77', 'Guinea', '+224' ),
+( '78', 'Guinea-Bissau', '+245' ),
+( '79', 'Guinea Ecuatorial', '+240' ),
+( '80', 'Guyana', '+592' ),
+( '81', 'Haití', '+509' ),
+( '82', 'Honduras', '+504' ),
+( '83', 'Hungría', '+36' ),
+( '84', 'India', '+91' ),
+( '85', 'Indonesia', '+62' ),
+( '86', 'Irán', '+98' ),
+( '87', 'Iraq', '+964' ),
+( '88', 'Irlanda', '+353' ),
+( '89', 'Islandia', '+354' ),
+( '90', 'Israel', '+972' ),
+( '91', 'Italia', '+39' ),
+( '92', 'Jamaica', '+1' ),
+( '93', 'Japón', '+81' ),
+( '94', 'Jordania', '+962' ),
+( '95', 'Kazajistán', '+7' ),
+( '96', 'Kenia', '+254' ),
+( '97', 'Kirguistán', '+996' ),
+( '98', 'Kiribati', '+686' ),
+( '99', 'Kosovo', '+383' ),
+( '100', 'Kuwait', '+965' ),
+( '101', 'Laos', '+856' ),
+( '102', 'Letonia', '+371' ),
+( '103', 'Líbano', '+961' ),
+( '104', 'Lesoto', '+266' ),
+( '105', 'Liberia', '+231' ),
+( '106', 'Libia', '+218' ),
+( '107', 'Liechtenstein', '+423' ),
+( '108', 'Lituania', '+370' ),
+( '109', 'Luxemburgo', '+352' ),
+( '110', 'Macedonia del Norte', '+389' ),
+( '111', 'Madagascar', '+261' ),
+( '112', 'Malasia', '+60' ),
+( '113', 'Malawi', '+265' ),
+( '114', 'Maldivas', '+960' ),
+( '115', 'Malí', '+223' ),
+( '116', 'Malta', '+356' ),
+( '117', 'Marruecos', '+212' ),
+( '118', 'Mauricio', '+230' ),
+( '119', 'Mauritania', '+222' ),
+( '120', 'México', '+52' ),
+( '121', 'Micronesia', '+691' ),
+( '122', 'Moldavia', '+373' ),
+( '123', 'Mónaco', '+377' ),
+( '124', 'Mongolia', '+976' ),
+( '125', 'Montenegro', '+382' ),
+( '126', 'Marruecos', '+212' ),
+( '127', 'Mozambique', '+258' ),
+( '128', 'Myanmar (Birmania)', '+95' ),
+( '129', 'Namibia', '+264' ),
+( '130', 'Nauru', '+674' ),
+( '131', 'Nepal', '+977' ),
+( '132', 'Países Bajos', '+31' ),
+( '133', 'Nueva Zelanda', '+64' ),
+( '134', 'Nicaragua', '+505' ),
+( '135', 'Níger', '+227' ),
+( '136', 'Nigeria', '+234' ),
+( '137', 'Noruega', '+47' ),
+( '138', 'Omán', '+968' ),
+( '139', 'Pakistán', '+92' ),
+( '140', 'Palaos', '+680' ),
+( '141', 'Palestina', '+970' ),
+( '142', 'Panamá', '+507' ),
+( '143', 'Papúa Nueva Guinea', '+675' ),
+( '144', 'Paraguay', '+595' ),
+( '145', 'Perú', '+51' ),
+( '146', 'Filipinas', '+63' ),
+( '147', 'Polonia', '+48' ),
+( '148', 'Portugal', '+351' ),
+( '149', 'Puerto Rico', '+1' ),
+( '150', 'Qatar', '+974' ),
+( '151', 'Reino Unido', '+44' ),
+( '152', 'Ruanda', '+250' ),
+( '153', 'Rumania', '+40' ),
+( '154', 'Rusia', '+7' ),
+( '155', 'Samoa', '+685' ),
+( '156', 'San Cristóbal y Nieves', '+1' ),
+( '157', 'San Marino', '+378' ),
+( '158', 'San Vicente y las Granadinas', '+1' ),
+( '159', 'Santa Lucía', '+1' ),
+( '160', 'Santo Tomé y Príncipe', '+239' ),
+( '161', 'Senegal', '+221' ),
+( '162', 'Serbia', '+381' ),
+( '163', 'Seychelles', '+248' ),
+( '164', 'Sierra Leona', '+232' ),
+( '165', 'Singapur', '+65' ),
+( '166', 'Siria', '+963' ),
+( '167', 'Somalia', '+252' ),
+( '168', 'Sri Lanka', '+94' ),
+( '169', 'Sudáfrica', '+27' ),
+( '170', 'Sudán', '+249' ),
+( '171', 'Sudán del Sur', '+211' ),
+( '172', 'Suecia', '+46' ),
+( '173', 'Suiza', '+41' ),
+( '174', 'Suriname', '+597' ),
+( '175', 'Tailandia', '+66' ),
+( '176', 'Tajikistan', '+992' ),
+( '177', 'Tanzania', '+255' ),
+( '178', 'Taylandia', '+66' ),
+( '179', 'Timor Oriental', '+670' ),
+( '180', 'Togo', '+228' ),
+( '181', 'Venezuela', '+58' );
 COMMIT;
 -- ---------------------------------------------------------
 
@@ -1675,39 +1785,7 @@ COMMIT;
 BEGIN;
 
 INSERT INTO `personas`(`id`,`identificacion`,`lugarexpedicion`,`fechaexpedicion`,`direccion`,`telefono`,`telefonomovil`,`telefonowhatsapp`,`email`,`sendemail`,`fechanacimiento`,`nombre`,`segundonombre`,`apellido`,`segundoapellido`,`foto`,`barrio`,`observaciones`,`created_at`,`updated_at`,`deleted_at`,`deleted_by`,`ciudad_id`,`created_by_id`,`departamento_id`,`ocupacion_id`,`pais_id`,`sexo_id`,`tipoidentificacion_id`,`updated_by_id`,`zona_id`) VALUES 
-( '39', '123456789', NULL, NULL, 'calle 33', NULL, '4567890123', '574567890123', NULL, '0', '2000-11-13', 'Yilberth', '', 'García', 'Rojas', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.390296', '2023-11-22 04:38:21.390296', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '40', '987654321', NULL, NULL, 'calle 34', NULL, '3456789012', '583456789012', NULL, '0', '2000-11-14', 'Marco', 'Victoria', 'Rodríguez', 'Peralta', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.407082', '2023-11-22 04:38:21.407082', NULL, NULL, NULL, '1', NULL, NULL, '181', '21', NULL, NULL, NULL ),
-( '41', '6666666666', NULL, NULL, 'calle 36', NULL, '5678901234', '585678901234', NULL, '0', '2000-11-16', 'Ana', 'Isabel', 'López', 'Solís', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.410595', '2023-11-22 04:38:21.410595', NULL, NULL, NULL, '1', NULL, NULL, '181', '21', NULL, NULL, NULL ),
-( '42', '2345678901', NULL, NULL, 'calle 38', NULL, '7890123456', '587890123456', NULL, '0', '2000-11-18', 'María', 'Gabriela', 'González', 'Campos', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.415154', '2023-11-22 04:38:21.415154', NULL, NULL, NULL, '1', NULL, NULL, '181', '21', NULL, NULL, NULL ),
-( '43', '1111111111', NULL, NULL, 'calle 40', NULL, '9012345678', '579012345678', NULL, '0', '2000-11-20', 'Laura', 'Elena', 'Romero', '', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.420519', '2023-11-22 04:38:21.420519', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '44', '2222222222', NULL, NULL, 'calle 41', NULL, '1012345678', '571012345678', NULL, '0', '2000-11-21', 'Carlos', 'Roberto', 'Torres', 'Chavarría', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.425528', '2023-11-22 04:38:21.425528', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '45', '3456789012', NULL, NULL, 'calle 43', NULL, '1212345678', '561212345678', NULL, '0', '2000-11-23', 'Luis', 'Jorge', 'Ramírez', 'Zúñiga', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.430552', '2023-11-22 04:38:21.430552', NULL, NULL, NULL, '1', NULL, NULL, '36', '21', NULL, NULL, NULL ),
-( '46', '2109876543', NULL, NULL, 'calle 44', NULL, '1312345678', '561312345678', NULL, '0', '2000-11-24', 'Andrea', 'Carmen', 'Ruiz', 'Aguilar', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.430552', '2023-11-22 04:38:21.430552', NULL, NULL, NULL, '1', NULL, NULL, '36', '21', NULL, NULL, NULL ),
-( '47', '4444444444', NULL, NULL, 'calle 45', NULL, '', '561412345678', NULL, '0', '2000-11-25', 'Manuel', 'Guillermo', 'González', 'Navarro', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.436010', '2023-11-22 04:38:21.436010', NULL, NULL, NULL, '1', NULL, NULL, '36', '21', NULL, NULL, NULL ),
-( '48', '8888888888', NULL, NULL, 'calle 46', NULL, '1512345678', '561512345678', NULL, '0', '2000-11-26', 'Marta', 'Beatriz', 'Díaz', 'Acuña', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.440527', '2023-11-22 04:38:21.440527', NULL, NULL, NULL, '1', NULL, NULL, '36', '21', NULL, NULL, NULL ),
-( '49', '123487695', NULL, NULL, 'calle 49', NULL, '1812345678', '561812345678', NULL, '0', '2000-11-29', 'Miguel', '', 'Ortega', 'Ochoa', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.440527', '2023-11-22 04:38:21.440527', NULL, NULL, NULL, '1', NULL, NULL, '36', '21', NULL, NULL, NULL ),
-( '50', '5551122334', NULL, NULL, 'calle 50', NULL, '1912345678', '571912345678', NULL, '0', '2000-11-30', 'Victoria', 'Ana', 'Reyes', 'Castillo', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.440527', '2023-11-22 04:38:21.440527', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '51', '987654321', NULL, NULL, 'calle 51', NULL, '2012345678', '572012345678', NULL, '0', '2000-12-01', 'Antonio', 'Pedro', 'Morales', 'Segura', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.452078', '2023-11-22 04:38:21.452078', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '52', '', NULL, NULL, 'calle 53', NULL, '2212345678', '572212345678', NULL, '0', '2000-12-03', 'Fernando', 'José', 'Vargas', 'González', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.455100', '2023-11-22 04:38:21.455100', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '53', '8889997776', NULL, NULL, 'calle 54', NULL, '2312345678', '572312345678', NULL, '0', '2000-12-04', 'Gabriela', 'Laura', 'Rivera', 'Díaz', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.460121', '2023-11-22 04:38:21.460121', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '54', '2222444455', NULL, NULL, 'calle 55', NULL, '2412345678', '572412345678', NULL, '0', '2000-12-05', 'Daniel', 'Carlos', 'Mendoza', 'Herrera', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.460121', '2023-11-22 04:38:21.460121', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '55', '3456783456', NULL, NULL, 'calle 56', NULL, '2512345678', '572512345678', NULL, '0', '2000-12-06', 'Elena', 'Sofia', 'Herrera', 'Castro', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.465155', '2023-11-22 04:38:21.465155', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '56', '999000111', NULL, NULL, 'calle 58', NULL, '2712345678', '572712345678', NULL, '0', '2000-12-08', 'Raquel', 'Andrea', 'Delgado', 'Reyes', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.468171', '2023-11-22 04:38:21.468171', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '57', '8765123456', NULL, NULL, 'calle 59', NULL, '2812345678', '572812345678', NULL, '0', '2000-12-09', 'Jorge', 'Manuel', 'Torres', 'Morales', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.470184', '2023-11-22 04:38:21.470184', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '58', '9876541987', NULL, NULL, 'calle 60', NULL, '2912345678', '572912345678', NULL, '0', '2000-12-10', 'Carmen', 'Marta', 'Méndez', 'Jiménez', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.470184', '2023-11-22 04:38:21.470184', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '59', '6543212345', NULL, NULL, 'calle 62', NULL, '3112345678', '573112345678', NULL, '0', '2000-12-12', 'Beatriz', 'Paula', 'Cordero', 'Rivera', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.470184', '2023-11-22 04:38:21.470184', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '60', '1357975313', NULL, NULL, 'calle 63', NULL, '3212345678', '573212345678', NULL, '0', '2000-12-13', 'Ricardo', 'Miguel', 'Cervantes', 'Mendoza', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.480317', '2023-11-22 04:38:21.480317', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '61', '8765435678', NULL, NULL, 'calle 65', NULL, '3412345678', '573412345678', NULL, '0', '2000-12-15', 'Alberto', 'Antonio', 'Peralta', 'Guzmán', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.483871', '2023-11-22 04:38:21.483871', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '62', '909090909', NULL, NULL, 'calle 66', NULL, '3512345678', '573512345678', NULL, '0', '2000-12-16', 'Clara', 'Isabel', 'León', 'Delgado', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.490542', '2023-11-22 04:38:21.490542', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '63', '1234509876', NULL, NULL, 'calle 68', NULL, '3712345678', '573712345678', NULL, '0', '2000-12-18', 'Raúl', 'Gabriela', 'Salas', 'Méndez', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.490542', '2023-11-22 04:38:21.490542', NULL, NULL, NULL, '1', NULL, NULL, '39', '21', NULL, NULL, NULL ),
-( '64', '6666555555', NULL, NULL, 'calle 70', NULL, '3912345678', '13912345678', NULL, '0', '2000-12-20', 'Natalia', 'Elena', 'Soto', 'Cordero', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.490542', '2023-11-22 04:38:21.490542', NULL, NULL, NULL, '1', NULL, NULL, '62', '21', NULL, NULL, NULL ),
-( '65', '7890123456', NULL, NULL, 'calle 71', NULL, '4012345678', '14012345678', NULL, '0', '2000-12-21', 'Oscar', 'Victoria', 'Mora', 'Cervantes', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.500148', '2023-11-22 04:38:21.500148', NULL, NULL, NULL, '1', NULL, NULL, '62', '21', NULL, NULL, NULL ),
-( '66', '567856789', NULL, NULL, 'calle 73', NULL, '4212345678', '14212345678', NULL, '0', '2000-12-23', 'Juan Carlos', 'Isabel', 'Araya', 'Peralta', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.505203', '2023-11-22 04:38:21.505203', NULL, NULL, NULL, '1', NULL, NULL, '62', '21', NULL, NULL, NULL ),
-( '67', '1212121212', NULL, NULL, 'calle 75', NULL, '4412345678', '14412345678', NULL, '0', '2000-12-25', 'Andrés', 'Gabriela', 'Aguilar', 'Solís', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.505203', '2023-11-22 04:38:21.505203', NULL, NULL, NULL, '1', NULL, NULL, '62', '21', NULL, NULL, NULL ),
-( '68', '', NULL, NULL, 'calle 77', NULL, '4612345678', '14612345678', NULL, '0', '2000-12-27', 'Gonzalo', 'Elena', 'Acuña', 'Campos', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.510223', '2023-11-22 04:38:21.510223', NULL, NULL, NULL, '1', NULL, NULL, '62', '21', NULL, NULL, NULL ),
-( '69', '5555556666', NULL, NULL, 'calle 78', NULL, '4712345678', '14712345678', NULL, '0', '2000-12-28', 'Silvia', 'Roberto', 'Gutiérrez', 'Soto', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.510223', '2023-11-22 04:38:21.510223', NULL, NULL, NULL, '1', NULL, NULL, '62', '21', NULL, NULL, NULL ),
-( '70', '7777888899', NULL, NULL, 'calle 79', NULL, '4812345678', '14812345678', NULL, '0', '2000-12-29', 'Angel', '', 'Avila', 'Mora', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.515371', '2023-11-22 04:38:21.515371', NULL, NULL, NULL, '1', NULL, NULL, '62', '21', NULL, NULL, NULL ),
-( '71', '321321321', NULL, NULL, 'calle 81', NULL, '5012345678', '15012345678', NULL, '0', '2000-12-31', 'Guillermo', 'Carmen', 'Castillo', 'Araya', NULL, 'los olivos', NULL, '2023-11-22 04:38:21.520493', '2023-11-22 04:38:21.520493', NULL, NULL, NULL, '1', NULL, NULL, '62', '21', NULL, NULL, NULL );
+( '73', NULL, NULL, NULL, NULL, NULL, '3042115334', '573042115334', NULL, '0', NULL, '', '', '', '', NULL, NULL, NULL, '2023-11-24 04:29:05.201287', '2023-11-24 04:29:05.201287', NULL, NULL, NULL, '1', NULL, NULL, '39', '23', NULL, NULL, NULL );
 COMMIT;
 -- ---------------------------------------------------------
 
@@ -1716,11 +1794,52 @@ COMMIT;
 BEGIN;
 
 INSERT INTO `peticion`(`id`,`estado`) VALUES 
-( '60', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMUEwQUE0RkQyNEZBOEIwMDJBNkU0RDk4NjhFMkE0MkMA", "timestamp": "1700626921", "text": {"body": "."}, "type": "text"}]}, "field": "messages"}]}]' ),
-( '61', 'Fallo websockets: (\'Error 11001 connecting to redis:6379. 11001.\',)' ),
-( '62', 'Error peticion inicial: (\'Invalid request\',)' ),
-( '63', 'Invalid request' );
+( '364', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggOEU3Q0VFNjdGRDJCRkRBMzM1QUQ2QkI5Q0E3NkEwRUMA", "timestamp": "1700800143", "type": "image", "image": {"mime_type": "image/jpeg", "sha256": "PTquy/njLyrrj90hNHp9fJ8/07hSIul+Jhx7/wOcgag=", "id": "1720907695055219"}}]}, "field": "messages"}]}]' ),
+( '365', 'Fallo websockets: (\'Error 11001 connecting to redis:6379. 11001.\',)' ),
+( '366', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '367', 'Invalid request' ),
+( '368', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggNzE2Mzk0Q0JDQTRCMUYyOUJEQzVEQTM3OEIyRjNEOEEA", "timestamp": "1701030479", "text": {"body": "..."}, "type": "text"}]}, "field": "messages"}]}]' ),
+( '369', 'Fallo websockets: (\'Error 11001 connecting to redis:6379. 11001.\',)' ),
+( '370', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '371', 'Invalid request' ),
+( '372', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMDRDNjY4NkNENkY0MkYzQjA0NjlDRThGQzk0QjNCQjYA", "timestamp": "1701030496", "text": {"body": "."}, "type": "text"}]}, "field": "messages"}]}]' ),
+( '373', 'Fallo websockets: (\'Error 11001 connecting to redis:6379. 11001.\',)' ),
+( '374', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '375', 'Invalid request' ),
+( '376', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggQkMyNDY1NjlFRTA1QzIzNDNENUMzMDU1Q0I0OURGRTcA", "timestamp": "1701030520", "type": "image", "image": {"mime_type": "image/jpeg", "sha256": "kZD3AN0JmhRzZ/F+NXH4gn4sRxuZT0XaiO/f4g71Tw8=", "id": "1432746831006716"}}]}, "field": "messages"}]}]' ),
+( '377', 'Fallo creando: \'url\'' ),
+( '378', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '379', 'Invalid request' ),
+( '380', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMkJGODM0M0E1NEU3NTFFNUYyRUZEN0IzODUyNUE1MjcA", "timestamp": "1701030669", "type": "image", "image": {"mime_type": "image/jpeg", "sha256": "kZD3AN0JmhRzZ/F+NXH4gn4sRxuZT0XaiO/f4g71Tw8=", "id": "1028174054906097"}}]}, "field": "messages"}]}]' ),
+( '381', 'Fallo creando: cannot access local variable \'file_model\' where it is not associated with a value' ),
+( '382', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '383', 'Invalid request' ),
+( '384', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggNURGRTU2QzU5RTBENjgxODNCNjY3QkFBOEJDQUU0RjgA", "timestamp": "1701030988", "type": "image", "image": {"mime_type": "image/jpeg", "sha256": "kZD3AN0JmhRzZ/F+NXH4gn4sRxuZT0XaiO/f4g71Tw8=", "id": "1734729080332718"}}]}, "field": "messages"}]}]' ),
+( '385', 'Fallo websockets: (\'Error 11001 connecting to redis:6379. 11001.\',)' ),
+( '386', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '387', 'Invalid request' ),
+( '388', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggMTZDRjJBODhBOTM2NTY0RkVGMDY1MTlBQUM2RjVENUIA", "timestamp": "1701031101", "type": "image", "image": {"mime_type": "image/jpeg", "sha256": "kZD3AN0JmhRzZ/F+NXH4gn4sRxuZT0XaiO/f4g71Tw8=", "id": "3578655689017575"}}]}, "field": "messages"}]}]' ),
+( '389', 'Fallo websockets: (\'Error 11001 connecting to redis:6379. 11001.\',)' ),
+( '390', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '391', 'Invalid request' ),
+( '392', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0U2MjIwMUZEQzdERTVGQTU0AA==", "status": "sent", "timestamp": "1701031443", "recipient_id": "573042115334", "conversation": {"id": "d41d18e0ddcf452f7816a46b889dedbd", "expiration_timestamp": "1701117900", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
+( '393', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '394', 'Invalid request' ),
+( '395', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0U2MjIwMUZEQzdERTVGQTU0AA==", "status": "delivered", "timestamp": "1701031444", "recipient_id": "573042115334", "conversation": {"id": "d41d18e0ddcf452f7816a46b889dedbd", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
+( '396', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '397', 'Invalid request' ),
+( '398', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "statuses": [{"id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAERgSN0U2MjIwMUZEQzdERTVGQTU0AA==", "status": "delivered", "timestamp": "1701031444", "recipient_id": "573042115334", "conversation": {"id": "d41d18e0ddcf452f7816a46b889dedbd", "origin": {"type": "service"}}, "pricing": {"billable": true, "pricing_model": "CBP", "category": "service"}}]}, "field": "messages"}]}]' ),
+( '399', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '400', 'Invalid request' ),
+( '401', '[{"id": "103916249443809", "changes": [{"value": {"messaging_product": "whatsapp", "metadata": {"display_phone_number": "15550491736", "phone_number_id": "112605838565124"}, "contacts": [{"profile": {"name": "Yilberth Andres"}, "wa_id": "573042115334"}], "messages": [{"from": "573042115334", "id": "wamid.HBgMNTczMDQyMTE1MzM0FQIAEhggREJDNDA0NUY1RjBCOEI5NDUyMTc4NzJENjRGRkUyRDcA", "timestamp": "1701031597", "type": "image", "image": {"mime_type": "image/jpeg", "sha256": "kZD3AN0JmhRzZ/F+NXH4gn4sRxuZT0XaiO/f4g71Tw8=", "id": "877694883929735"}}]}, "field": "messages"}]}]' ),
+( '402', 'Fallo websockets: (\'Error 11001 connecting to redis:6379. 11001.\',)' ),
+( '403', 'Error peticion inicial: (\'Invalid request\',)' ),
+( '404', 'Invalid request' );
 COMMIT;
+-- ---------------------------------------------------------
+
+
+-- Dump data of "secciones" --------------------------------
 -- ---------------------------------------------------------
 
 
@@ -1730,6 +1849,18 @@ CREATE INDEX `archivos_created_by_id_45f66317_fk_auth_user_id` USING BTREE ON `a
 
 -- CREATE INDEX "archivos_updated_by_id_69a44904_fk_auth_user_id" 
 CREATE INDEX `archivos_updated_by_id_69a44904_fk_auth_user_id` USING BTREE ON `archivos`( `updated_by_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "areas_created_by_id_aada67bb_fk_auth_user_id" -
+CREATE INDEX `areas_created_by_id_aada67bb_fk_auth_user_id` USING BTREE ON `areas`( `created_by_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "areas_estado_id_86aa5048_fk_maestras_id" ------
+CREATE INDEX `areas_estado_id_86aa5048_fk_maestras_id` USING BTREE ON `areas`( `estado_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "areas_updated_by_id_f2f43943_fk_auth_user_id" -
+CREATE INDEX `areas_updated_by_id_f2f43943_fk_auth_user_id` USING BTREE ON `areas`( `updated_by_id` );-- -------------------------------------------------------------;
 
 
 -- CREATE INDEX "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm" 
@@ -1796,6 +1927,22 @@ CREATE INDEX `django_celery_beat_p_solar_id_a87ce72c_fk_django_ce` USING BTREE O
 CREATE INDEX `django_session_expire_date_a5c62663` USING BTREE ON `django_session`( `expire_date` );-- -------------------------------------------------------------;
 
 
+-- CREATE INDEX "grupos_created_by_id_41aaa824_fk_auth_user_id" 
+CREATE INDEX `grupos_created_by_id_41aaa824_fk_auth_user_id` USING BTREE ON `grupos`( `created_by_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "grupos_estado_id_81961b57_fk_maestras_id" -----
+CREATE INDEX `grupos_estado_id_81961b57_fk_maestras_id` USING BTREE ON `grupos`( `estado_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "grupos_seccion_id_8cbe5f0d_fk_secciones_id" ---
+CREATE INDEX `grupos_seccion_id_8cbe5f0d_fk_secciones_id` USING BTREE ON `grupos`( `seccion_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "grupos_updated_by_id_fd9fff9a_fk_auth_user_id" 
+CREATE INDEX `grupos_updated_by_id_fd9fff9a_fk_auth_user_id` USING BTREE ON `grupos`( `updated_by_id` );-- -------------------------------------------------------------;
+
+
 -- CREATE INDEX "maestras_created_by_id_0d5f633f_fk_auth_user_id" 
 CREATE INDEX `maestras_created_by_id_0d5f633f_fk_auth_user_id` USING BTREE ON `maestras`( `created_by_id` );-- -------------------------------------------------------------;
 
@@ -1834,6 +1981,14 @@ CREATE INDEX `mensajeria_tipo_id_226751bf_fk_maestras_id` USING BTREE ON `mensaj
 
 -- CREATE INDEX "mensajeria_updated_by_id_9d97231f_fk_auth_user_id" 
 CREATE INDEX `mensajeria_updated_by_id_9d97231f_fk_auth_user_id` USING BTREE ON `mensajeria`( `updated_by_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "mensajeria_gruposdes_created_by_id_50082ce7_fk_auth_user" 
+CREATE INDEX `mensajeria_gruposdes_created_by_id_50082ce7_fk_auth_user` USING BTREE ON `mensajeria_gruposdestinatarios`( `created_by_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "mensajeria_gruposdes_updated_by_id_8d470726_fk_auth_user" 
+CREATE INDEX `mensajeria_gruposdes_updated_by_id_8d470726_fk_auth_user` USING BTREE ON `mensajeria_gruposdestinatarios`( `updated_by_id` );-- -------------------------------------------------------------;
 
 
 -- CREATE INDEX "modulos_created_by_id_682736db_fk_auth_user_id" 
@@ -1888,6 +2043,22 @@ CREATE INDEX `personas_updated_by_id_7e6ba61e_fk_auth_user_id` USING BTREE ON `p
 CREATE INDEX `personas_zona_id_0e8ab25d_fk_maestras_id` USING BTREE ON `personas`( `zona_id` );-- -------------------------------------------------------------;
 
 
+-- CREATE INDEX "secciones_area_id_c929d47b_fk_areas_id" -------
+CREATE INDEX `secciones_area_id_c929d47b_fk_areas_id` USING BTREE ON `secciones`( `area_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "secciones_created_by_id_8dc000a8_fk_auth_user_id" 
+CREATE INDEX `secciones_created_by_id_8dc000a8_fk_auth_user_id` USING BTREE ON `secciones`( `created_by_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "secciones_estado_id_9ceddd74_fk_maestras_id" --
+CREATE INDEX `secciones_estado_id_9ceddd74_fk_maestras_id` USING BTREE ON `secciones`( `estado_id` );-- -------------------------------------------------------------;
+
+
+-- CREATE INDEX "secciones_updated_by_id_2ba0e520_fk_auth_user_id" 
+CREATE INDEX `secciones_updated_by_id_2ba0e520_fk_auth_user_id` USING BTREE ON `secciones`( `updated_by_id` );-- -------------------------------------------------------------;
+
+
 -- CREATE LINK "archivos_created_by_id_45f66317_fk_auth_user_id" 
 ALTER TABLE `archivos`
 	ADD CONSTRAINT `archivos_created_by_id_45f66317_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
@@ -1899,6 +2070,30 @@ ALTER TABLE `archivos`
 -- CREATE LINK "archivos_updated_by_id_69a44904_fk_auth_user_id" 
 ALTER TABLE `archivos`
 	ADD CONSTRAINT `archivos_updated_by_id_69a44904_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
+	REFERENCES `auth_user`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "areas_created_by_id_aada67bb_fk_auth_user_id" --
+ALTER TABLE `areas`
+	ADD CONSTRAINT `areas_created_by_id_aada67bb_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
+	REFERENCES `auth_user`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "areas_estado_id_86aa5048_fk_maestras_id" -------
+ALTER TABLE `areas`
+	ADD CONSTRAINT `areas_estado_id_86aa5048_fk_maestras_id` FOREIGN KEY ( `estado_id` )
+	REFERENCES `maestras`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "areas_updated_by_id_f2f43943_fk_auth_user_id" --
+ALTER TABLE `areas`
+	ADD CONSTRAINT `areas_updated_by_id_f2f43943_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
 	REFERENCES `auth_user`( `id` )
 	ON DELETE No Action
 	ON UPDATE No Action;-- -------------------------------------------------------------;
@@ -2008,10 +2203,26 @@ ALTER TABLE `destinatarios`
 	ON UPDATE No Action;-- -------------------------------------------------------------;
 
 
+-- CREATE LINK "destinatarios_grupo_id_bfbb6cb7_fk_grupos_id" --
+ALTER TABLE `destinatarios`
+	ADD CONSTRAINT `destinatarios_grupo_id_bfbb6cb7_fk_grupos_id` FOREIGN KEY ( `grupo_id` )
+	REFERENCES `grupos`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
 -- CREATE LINK "destinatarios_persona_id_dda68fc7_fk_personas_id" 
 ALTER TABLE `destinatarios`
 	ADD CONSTRAINT `destinatarios_persona_id_dda68fc7_fk_personas_id` FOREIGN KEY ( `persona_id` )
 	REFERENCES `personas`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "destinatarios_seccion_id_d7134659_fk_secciones_id" 
+ALTER TABLE `destinatarios`
+	ADD CONSTRAINT `destinatarios_seccion_id_d7134659_fk_secciones_id` FOREIGN KEY ( `seccion_id` )
+	REFERENCES `secciones`( `id` )
 	ON DELETE No Action
 	ON UPDATE No Action;-- -------------------------------------------------------------;
 
@@ -2072,6 +2283,38 @@ ALTER TABLE `django_celery_beat_periodictask`
 	ON UPDATE No Action;-- -------------------------------------------------------------;
 
 
+-- CREATE LINK "grupos_created_by_id_41aaa824_fk_auth_user_id" -
+ALTER TABLE `grupos`
+	ADD CONSTRAINT `grupos_created_by_id_41aaa824_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
+	REFERENCES `auth_user`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "grupos_estado_id_81961b57_fk_maestras_id" ------
+ALTER TABLE `grupos`
+	ADD CONSTRAINT `grupos_estado_id_81961b57_fk_maestras_id` FOREIGN KEY ( `estado_id` )
+	REFERENCES `maestras`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "grupos_seccion_id_8cbe5f0d_fk_secciones_id" ----
+ALTER TABLE `grupos`
+	ADD CONSTRAINT `grupos_seccion_id_8cbe5f0d_fk_secciones_id` FOREIGN KEY ( `seccion_id` )
+	REFERENCES `secciones`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "grupos_updated_by_id_fd9fff9a_fk_auth_user_id" -
+ALTER TABLE `grupos`
+	ADD CONSTRAINT `grupos_updated_by_id_fd9fff9a_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
+	REFERENCES `auth_user`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
 -- CREATE LINK "maestras_created_by_id_0d5f633f_fk_auth_user_id" 
 ALTER TABLE `maestras`
 	ADD CONSTRAINT `maestras_created_by_id_0d5f633f_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
@@ -2124,6 +2367,38 @@ ALTER TABLE `mensajeria`
 ALTER TABLE `mensajeria`
 	ADD CONSTRAINT `mensajeria_estado_id_8bce68b8_fk_maestras_id` FOREIGN KEY ( `estado_id` )
 	REFERENCES `maestras`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "mensajeria_gruposdestinatarios_grupo_id_88b4ef2e_fk_grupos_id" 
+ALTER TABLE `mensajeria_gruposdestinatarios`
+	ADD CONSTRAINT `mensajeria_gruposdestinatarios_grupo_id_88b4ef2e_fk_grupos_id` FOREIGN KEY ( `grupo_id` )
+	REFERENCES `grupos`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "mensajeria_gruposdes_created_by_id_50082ce7_fk_auth_user" 
+ALTER TABLE `mensajeria_gruposdestinatarios`
+	ADD CONSTRAINT `mensajeria_gruposdes_created_by_id_50082ce7_fk_auth_user` FOREIGN KEY ( `created_by_id` )
+	REFERENCES `auth_user`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "mensajeria_gruposdes_destinatario_id_8e6e1b98_fk_destinata" 
+ALTER TABLE `mensajeria_gruposdestinatarios`
+	ADD CONSTRAINT `mensajeria_gruposdes_destinatario_id_8e6e1b98_fk_destinata` FOREIGN KEY ( `destinatario_id` )
+	REFERENCES `destinatarios`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "mensajeria_gruposdes_updated_by_id_8d470726_fk_auth_user" 
+ALTER TABLE `mensajeria_gruposdestinatarios`
+	ADD CONSTRAINT `mensajeria_gruposdes_updated_by_id_8d470726_fk_auth_user` FOREIGN KEY ( `updated_by_id` )
+	REFERENCES `auth_user`( `id` )
 	ON DELETE No Action
 	ON UPDATE No Action;-- -------------------------------------------------------------;
 
@@ -2252,6 +2527,38 @@ ALTER TABLE `personas`
 ALTER TABLE `personas`
 	ADD CONSTRAINT `personas_zona_id_0e8ab25d_fk_maestras_id` FOREIGN KEY ( `zona_id` )
 	REFERENCES `maestras`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "secciones_area_id_c929d47b_fk_areas_id" --------
+ALTER TABLE `secciones`
+	ADD CONSTRAINT `secciones_area_id_c929d47b_fk_areas_id` FOREIGN KEY ( `area_id` )
+	REFERENCES `areas`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "secciones_created_by_id_8dc000a8_fk_auth_user_id" 
+ALTER TABLE `secciones`
+	ADD CONSTRAINT `secciones_created_by_id_8dc000a8_fk_auth_user_id` FOREIGN KEY ( `created_by_id` )
+	REFERENCES `auth_user`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "secciones_estado_id_9ceddd74_fk_maestras_id" ---
+ALTER TABLE `secciones`
+	ADD CONSTRAINT `secciones_estado_id_9ceddd74_fk_maestras_id` FOREIGN KEY ( `estado_id` )
+	REFERENCES `maestras`( `id` )
+	ON DELETE No Action
+	ON UPDATE No Action;-- -------------------------------------------------------------;
+
+
+-- CREATE LINK "secciones_updated_by_id_2ba0e520_fk_auth_user_id" 
+ALTER TABLE `secciones`
+	ADD CONSTRAINT `secciones_updated_by_id_2ba0e520_fk_auth_user_id` FOREIGN KEY ( `updated_by_id` )
+	REFERENCES `auth_user`( `id` )
 	ON DELETE No Action
 	ON UPDATE No Action;-- -------------------------------------------------------------;
 
