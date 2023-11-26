@@ -8,4 +8,6 @@ urlpatterns = [
     path("upload/", include("mensajeria.views.carga.urls")),
     path("chat/", include("mensajeria.views.chat.urls")),
     path("multimedia/", include("mensajeria.views.multimedia.urls")),
+    path("distribucion/",      include("mensajeria.views.distribucion.urls")),
+
 ]

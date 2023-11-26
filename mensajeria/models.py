@@ -166,7 +166,8 @@ class Archivos(models.Model):
     tipo = models.CharField(max_length=50)
     formato = models.CharField(max_length=50)
     dir = models.CharField(max_length=500)
-    file = models.FileField(upload_to="mesagge/multimedia/", validators=[validate_file])
+    grupo = models.IntegerField(null=True)
+    file = models.FileField(upload_to="message/multimedia/", validators=[validate_file])
     created_by = models.ForeignKey(
         "auth.User", related_name="Archivos_created_by", on_delete=models.CASCADE
     )
@@ -185,12 +186,166 @@ class Archivos(models.Model):
         verbose_name_plural = "archivos"
 
 
+class Areas(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=250)
+    codigo = models.CharField(max_length=25)
+    estado = models.ForeignKey(
+        Maestras,
+        blank=True,
+        related_name="areas_estado",
+        null=True,
+        on_delete=models.CASCADE,
+        db_index=True,
+    )
+    created_by = models.ForeignKey(
+        "auth.User",
+        related_name="areas_created_by",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+    )
+    updated_by = models.ForeignKey(
+        "auth.User",
+        related_name="areas_updated_by",
+        null=True,
+        on_delete=models.CASCADE,
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "areas"
+        verbose_name = "area"
+        verbose_name_plural = "areas"
+
+
+class Secciones(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=250)
+    codigo = models.CharField(max_length=25)
+    area = models.ForeignKey(
+        Areas,
+        blank=True,
+        related_name="secciones_estado",
+        null=True,
+        on_delete=models.CASCADE,
+        db_index=True,
+    )
+    estado = models.ForeignKey(
+        Maestras,
+        blank=True,
+        related_name="secciones_estado",
+        null=True,
+        on_delete=models.CASCADE,
+        db_index=True,
+    )
+    created_by = models.ForeignKey(
+        "auth.User",
+        related_name="secciones_created_by",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+    )
+    updated_by = models.ForeignKey(
+        "auth.User",
+        related_name="secciones_updated_by",
+        null=True,
+        on_delete=models.CASCADE,
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "secciones"
+        verbose_name = "seccion"
+        verbose_name_plural = "secciones"
+
+
+class Grupos(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=250)
+    codigo = models.CharField(max_length=25)
+    seccion = models.ForeignKey(
+        Secciones,
+        blank=True,
+        related_name="secciones_estado",
+        null=True,
+        on_delete=models.CASCADE,
+        db_index=True,
+    )
+    estado = models.ForeignKey(
+        Maestras,
+        blank=True,
+        related_name="grupos_estado",
+        null=True,
+        on_delete=models.CASCADE,
+        db_index=True,
+    )
+    created_by = models.ForeignKey(
+        "auth.User",
+        related_name="grupos_created_by",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+    )
+    updated_by = models.ForeignKey(
+        "auth.User",
+        related_name="grupos_updated_by",
+        null=True,
+        on_delete=models.CASCADE,
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+    )
+
+    class Meta:
+        db_table = "grupos"
+        verbose_name = "grupo"
+        verbose_name_plural = "grupos"
+
+
 class Destinatarios(models.Model):
     persona = models.ForeignKey(
         Personas,
         null=True,
         blank=True,
         related_name="Personas_destinatarios_persona",
+        on_delete=models.CASCADE,
+        db_index=True,
+        unique=True,
+    )
+    seccion = models.ForeignKey(
+        Secciones,
+        null=True,
+        blank=True,
+        related_name="Seccion_destinatarios_persona",
+        on_delete=models.CASCADE,
+        db_index=True,
+        unique=True,
+    )
+    grupo = models.ForeignKey(
+        Grupos,
+        null=True,
+        blank=True,
+        related_name="Grupo_destinatarios_persona",
         on_delete=models.CASCADE,
         db_index=True,
         unique=True,
@@ -219,6 +374,48 @@ class Destinatarios(models.Model):
         db_table = "destinatarios"
         verbose_name = "destinatarios"
         verbose_name_plural = "destinatarios"
+
+
+class gruposDestinatarios(models.Model):
+    destinatario = models.ForeignKey(
+        Destinatarios,
+        null=True,
+        blank=True,
+        related_name="gruposDestinatarios_destinatarios",
+        on_delete=models.CASCADE,
+        db_index=True,
+        unique=True,
+    )
+    grupo = models.ForeignKey(
+        Grupos,
+        null=True,
+        blank=True,
+        related_name="gruposDestinatarios_grupos",
+        on_delete=models.CASCADE,
+        db_index=True,
+        unique=True,
+    )
+    created_by = models.ForeignKey(
+        "auth.User",
+        related_name="destinatarios_created_by",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+    )
+    updated_by = models.ForeignKey(
+        "auth.User",
+        related_name="destinatarios_updated_by",
+        null=True,
+        on_delete=models.CASCADE,
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+    )
 
 
 class Conversaciones(models.Model):
