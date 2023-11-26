@@ -9,6 +9,7 @@ from mensajeria.models import (
     Destinatarios,
     Personas,
     Conversaciones,
+    Archivos
 )
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -23,7 +24,8 @@ from django.db import connection
 from django.core.files.storage import get_storage_class
 import os
 import asyncio
-
+from django.core.files.base import ContentFile
+media_storage = get_storage_class()()
 import hashlib
 import re
 
@@ -223,14 +225,14 @@ def new_message(message, perfil):
         # El registro existe
     except ObjectDoesNotExist:
         resultado = from_num[2:]
-        codigo_pais = "+" + from_num[:2]
+        codigo_pais =  from_num[:2]
         paises_actuales   = Paises.objects.all()
         paises_validos = []
         for pais in paises_actuales:
             paises_validos.append(pais.codigo)
 
         try:
-            if(pais == '+57'):
+            if(pais == '57'):
                 pais_id = 39
             else:
                 index = get_binary_search(paises_validos, codigo_pais)
@@ -276,6 +278,7 @@ def new_message(message, perfil):
             conversacion.save()
             conversacion_id = conversacion.id
 
+
         if type == "text":
             text = message["text"]["body"]
             nuevo_mensaje = Mensajeria(
@@ -310,104 +313,53 @@ def new_message(message, perfil):
 
             send_txt(message_body)
 
-        elif type == "image":
-            mime_type = message["image"]["mime_type"]
-            sha256 = message["image"]["sha256"]
-            multimedia_id = message["image"]["id"]
-            nuevo_mensaje = Mensajeria(
-                mime_type=mime_type,
-                sha256=sha256,
-                multimedia_id=multimedia_id,
-                celular=from_num,
-                recipiente_id=from_num,
-                mensaje_id=message_id,
-                timestamp_w=timestamp,
-                tipo_id=750,
-                estado_id=estado,
-                conversacion_id=conversacion_id,
-            )
-            nuevo_mensaje.save()
-            horaMinutos = getMinutosHoras(timestamp)
-            get_media(multimedia_id, message_id, horaMinutos, from_num, mime_type)
-            # get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
-        elif type == "video":
-            mime_type = message["video"]["mime_type"]
-            sha256 = message["video"]["sha256"]
-            multimedia_id = message["video"]["id"]
-            nuevo_mensaje = Mensajeria(
-                mime_type=mime_type,
-                sha256=sha256,
-                multimedia_id=multimedia_id,
-                celular=from_num,
-                recipiente_id=from_num,
-                mensaje_id=message_id,
-                timestamp_w=timestamp,
-                tipo_id=755,
-                estado_id=estado,
-                conversacion_id=conversacion_id,
-            )
-            nuevo_mensaje.save()
-            horaMinutos = getMinutosHoras(timestamp)
-            get_media(multimedia_id, message_id, horaMinutos, from_num, mime_type)
+        else:
+            mime_type = message[type]["mime_type"]
+            sha256 = message[type]["sha256"]
+            multimedia_id = message[type]["id"]
+            if(type == "document"):
+                filename = message["document"]["filename"]
+            else:
+                filename = ""
 
-        elif type == "document":
-            mime_type = message["document"]["mime_type"]
-            sha256 = message["document"]["sha256"]
-            multimedia_id = message["document"]["id"]
-            filename = message["document"]["filename"]
+            file_id = post_send_file(multimedia_id)
             nuevo_mensaje = Mensajeria(
                 mime_type=mime_type,
                 sha256=sha256,
-                multimedia_id=multimedia_id,
+                multimedia_id_id=file_id,
                 celular=from_num,
                 recipiente_id=from_num,
                 mensaje_id=message_id,
                 timestamp_w=timestamp,
                 filename=filename,
-                tipo_id=756,
+                tipo_id=750,
                 estado_id=estado,
                 conversacion_id=conversacion_id,
             )
             nuevo_mensaje.save()
-            horaMinutos = getMinutosHoras(timestamp)
-            get_file(
-                multimedia_id, filename, message_id, horaMinutos, from_num, mime_type
-            )
-        elif type == "audio":
-            mime_type = message["audio"]["mime_type"]
-            sha256 = message["audio"]["sha256"]
-            multimedia_id = message["audio"]["id"]
-            voice = message["audio"]["voice"]
-            nuevo_mensaje = Mensajeria(
-                mime_type=mime_type,
-                sha256=sha256,
-                multimedia_id=multimedia_id,
-                celular=from_num,
-                recipiente_id=from_num,
-                mensaje_id=message_id,
-                timestamp_w=timestamp,
-                voice=voice,
-                tipo_id=756,
-                estado_id=estado,
-                conversacion_id=conversacion_id,
-            )
-            nuevo_mensaje.save()
-            horaMinutos = getMinutosHoras(timestamp)
-            get_audio(
-                multimedia_id, message_id, horaMinutos, from_num, mime_type, voice
-            )
-            # get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
-        else:
-            nuevo_mensaje = Mensajeria(
-                celular=from_num,
-                recipiente_id=from_num,
-                mensaje_id=message_id,
-                timestamp_w=timestamp,
-                tipo_id=751,
-                estado_id=estado,
-                conversacion_id=conversacion_id,
-            )
-            nuevo_mensaje.save()
+
+
+            ruta = get_likFile(file_id)
+            hora_minutos = getMinutosHoras(timestamp)
+            fecha = nuevo_mensaje.created_at.strftime("%Y/%m/%d")
+            
+
+            message_body = {
+                "recipiente_id": nuevo_mensaje.recipiente_id,
+                "fecha": fecha,
+                "id": nuevo_mensaje.id,
+                "estado": "enviado" if nuevo_mensaje.estado_id == None else "recibido",
+                "texto": nuevo_mensaje.texto,
+                "mensaje_id": nuevo_mensaje.mensaje_id,
+                "mime_type": nuevo_mensaje.mime_type,
+                "dir": ruta,
+                "filename": nuevo_mensaje.filename,
+                "voice": nuevo_mensaje.voice,
+                "hora": hora_minutos,
+                "timestamp_w": hora_minutos,
+            }
+
+            post_sendMedia(message_body)
 
     except Exception as e:
         error_message = str(e)
@@ -424,10 +376,6 @@ def getMinutosHoras(timestamp):
 
     return horaMinutos
 
-
-# Vista donde quieres enviar el mensaje al WebSocketGroup
-
-
 def send_txt(message):
     try:
         channel_layer = get_channel_layer()
@@ -442,252 +390,72 @@ def send_txt(message):
         nueva_peticion = Peticion(estado="Fallo websockets: " + error_message)
         nueva_peticion.save()
 
+def post_send_file(media_id):
 
-def get_media(media_id, message_id, timestamp_w, recipiente_id, mime_type):
+    url = "https://graph.facebook.com/" + API_VERSION_WHATSAPP_ENV + "/" + media_id
+    headers = {
+    "Authorization": "Bearer " + API_KEY_ENV,
+    "Content-Type": "application/json",
+    }
+    response = requests.get(url, headers=headers)
+    response_json = response.json()
+    
+    # if response_media.status_code == 200:
+    url_media = response_json["url"]
+    response_media = requests.get(url_media, headers=headers)
+    nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
+    extension_archivo = response_media.headers.get("Content-Type", "").split(
+        "/"
+    )[-1]
+
+
+    nombre_archivo = re.sub(r'[\\/*?:"<>|]', "", nombre_archivo)
+
+    nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
+    
     try:
-        url = "https://graph.facebook.com/" + API_VERSION_WHATSAPP_ENV + "/" + media_id
-        headers = {"Authorization": API_KEY_ENV, "Content-Type": "application/json"}
-
-        response = requests.get(url, headers=headers)
-        response_json = response.json()
-
-        url_media = response_json["url"]
-
-        response_media = requests.get(url_media, headers=headers)
-
-        if response_media.status_code == 200:
-            nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
-            extension_archivo = response_media.headers.get("Content-Type", "").split(
-                "/"
-            )[-1]
-
-            # Elimina los caracteres inválidos para el nombre del archivo
-            nombre_archivo = re.sub(r'[\\/*?:"<>|]', "", nombre_archivo)
-
-            # Combina el nombre del archivo y su extensión
-            nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
-
-            # Construye la ruta completa para guardar el archivo en la carpeta deseada
-            ruta_archivo = os.path.join(
-                settings.BASE_DIR,
-                "mensajeria",
-                "static",
-                "temp",
-                nombre_archivo_con_extension,
-            )
-
-            # Abre el archivo en modo binario y guarda el contenido de la respuesta en él
-            with open(ruta_archivo, "wb") as archivo:
-                archivo.write(response_media.content)
-
-            mensaje = Mensajeria.objects.get(mensaje_id=message_id)
-            mensaje.link = "static/temp/" + nombre_archivo_con_extension
-            # mensaje.conversacion_id = conversacion_id
-            mensaje.save()
-
-            link = "static/temp/" + nombre_archivo_con_extension
-
-            send_media(message_id, timestamp_w, recipiente_id, mime_type, link, "")
-            # Devuelve una respuesta con el enlace a la imagen descargada
-            return HttpResponse(f"Imagen descargada y guardada en: {ruta_archivo}")
-        else:
-            return HttpResponse("Error al descargar la imagen", status=404)
+    
+        file_model          = Archivos()
+        file_model.nombre   = nombre_archivo_con_extension
+        file_model.grupo    = 2
+        file_model.file.save(nombre_archivo_con_extension, ContentFile(response_media.content))
+        file_model.save()
     except Exception as e:
-        error_message = str(e)
-        nueva_peticion = Peticion(estado="Fallo guardando multimedia: " + error_message)
-        nueva_peticion.save()
+        print("Error cargando el archivo: " + str(e))
+    
+    return file_model.id
 
+def get_likFile(file_id):
+    archivos = Archivos.objects.filter(id=file_id)
+    files = []
+    for archivo in archivos:
+        aws_file = {
+            "file_id": archivo.id,
+            "name": archivo.nombre,
+            "dir": media_storage.url(name=archivo.file.name),
+            "type": archivo.tipo,
+        }
 
-def get_audio(multimedia_id, message_id, timestamp_w, recipiente_id, mime_type, voice):
+        files.append(aws_file)
+
+    return files[0]['dir']
+
+def post_sendMedia(message):
+    
     try:
-        url = (
-            "https://graph.facebook.com/"
-            + API_VERSION_WHATSAPP_ENV
-            + "/"
-            + multimedia_id
+        channel_layer = get_channel_layer()
+
+        async_to_sync(channel_layer.group_send)(
+            "chat_riodev",
+            {"type": "chatbox_message", "message": {**message}},
         )
-        headers = {"Authorization": API_KEY_ENV, "Content-Type": "application/json"}
 
-        response = requests.get(url, headers=headers)
-        response_json = response.json()
-
-        url_media = response_json["url"]
-
-        response_media = requests.get(url_media, headers=headers)
-
-        if response_media.status_code == 200:
-            nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
-
-            extension_archivo = response_media.headers.get("Content-Type", "").split(
-                "/"
-            )[-1]
-
-            # Elimina los caracteres inválidos para el nombre del archivo
-            nombre_archivo = re.sub(r'[\\/*?:"<>|]', "", nombre_archivo)
-
-            # Combina el nombre del archivo y su extensión
-            nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
-
-            # Construye la ruta completa para guardar el archivo en la carpeta deseada
-            ruta_archivo = os.path.join(
-                settings.BASE_DIR,
-                "mensajeria",
-                "static",
-                "temp",
-                nombre_archivo_con_extension,
-            )
-
-            # Abre el archivo en modo binario y guarda el contenido de la respuesta en él
-            with open(ruta_archivo, "wb") as archivo:
-                archivo.write(response_media.content)
-
-            mensaje = Mensajeria.objects.get(mensaje_id=message_id)
-            mensaje.link = "static/temp/" + nombre_archivo_con_extension
-            # mensaje.conversacion_id = conversacion_id
-            mensaje.save()
-
-            link = "static/temp/" + nombre_archivo_con_extension
-
-            send_media(message_id, timestamp_w, recipiente_id, mime_type, link, voice)
-            # Devuelve una respuesta con el enlace a la imagen descargada
-            return HttpResponse(f"Imagen descargada y guardada en: {ruta_archivo}")
-        else:
-            return HttpResponse("Error al descargar la imagen", status=404)
     except Exception as e:
-        error_message = str(e)
-        nueva_peticion = Peticion(estado="Fallo guardando multimedia: " + error_message)
+        error_message = str(e.args)
+        nueva_peticion = Peticion(estado="Fallo websockets: " + error_message)
         nueva_peticion.save()
-
-
-# import os
-# import re
-# import hashlib
-
-import re
-import hashlib
-
-# Otras importaciones y definiciones de funciones...
-
-
+    
 def clean_filename(filename):
-    # Remueve caracteres inválidos para nombres de archivo, excepto letras, números y guiones bajos
     cleaned_filename = re.sub(r"[^\w.-]", "", filename)
     return cleaned_filename
 
-
-def get_file(media_id, filename, message_id, timestamp_w, recipiente_id, mime_type):
-    try:
-        url = "https://graph.facebook.com/" + API_VERSION_WHATSAPP_ENV + "/" + media_id
-        headers = {"Authorization": API_KEY_ENV, "Content-Type": "application/json"}
-
-        response = requests.get(url, headers=headers)
-        response_json = response.json()
-
-        url_media = response_json["url"]
-
-        response_media = requests.get(url_media, headers=headers)
-
-        # Resto del código para descargar y guardar el archivo...
-        # ...
-
-        if response_media.status_code == 200:
-            nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
-
-            extension_archivo = response_media.headers.get("Content-Type", "").split(
-                "/"
-            )[-1]
-
-            # Combina el nombre del archivo y su extensión
-            nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
-
-            # Limpia el nombre del archivo para eliminar caracteres inválidos
-            nombre_archivo_con_extension = clean_filename(filename)
-
-            # Construye la ruta completa para guardar el archivo en la carpeta deseada
-            ruta_archivo = os.path.join(
-                settings.BASE_DIR,
-                "mensajeria",
-                "static",
-                "temp",
-                nombre_archivo_con_extension,
-            )
-
-            # Abre el archivo en modo binario y guarda el contenido de la respuesta en él
-            with open(ruta_archivo, "wb") as archivo:
-                archivo.write(response_media.content)
-
-            mensaje = Mensajeria.objects.get(mensaje_id=message_id)
-            mensaje.link = "static/temp/" + nombre_archivo_con_extension
-            mensaje.save()
-
-            link = "static/temp/" + nombre_archivo_con_extension
-
-            send_file(message_id, timestamp_w, recipiente_id, mime_type, link, filename)
-            # Devuelve una respuesta con el enlace a la imagen descargada
-            return HttpResponse(f"Archivo descargado y guardado en: {ruta_archivo}")
-        else:
-            return HttpResponse("Error al descargar el archivo", status=404)
-    except Exception as e:
-        error_message = str(e)
-        nueva_peticion = Peticion(estado="Fallo guardando archivo: " + error_message)
-        nueva_peticion.save()
-
-
-def send_media(id, timestamp_w, recipiente_id, mime_type, link, voice):
-    try:
-        # Obtén los datos del mensaje y el nombre de usuario de alguna manera
-        # message = "Hola, esto es un mensaje enviado desde otra vista"
-        # username = "Usuario1"
-
-        # Obtén el channel_layer
-        channel_layer = get_channel_layer()
-
-        # Envia el mensaje al grupo del WebSocketGroup usando async_to_sync
-        async_to_sync(channel_layer.group_send)(
-            "chat_riodev",
-            {
-                "type": "chatbox_message",
-                "id": id,
-                "message": "",
-                "timestamp_w": timestamp_w,
-                "recipiente_id": recipiente_id,
-                "mime_type": mime_type,
-                "link": link,
-                "filename": "",
-                "voice": voice,
-            },
-        )
-    except Exception as e:
-        error_message = str(e)
-        nueva_peticion = Peticion(estado="Fallo websockets: " + error_message)
-        nueva_peticion.save()
-
-
-def send_file(id, timestamp_w, recipiente_id, mime_type, link, filename):
-    try:
-        # Obtén los datos del mensaje y el nombre de usuario de alguna manera
-        # message = "Hola, esto es un mensaje enviado desde otra vista"
-        # username = "Usuario1"
-
-        # Obtén el channel_layer
-        channel_layer = get_channel_layer()
-
-        # Envia el mensaje al grupo del WebSocketGroup usando async_to_sync
-        async_to_sync(channel_layer.group_send)(
-            "chat_riodev",
-            {
-                "type": "chatbox_message",
-                "id": id,
-                "message": "",
-                "timestamp_w": timestamp_w,
-                "recipiente_id": recipiente_id,
-                "mime_type": mime_type,
-                "link": link,
-                "filename": filename,
-                "voice": "",
-            },
-        )
-    except Exception as e:
-        error_message = str(e)
-        nueva_peticion = Peticion(estado="Fallo websockets: " + error_message)
-        nueva_peticion.save()
