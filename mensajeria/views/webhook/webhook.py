@@ -222,7 +222,6 @@ def new_message(message, perfil):
         envia = Destinatarios.objects.get(persona_id=persona_id)
         envia_id = envia.id
 
-        # El registro existe
     except ObjectDoesNotExist:
         resultado = from_num[2:]
         codigo_pais = from_num[:2]
@@ -321,7 +320,7 @@ def new_message(message, perfil):
             else:
                 filename = ""
 
-            file_id = post_send_file(multimedia_id)
+            file_id = post_send_file(multimedia_id, envia_id)
             nuevo_mensaje = Mensajeria(
                 mime_type=mime_type,
                 sha256=sha256,
@@ -349,11 +348,14 @@ def new_message(message, perfil):
                 "texto": nuevo_mensaje.texto,
                 "mensaje_id": nuevo_mensaje.mensaje_id,
                 "mime_type": nuevo_mensaje.mime_type,
-                "dir": ruta,
                 "filename": nuevo_mensaje.filename,
                 "voice": nuevo_mensaje.voice,
                 "hora": hora_minutos,
                 "timestamp_w": hora_minutos,
+                "multimedia": {
+                    "url": ruta["dir"],
+                    "name": ruta["name"]
+                },
             }
 
             post_sendMedia(message_body)
@@ -389,7 +391,7 @@ def send_txt(message):
         nueva_peticion.save()
 
 
-def post_send_file(media_id):
+def post_send_file(media_id, create_by):
     url = "https://graph.facebook.com/" + API_VERSION_WHATSAPP_ENV + "/" + media_id
     headers = {
         "Authorization": "Bearer " + API_KEY_ENV,
@@ -412,8 +414,10 @@ def post_send_file(media_id):
         file_model = Archivos()
         file_model.nombre = nombre_archivo_con_extension
         file_model.grupo = 2
+        file_model.created_by_id = 1
         file_model.file.save(
-            nombre_archivo_con_extension, ContentFile(response_media.content)
+            nombre_archivo_con_extension,
+            ContentFile(response_media.content),
         )
         file_model.save()
     except Exception as e:
@@ -435,7 +439,7 @@ def get_likFile(file_id):
 
         files.append(aws_file)
 
-    return files[0]["dir"]
+    return files[0]
 
 
 def post_sendMedia(message):

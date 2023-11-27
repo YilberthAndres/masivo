@@ -3,6 +3,12 @@ from datetime import datetime
 from django.shortcuts import get_object_or_404
 from mensajeria.models import Archivos, Mensajeria, Conversaciones, Peticion
 from django.core.files.storage import get_storage_class
+import fitz  # PyMuPDF
+from PIL import Image
+from io import BytesIO
+import boto3
+import requests
+import base64
 
 media_storage = get_storage_class()()
 dotenv.load_dotenv()
@@ -11,7 +17,10 @@ API_KEY_ENV = os.getenv("API_KEY")
 ID_WHATSAPP_BUSINESS_ENV = os.getenv("ID_WHATSAPP_BUSINESS")
 ID_WHATSAPP_NUMBER_ENV = os.getenv("ID_WHATSAPP_NUMBER")
 API_VERSION_WHATSAPP_ENV = os.getenv("API_VERSION_WHATSAPP")
-
+AWS_ACCESS_KEY_ID_ENV = os.getenv("AWS_ACCESS_KEY_ID_N")
+AWS_SECRET_ACCESS_KEY_ENV = os.getenv("AWS_SECRET_ACCESS_KEY_N")
+AWS_STORAGE_BUCKET_NAME_ENV = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME_ENV = os.getenv("AWS_S3_REGION_NAME")
 
 def api_connect(id_whatsap, path: str, payload={}, method="GET", headers={}):
     print(payload)
@@ -156,3 +165,30 @@ def get_errors(errors):
         if len(errors["non_field_errors"]) == 1:
             return errors["non_field_errors"][0]
         return errors["non_field_errors"]
+
+
+def capture_first_page_from_s3(bucket_name, pdf_key):
+    s3 = boto3.client(
+        "s3",
+        aws_access_key_id=AWS_ACCESS_KEY_ID_ENV,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY_ENV,
+        region_name=AWS_S3_REGION_NAME_ENV,
+    )
+    response = s3.get_object(Bucket=bucket_name, Key=pdf_key)
+    pdf_content = response["Body"].read()
+
+    pdf_document = fitz.open("pdf",pdf_content)
+
+    first_page = pdf_document[0]
+
+    pixmap = first_page.get_pixmap()
+
+    image = Image.frombytes("RGB", [pixmap.width, pixmap.height], pixmap.samples)
+
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    image_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+    pdf_document.close()
+
+    return image_base64

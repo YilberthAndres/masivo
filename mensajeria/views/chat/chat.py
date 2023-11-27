@@ -4,7 +4,6 @@ from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
 from rest_framework.response import Response
 from rest_framework import status
-import json
 from mensajeria.models import (
     Destinatarios,
     Mensajeria,
@@ -15,10 +14,9 @@ from django.db.models.functions import TruncDate
 from django.db.models import Count, Case, When, Value, CharField
 from datetime import datetime, timedelta
 import os
-from ..base import send_message_api
+from ..base import send_message_api, capture_first_page_from_s3
 import uuid
 from masivo.utils import agregar_tarea_dinamicamente
-from django.shortcuts import get_object_or_404
 from django_celery_beat.models import PeriodicTask
 from django.core.files.storage import get_storage_class
 
@@ -165,6 +163,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                         "id",
                         "multimedia_id__file",
                         "multimedia_id__nombre",
+                        "multimedia_id__tipo",
                     )
                     .annotate(cantidad_registros=Count("id"))
                     .order_by("fecha", "created_at")
@@ -184,6 +183,17 @@ class MenssageFind(CreateAPIView, ResponseMixin):
 
                     if fecha not in resultados:
                         resultados[fecha] = []
+
+                    pre = ""
+                    if (
+                        mensaje["multimedia_id__file"]
+                        and mensaje["mime_type"] == "application/pdf"
+                    ):
+                        pre = capture_first_page_from_s3(
+                            "masivo",
+                            "static/" + mensaje["multimedia_id__file"],
+                        )
+
                     resultados[fecha].append(
                         {
                             "estado": mensaje["estado_annotation"],
@@ -203,6 +213,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                                 if mensaje["multimedia_id__file"] != None
                                 else None,
                                 "name": mensaje["multimedia_id__nombre"],
+                                "preview": pre,
                             },
                         }
                     )
@@ -340,9 +351,7 @@ class ProgrammedSend(GenericAPIView, ResponseMixin):
 
             user = request.user
 
-            recipient_id = Destinatarios.objects.get(
-                persona__telefonowhatsapp=to
-            ).pk
+            recipient_id = Destinatarios.objects.get(persona__telefonowhatsapp=to).pk
 
             if not recipient_id:
                 self.error = "Numero no existe en nuestra base de datos"
