@@ -1,5 +1,3 @@
-from django.http import JsonResponse
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from mensajeria.models import (
@@ -9,9 +7,8 @@ from mensajeria.models import (
     Destinatarios,
     Personas,
     Conversaciones,
-    Archivos
+    Archivos,
 )
-from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from channels.layers import get_channel_layer
 from channels.db import database_sync_to_async
@@ -25,6 +22,7 @@ from django.core.files.storage import get_storage_class
 import os
 import asyncio
 from django.core.files.base import ContentFile
+
 media_storage = get_storage_class()()
 import hashlib
 import re
@@ -193,20 +191,22 @@ def update_message(statuses):
         nueva_peticion = Peticion(estado=e)
         nueva_peticion.save()
 
+
 def get_binary_search(arr, target):
     left, right = 0, len(arr) - 1
 
     while left <= right:
-        mid = (left + right) // 2  
+        mid = (left + right) // 2
 
         if arr[mid] == target:
-            return mid  
+            return mid
         elif arr[mid] < target:
-            left = mid + 1  
+            left = mid + 1
         else:
-            right = mid - 1  
+            right = mid - 1
 
     return -1
+
 
 def new_message(message, perfil):
     message_id = message["id"]
@@ -225,20 +225,20 @@ def new_message(message, perfil):
         # El registro existe
     except ObjectDoesNotExist:
         resultado = from_num[2:]
-        codigo_pais =  from_num[:2]
-        paises_actuales   = Paises.objects.all()
+        codigo_pais = from_num[:2]
+        paises_actuales = Paises.objects.all()
         paises_validos = []
         for pais in paises_actuales:
             paises_validos.append(pais.codigo)
 
         try:
-            if(pais == '57'):
+            if pais == "57":
                 pais_id = 39
             else:
                 index = get_binary_search(paises_validos, codigo_pais)
-                
+
                 if index != -1:
-                    pais_id = (index + 1)
+                    pais_id = index + 1
                 else:
                     pais_id = 39
 
@@ -278,7 +278,6 @@ def new_message(message, perfil):
             conversacion.save()
             conversacion_id = conversacion.id
 
-
         if type == "text":
             text = message["text"]["body"]
             nuevo_mensaje = Mensajeria(
@@ -317,7 +316,7 @@ def new_message(message, perfil):
             mime_type = message[type]["mime_type"]
             sha256 = message[type]["sha256"]
             multimedia_id = message[type]["id"]
-            if(type == "document"):
+            if type == "document":
                 filename = message["document"]["filename"]
             else:
                 filename = ""
@@ -338,11 +337,9 @@ def new_message(message, perfil):
             )
             nuevo_mensaje.save()
 
-
             ruta = get_likFile(file_id)
             hora_minutos = getMinutosHoras(timestamp)
             fecha = nuevo_mensaje.created_at.strftime("%Y/%m/%d")
-            
 
             message_body = {
                 "recipiente_id": nuevo_mensaje.recipiente_id,
@@ -376,6 +373,7 @@ def getMinutosHoras(timestamp):
 
     return horaMinutos
 
+
 def send_txt(message):
     try:
         channel_layer = get_channel_layer()
@@ -390,40 +388,39 @@ def send_txt(message):
         nueva_peticion = Peticion(estado="Fallo websockets: " + error_message)
         nueva_peticion.save()
 
-def post_send_file(media_id):
 
+def post_send_file(media_id):
     url = "https://graph.facebook.com/" + API_VERSION_WHATSAPP_ENV + "/" + media_id
     headers = {
-    "Authorization": "Bearer " + API_KEY_ENV,
-    "Content-Type": "application/json",
+        "Authorization": "Bearer " + API_KEY_ENV,
+        "Content-Type": "application/json",
     }
     response = requests.get(url, headers=headers)
     response_json = response.json()
-    
+
     # if response_media.status_code == 200:
     url_media = response_json["url"]
     response_media = requests.get(url_media, headers=headers)
     nombre_archivo = hashlib.md5(url_media.encode()).hexdigest()
-    extension_archivo = response_media.headers.get("Content-Type", "").split(
-        "/"
-    )[-1]
-
+    extension_archivo = response_media.headers.get("Content-Type", "").split("/")[-1]
 
     nombre_archivo = re.sub(r'[\\/*?:"<>|]', "", nombre_archivo)
 
     nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
-    
+
     try:
-    
-        file_model          = Archivos()
-        file_model.nombre   = nombre_archivo_con_extension
-        file_model.grupo    = 2
-        file_model.file.save(nombre_archivo_con_extension, ContentFile(response_media.content))
+        file_model = Archivos()
+        file_model.nombre = nombre_archivo_con_extension
+        file_model.grupo = 2
+        file_model.file.save(
+            nombre_archivo_con_extension, ContentFile(response_media.content)
+        )
         file_model.save()
     except Exception as e:
         print("Error cargando el archivo: " + str(e))
-    
+
     return file_model.id
+
 
 def get_likFile(file_id):
     archivos = Archivos.objects.filter(id=file_id)
@@ -438,10 +435,10 @@ def get_likFile(file_id):
 
         files.append(aws_file)
 
-    return files[0]['dir']
+    return files[0]["dir"]
+
 
 def post_sendMedia(message):
-    
     try:
         channel_layer = get_channel_layer()
 
@@ -454,8 +451,8 @@ def post_sendMedia(message):
         error_message = str(e.args)
         nueva_peticion = Peticion(estado="Fallo websockets: " + error_message)
         nueva_peticion.save()
-    
+
+
 def clean_filename(filename):
     cleaned_filename = re.sub(r"[^\w.-]", "", filename)
     return cleaned_filename
-
