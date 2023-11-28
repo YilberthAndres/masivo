@@ -46,17 +46,13 @@ class ListTemplates(APIView, ResponseMixin):
                 )
 
             self.data = {
-                "status": status.HTTP_200_OK,
-                "data": {
-                    "templates": templates,
-                    "templates_body": templates_body,
-                },
-                "valid": True,
+                "templates": templates,
+                "templates_body": templates_body,
             }
 
             return Response(self.response_obj)
         except Exception as e:
-            self.error = {"error": e.args}
+            self.error = e.args
             return Response(self.response_obj)
 
 
@@ -87,18 +83,12 @@ class ListDestinatarios(APIView, ResponseMixin):
                 for destinatario in destinatarios
             ]
 
-            self.data = {
-                "status": status.HTTP_200_OK,
-                "valid": True,
-                "data": destinatariosnew,
-            }
+            self.data = destinatariosnew
 
             return Response(self.response_obj)
         except Exception as e:
             error_message = str(e.args)
-            self.error = {
-                "error": error_message,
-            }
+            self.error = error_message
             return Response(self.response_obj)
 
 
@@ -127,7 +117,8 @@ class SendMensaje(APIView, ResponseMixin):
             response_json = response.json()
 
             if "error" in response_json:
-                self.error = {"message": response_json}
+                self.status = status.HTTP_400_BAD_REQUEST
+                self.error = response_json
                 return Response(self.response_obj)
 
             nuevo_mensaje = Mensajeria(
@@ -140,7 +131,7 @@ class SendMensaje(APIView, ResponseMixin):
 
             nuevo_mensaje.save()
 
-            self.data = {"data": response_json}
+            self.data = response_json
 
             return Response(self.response_obj)
 
@@ -171,6 +162,6 @@ class SendMessageTemplate(APIView, ResponseMixin):
             response_json = response.json()
             mensajes.append(response_json)
 
-        self.data = {"response": mensajes}
+        self.data = mensajes
 
         return Response(self.response_obj)
