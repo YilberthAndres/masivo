@@ -1,9 +1,9 @@
 import dotenv, os, requests
 from datetime import datetime
 from django.shortcuts import get_object_or_404
-from mensajeria.models import Archivos, Mensajeria, Conversaciones, Peticion
+from mensajeria.models import Archivos, Mensajeria, Conversaciones
 from django.core.files.storage import get_storage_class
-import fitz  # PyMuPDF
+import fitz 
 from PIL import Image
 from io import BytesIO
 import boto3
@@ -23,7 +23,7 @@ AWS_STORAGE_BUCKET_NAME_ENV = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME_ENV = os.getenv("AWS_S3_REGION_NAME")
 
 def api_connect(id_whatsap, path: str, payload={}, method="GET", headers={}):
-    print(payload)
+    
     url = (
         "https://graph.facebook.com/"
         + API_VERSION_WHATSAPP_ENV

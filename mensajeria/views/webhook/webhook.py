@@ -14,14 +14,13 @@ from channels.layers import get_channel_layer
 from channels.db import database_sync_to_async
 from asgiref.sync import async_to_sync
 import requests
-from datetime import datetime, timezone
-from django.conf import settings
+from datetime import datetime
 import json
 from django.db import connection
 from django.core.files.storage import get_storage_class
 import os
-import asyncio
 from django.core.files.base import ContentFile
+from ..base import capture_first_page_from_s3
 
 media_storage = get_storage_class()()
 import hashlib
@@ -354,7 +353,8 @@ def new_message(message, perfil):
                 "timestamp_w": hora_minutos,
                 "multimedia": {
                     "url": ruta["dir"],
-                    "name": ruta["name"]
+                    "name": ruta["name"],
+                    "preview": ruta["preview"],
                 },
             }
 
@@ -411,14 +411,22 @@ def post_send_file(media_id, create_by):
     nombre_archivo_con_extension = f"{nombre_archivo}.{extension_archivo}"
 
     try:
+        tipo = None
+        if extension_archivo == "pdf":
+            tipo = "application/pdf"
+
         file_model = Archivos()
         file_model.nombre = nombre_archivo_con_extension
         file_model.grupo = 2
         file_model.created_by_id = 1
+        file_model.tipo = tipo
         file_model.file.save(
             nombre_archivo_con_extension,
             ContentFile(response_media.content),
         )
+        rep = capture_first_page_from_s3("masivo", "static/" + file_model.file.name)
+        file_model.preview = rep
+
         file_model.save()
     except Exception as e:
         print("Error cargando el archivo: " + str(e))
@@ -429,12 +437,21 @@ def post_send_file(media_id, create_by):
 def get_likFile(file_id):
     archivos = Archivos.objects.filter(id=file_id)
     files = []
+    pre = None
+
     for archivo in archivos:
+        if archivo.preview:
+            pre = archivo.preview
+
+        elif archivo.tipo == "application/pdf":
+            pre = capture_first_page_from_s3("masivo", "static/" + archivo.file.name)
+
         aws_file = {
             "file_id": archivo.id,
             "name": archivo.nombre,
             "dir": media_storage.url(name=archivo.file.name),
             "type": archivo.tipo,
+            "preview": pre,
         }
 
         files.append(aws_file)

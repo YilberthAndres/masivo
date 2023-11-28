@@ -1,6 +1,7 @@
 from mensajeria.models import Archivos
 import os
 import dotenv
+from ..base import capture_first_page_from_s3
 
 dotenv.load_dotenv()
 from django.core.files.storage import get_storage_class
@@ -36,26 +37,28 @@ class Uploaded(CreateAPIView, ResponseMixin):
 
     def post(self, request, *args, **kwargs):
         try:
-            file = request.FILES["file"]
+            file_ = request.FILES["file"]
             name = request.POST.get("name")
 
-            file_format = self.get_info(file)
+            file_format = self.get_info(file_)
             user = request.user
 
             file_model = Archivos()
-            file_model.file = file
+            file_model.file = file_
             file_model.nombre = name
             file_model.tipo = file_format
             file_model.created_by = user
 
             file_model.save()
 
-            self.data = {
-                "status": status.HTTP_200_OK,
-                "data": {},
-                "message": "Exitoso",
-                "error": False,
-            }
+            base64 = capture_first_page_from_s3("masivo", "static/" + file_model.file.name)
+            
+            file_model.preview = base64
+            
+            file_model.save()
+
+            self.status = status.HTTP_200_OK
+            self.data = "Exitoso"
             return Response(self.response_obj)
 
         except Exception as e:

@@ -171,6 +171,7 @@ class Archivos(models.Model):
     created_by = models.ForeignKey(
         "auth.User", related_name="Archivos_created_by", on_delete=models.CASCADE
     )
+    preview = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.ForeignKey(
         "auth.User",

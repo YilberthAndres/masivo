@@ -164,6 +164,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                         "multimedia_id__file",
                         "multimedia_id__nombre",
                         "multimedia_id__tipo",
+                        "multimedia_id__preview",
                     )
                     .annotate(cantidad_registros=Count("id"))
                     .order_by("fecha", "created_at")
@@ -184,16 +185,6 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                     if fecha not in resultados:
                         resultados[fecha] = []
 
-                    pre = ""
-                    if (
-                        mensaje["multimedia_id__file"]
-                        and mensaje["mime_type"] == "application/pdf"
-                    ):
-                        pre = capture_first_page_from_s3(
-                            "masivo",
-                            "static/" + mensaje["multimedia_id__file"],
-                        )
-
                     resultados[fecha].append(
                         {
                             "estado": mensaje["estado_annotation"],
@@ -213,7 +204,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                                 if mensaje["multimedia_id__file"] != None
                                 else None,
                                 "name": mensaje["multimedia_id__nombre"],
-                                "preview": pre,
+                                "preview": mensaje["multimedia_id__preview"],
                             },
                         }
                     )
@@ -228,7 +219,6 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                 if registros.count() <= 0:
                     cantidad_registros = False
 
-                # Devolver la respuesta JSON
                 response_data = {
                     "resultados": resultados,
                     "chat_view": cantidad_registros,
