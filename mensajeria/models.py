@@ -139,7 +139,7 @@ class Personas(models.Model):
         on_delete=models.CASCADE,
         db_index=True,
     )
-    observaciones = models.TextField(null=True, blank=True)
+    observaciones = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     created_by = models.ForeignKey(
         "auth.User", related_name="personas_created_by", on_delete=models.CASCADE
