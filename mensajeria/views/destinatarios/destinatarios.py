@@ -1,9 +1,10 @@
 from django.http import JsonResponse
-from mensajeria.models import Destinatarios, Maestras
+from mensajeria.models import Destinatarios
 from rest_framework.views import APIView
 from rest_framework.generics import DestroyAPIView
 from ...mixins.base import ResponseMixin
 from rest_framework.response import Response
+from rest_framework import status
 
 
 class ListDestinatarios(APIView, ResponseMixin):
@@ -71,4 +72,5 @@ class DestinarioDelete(DestroyAPIView, ResponseMixin):
             return Response(self.response_obj)
         except Exception as e:
             self.error = {"error": e.args}
+            self.status = status.HTTP_400_BAD_REQUEST
             return Response(self.response_obj)
