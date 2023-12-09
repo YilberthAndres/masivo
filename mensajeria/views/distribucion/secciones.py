@@ -3,7 +3,7 @@ from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
 from rest_framework.response import Response
 from rest_framework import status
-from mensajeria.models import Areas, Secciones
+from mensajeria.models import Areas, Secciones, Grupos
 from django.db.models import Q
 
 
