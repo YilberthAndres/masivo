@@ -9,5 +9,9 @@ urlpatterns = [
     path("chat/", include("mensajeria.views.chat.urls")),
     path("multimedia/", include("mensajeria.views.multimedia.urls")),
     path("distribucion/",      include("mensajeria.views.distribucion.urls")),
+    
+    
+    
+    path("perfil/",      include("mensajeria.views.perfil.urls")),
 
 ]

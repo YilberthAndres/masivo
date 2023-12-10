@@ -340,7 +340,6 @@ class Destinatarios(models.Model):
         related_name="Seccion_destinatarios_persona",
         on_delete=models.CASCADE,
         db_index=True,
-        unique=True,
     )
     grupo = models.ForeignKey(
         Grupos,
@@ -349,7 +348,6 @@ class Destinatarios(models.Model):
         related_name="Grupo_destinatarios_persona",
         on_delete=models.CASCADE,
         db_index=True,
-        unique=True,
     )
     estado = models.ForeignKey(
         Maestras,
