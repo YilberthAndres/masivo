@@ -41,7 +41,7 @@ class SeccionesDistribucion(CreateAPIView, ResponseMixin):
             return Response(self.response_obj)
         except Exception as e:
             self.status = status.HTTP_400_BAD_REQUEST
-            self.error = "Ocurrio un error."
+            self.error = e.args
             return Response(self.response_obj)
 
     def get(self, request, *args, **kwargs):
