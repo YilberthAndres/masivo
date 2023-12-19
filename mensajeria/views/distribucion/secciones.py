@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from mensajeria.models import Areas, Secciones, Grupos
 from django.db.models import Q
+from django.db.models import Prefetch
+from .serializer import SeccionesSerializer
 
 class SeccionesDistribucion(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
@@ -17,26 +19,30 @@ class SeccionesDistribucion(CreateAPIView, ResponseMixin):
             area_id            = data.get("area_id", None)
             user            = request.user
             
-            seccion_existente   = Secciones.objects.filter(Q(nombre=name)).first()
-            area_existente      = Areas.objects.filter(Q(id = area_id)).first()
+            
 
             if(name == ''):
                 self.status = status.HTTP_400_BAD_REQUEST
                 self.error = "El nombre es un campo requerido."
-            elif seccion_existente:
-                self.status = status.HTTP_400_BAD_REQUEST
-                self.error = "Ya existe una seccion con el mismo nombre."
-            elif not area_existente:
-                self.status = status.HTTP_400_BAD_REQUEST
-                self.error = "Debe agregar un area valida."
             else:
-                new_seccion                = Secciones()
-                new_seccion.nombre         = name
-                new_seccion.descripcion    = description
-                new_seccion.area_id        = area_id
-                new_seccion.estado_id      = 596
-                new_seccion.created_by     = user
-                new_seccion.save()
+                name = name.strip().lower()
+                seccion_existente   = Secciones.objects.filter(Q(nombre__iexact=name)).first()
+                area_existente      = Areas.objects.filter(Q(id = area_id)).first()
+
+                if seccion_existente:
+                    self.status = status.HTTP_400_BAD_REQUEST
+                    self.error = "Ya existe una seccion con el mismo nombre."
+                elif not area_existente:
+                    self.status = status.HTTP_400_BAD_REQUEST
+                    self.error = "Debe agregar un area valida."
+                else:
+                    new_seccion                = Secciones()
+                    new_seccion.nombre         = name
+                    new_seccion.descripcion    = description
+                    new_seccion.area_id        = area_id
+                    new_seccion.estado_id      = 596
+                    new_seccion.created_by     = user
+                    new_seccion.save()
 
             return Response(self.response_obj)
         except Exception as e:
@@ -47,46 +53,25 @@ class SeccionesDistribucion(CreateAPIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
 
         try:
-            secciones_consulta  = Secciones.objects.filter(estado_id=596)
-            secciones           = []
-
-            for row in secciones_consulta:
-
-                grupos = Grupos.objects.filter(seccion_id = row.id, estado_id = 596)
-                grupos_new = []
-                for grupo in grupos:
-                    grupos_new.append(
-                        {
-                            "id": grupo.id,
-                            "nombre": grupo.nombre,
-                            "status_id": grupo.estado.id,
-                            "status_nombre": grupo.estado.nombre,
-                        }
+            secciones_consulta =  (
+                Secciones.objects.filter(estado_id=596)
+                .select_related("estado", "created_by")
+                .prefetch_related(Prefetch("grupos_set", queryset = Grupos.objects.filter(
+                            estado_id=596
+                        ).select_related("estado", "created_by")
                     )
-                secciones.append(
-                    {
-                        "id": row.id,
-                        "name": row.nombre,
-                        "description": row.descripcion,
-                        "description": row.descripcion,
-                        "area_id": row.area.id,
-                        "area_nombre": row.area.nombre,
-                        "grupos": grupos_new,
-                        "status_id": row.estado.id,
-                        "status_name": row.estado.nombre,
-                        "created_by": row.created_by_id,
-                        "created_at": row.created_at
-                    }
                 )
+            )
+            
+            result_secciones = SeccionesSerializer(secciones_consulta, many=True)
+
             self.status = status.HTTP_200_OK
-            self.data = {
-                "data": secciones
-            }
+            self.data = result_secciones.data
 
             return Response(self.response_obj)
         except Exception as e:
             self.status = status.HTTP_400_BAD_REQUEST
-            self.error = "Ocurrio un error."
+            self.error = e.args
             return Response(self.response_obj)
 
     def put(self, request, *args, **kwargs):
@@ -111,7 +96,7 @@ class SeccionesDistribucion(CreateAPIView, ResponseMixin):
             return Response(self.response_obj)
         except Secciones.DoesNotExist as e:
             self.status = status.HTTP_400_BAD_REQUEST
-            self.error = "Ocurrio un error."
+            self.error = e.args
             return Response(self.response_obj)
         
 
@@ -126,7 +111,7 @@ class SeccionesDistribucion(CreateAPIView, ResponseMixin):
             return Response(self.response_obj)
         except Secciones.DoesNotExist as e:
             self.status = status.HTTP_400_BAD_REQUEST
-            self.error = "Ocurrio un error."
+            self.error = e.args
             return Response(self.response_obj)
         
 class SeccionesFind(CreateAPIView, ResponseMixin):
@@ -136,32 +121,24 @@ class SeccionesFind(CreateAPIView, ResponseMixin):
 
         try: 
             seccion_id =   self.kwargs.get("seccion_id", None)
-            seccion    =   Secciones.objects.get(id=seccion_id, estado_id = 596)
-        except Secciones.DoesNotExist as e:
-            self.status = status.HTTP_400_BAD_REQUEST
-            self.error = "El seccion no existe."
-            return Response(self.response_obj)
-
-        try:
+            secciones_consulta =  (
+                Secciones.objects.filter(id=seccion_id)
+                .select_related("estado", "created_by")
+                .prefetch_related(Prefetch("grupos_set", queryset = Grupos.objects.filter(
+                            estado_id=596
+                        ).select_related("estado", "created_by")
+                    )
+                )
+            )
             
-            data = {
-                "seccion_id": seccion.id,
-                "name": seccion.nombre,
-                "description": seccion.descripcion,
-                "area_id": seccion.area.id,
-                "area_nombre": seccion.area.nombre,
-                "status_id": seccion.estado.id,
-                "status_name": seccion.estado.nombre,
-                "created_at": seccion.created_at,
-                "created_by": seccion.created_by.id
-            }
-            self.data = {
-                "data": data
-            }
+            result_secciones = SeccionesSerializer(secciones_consulta, many=True)
+
+            self.status = status.HTTP_200_OK
+            self.data = result_secciones.data
 
             return Response(self.response_obj)
         except Exception as e:
             self.status = status.HTTP_400_BAD_REQUEST
-            self.error = "Ocurrio un error."
+            self.error = e.args
             return Response(self.response_obj)
         

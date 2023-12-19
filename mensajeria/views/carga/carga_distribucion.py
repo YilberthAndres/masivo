@@ -253,8 +253,7 @@ class Save(CreateAPIView, ResponseMixin):
 
         nueva_persona.save()
         persona_id = nueva_persona.id
-        print("Persona_id")
-        print(persona_id)
+        
 
         nuevo_registro = Destinatarios(
             persona_id=persona_id, created_by=user, estado_id=596, grupo_id = data["grupo_id"]
@@ -366,7 +365,7 @@ class Save(CreateAPIView, ResponseMixin):
 
                         new_grupo                = Grupos()
                         new_grupo.nombre         = row_area['grupo']
-                        new_grupo.area_id        = area_id
+                        new_grupo.seccion_id     = seccion_id
                         new_grupo.descripcion    = ""
                         new_grupo.estado_id      = 596
                         new_grupo.created_by     = user

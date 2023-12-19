@@ -234,7 +234,6 @@ class Secciones(models.Model):
     area = models.ForeignKey(
         Areas,
         blank=True,
-        related_name="secciones_estado",
         null=True,
         on_delete=models.CASCADE,
         db_index=True,
@@ -282,7 +281,6 @@ class Grupos(models.Model):
     seccion = models.ForeignKey(
         Secciones,
         blank=True,
-        related_name="secciones_estado",
         null=True,
         on_delete=models.CASCADE,
         db_index=True,
