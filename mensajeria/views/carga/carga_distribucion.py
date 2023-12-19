@@ -324,16 +324,16 @@ class Save(CreateAPIView, ResponseMixin):
                 areas_array     = []
                 secciones_array = []
                 grupos_array    = []
-                for row_area in personas:
-                    index_validos = self.get_search(areas_listado, row_area['area'])
+                for row in personas:
+                    index_validos = self.get_search(areas_listado, row['area'])
 
                     if index_validos != -1:
                         area_id = areas_listado_id[index_validos]
                     else:
-                        areas_listado.append(row_area["area"])
+                        areas_listado.append(row["area"])
 
                         new_area                = Areas()
-                        new_area.nombre         = row_area["area"]
+                        new_area.nombre         = row["area"]
                         new_area.descripcion    = ""
                         new_area.estado_id      = 596
                         new_area.created_by     = user
@@ -341,14 +341,14 @@ class Save(CreateAPIView, ResponseMixin):
                         area_id = new_area.id
                         areas_listado_id.append(area_id)
 
-                    index_seccion = self.get_search(secciones_listado, row_area['seccion'])
+                    index_seccion = self.get_search(secciones_listado, row['seccion'])
                     if index_seccion != -1:
                         seccion_id = secciones_listado_id[index_seccion]
                     else:
-                        secciones_listado.append(row_area['seccion'])
+                        secciones_listado.append(row['seccion'])
 
                         new_seccion                = Secciones()
-                        new_seccion.nombre         = row_area['seccion']
+                        new_seccion.nombre         = row['seccion']
                         new_seccion.area_id        = area_id
                         new_seccion.descripcion    = ""
                         new_seccion.estado_id      = 596
@@ -357,14 +357,14 @@ class Save(CreateAPIView, ResponseMixin):
                         seccion_id = new_seccion.id
                         secciones_listado_id.append(seccion_id)
 
-                    index_grupo = self.get_search(grupos_listado, row_area['grupo'])
+                    index_grupo = self.get_search(grupos_listado, row['grupo'])
                     if index_grupo != -1:
                         grupo_id = grupos_listado_id[index_grupo]
                     else:
-                        grupos_listado.append(row_area['grupo'])
+                        grupos_listado.append(row['grupo'])
 
                         new_grupo                = Grupos()
-                        new_grupo.nombre         = row_area['grupo']
+                        new_grupo.nombre         = row['grupo']
                         new_grupo.seccion_id     = seccion_id
                         new_grupo.descripcion    = ""
                         new_grupo.estado_id      = 596
@@ -373,26 +373,24 @@ class Save(CreateAPIView, ResponseMixin):
                         grupo_id = new_grupo.id
                         grupos_listado_id.append(grupo_id)
 
-                    
-                for persona in personas:
 
-                    index_grupo = self.get_search(grupos_listado, persona['grupo'])
+                    index_grupo = self.get_search(grupos_listado, row['grupo'])
                     if index_grupo != -1:
                         grupo_id = grupos_listado_id[index_grupo]
                     
                     persona_new = {
-                        "nombre": persona["nombre"],
-                        "segundo_nombre": persona["segundo_nombre"],
-                        "apellido": persona["apellido"],
-                        "segundo_apellido": persona["segundo_apellido"],
-                        "celular_whatsapp": persona["whatsapp_prefijo"],
-                        "celular_llamada": persona["celular_whatsapp"],
-                        "documento": persona["documento"],
-                        "fechanacimiento": persona["fechanacimiento"],
-                        "pais_id": persona["pais"],
+                        "nombre": row["nombre"],
+                        "segundo_nombre": row["segundo_nombre"],
+                        "apellido": row["apellido"],
+                        "segundo_apellido": row["segundo_apellido"],
+                        "celular_whatsapp": row["whatsapp_prefijo"],
+                        "celular_llamada": row["celular_whatsapp"],
+                        "documento": row["documento"],
+                        "fechanacimiento": row["fechanacimiento"],
+                        "pais_id": row["pais"],
                         "grupo_id": grupo_id,
-                        "seccion": persona["seccion"],
-                        "grupo": persona["grupo"]
+                        "seccion": row["seccion"],
+                        "grupo": row["grupo"]
                     }
 
 
