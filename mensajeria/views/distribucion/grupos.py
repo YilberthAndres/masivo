@@ -3,10 +3,13 @@ from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
 from rest_framework.response import Response
 from rest_framework import status
-from mensajeria.models import Areas, Secciones, Grupos
+from mensajeria.models import Areas, Secciones, Grupos, Maestras
 from django.db.models import Q
 from django.db.models import Prefetch
-from .serializer import GruposSerializer
+from .serializer import GruposSerializer, AllSerializer
+
+import os
+PARENT_STATE_ENV = os.getenv("PARENT_STATE")
 
 class GruposDistribucion(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
@@ -127,4 +130,30 @@ class GruposFind(CreateAPIView, ResponseMixin):
         except Exception as e:
             self.status = status.HTTP_400_BAD_REQUEST
             self.error = e.args
+            return Response(self.response_obj)
+
+class GruposEdit(CreateAPIView, ResponseMixin):
+    serializer_class = SignupSerializers
+
+    def get(self, request, *args, **kwargs):
+        try:
+
+            status_list     = Maestras.objects.filter(padre_id = 595)
+            status_resul    = AllSerializer(status_list, many=True)
+
+            secciones_list  = Secciones.objects.filter(estado_id = 596).order_by('nombre')
+            secciones_resul = AllSerializer(secciones_list, many=True)
+
+
+            data = {
+                "estados": status_resul.data,
+                "secciones": secciones_resul.data,
+            }
+
+            self.status = status.HTTP_200_OK
+            self.data   = data
+            return Response(self.response_obj)
+        except Exception as e:
+            self.status = status.HTTP_400_BAD_REQUEST
+            self.error = str(e.args)
             return Response(self.response_obj)

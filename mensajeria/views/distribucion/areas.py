@@ -3,10 +3,13 @@ from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
 from rest_framework.response import Response
 from rest_framework import status
-from mensajeria.models import Areas, Secciones, Grupos
+from mensajeria.models import Areas, Secciones, Grupos,Maestras
 from django.db.models import Q
 from django.db.models import Prefetch
-from .serializer import AreasSerializer
+from .serializer import AreasSerializer, AllSerializer
+
+import os
+PARENT_STATE_ENV = os.getenv("PARENT_STATE")
 
 class AreasDistribucion(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
@@ -129,6 +132,24 @@ class AreasFind(CreateAPIView, ResponseMixin):
             result_areas    = AreasSerializer(areas_consulta, many=True)
             self.status     = status.HTTP_200_OK
             self.data       = result_areas.data
+            return Response(self.response_obj)
+        except Exception as e:
+            self.status = status.HTTP_400_BAD_REQUEST
+            self.error = str(e.args)
+            return Response(self.response_obj)
+        
+
+class AreasEdit(CreateAPIView, ResponseMixin):
+    serializer_class = SignupSerializers
+
+    def get(self, request, *args, **kwargs):
+        try:
+
+            status_list = Maestras.objects.filter(padre_id = 595)
+            satus_resul = AllSerializer(status_list, many=True)
+            
+            self.status = status.HTTP_200_OK
+            self.data   = satus_resul.data
             return Response(self.response_obj)
         except Exception as e:
             self.status = status.HTTP_400_BAD_REQUEST
