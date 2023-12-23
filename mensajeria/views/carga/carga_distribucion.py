@@ -105,6 +105,7 @@ class Preparation(CreateAPIView, ResponseMixin):
                     errados         = []
                     validos         = []
                     validos_celular = []
+                    validos_documento = []
                     duplicados      = []
                     duplicados_add  = []
                     duplicados_docu = []
@@ -113,24 +114,13 @@ class Preparation(CreateAPIView, ResponseMixin):
                     num_duplicados  = 0
                     num_errados     = 0
 
-                    personas_actuales   = Personas.objects.all().order_by("telefonowhatsapp")
-                    paises_actuales     = Paises.objects.all().order_by("nombre")
+                    personas = Personas.objects.all().values('id', 'telefonomovil', 'identificacion').order_by('telefonomovil', 'identificacion')
+                    paises = Paises.objects.all().order_by('nombre').values_list('nombre', 'codigo')
+                    paises_validos = [pais[0] for pais in paises]
+                    paises_codigo = [pais[1] for pais in paises]
 
-
-                    paises_validos      = []
-                    paises_codigo       = []
-                    validos_actuales    = []
-                    documentos_actuales = []
-
-
-                    for pais_list in paises_actuales:
-                        paises_validos.append(pais_list.nombre)
-                        paises_codigo.append(pais_list.codigo)
-
-                    
-                    for persona in personas_actuales:
-                        validos_actuales.append(persona.telefonowhatsapp)
-                        documentos_actuales.append(persona.identificacion)
+                    validos_actuales = [persona['telefonomovil'] for persona in personas if persona['telefonomovil']]
+                    documentos_actuales = [persona['identificacion'] for persona in personas if persona['identificacion']]
 
                     matriz_data = self.get_validar_campos(matriz)
 
@@ -202,18 +192,39 @@ class Preparation(CreateAPIView, ResponseMixin):
                                 duplicados.append(persona_new)
                                 num_duplicados = num_duplicados + 1
                             else:
-                                index2 = self.get_binary_search(validos_actuales, celular)
-                                if index2 != -1:
+                                validos_documento.sort()
+                                index_validos2 = self.get_binary_search(validos_documento, documento)
+
+                                if index_validos2 != -1:
                                     persona_new[
                                         "message"
-                                    ] = "Numero de whatsapp duplicado en la base de datos."
+                                    ] = "Numero de documento duplicado en el excel."
                                     duplicados.append(persona_new)
                                     num_duplicados = num_duplicados + 1
                                 else:
-                                    persona_new["message"] = "Datos correctos."
-                                    validos_celular.append(celular)
-                                    validos.append(persona_new)
-                                    num_validos = num_validos + 1
+
+                                    index2 = self.get_binary_search(validos_actuales, celular)
+                                    if index2 != -1:
+                                        persona_new[
+                                            "message"
+                                        ] = "Numero de whatsapp duplicado en la base de datos."
+                                        duplicados.append(persona_new)
+                                        num_duplicados = num_duplicados + 1
+                                    else:
+                                        
+                                        index3 = self.get_binary_search(documentos_actuales, documento)
+                                        if index3 != -1:
+                                            persona_new[
+                                                "message"
+                                            ] = "Numero de documento duplicado en la base de datos."
+                                            duplicados.append(persona_new)
+                                            num_duplicados = num_duplicados + 1
+                                        else:
+                                            persona_new["message"] = "Datos correctos."
+                                            validos_celular.append(celular)
+                                            validos_documento.append(documento)
+                                            validos.append(persona_new)
+                                            num_validos = num_validos + 1
                     data = {
                         "validos": {"count": num_validos, "data": validos},
                         "errados": {"count": num_errados, "data": errados},

@@ -66,3 +66,10 @@ class AreasSerializer(serializers.Serializer):
 
     class Meta:
         model = Areas
+
+
+class AllSerializer(serializers.Serializer):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    nombre = serializers.CharField(read_only=True)
+
+
