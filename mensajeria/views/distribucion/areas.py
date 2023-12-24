@@ -3,13 +3,15 @@ from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
 from rest_framework.response import Response
 from rest_framework import status
-from mensajeria.models import Areas, Secciones, Grupos,Maestras
+from mensajeria.models import Areas, Secciones, Grupos, Maestras
 from django.db.models import Q
 from django.db.models import Prefetch
 from .serializer import AreasSerializer, AllSerializer
 
 import os
+
 PARENT_STATE_ENV = os.getenv("PARENT_STATE")
+
 
 class AreasDistribucion(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
@@ -54,11 +56,16 @@ class AreasDistribucion(CreateAPIView, ResponseMixin):
                 .prefetch_related(
                     Prefetch(
                         "secciones_set",
-                        queryset=Secciones.objects.filter(estado_id=596).select_related(
-                            "estado", "created_by"
-                        ).prefetch_related(Prefetch("grupos_set", queryset = Grupos.objects.filter(
-                         estado_id=596
-                    ).select_related("estado", "created_by"))),
+                        queryset=Secciones.objects.filter(estado_id=596)
+                        .select_related("estado", "created_by")
+                        .prefetch_related(
+                            Prefetch(
+                                "grupos_set",
+                                queryset=Grupos.objects.filter(
+                                    estado_id=596
+                                ).select_related("estado", "created_by"),
+                            )
+                        ),
                     )
                 )
             )
@@ -76,10 +83,10 @@ class AreasDistribucion(CreateAPIView, ResponseMixin):
 
     def delete(self, request, *args, **kwargs):
         try:
-            user            = request.user
-            area_id         = self.kwargs.get("area_id", None)
-            area            = Areas.objects.get(id=area_id)
-            area.estado_id  = 597
+            user = request.user
+            area_id = self.kwargs.get("area_id", None)
+            area = Areas.objects.get(id=area_id)
+            area.estado_id = 597
             area.updated_by = user
             area.save()
             return Response(self.response_obj)
@@ -90,21 +97,21 @@ class AreasDistribucion(CreateAPIView, ResponseMixin):
 
     def put(self, request, *args, **kwargs):
         try:
-            data    = request.data[0]
-            user    = request.user
+            data = request.data[0]
+            user = request.user
             area_id = self.kwargs.get("area_id", None)
-            area    = Areas.objects.get(id=area_id)
+            area = Areas.objects.get(id=area_id)
 
-            area.nombre         = data.get("name", None)
-            area.descripcion    = data.get("description", None)
-            area.estado_id      = data.get("status_id", None)
-            area.updated_by     = user
+            area.nombre = data.get("name", None)
+            area.descripcion = data.get("description", None)
+            area.estado_id = data.get("status_id", None)
+            area.updated_by = user
             area.save()
 
             return Response(self.response_obj)
         except Areas.DoesNotExist as e:
             self.status = status.HTTP_400_BAD_REQUEST
-            self.error  = str(e.args)
+            self.error = str(e.args)
             return Response(self.response_obj)
 
 
@@ -120,36 +127,40 @@ class AreasFind(CreateAPIView, ResponseMixin):
                 .prefetch_related(
                     Prefetch(
                         "secciones_set",
-                        queryset=Secciones.objects.filter(estado_id=596).select_related(
-                            "estado", "created_by"
-                        ).prefetch_related(Prefetch("grupos_set", queryset = Grupos.objects.filter(
-                         estado_id=596
-                    ).select_related("estado", "created_by"))),
+                        queryset=Secciones.objects.filter(estado_id=596)
+                        .select_related("estado", "created_by")
+                        .prefetch_related(
+                            Prefetch(
+                                "grupos_set",
+                                queryset=Grupos.objects.filter(
+                                    estado_id=596
+                                ).select_related("estado", "created_by"),
+                            )
+                        ),
                     )
                 )
             )
 
-            result_areas    = AreasSerializer(areas_consulta, many=True)
-            self.status     = status.HTTP_200_OK
-            self.data       = result_areas.data
+            result_areas = AreasSerializer(areas_consulta, many=True)
+            self.status = status.HTTP_200_OK
+            self.data = result_areas.data
             return Response(self.response_obj)
         except Exception as e:
             self.status = status.HTTP_400_BAD_REQUEST
             self.error = str(e.args)
             return Response(self.response_obj)
-        
+
 
 class AreasEdit(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
     def get(self, request, *args, **kwargs):
         try:
-
-            status_list = Maestras.objects.filter(padre_id = 595)
+            status_list = Maestras.objects.filter(padre_id=595)
             satus_resul = AllSerializer(status_list, many=True)
-            
+
             self.status = status.HTTP_200_OK
-            self.data   = satus_resul.data
+            self.data = satus_resul.data
             return Response(self.response_obj)
         except Exception as e:
             self.status = status.HTTP_400_BAD_REQUEST
