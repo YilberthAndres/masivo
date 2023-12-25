@@ -12,7 +12,7 @@ from mensajeria.models import (
     Paises,
     Areas,
     Secciones,
-    Grupos
+    Grupos,
 )
 from mensajeria.forms import ArchivosForm
 import os
@@ -39,6 +39,7 @@ from django.core.exceptions import ValidationError
 
 class Preparation(CreateAPIView, ResponseMixin):
     serializer_class = SignupSerializers
+
     def get_validar_numero(self, numero):
         regex = r"\d{10}$"
         return re.match(regex, numero) is not None
@@ -69,9 +70,8 @@ class Preparation(CreateAPIView, ResponseMixin):
             [str(x) if x is not None and not pd.isna(x) else "" for x in row]
             for row in matriz
         ]
-    
-    def get_pais(self, paises_validos, paises_codigo, pais):
 
+    def get_pais(self, paises_validos, paises_codigo, pais):
         try:
             if pais == "Colombia":
                 pais_id = 39
@@ -92,9 +92,7 @@ class Preparation(CreateAPIView, ResponseMixin):
 
         return pais_id, codigo
 
-
     def post(self, request, *args, **kwargs):
-
         try:
             if "archivo_excel_area" in request.FILES:
                 archivo = request.FILES["archivo_excel_area"]
@@ -102,45 +100,62 @@ class Preparation(CreateAPIView, ResponseMixin):
                     df = pd.read_excel(archivo, engine="openpyxl")
                     matriz = df.values.tolist()
 
-                    errados         = []
-                    validos         = []
+                    errados = []
+                    validos = []
                     validos_celular = []
                     validos_documento = []
-                    duplicados      = []
-                    duplicados_add  = []
+                    duplicados = []
+                    duplicados_add = []
                     duplicados_docu = []
 
-                    num_validos     = 0
-                    num_duplicados  = 0
-                    num_errados     = 0
+                    num_validos = 0
+                    num_duplicados = 0
+                    num_errados = 0
 
-                    personas = Personas.objects.all().values('id', 'telefonomovil', 'identificacion').order_by('telefonomovil', 'identificacion')
-                    paises = Paises.objects.all().order_by('nombre').values_list('nombre', 'codigo')
+                    personas = (
+                        Personas.objects.all()
+                        .values("id", "telefonomovil", "identificacion")
+                        .order_by("telefonomovil", "identificacion")
+                    )
+                    paises = (
+                        Paises.objects.all()
+                        .order_by("nombre")
+                        .values_list("nombre", "codigo")
+                    )
                     paises_validos = [pais[0] for pais in paises]
                     paises_codigo = [pais[1] for pais in paises]
 
-                    validos_actuales = [persona['telefonomovil'] for persona in personas if persona['telefonomovil']]
-                    documentos_actuales = [persona['identificacion'] for persona in personas if persona['identificacion']]
+                    validos_actuales = [
+                        persona["telefonomovil"]
+                        for persona in personas
+                        if persona["telefonomovil"]
+                    ]
+                    documentos_actuales = [
+                        persona["identificacion"]
+                        for persona in personas
+                        if persona["identificacion"]
+                    ]
 
                     matriz_data = self.get_validar_campos(matriz)
 
                     for row in matriz_data:
-                        nombre              = row[0].strip()
-                        segundo_nombre      = row[1].strip()
-                        apellido            = row[2].strip()
-                        segundo_apellido    = row[3].strip()
-                        celular             = row[4].strip()
-                        pais                = row[5].strip()
-                        documento           = row[6].strip()
-                        tipoidentificacion  = row[7].strip()
-                        fechanacimiento     = row[8].strip()
-                        ocupacion           = row[9].strip()
-                        area                = row[10].strip()
-                        seccion             = row[11].strip()
-                        grupo               = row[12].strip()
+                        nombre = row[0].strip()
+                        segundo_nombre = row[1].strip()
+                        apellido = row[2].strip()
+                        segundo_apellido = row[3].strip()
+                        celular = row[4].strip()
+                        pais = row[5].strip()
+                        documento = row[6].strip()
+                        tipoidentificacion = row[7].strip()
+                        fechanacimiento = row[8].strip()
+                        ocupacion = row[9].strip()
+                        area = row[10].strip()
+                        seccion = row[11].strip()
+                        grupo = row[12].strip()
 
-
-                        pais_id, codigo = self.get_pais(paises_validos, paises_codigo, pais)
+                        pais_id, codigo = self.get_pais(
+                            paises_validos, paises_codigo, pais
+                        )
                         try:
                             fechanacimiento = datetime.strptime(
                                 fechanacimiento, "%Y-%m-%d %H:%M:%S"
@@ -183,7 +198,9 @@ class Preparation(CreateAPIView, ResponseMixin):
                             num_errados = num_errados + 1
                         else:
                             validos_celular.sort()
-                            index_validos = self.get_binary_search(validos_celular, celular)
+                            index_validos = self.get_binary_search(
+                                validos_celular, celular
+                            )
 
                             if index_validos != -1:
                                 persona_new[
@@ -193,7 +210,9 @@ class Preparation(CreateAPIView, ResponseMixin):
                                 num_duplicados = num_duplicados + 1
                             else:
                                 validos_documento.sort()
-                                index_validos2 = self.get_binary_search(validos_documento, documento)
+                                index_validos2 = self.get_binary_search(
+                                    validos_documento, documento
+                                )
 
                                 if index_validos2 != -1:
                                     persona_new[
@@ -202,8 +221,9 @@ class Preparation(CreateAPIView, ResponseMixin):
                                     duplicados.append(persona_new)
                                     num_duplicados = num_duplicados + 1
                                 else:
-
-                                    index2 = self.get_binary_search(validos_actuales, celular)
+                                    index2 = self.get_binary_search(
+                                        validos_actuales, celular
+                                    )
                                     if index2 != -1:
                                         persona_new[
                                             "message"
@@ -211,8 +231,9 @@ class Preparation(CreateAPIView, ResponseMixin):
                                         duplicados.append(persona_new)
                                         num_duplicados = num_duplicados + 1
                                     else:
-                                        
-                                        index3 = self.get_binary_search(documentos_actuales, documento)
+                                        index3 = self.get_binary_search(
+                                            documentos_actuales, documento
+                                        )
                                         if index3 != -1:
                                             persona_new[
                                                 "message"
@@ -233,22 +254,20 @@ class Preparation(CreateAPIView, ResponseMixin):
 
                     self.data = data
             else:
-                self.error  = "Archivo no encontrado"
+                self.error = "Archivo no encontrado"
                 self.status = status.HTTP_400_BAD_REQUEST
 
         except Exception as e:
-            self.error  = str(e)
+            self.error = str(e)
             self.status = status.HTTP_400_BAD_REQUEST
 
         return Response(self.response_obj)
 
 
-
 class Save(CreateAPIView, ResponseMixin):
-    serializer_class = SignupSerializers      
+    serializer_class = SignupSerializers
 
     def post_add_person(self, data, user):
-        
         nueva_persona = Personas(
             nombre=data["nombre"],
             segundonombre=data["segundo_nombre"],
@@ -264,10 +283,12 @@ class Save(CreateAPIView, ResponseMixin):
 
         nueva_persona.save()
         persona_id = nueva_persona.id
-        
 
         nuevo_registro = Destinatarios(
-            persona_id=persona_id, created_by=user, estado_id=596, grupo_id = data["grupo_id"]
+            persona_id=persona_id,
+            created_by=user,
+            estado_id=596,
+            grupo_id=data["grupo_id"],
         )
         nuevo_registro.save()
 
@@ -287,142 +308,139 @@ class Save(CreateAPIView, ResponseMixin):
                 right = mid - 1
 
         return -1
-    
+
     def get_search(self, lista, valor):
         try:
             index = lista.index(valor)
             return index
         except ValueError:
             return -1
-    
-    
+
     def post(self, request, *args, **kwargs):
+        try:
+            personas = request.data["destinatarios"]
+            user = request.user
+            validos = []
+            num_validos = 0
+            invalidos = []
+            num_invalidos = 0
 
-            try:
-                personas = request.data["destinatarios"]
-                user = request.user
-                validos = []
-                num_validos = 0
-                invalidos = []
-                num_invalidos = 0
+            areas_actuales = Areas.objects.filter(estado_id=596).order_by("nombre")
+            secciones_actuales = Secciones.objects.filter(estado_id=596).order_by(
+                "nombre"
+            )
+            grupos_actuales = Grupos.objects.filter(estado_id=596).order_by("nombre")
 
-                areas_actuales      = Areas.objects.filter(estado_id=596).order_by("nombre")
-                secciones_actuales  = Secciones.objects.filter(estado_id=596).order_by("nombre")
-                grupos_actuales     = Grupos.objects.filter(estado_id=596).order_by("nombre")
+            areas_listado = []
+            areas_listado_id = []
 
-                areas_listado           = []
-                areas_listado_id        = []
-                
-                secciones_listado       = []
-                secciones_listado_id    = []
-                grupos_listado          = []
-                grupos_listado_id       = []
-                grupos_listado_info     = []
+            secciones_listado = []
+            secciones_listado_id = []
+            grupos_listado = []
+            grupos_listado_id = []
+            grupos_listado_info = []
 
-                for area_list in areas_actuales:
-                    areas_listado_id.append(area_list.id)
-                    areas_listado.append(area_list.nombre)
+            for area_list in areas_actuales:
+                areas_listado_id.append(area_list.id)
+                areas_listado.append(area_list.nombre)
 
-                for seccion_list in secciones_actuales:
-                    secciones_listado_id.append(seccion_list.id)
-                    secciones_listado.append(seccion_list.nombre)
+            for seccion_list in secciones_actuales:
+                secciones_listado_id.append(seccion_list.id)
+                secciones_listado.append(seccion_list.nombre)
 
-                for grupos_list in grupos_actuales:
-                    grupos_listado_id.append(grupos_list.id)
-                    grupos_listado.append(grupos_list.nombre)
+            for grupos_list in grupos_actuales:
+                grupos_listado_id.append(grupos_list.id)
+                grupos_listado.append(grupos_list.nombre)
 
-                
-                areas_array     = []
-                secciones_array = []
-                grupos_array    = []
-                for row in personas:
-                    index_validos = self.get_search(areas_listado, row['area'])
+            areas_array = []
+            secciones_array = []
+            grupos_array = []
+            for row in personas:
+                index_validos = self.get_search(areas_listado, row["area"])
 
-                    if index_validos != -1:
-                        area_id = areas_listado_id[index_validos]
-                    else:
-                        areas_listado.append(row["area"])
+                if index_validos != -1:
+                    area_id = areas_listado_id[index_validos]
+                else:
+                    areas_listado.append(row["area"])
 
-                        new_area                = Areas()
-                        new_area.nombre         = row["area"]
-                        new_area.descripcion    = ""
-                        new_area.estado_id      = 596
-                        new_area.created_by     = user
-                        new_area.save()
-                        area_id = new_area.id
-                        areas_listado_id.append(area_id)
+                    new_area = Areas()
+                    new_area.nombre = row["area"]
+                    new_area.descripcion = ""
+                    new_area.estado_id = 596
+                    new_area.created_by = user
+                    new_area.save()
+                    area_id = new_area.id
+                    areas_listado_id.append(area_id)
 
-                    index_seccion = self.get_search(secciones_listado, row['seccion'])
-                    if index_seccion != -1:
-                        seccion_id = secciones_listado_id[index_seccion]
-                    else:
-                        secciones_listado.append(row['seccion'])
+                index_seccion = self.get_search(secciones_listado, row["seccion"])
+                if index_seccion != -1:
+                    seccion_id = secciones_listado_id[index_seccion]
+                else:
+                    secciones_listado.append(row["seccion"])
 
-                        new_seccion                = Secciones()
-                        new_seccion.nombre         = row['seccion']
-                        new_seccion.area_id        = area_id
-                        new_seccion.descripcion    = ""
-                        new_seccion.estado_id      = 596
-                        new_seccion.created_by     = user
-                        new_seccion.save()
-                        seccion_id = new_seccion.id
-                        secciones_listado_id.append(seccion_id)
+                    new_seccion = Secciones()
+                    new_seccion.nombre = row["seccion"]
+                    new_seccion.area_id = area_id
+                    new_seccion.descripcion = ""
+                    new_seccion.estado_id = 596
+                    new_seccion.created_by = user
+                    new_seccion.save()
+                    seccion_id = new_seccion.id
+                    secciones_listado_id.append(seccion_id)
 
-                    index_grupo = self.get_search(grupos_listado, row['grupo'])
-                    if index_grupo != -1:
-                        grupo_id = grupos_listado_id[index_grupo]
-                    else:
-                        grupos_listado.append(row['grupo'])
+                index_grupo = self.get_search(grupos_listado, row["grupo"])
+                if index_grupo != -1:
+                    grupo_id = grupos_listado_id[index_grupo]
+                else:
+                    grupos_listado.append(row["grupo"])
 
-                        new_grupo                = Grupos()
-                        new_grupo.nombre         = row['grupo']
-                        new_grupo.seccion_id     = seccion_id
-                        new_grupo.descripcion    = ""
-                        new_grupo.estado_id      = 596
-                        new_grupo.created_by     = user
-                        new_grupo.save()
-                        grupo_id = new_grupo.id
-                        grupos_listado_id.append(grupo_id)
+                    new_grupo = Grupos()
+                    new_grupo.nombre = row["grupo"]
+                    new_grupo.seccion_id = seccion_id
+                    new_grupo.descripcion = ""
+                    new_grupo.estado_id = 596
+                    new_grupo.created_by = user
+                    new_grupo.save()
+                    grupo_id = new_grupo.id
+                    grupos_listado_id.append(grupo_id)
 
+                index_grupo = self.get_search(grupos_listado, row["grupo"])
+                if index_grupo != -1:
+                    grupo_id = grupos_listado_id[index_grupo]
 
-                    index_grupo = self.get_search(grupos_listado, row['grupo'])
-                    if index_grupo != -1:
-                        grupo_id = grupos_listado_id[index_grupo]
-                    
-                    persona_new = {
-                        "nombre": row["nombre"],
-                        "segundo_nombre": row["segundo_nombre"],
-                        "apellido": row["apellido"],
-                        "segundo_apellido": row["segundo_apellido"],
-                        "celular_whatsapp": row["whatsapp_prefijo"],
-                        "celular_llamada": row["celular_whatsapp"],
-                        "documento": row["documento"],
-                        "fechanacimiento": row["fechanacimiento"],
-                        "pais_id": row["pais"],
-                        "grupo_id": grupo_id,
-                        "seccion": row["seccion"],
-                        "grupo": row["grupo"]
-                    }
-
-
-                    try:
-                        self.post_add_person(persona_new, user)
-                        validos.append(persona_new)
-                        num_validos = num_validos + 1
-                    except Exception as e:
-                        invalidos.append(persona_new)
-                        num_invalidos = num_invalidos + 1
-
-                data = {
-                    "validos": {"count": num_validos, "data": validos},
-                    "invalidos": {"count": num_invalidos, "data": invalidos},
-                    "error": num_invalidos,
+                persona_new = {
+                    "nombre": row["nombre"],
+                    "segundo_nombre": row["segundo_nombre"],
+                    "apellido": row["apellido"],
+                    "segundo_apellido": row["segundo_apellido"],
+                    "celular_whatsapp": row["whatsapp_prefijo"],
+                    "celular_llamada": row["celular_whatsapp"],
+                    "documento": row["documento"],
+                    "fechanacimiento": row["fechanacimiento"],
+                    "pais_id": row["pais"],
+                    "grupo_id": grupo_id,
+                    "seccion": row["seccion"],
+                    "grupo": row["grupo"],
                 }
 
-                self.data = data
-                return Response(self.response_obj)
-            except Exception as e:
-                self.error  = str(e)
-                self.status = status.HTTP_400_BAD_REQUEST
+                try:
+                    self.post_add_person(persona_new, user)
+                    validos.append(persona_new)
+                    num_validos = num_validos + 1
+                except Exception as e:
+                    invalidos.append(persona_new)
+                    num_invalidos = num_invalidos + 1
 
+            data = {
+                "validos": {"count": num_validos, "data": validos},
+                "invalidos": {"count": num_invalidos, "data": invalidos},
+                "error": num_invalidos,
+            }
+
+            self.data = data
             return Response(self.response_obj)
+        except Exception as e:
+            self.error = str(e)
+            self.status = status.HTTP_400_BAD_REQUEST
+
+        return Response(self.response_obj)

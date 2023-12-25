@@ -51,10 +51,14 @@ class Uploaded(CreateAPIView, ResponseMixin):
 
             file_model.save()
 
-            base64 = capture_first_page_from_s3("masivo", "static/" + file_model.file.name)
-            
+            base64, page_count, weight = capture_first_page_from_s3(
+                "masivo", "static/" + file_model.file.name
+            )
+
             file_model.preview = base64
-            
+            file_model.page_count = page_count
+            file_model.weight_file = weight
+
             file_model.save()
 
             self.status = status.HTTP_200_OK

@@ -180,6 +180,8 @@ class Archivos(models.Model):
         on_delete=models.CASCADE,
     )
     updated_at = models.DateTimeField(auto_now=True)
+    page_count = models.IntegerField(default=0)
+    weight_file = models.DecimalField(default=0, max_digits=5, decimal_places=2)
 
     class Meta:
         db_table = "archivos"

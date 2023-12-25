@@ -112,7 +112,8 @@ class MenssageLeft(GenericAPIView, ResponseMixin):
 
             data = {"chats": chats}
 
-            self.data = {"status": status.HTTP_200_OK, "data": data, "state": True}
+            self.status = 200
+            self.data = data
             return Response(self.response_obj)
         except Exception as e:
             self.status = status.HTTP_404_NOT_FOUND
@@ -165,6 +166,8 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                         "multimedia_id__nombre",
                         "multimedia_id__tipo",
                         "multimedia_id__preview",
+                        "multimedia_id__page_count",
+                        "multimedia_id__weight_file"
                     )
                     .annotate(cantidad_registros=Count("id"))
                     .order_by("fecha", "created_at")
@@ -172,12 +175,10 @@ class MenssageFind(CreateAPIView, ResponseMixin):
 
                 resultados = {}
                 for mensaje in mensajes:
-                    fecha_int = float(mensaje["timestamp_w"])
-                    fecha_datetime = timezone.datetime.fromtimestamp(fecha_int)
-                    fecha = fecha_datetime.strftime("%Y/%m/%d")
-
                     timestamp = float(mensaje["timestamp_w"])
                     fecha_hora = datetime.fromtimestamp(timestamp)
+                    fecha = fecha_hora.strftime("%Y/%m/%d")
+
                     hora = fecha_hora.strftime("%H")
                     minutos = fecha_hora.strftime("%M")
                     hora_completa = hora + ":" + minutos
@@ -205,6 +206,8 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                                 else None,
                                 "name": mensaje["multimedia_id__nombre"],
                                 "preview": mensaje["multimedia_id__preview"],
+                                "pages": mensaje["multimedia_id__page_count"],
+                                "file_weight": mensaje["multimedia_id__weight_file"]
                             },
                         }
                     )
@@ -232,7 +235,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                 return Response(response_data)
             else:
                 self.status = status.HTTP_404_NOT_FOUND
-                self.error = "No tienes acceso."
+                self.error = f"{telefonowhatsapp} invalid"
                 return Response(self.response_obj)
         except Exception as e:
             response_data = {
@@ -255,14 +258,12 @@ class MenssageSend(CreateAPIView, ResponseMixin):
             message = data.get("message", "")
 
             user = request.user
-
-            persona_model = Personas.objects.get(telefonowhatsapp=recipient)
-            recipient_model = Destinatarios.objects.get(persona=persona_model)
+            recipient_model = Destinatarios.objects.get(
+                persona__telefonowhatsapp=recipient
+            )
             recipient_id = recipient_model.id
 
-            data_send = {}
-
-            if persona_model:
+            if recipient_model:
                 data_send = {
                     "recipient_id": recipient_id,
                     "recipient_w": recipient,

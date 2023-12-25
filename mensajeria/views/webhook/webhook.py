@@ -424,8 +424,12 @@ def post_send_file(media_id, create_by):
             nombre_archivo_con_extension,
             ContentFile(response_media.content),
         )
-        rep = capture_first_page_from_s3("masivo", "static/" + file_model.file.name)
+        rep, page_count, weight = capture_first_page_from_s3(
+            "masivo", "static/" + file_model.file.name
+        )
         file_model.preview = rep
+        file_model.page_count = page_count
+        file_model.weight_file = weight
 
         file_model.save()
     except Exception as e:
@@ -444,7 +448,9 @@ def get_likFile(file_id):
             pre = archivo.preview
 
         elif archivo.tipo == "application/pdf":
-            pre = capture_first_page_from_s3("masivo", "static/" + archivo.file.name)
+            pre, page_count, _ = capture_first_page_from_s3(
+                "masivo", "static/" + archivo.file.name
+            )
 
         aws_file = {
             "file_id": archivo.id,
@@ -452,6 +458,7 @@ def get_likFile(file_id):
             "dir": media_storage.url(name=archivo.file.name),
             "type": archivo.tipo,
             "preview": pre,
+            "page_count": page_count,
         }
 
         files.append(aws_file)

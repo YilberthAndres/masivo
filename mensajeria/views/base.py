@@ -3,7 +3,7 @@ from datetime import datetime
 from django.shortcuts import get_object_or_404
 from mensajeria.models import Archivos, Mensajeria, Conversaciones
 from django.core.files.storage import get_storage_class
-import fitz 
+import fitz
 from PIL import Image
 from io import BytesIO
 import boto3
@@ -22,8 +22,8 @@ AWS_SECRET_ACCESS_KEY_ENV = os.getenv("AWS_SECRET_ACCESS_KEY_N")
 AWS_STORAGE_BUCKET_NAME_ENV = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME_ENV = os.getenv("AWS_S3_REGION_NAME")
 
+
 def api_connect(id_whatsap, path: str, payload={}, method="GET", headers={}):
-    
     url = (
         "https://graph.facebook.com/"
         + API_VERSION_WHATSAPP_ENV
@@ -64,9 +64,11 @@ def get_payload(whatsapp, text, type_message, file_id):
         }
 
 
-def post_conversation(recipient_id):
+def post_conversation(data):
     conversacion = Conversaciones.objects.update_or_create(
-        destinatario_id=recipient_id, defaults={"estado_id": 758}
+        destinatario_id=data["recipient_id"],
+        defaults={"estado_id": 758},
+        created_by=data["user"],
     )
     if isinstance(conversacion, tuple):
         conversacion = conversacion[0]
@@ -87,7 +89,7 @@ def send_message_api(data):
         )
         response_json = response.json()
 
-        conversacion_id = post_conversation(data["recipient_id"])
+        conversacion_id = post_conversation(data)
 
         waId = response_json["contacts"][0]["wa_id"]
         messageId = response_json["messages"][0]["id"]
@@ -113,8 +115,8 @@ def send_message_api(data):
             mensaje_id=messageId,
             conversacion_id=conversacion_id,
             mime_type=mime_type,
-            created_by_id=data["user_id"],
-            timestamp_w=datetime.now(),
+            created_by=data["user"],
+            timestamp_w=datetime.now().timestamp(),
         )
 
         if data["file_id"] != "":
@@ -167,19 +169,26 @@ def get_errors(errors):
         return errors["non_field_errors"]
 
 
-def capture_first_page_from_s3(bucket_name, pdf_key):
+def capture_first_page_from_s3(bucket_name, key):
     s3 = boto3.client(
         "s3",
         aws_access_key_id=AWS_ACCESS_KEY_ID_ENV,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY_ENV,
         region_name=AWS_S3_REGION_NAME_ENV,
     )
-    response = s3.get_object(Bucket=bucket_name, Key=pdf_key)
-    pdf_content = response["Body"].read()
+    response = s3.get_object(Bucket=bucket_name, Key=key)
+    content = response["Body"].read()
+    
+    size_in_bytes = response['ContentLength']
 
-    pdf_document = fitz.open("pdf",pdf_content)
+    size_in_kb = size_in_bytes / 1024.0
+    size_in_mb = size_in_kb / 1024.0
 
-    first_page = pdf_document[0]
+
+    document = fitz.open("pdf", content)
+
+    first_page = document[0]
+    count_page = document.page_count
 
     pixmap = first_page.get_pixmap()
 
@@ -189,6 +198,6 @@ def capture_first_page_from_s3(bucket_name, pdf_key):
     image.save(buffered, format="PNG")
     image_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
 
-    pdf_document.close()
+    document.close()
 
-    return image_base64
+    return image_base64, count_page, size_in_mb

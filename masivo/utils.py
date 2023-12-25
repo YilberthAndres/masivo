@@ -13,7 +13,7 @@ def agregar_tarea_dinamicamente(
             "minute": fecha_ejecucion.minute,
         }
 
-        if fecha_terminacion and type(fecha_terminacion) != type([]):
+        if fecha_terminacion and not isinstance(fecha_terminacion, list):
             cron["day_of_month"] = (
                 str(fecha_ejecucion.day) + "-" + str(fecha_terminacion.day)
             )

@@ -238,7 +238,7 @@ CREATE TABLE `django_celery_beat_periodictask`(
 	`one_off` TinyInt( 1 ) NOT NULL,
 	`start_time` DateTime NULL DEFAULT NULL,
 	`priority` Int( 0 ) UNSIGNED NULL DEFAULT NULL,
-	`headers` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '_utf8mb3',
+	`headers` LongText CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
 	`clocked_id` Int( 0 ) NULL DEFAULT NULL,
 	`expire_seconds` Int( 0 ) UNSIGNED NULL DEFAULT NULL,
 	PRIMARY KEY ( `id` ),

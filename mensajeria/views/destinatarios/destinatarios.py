@@ -5,31 +5,37 @@ from rest_framework.generics import DestroyAPIView
 from ...mixins.base import ResponseMixin
 from rest_framework.response import Response
 from rest_framework import status
+from django.db import models
 
 
 class ListDestinatarios(APIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
         try:
-            destinatarios = Destinatarios.objects.only("persona", "id").select_related(
-                "persona"
+            destinatarios = (
+                Destinatarios.objects.only("persona", "id")
+                .select_related("persona")
+                .annotate(
+                    nombre_persona=models.functions.Concat(
+                        "persona__nombre",
+                        models.Value(" "),
+                        "persona__segundonombre",
+                        models.Value(" "),
+                        "persona__apellido",
+                        models.Value(" "),
+                        "persona__segundoapellido",
+                        models.Value(" "),
+                    )
+                )
             )
+
             destinatariosnew = []
 
             for destinatario in destinatarios:
                 persona = destinatario.persona
 
-                nombre_persona = (
-                    persona.nombre
-                    + " "
-                    + persona.segundonombre
-                    + " "
-                    + persona.apellido
-                    + " "
-                    + persona.segundoapellido
-                )
                 destinatarioslist = {
                     "id": destinatario.id,
-                    "nombre": nombre_persona,
+                    "nombre": destinatario.nombre_persona,
                     "celular": persona.telefonowhatsapp,
                     "estado": destinatario.estado_id,
                     "estado_nombre": destinatario.estado.nombre,

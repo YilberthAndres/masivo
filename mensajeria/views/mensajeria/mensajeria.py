@@ -140,7 +140,9 @@ class SendMessageTemplate(APIView, ResponseMixin):
     def post(self, request, *args, **kwargs):
         parameters = request.data["template"]
 
-        destinatarios = Destinatarios.objects.filter(estado_id=596)
+        destinatarios = Destinatarios.objects.filter(estado_id=596).select_related(
+            "persona"
+        )
         mensajes = []
         for destinatario in destinatarios:
             celular = destinatario.persona.telefonomovil
