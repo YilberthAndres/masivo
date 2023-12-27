@@ -23,7 +23,7 @@ from openpyxl import Workbook
 
 from rest_framework.generics import CreateAPIView, GenericAPIView
 
-from mensajeria.views.serializer import DestinatariosgruposSerializer
+
 from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
 from ...serializers.auth.signin_serializers import SigninSerializers
