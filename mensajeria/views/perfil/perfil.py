@@ -1,48 +1,62 @@
-from django.http import JsonResponse
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
-from mensajeria.models import Peticion, Mensajeria, Destinatarios, Personas, Conversaciones
-from django.http import JsonResponse
-from django.core.exceptions import ObjectDoesNotExist
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 import requests
-from datetime import datetime
-from django.conf import settings
-import json
-import dotenv
 import os
+import base64
+import json
+from mensajeria.models import (
+    Paises,
+    Peticion,
+)
+from rest_framework.generics import CreateAPIView
+from ...mixins.base import ResponseMixin
+from ...serializers.auth.signup_serializers import SignupSerializers
+from rest_framework.response import Response
+from rest_framework import status
+from mensajeria.models import Areas, Secciones, Grupos
+from django.db.models import Q
+from django.db.models import Prefetch
+API_KEY_ENV = os.getenv("API_KEY")
+ID_WHATSAPP_NUMBER_ENV   = os.getenv("ID_WHATSAPP_NUMBER")
+VERIFY_TOKEN_ENV         = os.getenv("VERIFY_TOKEN_ENV")
 
-API_KEY_ENV                 = os.getenv('API_KEY')
-ID_WHATSAPP_BUSINESS_ENV    = os.getenv('ID_WHATSAPP_BUSINESS')
-ID_WHATSAPP_NUMBER_ENV      = os.getenv('ID_WHATSAPP_NUMBER')
-API_VERSION_WHATSAPP_ENV    = os.getenv('API_VERSION_WHATSAPP')
-VERIFY_TOKEN_ENV            = os.getenv('VERIFY_TOKEN')
+class PhotoUpdate(CreateAPIView, ResponseMixin):
+    serializer_class = SignupSerializers
+
+    def put(self, request, *args, **kwargs):
+        # 
+        try:
+            file = request.FILES["file"]
+            if not file.content_type.startswith("image/"):
+                raise ValueError("Invalid file type. Only images are allowed.")
+            
+            headers = {"Authorization": f"Bearer {VERIFY_TOKEN_ENV}"}
+            if file.content_type == "image/jpeg":
+                headers["Content-Type"] = "image/jpeg"
+            elif file.content_type == "image/png":
+                headers["Content-Type"] = "image/png"
+            else:
+                raise ValueError("Unsupported image format.")
+            
+            solicitud = requests.post(
+                "https://api.whatsapp.com/v1/settings/profile/photo",
+                headers=headers,
+                data=file,
+            )
+            
+            # solicitud = requests.post(
+            #     "https://api.whatsapp.com/v1/business/profile/photo",
+            #     headers={"Authorization": VERIFY_TOKEN_ENV},
+            #     data=file,
+            # )
+
+            print(solicitud)
+
+            # statuses_text = json.dumps(solicitud)
+            # nueva_peticion = Peticion(estado=statuses_text)
+            # nueva_peticion.save()
 
 
 
+            return Response(self.response_obj)
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
-@csrf_exempt
-def perfil_foto(request):
-    print("ss")
-    try:
-        
-        verify_token = VERIFY_TOKEN_ENV
-        mode = request.GET.get("hub.mode")
-        challenge = request.GET.get("hub.challenge")
-        token = request.GET.get("hub.verify_token")
-        json_data = json.loads(request.body)
-
-        statuses_text = json.dumps(json_data["entry"])
-        nueva_peticion = Peticion(estado=statuses_text)
-        nueva_peticion.save()
-
-        if mode and token:
-            if mode == "subscribe" and token == verify_token:
-                return HttpResponse(challenge, content_type="text/plain")
-    except Exception as e:
-        error_message = str(e)
-        nueva_peticion = Peticion(estado = 'error1: ' + json_data)
-        nueva_peticion.save()

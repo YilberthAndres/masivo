@@ -46,7 +46,7 @@ class Paises(models.Model):
 
 class Personas(models.Model):
     identificacion = models.CharField(
-        max_length=50, null=True, blank=True, verbose_name="Identificacion"
+        max_length=50, null=True, blank=True, verbose_name="Identificacion", unique=True
     )
     lugarexpedicion = models.CharField(
         max_length=50, null=True, blank=True, verbose_name="lugar de expedición"
@@ -375,28 +375,26 @@ class Destinatarios(models.Model):
         verbose_name_plural = "destinatarios"
 
 
-class gruposDestinatarios(models.Model):
+class Destinatariosgrupos(models.Model):
     destinatario = models.ForeignKey(
         Destinatarios,
         null=True,
         blank=True,
-        related_name="gruposDestinatarios_destinatarios",
+        related_name="destinatariosGrupos_destinatarios",
         on_delete=models.CASCADE,
         db_index=True,
-        unique=True,
     )
     grupo = models.ForeignKey(
         Grupos,
         null=True,
         blank=True,
-        related_name="gruposDestinatarios_grupos",
+        related_name="destinatariosgrupos_grupos",
         on_delete=models.CASCADE,
         db_index=True,
-        unique=True,
     )
     created_by = models.ForeignKey(
         "auth.User",
-        related_name="destinatarios_created_by",
+        related_name="destinatariosgrupos_created_by",
         null=True,
         blank=True,
         on_delete=models.CASCADE,
@@ -407,7 +405,7 @@ class gruposDestinatarios(models.Model):
     )
     updated_by = models.ForeignKey(
         "auth.User",
-        related_name="destinatarios_updated_by",
+        related_name="destinatariosgrupos_updated_by",
         null=True,
         on_delete=models.CASCADE,
     )
@@ -415,6 +413,11 @@ class gruposDestinatarios(models.Model):
         auto_now=True,
         blank=True,
     )
+
+    class Meta:
+        db_table = "destinatariosgrupos"
+        verbose_name = "destinatariosgrupos"
+        verbose_name_plural = "destinatariosgrupos"
 
 
 class Conversaciones(models.Model):
