@@ -150,6 +150,9 @@ def send_message_api(data):
             response["multimedia"] = {
                 "url": media_storage.url(nuevo_mensaje.multimedia_id.file.name),
                 "name": nuevo_mensaje.multimedia_id.nombre,
+                "weight": nuevo_mensaje.multimedia_id.weight_file,
+                "preview": nuevo_mensaje.multimedia_id.preview,
+                "pages": nuevo_mensaje.multimedia_id.page_count
             }
 
         return response

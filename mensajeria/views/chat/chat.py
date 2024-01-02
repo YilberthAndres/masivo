@@ -1,5 +1,5 @@
 from django.db import connection
-from rest_framework.generics import CreateAPIView, GenericAPIView
+from rest_framework.generics import GenericAPIView
 from ...mixins.base import ResponseMixin
 from ...serializers.auth.signup_serializers import SignupSerializers
 from rest_framework.response import Response
@@ -121,7 +121,7 @@ class MenssageLeft(GenericAPIView, ResponseMixin):
             return Response(self.response_obj)
 
 
-class MenssageFind(CreateAPIView, ResponseMixin):
+class MenssageFind(GenericAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
     def get(self, request, *args, **kwargs):
@@ -167,7 +167,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                         "multimedia_id__tipo",
                         "multimedia_id__preview",
                         "multimedia_id__page_count",
-                        "multimedia_id__weight_file"
+                        "multimedia_id__weight_file",
                     )
                     .annotate(cantidad_registros=Count("id"))
                     .order_by("fecha", "created_at")
@@ -207,7 +207,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
                                 "name": mensaje["multimedia_id__nombre"],
                                 "preview": mensaje["multimedia_id__preview"],
                                 "pages": mensaje["multimedia_id__page_count"],
-                                "file_weight": mensaje["multimedia_id__weight_file"]
+                                "file_weight": mensaje["multimedia_id__weight_file"],
                             },
                         }
                     )
@@ -246,7 +246,7 @@ class MenssageFind(CreateAPIView, ResponseMixin):
             return Response(response_data)
 
 
-class MenssageSend(CreateAPIView, ResponseMixin):
+class MenssageSend(GenericAPIView, ResponseMixin):
     serializer_class = SignupSerializers
 
     def post(self, request, *args, **kwargs):
@@ -264,6 +264,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
             recipient_id = recipient_model.id
 
             if recipient_model:
+                
                 data_send = {
                     "recipient_id": recipient_id,
                     "recipient_w": recipient,
@@ -278,9 +279,7 @@ class MenssageSend(CreateAPIView, ResponseMixin):
 
                 if data_message["estado_envio"]:
                     self.data = {
-                        "status": status.HTTP_200_OK,
                         "data": data_message,
-                        "message": "Exitoso.",
                     }
                 else:
                     self.status = status.HTTP_400_BAD_REQUEST
@@ -294,11 +293,8 @@ class MenssageSend(CreateAPIView, ResponseMixin):
                 return Response(self.response_obj)
 
         except Exception as e:
-            response_data = {
-                "status": status.HTTP_404_NOT_FOUND,
-                "message": e.args,
-                "state": False,
-            }
+            self.status = status.HTTP_404_NOT_FOUND
+            response_data = e.args
             return Response(response_data)
 
 

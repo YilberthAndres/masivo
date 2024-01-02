@@ -14,7 +14,6 @@ from rest_framework_simplejwt.exceptions import (
     exceptions,
 )
 from django.contrib.auth import get_user_model
-from pathlib import Path
 import os
 import re
 
