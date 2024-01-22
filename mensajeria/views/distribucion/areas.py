@@ -51,24 +51,24 @@ class AreasDistribucion(CreateAPIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
         try:
             areas_consulta = (
-                Areas.objects.filter(estado_id=596)
+                Areas.objects.exclude(estado_id=598)
                 .select_related("estado", "created_by")
                 .prefetch_related(
                     Prefetch(
                         "secciones_set",
-                        queryset=Secciones.objects.filter(estado_id=596)
+                        queryset=Secciones.objects.exclude(estado_id=598)
                         .select_related("estado", "created_by")
                         .prefetch_related(
                             Prefetch(
                                 "grupos_set",
-                                queryset=Grupos.objects.filter(
-                                    estado_id=596
-                                ).select_related("estado", "created_by"),
+                                queryset=Grupos.objects.exclude(estado_id=598)
+                                .select_related("estado", "created_by"),
                             )
                         ),
                     )
                 )
             )
+
 
             result_areas = AreasSerializer(areas_consulta, many=True)
 
@@ -86,7 +86,7 @@ class AreasDistribucion(CreateAPIView, ResponseMixin):
             user = request.user
             area_id = self.kwargs.get("area_id", None)
             area = Areas.objects.get(id=area_id)
-            area.estado_id = 597
+            area.estado_id = 598
             area.updated_by = user
             area.save()
             return Response(self.response_obj)
@@ -122,24 +122,24 @@ class AreasFind(CreateAPIView, ResponseMixin):
         try:
             area_id = self.kwargs.get("area_id", None)
             areas_consulta = (
-                Areas.objects.filter(id=area_id, estado_id=596)
+                Areas.objects.filter(id=area_id).exclude(estado_id=598)
                 .select_related("estado", "created_by")
                 .prefetch_related(
                     Prefetch(
                         "secciones_set",
-                        queryset=Secciones.objects.filter(estado_id=596)
+                        queryset=Secciones.objects.exclude(estado_id=598)
                         .select_related("estado", "created_by")
                         .prefetch_related(
                             Prefetch(
                                 "grupos_set",
-                                queryset=Grupos.objects.filter(
-                                    estado_id=596
-                                ).select_related("estado", "created_by"),
+                                queryset=Grupos.objects.exclude(estado_id=598)
+                                .select_related("estado", "created_by"),
                             )
                         ),
                     )
                 )
             )
+
 
             result_areas = AreasSerializer(areas_consulta, many=True)
             self.status = status.HTTP_200_OK

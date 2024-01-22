@@ -32,7 +32,7 @@ class GruposDistribucion(CreateAPIView, ResponseMixin):
                 grupo_existente = Grupos.objects.filter(Q(nombre__iexact=name)).first()
                 if grupo_existente:
                     self.status = status.HTTP_400_BAD_REQUEST
-                    self.error = "Ya existe un área con el mismo nombre."
+                    self.error = "Ya existe un grupo con el mismo nombre."
                 else:
                     new_grupo = Grupos()
                     new_grupo.nombre = name
@@ -52,7 +52,7 @@ class GruposDistribucion(CreateAPIView, ResponseMixin):
 
     def get(self, request, *args, **kwargs):
         try:
-            secciones_consulta = Grupos.objects.filter(estado_id=596).select_related(
+            secciones_consulta = Grupos.objects.exclude(estado_id=598).select_related(
                 "estado", "created_by"
             )
 
@@ -96,7 +96,7 @@ class GruposDistribucion(CreateAPIView, ResponseMixin):
             user = request.user
             grupo_id = self.kwargs.get("grupo_id", None)
             grupo = Grupos.objects.get(id=grupo_id)
-            grupo.estado_id = 597
+            grupo.estado_id = 598
             grupo.updated_by = user
             grupo.save()
             return Response(self.response_obj)
@@ -112,7 +112,7 @@ class GruposFind(CreateAPIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
         try:
             area_id = self.kwargs.get("grupo_id", None)
-            secciones_consulta = Grupos.objects.filter(id=area_id).select_related(
+            secciones_consulta = Grupos.objects.exclude(estado_id=598).select_related(
                 "estado", "created_by"
             )
 

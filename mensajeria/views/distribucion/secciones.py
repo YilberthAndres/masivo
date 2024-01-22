@@ -54,12 +54,12 @@ class SeccionesDistribucion(CreateAPIView, ResponseMixin):
     def get(self, request, *args, **kwargs):
         try:
             secciones_consulta = (
-                Secciones.objects.filter(estado_id=596)
+                Secciones.objects.exclude(estado_id=598)
                 .select_related("estado", "created_by")
                 .prefetch_related(
                     Prefetch(
                         "grupos_set",
-                        queryset=Grupos.objects.filter(estado_id=596).select_related(
+                        queryset=Grupos.objects.exclude(estado_id=598).select_related(
                             "estado", "created_by"
                         ),
                     )
@@ -128,7 +128,7 @@ class SeccionesFind(CreateAPIView, ResponseMixin):
                 .prefetch_related(
                     Prefetch(
                         "grupos_set",
-                        queryset=Grupos.objects.filter(estado_id=596).select_related(
+                        queryset=Grupos.objects.exclude(estado_id=598).select_related(
                             "estado", "created_by"
                         ),
                     )
