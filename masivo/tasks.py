@@ -4,5 +4,4 @@ from mensajeria.views.base import send_message_api
 
 @shared_task
 def ejecutar_tarea(*args, **kwargs):
-    print(kwargs)
     # send_message_api(kwargs)
