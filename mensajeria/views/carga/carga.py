@@ -1,24 +1,11 @@
 from cmath import nan
 import re
-from types import NoneType
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
 from mensajeria.models import (
-    Archivos,
     Destinatarios,
     Personas,
     Maestras,
-    Peticion,
     Paises,
 )
-from mensajeria.forms import ArchivosForm
-import os
-from datetime import datetime
-from django.conf import settings
-import pandas as pd
-import json
-from django.http import HttpResponse
-from openpyxl import Workbook
 
 
 from rest_framework.generics import CreateAPIView, GenericAPIView

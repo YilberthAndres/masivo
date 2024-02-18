@@ -56,7 +56,6 @@ class CustomMiddleware(MiddlewareMixin):
 
         content_type = "application/json"
 
-        # If token Exists
         if jwt_token:
             try:
                 tokenUser, _ = JWTAuthentication.authenticate(
