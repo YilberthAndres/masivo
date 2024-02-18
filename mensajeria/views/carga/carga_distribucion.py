@@ -24,10 +24,8 @@ from django.http import HttpResponse
 from openpyxl import Workbook
 
 
-from rest_framework.generics import CreateAPIView, GenericAPIView
+from rest_framework.generics import CreateAPIView
 from ...mixins.base import ResponseMixin
-from ...serializers.auth.signup_serializers import SignupSerializers
-from ...serializers.auth.signin_serializers import SigninSerializers
 from rest_framework.response import Response
 from rest_framework import status
 
